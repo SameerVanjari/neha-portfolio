@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, JetBrains_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
 const space = Space_Grotesk({
@@ -14,17 +14,25 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
+const serif = Instrument_Serif({
+  variable: "--font-serif",
+  weight: ["400"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "NEHA // AI · XR · UX Design",
+  title: "NEHA — Perception, Intelligence, Design",
   description:
-    "Portfolio of Neha — designer crafting AI, extended reality and human-centred experiences.",
+    "An interactive journey through a designer's perception — AI, XR, UX and product design.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${space.variable} ${jetbrains.variable} h-full antialiased`}
+      className={`${space.variable} ${jetbrains.variable} ${serif.variable} h-full antialiased`}
     >
       <body className="min-h-full">{children}</body>
     </html>

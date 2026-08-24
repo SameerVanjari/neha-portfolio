@@ -17,11 +17,27 @@ export interface Stat {
 
 export interface Project {
   title: string;
-  category: "AI" | "XR" | "UX";
+  dimension: "PRODUCT" | "UX" | "XR" | "AI";
   year: string;
   blurb: string;
   tags: string[];
-  accent: "cyan" | "neon" | "volt" | "sigil";
+  accent: "cyan" | "sky" | "neon" | "volt" | "sigil";
+}
+
+export interface Dimension {
+  id: "PRODUCT" | "UX" | "XR" | "AI";
+  color: string;
+  glow: string;
+  text: string;
+  ring: string;
+  headline: string;
+  description: string;
+}
+
+export interface Milestone {
+  year: string;
+  title: string;
+  description: string;
 }
 
 export interface Capability {
@@ -38,42 +54,148 @@ export interface Social {
 }
 
 export const profile: Profile = {
-  name: "Neha",
-  tagline: "Designing the interfaces of intelligent, immersive worlds.",
-  roles: ["AI Designer", "XR Designer", "UX Designer"],
+  name: "NEHA",
+  tagline:
+    "I design the interfaces where intelligent systems and human needs meet — across every reality.",
+  roles: ["AI Experience Designer", "XR Designer", "UX Designer", "Product Designer"],
   bootLines: [
-    "> init neha.design",
-    "> loading neural core ......... OK",
-    "> mounting spatial shader .... OK",
-    "> calibrating human layer .... OK",
-    "> entry unlocked.",
+    "> entering perception space ........",
+    "> syncing neural core .............. OK",
+    "> a bird will guide you ............",
+    "> journey begins.",
   ],
-  bio: "I design where machine intelligence, spatial computing and human behaviour intersect. From conversational AI systems to hand-tracked XR flows and classic product interfaces — I prototype the future at the speed of now, and make sure people never get left behind by it.",
+  bio: "Neha is an AI, XR and UX designer who believes intelligence should feel less like a machine and more like a kind companion. She crafts spatial worlds, conversational minds and product surfaces where technology disappears and understanding arrives.",
   location: "Bangalore, IN · Remote worldwide",
   email: "hello@neha.design",
-  availability: "Open for select collaborations · Q4 2026",
+  availability: "Open for select collaborations",
+};
+
+export const openingStatement = {
+  pre: "Designing the",
+  italic: "intelligent",
+  post: "interface.",
+  kicker: "AI EXPERIENCE DESIGNER",
+  meta: "XR · AI · UX · PRODUCT DESIGN",
+  description:
+    "An interactive journey through the mind of a designer who builds where intelligent systems meet human needs — across screens, spaces and realities.",
+};
+
+export const identityStatement = {
+  label: "WHO I AM",
+  line: "Every interface I build begins with a question: what does it feel like to be understood by a machine?",
+  name: "NEHA",
+};
+
+export const perceptionStatement = {
+  label: "ENTER PERCEPTION",
+  line: "Follow how I see the world.",
+  detail: "From product pixels to spatial worlds to thinking machines — the same curiosity runs through all of it.",
+};
+
+export const arrivalStatement = {
+  label: "ARRIVAL",
+  line: "Welcome to the place where the work lives.",
+  detail: "This platform is my portfolio — a calm clearing after the journey through perception.",
+};
+
+export const milestones: Milestone[] = [
+  {
+    year: "2017",
+    title: "Product Design",
+    description: "Learned that good design is invisible — first shipped products, first user interviews.",
+  },
+  {
+    year: "2020",
+    title: "Immersive Design",
+    description: "Moved into AR/VR — discovered that depth changes the meaning of every pixel.",
+  },
+  {
+    year: "2023",
+    title: "AI Exploration",
+    description: "Started designing with — not just for — intelligent systems. Prototyped early LLM products.",
+  },
+  {
+    year: "NOW",
+    title: "Sentient Design",
+    description: "Blending all three: product craft, spatial intuition and machine intelligence.",
+  },
+];
+
+export const dimensions: Dimension[] = [
+  {
+    id: "PRODUCT",
+    color: "#00e5ff",
+    glow: "rgba(0,229,255,0.5)",
+    text: "text-cyber",
+    ring: "from-cyber/60 to-cyber/5",
+    headline: "Products people trust",
+    description: "End-to-end product design — strategy, systems, shipping.",
+  },
+  {
+    id: "UX",
+    color: "#ffc94d",
+    glow: "rgba(255,201,77,0.5)",
+    text: "text-volt",
+    ring: "from-volt/60 to-volt/5",
+    headline: "Experiences that flow",
+    description: "Research-driven interfaces that vanish into the task.",
+  },
+  {
+    id: "XR",
+    color: "#ff2bd6",
+    glow: "rgba(255,43,214,0.5)",
+    text: "text-neon",
+    ring: "from-neon/60 to-neon/5",
+    headline: "Worlds you can enter",
+    description: "Spatial interfaces, hand-tracked flows, immersive environments.",
+  },
+  {
+    id: "AI",
+    color: "#8b5cff",
+    glow: "rgba(139,92,255,0.55)",
+    text: "text-sigil",
+    ring: "from-sigil/60 to-sigil/5",
+    headline: "Intelligence made kind",
+    description: "Conversational agents, generative systems, trust-first AI UX.",
+  },
+];
+
+export const eyeStatement = {
+  label: "THE SENTIENT EYE",
+  line: "Perception becomes intelligence.",
+  detail: "Eye → perception → intelligence → design.",
+};
+
+export const logoStatement = {
+  label: "IDENTITY",
+  line: "Designing",
+  line2: "intelligent experiences",
+  line3: "across realities.",
+  kicker: "AI EXPERIENCE DESIGNER",
+  meta: "XR · AI · UX · PRODUCT DESIGN",
+  cta: "Explore the work",
 };
 
 export const stats: Stat[] = [
   { value: "07", suffix: "+", label: "Years in design" },
   { value: "40", suffix: "+", label: "Ships to production" },
-  { value: "12", suffix: "", label: "XMR / spatial builds" },
-  { value: "3", suffix: "", label: "Design awards" },
+  { value: "12", suffix: "", label: "Immersive builds" },
+  { value: "03", suffix: "", label: "Design awards" },
 ];
 
 export const projects: Project[] = [
   {
     title: "Synapse Assistant",
-    category: "AI",
+    dimension: "AI",
     year: "2026",
     blurb:
       "A grounded multimodal AI copilot for enterprise workflows — intent trees, memory layers and voice-first UX.",
     tags: ["LLM UX", "Voice UI", "Design Systems"],
-    accent: "cyan",
+    accent: "sigil",
   },
   {
     title: "Aether Field",
-    category: "XR",
+    dimension: "XR",
     year: "2025",
     blurb:
       "Hand-tracked AR workspace that projects live 3D data into the room. Spatial gestures designed for 45-minute sessions.",
@@ -81,8 +203,8 @@ export const projects: Project[] = [
     accent: "neon",
   },
   {
-    title: "Pulse Bank App",
-    category: "UX",
+    title: "Pulse Bank",
+    dimension: "UX",
     year: "2025",
     blurb:
       "Fintech onboarding rebuild that lifted activation 31% through a friction-first audit and expressive motion system.",
@@ -90,13 +212,13 @@ export const projects: Project[] = [
     accent: "volt",
   },
   {
-    title: "Orbit Design OS",
-    category: "AI",
+    title: "Orbit OS",
+    dimension: "PRODUCT",
     year: "2024",
     blurb:
       "A token-powered design operating system that generates variant UIs from natural language briefs.",
     tags: ["GenAI", "Token Systems", "Tooling"],
-    accent: "sigil",
+    accent: "cyan",
   },
 ];
 

@@ -5,9 +5,9 @@ import { ScrollTrigger } from "@/lib/gsap";
 import { profile } from "@/data/portfolio";
 
 const LINKS = [
-  { label: "about", href: "#about" },
-  { label: "work", href: "#work" },
-  { label: "stack", href: "#capabilities" },
+  { label: "timeline", href: "#timeline" },
+  { label: "dimensions", href: "#dimensions" },
+  { label: "world", href: "#world" },
   { label: "contact", href: "#contact" },
 ];
 

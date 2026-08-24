@@ -5,12 +5,8 @@ import CursorGlow from "@/components/chrome/CursorGlow";
 import ProgressBar from "@/components/chrome/ProgressBar";
 import Nav from "@/components/chrome/Nav";
 import Boot from "@/components/chrome/Boot";
-import Hero from "@/components/sections/Hero";
-import Ticker from "@/components/sections/Ticker";
-import About from "@/components/sections/About";
-import Work from "@/components/sections/Work";
-import Capabilities from "@/components/sections/Capabilities";
-import Contact from "@/components/sections/Contact";
+import Journey from "@/components/cinema/dom/Journey";
+import PortfolioWorld from "@/components/cinema/dom/PortfolioWorld";
 
 export default function Home() {
   return (
@@ -22,12 +18,8 @@ export default function Home() {
       <Nav />
       <Boot />
       <main className="relative z-10">
-        <Hero />
-        <Ticker />
-        <About />
-        <Work />
-        <Capabilities />
-        <Contact />
+        <Journey />
+        <PortfolioWorld />
       </main>
       <ScrollSync />
     </>
