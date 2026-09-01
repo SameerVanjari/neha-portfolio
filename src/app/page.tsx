@@ -1,27 +1,28 @@
-import SceneRoot from "@/components/canvas/SceneRoot";
-import ScrollSync from "@/components/providers/ScrollSync";
-import Scanlines from "@/components/chrome/Scanlines";
-import CursorGlow from "@/components/chrome/CursorGlow";
-import ProgressBar from "@/components/chrome/ProgressBar";
 import Nav from "@/components/chrome/Nav";
-import Boot from "@/components/chrome/Boot";
-import Journey from "@/components/cinema/dom/Journey";
-import PortfolioWorld from "@/components/cinema/dom/PortfolioWorld";
+import Hero from "@/components/sections/Hero";
+import About from "@/components/sections/About";
+import Timeline from "@/components/sections/Timeline";
+import Dimensions from "@/components/sections/Dimensions";
+import Projects from "@/components/sections/Projects";
+import Skills from "@/components/sections/Skills";
+import Contact from "@/components/sections/Contact";
+import ScrollReveal from "@/components/sections/ScrollReveal";
 
 export default function Home() {
   return (
     <>
-      <Scanlines />
-      <CursorGlow />
-      <SceneRoot />
-      <ProgressBar />
       <Nav />
-      <Boot />
-      <main className="relative z-10">
-        <Journey />
-        <PortfolioWorld />
-      </main>
-      <ScrollSync />
+      <ScrollReveal>
+        <main>
+          <Hero />
+          <About />
+          <Timeline />
+          <Dimensions />
+          <Projects />
+          <Skills />
+          <Contact />
+        </main>
+      </ScrollReveal>
     </>
   );
 }

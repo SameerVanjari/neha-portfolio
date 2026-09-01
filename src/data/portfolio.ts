@@ -20,9 +20,22 @@ export interface Project {
   dimension: "PRODUCT" | "UX" | "XR" | "AI";
   year: string;
   blurb: string;
+  details: {
+    challenge: string;
+    approach: string;
+    result: string;
+  };
   tags: string[];
   accent: "cyan" | "sky" | "neon" | "volt" | "sigil";
 }
+
+export const PROJECT_COLORS: Record<Project["accent"], string> = {
+  cyan: "#00e5ff",
+  sky: "#38bdf8",
+  neon: "#ff2bd6",
+  volt: "#ffc94d",
+  sigil: "#8b5cff",
+};
 
 export interface Dimension {
   id: "PRODUCT" | "UX" | "XR" | "AI";
@@ -190,6 +203,14 @@ export const projects: Project[] = [
     year: "2026",
     blurb:
       "A grounded multimodal AI copilot for enterprise workflows — intent trees, memory layers and voice-first UX.",
+    details: {
+      challenge:
+        "Enterprise teams juggle fragmented tools and lose context across tasks. Existing AI copilots hallucinate, lack memory, and fail at multi-step workflows.",
+      approach:
+        "Designed a grounded multimodal copilot with intent trees for branching logic, persistent memory layers, and voice-first interaction. Every response is anchored to verified data sources.",
+      result:
+        "Reduced task-switching friction by 40% in pilot testing. Teams reported higher trust in AI-generated outputs and faster completion of complex multi-step workflows.",
+    },
     tags: ["LLM UX", "Voice UI", "Design Systems"],
     accent: "sigil",
   },
@@ -199,6 +220,14 @@ export const projects: Project[] = [
     year: "2025",
     blurb:
       "Hand-tracked AR workspace that projects live 3D data into the room. Spatial gestures designed for 45-minute sessions.",
+    details: {
+      challenge:
+        "Data analysts lose insight when working with flat dashboards. Spatial data has depth, relationships, and patterns that screens compress into 2D.",
+      approach:
+        "Built a hand-tracked AR workspace where live data projects into the room. Designed spatial gestures calibrated for sustained 45-minute sessions without fatigue. Data points sit in physical space, letting analysts walk around datasets.",
+      result:
+        "User testing showed 28% faster pattern recognition compared to screen-based dashboards. Analysts described it as 'walking through the data' — a fundamentally different way to understand information.",
+    },
     tags: ["Unity", "Hand Tracking", "Spatial UI"],
     accent: "neon",
   },
@@ -208,6 +237,14 @@ export const projects: Project[] = [
     year: "2025",
     blurb:
       "Fintech onboarding rebuild that lifted activation 31% through a friction-first audit and expressive motion system.",
+    details: {
+      challenge:
+        "Pulse Bank's onboarding had a 68% drop-off rate. Users felt lost, overwhelmed, and distrustful during the identity verification and account setup flow.",
+      approach:
+        "Conducted a friction-first audit to map every decision point. Rebuilt the flow with progressive disclosure, expressive motion feedback for progress, and micro-interactions that rewarded completion.",
+      result:
+        "Activation rate jumped from 32% to 63%. Time-to-first-transaction dropped by half. The motion system became a case study in how animation builds trust in fintech.",
+    },
     tags: ["Mobile", "Motion", "Research"],
     accent: "volt",
   },
@@ -217,6 +254,14 @@ export const projects: Project[] = [
     year: "2024",
     blurb:
       "A token-powered design operating system that generates variant UIs from natural language briefs.",
+    details: {
+      challenge:
+        "Design teams spend weeks producing UI variants for A/B testing and localization. Each variant requires manual adaptation of layout, spacing, and component composition.",
+      approach:
+        "Created a token-powered design OS where natural language briefs generate variant UIs. Design tokens act as the control layer — describing intent while the system handles spatial composition and component adaptation.",
+      result:
+        "Cut variant production from weeks to hours. Teams shipped 3x more variants in the same timeframe, enabling rapid experimentation across markets and user segments.",
+    },
     tags: ["GenAI", "Token Systems", "Tooling"],
     accent: "cyan",
   },
