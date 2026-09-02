@@ -65,6 +65,7 @@ export default function Home() {
       <ThemeWave baseId={baseId} overlayId={overlayId} onOverlayDone={handleWaveDone} />
 
       <Nav theme={theme} />
+
       <main className="h-[100dvh] max-h-[100dvh] overflow-hidden">
         <HeroStage activeId={activeId} baseId={baseId} overlayId={overlayId} islands={islands} />
       </main>

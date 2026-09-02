@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import type { ThemeId } from "@/data/themes";
 import { THEMES } from "@/data/themes";
+import GradientOrbs from "./background/GradientOrbs";
 
 type IslandId = ThemeId;
 
@@ -199,8 +200,11 @@ export default function HeroStage({
     <>
       {/* Base — always underneath, static */}
       <div className="relative flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 pt-[64px] pb-[88px] md:px-6 md:pb-[96px]">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
+          <GradientOrbs theme={THEMES[baseId]} />
+        </div>
         {!isWaving && (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden>
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0" aria-hidden>
             <div
               className="h-[520px] w-[720px] max-w-[90vw] rounded-[40px] blur-[80px] opacity-40"
               style={{ background: `radial-gradient(ellipse at center, ${THEMES[baseId].glow} 0%, transparent 72%)` }}
@@ -297,12 +301,8 @@ export default function HeroStage({
             className="pointer-events-none fixed inset-0 z-10 flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 pt-[64px] pb-[88px] md:px-6 md:pb-[96px] will-change-[clip-path]"
             aria-hidden
           >
-            {/* Glow for overlay */}
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div
-                className="h-[520px] w-[720px] max-w-[90vw] rounded-[40px] blur-[80px] opacity-40"
-                style={{ background: `radial-gradient(ellipse at center, ${THEMES[overlayId!].glow} 0%, transparent 72%)` }}
-              />
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+              <GradientOrbs theme={THEMES[overlayId!]} />
             </div>
 
             <div className="relative w-full max-w-[1040px]">

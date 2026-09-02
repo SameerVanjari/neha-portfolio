@@ -1,29 +1,26 @@
-// Impeccable themes — light studio daylight, paper + tinted washes
-// Each perception owns a full-paper world, not an accent on cream.
-
+// Impeccable — light studio, tonal washes (matching, not complementary)
+// Each perception owns a restrained tonal sweep — calm authority, one accent family per page.
 export type ThemeId = "xr" | "ux" | "ai" | "product";
 
 export interface Theme {
   id: ThemeId;
   accent: string;
-  accentStrong: string; // for text/icons where contrast needed
-  bg: string; // fallback flat
-  bgGradient: string; // page gradient (covers viewport)
-  glow: string; // island glow/radial
-  text: string; // primary dark
+  accentStrong: string;
+  bg: string;
+  bgGradient: string;
+  wash: string; // matching tonal wash — not complement
+  glow: string;
+  text: string;
   muted: string;
   faint: string;
   border: string;
-  surface: string; // card surface
+  surface: string;
   islandBg: string;
   islandBorder: string;
   islandIconIdle: string;
 }
 
-// Island: darker contrast — unified charcoal anchor so the wave reads as emerging from the control.
-// Craft-floor depth: offset + soft blur, not halo; border or shadow, not both ghosts.
 const ISLAND_BG = "rgba(18,18,22,0.92)";
-const ISLAND_BG_HOVER = "rgba(22,22,28,0.96)";
 const ISLAND_IDLE = "rgba(255,255,255,0.52)";
 
 export const THEMES: Record<ThemeId, Theme> = {
@@ -32,8 +29,9 @@ export const THEMES: Record<ThemeId, Theme> = {
     accent: "#FF2BD6",
     accentStrong: "#D60AA8",
     bg: "#FFF0F7",
+    wash: "#FFC2DD", // rose — tonal to magenta
     bgGradient:
-      "radial-gradient(130% 100% at 50% 108%, #FF9AD0 0%, #FFB5DD 22%, #FFD0E8 42%, #FFE0F0 62%, #FFF0F7 82%, #FFD6EC 100%)",
+      "radial-gradient(130% 100% at 50% 108%, #FF9AD0 0%, #FFB5DD 22%, #FFD0E8 36%, #FFE0F0 54%, #FFF0F7 72%, #FFD6E8 88%, #FFC2DD 100%)",
     glow: "rgba(255,43,214,0.22)",
     text: "#2A1020",
     muted: "#7A4A62",
@@ -49,8 +47,9 @@ export const THEMES: Record<ThemeId, Theme> = {
     accent: "#FFC94D",
     accentStrong: "#B77900",
     bg: "#FFF4CC",
+    wash: "#FFE7A3", // warm gold — tonal
     bgGradient:
-      "radial-gradient(130% 100% at 50% 108%, #FFD84D 0%, #FFE27A 24%, #FFE9A3 44%, #FFF0C2 64%, #FFF4CC 82%, #FFE7A3 100%)",
+      "radial-gradient(130% 100% at 50% 108%, #FFD84D 0%, #FFE27A 24%, #FFE9A3 40%, #FFF0C2 58%, #FFF4CC 74%, #FFEEC2 88%, #FFE7A3 100%)",
     glow: "rgba(255,201,77,0.26)",
     text: "#231C0A",
     muted: "#7A652F",
@@ -66,8 +65,9 @@ export const THEMES: Record<ThemeId, Theme> = {
     accent: "#8B5CF6",
     accentStrong: "#6D28D9",
     bg: "#EDE8FF",
+    wash: "#D8D0FF", // lavender — tonal to violet
     bgGradient:
-      "radial-gradient(130% 100% at 50% 108%, #B8A6FF 0%, #C7B8FF 24%, #DDD6FE 44%, #E9E2FF 64%, #EDE8FF 82%, #D8D0FF 100%)",
+      "radial-gradient(130% 100% at 50% 108%, #B8A6FF 0%, #C7B8FF 24%, #DDD6FE 40%, #E9E2FF 58%, #EDE8FF 74%, #E6E0FF 88%, #D8D0FF 100%)",
     glow: "rgba(139,92,246,0.22)",
     text: "#1A1630",
     muted: "#5E5878",
@@ -83,8 +83,9 @@ export const THEMES: Record<ThemeId, Theme> = {
     accent: "#06B6D4",
     accentStrong: "#0E7490",
     bg: "#CFF5FA",
+    wash: "#A5F3FC", // sky — tonal to cyan
     bgGradient:
-      "radial-gradient(130% 100% at 50% 108%, #67E8F9 0%, #8EF0FB 24%, #A5F3FC 44%, #BEF8FE 64%, #CFF5FA 82%, #99EFFF 100%)",
+      "radial-gradient(130% 100% at 50% 108%, #67E8F9 0%, #8EF0FB 24%, #A5F3FC 40%, #BEF8FE 56%, #CFF5FA 72%, #D1F2FA 88%, #A5F3FC 100%)",
     glow: "rgba(6,182,214,0.22)",
     text: "#0F1F25",
     muted: "#4A6570",
