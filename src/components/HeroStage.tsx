@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import type { ThemeId } from "@/data/themes";
 import { THEMES } from "@/data/themes";
@@ -32,7 +31,7 @@ const rowStagger = {
 
 const rowStaggerOverlay = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.52 } },
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.12 } },
   exit: { transition: { staggerChildren: 0.04, staggerDirection: -1 } },
 };
 
@@ -170,11 +169,6 @@ export default function HeroStage({
   const overlayIsland = overlayId ? islands.find((i) => i.id === overlayId)! : null;
 
   const isWaving = !!overlayId && !!overlayIsland;
-  const hasWavedRef = useRef(false);
-  useEffect(() => {
-    if (isWaving) hasWavedRef.current = true;
-  }, [isWaving]);
-  const showBaseStagger = !isWaving && !hasWavedRef.current;
 
   if (reduceMotion) {
     // Reduced: no wave, simple crossfade — keeps comprehension, drops position
@@ -231,76 +225,47 @@ export default function HeroStage({
                 <CardImage island={baseIsland} />
               </div>
               <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-10">
-                {isWaving ? (
-                  <>
-                    <div className="max-w-[560px] opacity-90">
-                      <div className="mb-3 flex items-center gap-2">
-                        <span className="h-2 w-2 rounded-full" style={{ background: baseIsland.color }} />
-                        <span className="font-mono text-[10px] tracking-[0.2em]" style={{ color: baseIsland.color }}>
-                          {baseIsland.subtitle}
-                        </span>
-                        <span className="font-mono text-[10px] tracking-[0.14em] text-white/60">· {baseIsland.stat}</span>
-                      </div>
-                      <h1 className="font-display text-[30px] font-bold leading-[0.95] tracking-[-0.03em] text-white md:text-[44px] lg:text-[48px]" style={{ fontFamily: "var(--font-display)" }}>
-                        {baseIsland.title}
-                      </h1>
-                      <p className="mt-3 max-w-[520px] text-[14px] leading-[1.6] text-white/75 md:text-[15px]" style={{ fontFamily: "var(--font-body)" }}>
-                        {baseIsland.description}
-                      </p>
-                    </div>
-                    <div className="mt-6 flex items-center justify-end border-t border-white/15 pt-4">
-                      <span className="h-1.5 w-8 rounded-full opacity-70" style={{ background: baseIsland.color }} />
-                    </div>
-                  </>
-                ) : showBaseStagger ? (
-                  <>
-                    <AnimatePresence mode="wait">
-                      <TextStack key={`${baseIsland.id}-text`} island={baseIsland} reduceMotion={false} />
-                    </AnimatePresence>
-                    <div className="mt-6 flex items-center justify-end border-t border-white/15 pt-4">
-                      <span className="h-1.5 w-8 rounded-full opacity-70" style={{ background: baseIsland.color }} />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="max-w-[560px]">
-                      <div className="mb-3 flex items-center gap-2">
-                        <span className="h-2 w-2 rounded-full" style={{ background: baseIsland.color }} />
-                        <span className="font-mono text-[10px] tracking-[0.2em]" style={{ color: baseIsland.color }}>
-                          {baseIsland.subtitle}
-                        </span>
-                        <span className="font-mono text-[10px] tracking-[0.14em] text-white/60">· {baseIsland.stat}</span>
-                      </div>
-                      <h1 className="font-display text-[30px] font-bold leading-[0.95] tracking-[-0.03em] text-white md:text-[44px] lg:text-[48px]" style={{ fontFamily: "var(--font-display)" }}>
-                        {baseIsland.title}
-                      </h1>
-                      <p className="mt-3 max-w-[520px] text-[14px] leading-[1.6] text-white/75 md:text-[15px]" style={{ fontFamily: "var(--font-body)" }}>
-                        {baseIsland.description}
-                      </p>
-                    </div>
-                    <div className="mt-6 flex items-center justify-end border-t border-white/15 pt-4">
-                      <span className="h-1.5 w-8 rounded-full opacity-70" style={{ background: baseIsland.color }} />
-                    </div>
-                  </>
-                )}
+                {/* Base content — stays mounted under wave. Opacity dims during wave so overlay text reads, no retriggered stagger on every baseId change */}
+                <motion.div
+                  key={baseId}
+                  initial={false}
+                  animate={{ opacity: isWaving ? 0.9 : 1 }}
+                  transition={{ duration: 0.18, ease: EASE_OUT }}
+                  className="max-w-[560px]"
+                >
+                  <div className="mb-3 flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full" style={{ background: baseIsland.color, boxShadow: `0 0 10px ${baseIsland.color}` }} />
+                    <span className="font-mono text-[10px] tracking-[0.2em]" style={{ color: baseIsland.color }}>
+                      {baseIsland.subtitle}
+                    </span>
+                    <span className="font-mono text-[10px] tracking-[0.14em] text-white/60">· {baseIsland.stat}</span>
+                  </div>
+                  <h1 className="font-display text-[30px] font-bold leading-[0.95] tracking-[-0.03em] text-white md:text-[44px] lg:text-[48px]" style={{ fontFamily: "var(--font-display)" }}>
+                    {baseIsland.title}
+                  </h1>
+                  <p className="mt-3 max-w-[520px] text-[14px] leading-[1.6] text-white/75 md:text-[15px]" style={{ fontFamily: "var(--font-body)" }}>
+                    {baseIsland.description}
+                  </p>
+                </motion.div>
+                <div className="mt-6 flex items-center justify-end border-t border-white/15 pt-4">
+                  <span className="h-1.5 w-8 rounded-full opacity-70" style={{ background: baseIsland.color }} />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Overlay — synced wave, same viewport mask as ThemeWave */}
-      <AnimatePresence>
-        {isWaving && (
-          <motion.div
-            key={`hero-wave-${overlayId}`}
-            initial={{ clipPath: "circle(0% at 50% 92%)" }}
-            animate={{ clipPath: "circle(150% at 50% 92%)" }}
-            exit={{ clipPath: "circle(150% at 50% 92%)" }}
-            transition={{ duration: DURATION_WAVE, ease: EASE_WAVE }}
-            className="pointer-events-none fixed inset-0 z-10 flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 pt-[64px] pb-[88px] md:px-6 md:pb-[96px] will-change-[clip-path]"
-            aria-hidden
-          >
+      {/* Overlay — single instance, remounts per overlayId without AnimatePresence double-mount glitch on rapid switches */}
+      {isWaving && (
+        <motion.div
+          key={overlayId}
+          initial={{ clipPath: "circle(0% at 50% 92%)" }}
+          animate={{ clipPath: "circle(150% at 50% 92%)" }}
+          transition={{ duration: DURATION_WAVE, ease: EASE_WAVE }}
+          className="pointer-events-none fixed inset-0 z-10 flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 pt-[64px] pb-[88px] md:px-6 md:pb-[96px] will-change-[clip-path]"
+          aria-hidden
+        >
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
               <GradientOrbs theme={THEMES[overlayId!]} />
             </div>
@@ -331,9 +296,8 @@ export default function HeroStage({
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </motion.div>
+      )}
     </>
   );
 }
