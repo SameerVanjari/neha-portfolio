@@ -1,0 +1,90 @@
+{
+  "profile": {
+    "name": "NEHA",
+    "tagline": "I design the interfaces where intelligent systems and human needs meet — across every reality.",
+    "roles": ["AI Experience Designer", "XR Designer", "UX Designer", "Product Designer"],
+    "bio": "Neha is an AI, XR and UX designer who believes intelligence should feel less like a machine and more like a kind companion. She crafts spatial worlds, conversational minds and product surfaces where technology disappears and understanding arrives.",
+    "location": "Bangalore, IN · Remote worldwide",
+    "email": "hello@neha.design",
+    "availability": "Open for select collaborations"
+  },
+  "islands": [
+    {
+      "id": "xr",
+      "label": "XR",
+      "title": "Spatial Worlds",
+      "subtitle": "XR · Immersive",
+      "color": "#ff2bd6",
+      "description": "Worlds you can enter — spatial interfaces, hand-tracked flows, immersive environments.",
+      "image": "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?q=80&w=1200&auto=format&fit=crop",
+      "imageAlt": "XR headset in spatial environment",
+      "stat": "12 Immersive builds"
+    },
+    {
+      "id": "ux",
+      "label": "UX",
+      "title": "Human Flows",
+      "subtitle": "UX · Research",
+      "color": "#ffc94d",
+      "description": "Experiences that flow — research-driven interfaces that vanish into the task.",
+      "image": "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?q=80&w=1200&auto=format&fit=crop",
+      "imageAlt": "UX design workspace with wireframes",
+      "stat": "40+ Ships to production"
+    },
+    {
+      "id": "ai",
+      "label": "AI",
+      "title": "Kind Intelligence",
+      "subtitle": "AI · Systems",
+      "color": "#8b5cff",
+      "description": "Intelligence made kind — conversational agents, generative systems, trust-first AI UX.",
+      "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1200&auto=format&fit=crop",
+      "imageAlt": "AI neural network visualization",
+      "stat": "LLM · Voice · Agents"
+    },
+    {
+      "id": "product",
+      "label": "PRODUCT",
+      "title": "Products People Trust",
+      "subtitle": "Product · Systems",
+      "color": "#00e5ff",
+      "description": "End-to-end product design — strategy, systems, shipping.",
+      "image": "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1200&auto=format&fit=crop",
+      "imageAlt": "Product design system overview",
+      "stat": "07+ Years in design"
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "PRODUCT",
+      "color": "#00e5ff",
+      "headline": "Products people trust",
+      "description": "End-to-end product design — strategy, systems, shipping."
+    },
+    {
+      "id": "UX",
+      "color": "#ffc94d",
+      "headline": "Experiences that flow",
+      "description": "Research-driven interfaces that vanish into the task."
+    },
+    {
+      "id": "XR",
+      "color": "#ff2bd6",
+      "headline": "Worlds you can enter",
+      "description": "Spatial interfaces, hand-tracked flows, immersive environments."
+    },
+    {
+      "id": "AI",
+      "color": "#8b5cff",
+      "headline": "Intelligence made kind",
+      "description": "Conversational agents, generative systems, trust-first AI UX."
+    }
+  ],
+  "socials": [
+    { "label": "linkedin", "handle": "in/neha-design", "href": "https://linkedin.com" },
+    { "label": "dribbble", "handle": "@neha.design", "href": "https://dribbble.com" },
+    { "label": "behance", "handle": "@neha", "href": "https://behance.net" },
+    { "label": "github", "handle": "@neha-spatial", "href": "https://github.com" },
+    { "label": "mail", "handle": "hello@neha.design", "href": "mailto:hello@neha.design" }
+  ]
+}
