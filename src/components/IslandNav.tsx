@@ -98,7 +98,8 @@ const CLAY_ASSET: Record<ThemeId, { src: string; srcSet: string; fallback: strin
     fallback: "/clay/product.png",
   },
 };
-// Keep string map for preload loops + legacy
+// Keep string map for preload loops + legacy (used via CLAY_ASSET)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CLAY_SRC: Record<ThemeId, string> = {
   xr: CLAY_ASSET.xr.src,
   ux: CLAY_ASSET.ux.src,
@@ -296,7 +297,8 @@ export default function IslandNav({
                         height={84}
                         loading="eager"
                         decoding="async"
-                        // @ts-ignore
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore — fetchPriority types vary across React versions
                         fetchPriority="high"
                         alt=""
                         aria-hidden

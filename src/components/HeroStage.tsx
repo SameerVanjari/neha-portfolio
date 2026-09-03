@@ -117,28 +117,17 @@ function HeroPanel({ island, theme }: { island: IslandData; theme: ReturnType<ty
         />
       </div>
 
-      <div className="relative w-full max-w-[1040px]">
-        <div className="mb-4 flex items-center justify-center gap-3">
-          <span className="h-px w-8" style={{ background: theme.faint }} />
-          <span className="font-mono text-[11px] tracking-[0.24em]" style={{ color: theme.muted }}>
-            PERCEPTION · {island.label}
-          </span>
-          <span className="h-px w-8" style={{ background: theme.faint }} />
-        </div>
-
+      <div className="relative w-full max-w-[2440px]">
         <div
-          className="relative overflow-hidden rounded-[28px] bg-white shadow-[0_16px_48px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.8)_inset] md:rounded-[32px]"
+          className="relative overflow-hidden bg-white shadow-[0_16px_48px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.8)_inset] md:rounded-[24px]"
           style={{ border: `1px solid ${theme.border}` }}
         >
-          <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-[16/10] lg:aspect-[16/9]">
+          <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-[16/9] lg:aspect-[21/9]">
             <div className="absolute inset-0">
               <CardImage island={island} />
             </div>
-            <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-10">
+            <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
               <TextStack island={island} reduceMotion={null} />
-              <div className="mt-6 flex items-center justify-end border-t border-white/15 pt-4">
-                <span className="h-1.5 w-8 rounded-full opacity-70" style={{ background: island.color }} />
-              </div>
             </div>
           </div>
         </div>
@@ -171,9 +160,8 @@ export default function HeroStage({
   const isWaving = !!overlayId && !!overlayIsland;
 
   if (reduceMotion) {
-    // Reduced: no wave, simple crossfade — keeps comprehension, drops position
     return (
-      <div className="relative flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 pt-[64px] pb-[88px] md:px-6 md:pb-[96px]">
+      <div className="relative flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden pt-[64px] pb-[88px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeId}
@@ -181,7 +169,7 @@ export default function HeroStage({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.28, ease: EASE_OUT }}
-            className="relative flex w-full flex-col items-center justify-center"
+            className="relative flex w-full max-w-[2440px] flex-col items-center justify-center px-0 md:px-4"
           >
             <HeroPanel island={activeIsland} theme={getTheme(activeId)} />
           </motion.div>
@@ -193,39 +181,20 @@ export default function HeroStage({
   return (
     <>
       {/* Base — always underneath, static */}
-      <div className="relative flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 pt-[64px] pb-[88px] md:px-6 md:pb-[96px]">
+      <div className="relative flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden pt-[64px] pb-[88px]">
         <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
           <GradientOrbs theme={THEMES[baseId]} />
         </div>
-        {!isWaving && (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0" aria-hidden>
-            <div
-              className="h-[520px] w-[720px] max-w-[90vw] rounded-[40px] blur-[80px] opacity-40"
-              style={{ background: `radial-gradient(ellipse at center, ${THEMES[baseId].glow} 0%, transparent 72%)` }}
-            />
-          </div>
-        )}
-        <div className="relative w-full max-w-[1040px]">
-          {!isWaving && (
-            <div className="mb-4 flex items-center justify-center gap-3">
-              <span className="h-px w-8" style={{ background: THEMES[baseId].faint }} />
-              <span className="font-mono text-[11px] tracking-[0.24em]" style={{ color: THEMES[baseId].muted }}>
-                PERCEPTION · {baseIsland.label}
-              </span>
-              <span className="h-px w-8" style={{ background: THEMES[baseId].faint }} />
-            </div>
-          )}
-          {isWaving && <div className="mb-4 h-[17px]" aria-hidden />}
+        <div className="relative w-full max-w-[2440px] px-0 md:px-4">
           <div
-            className="relative overflow-hidden rounded-[28px] bg-white shadow-[0_16px_48px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.8)_inset] md:rounded-[32px]"
+            className="relative overflow-hidden bg-white shadow-[0_16px_48px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.8)_inset] md:rounded-[24px]"
             style={{ border: `1px solid ${THEMES[baseId].border}` }}
           >
-            <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-[16/10] lg:aspect-[16/9]">
+            <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-[16/9] lg:aspect-[21/9]">
               <div className="absolute inset-0">
                 <CardImage island={baseIsland} />
               </div>
-              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-10">
-                {/* Base content — stays mounted under wave. Opacity dims during wave so overlay text reads, no retriggered stagger on every baseId change */}
+              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
                 <motion.div
                   key={baseId}
                   initial={false}
@@ -247,9 +216,6 @@ export default function HeroStage({
                     {baseIsland.description}
                   </p>
                 </motion.div>
-                <div className="mt-6 flex items-center justify-end border-t border-white/15 pt-4">
-                  <span className="h-1.5 w-8 rounded-full opacity-70" style={{ background: baseIsland.color }} />
-                </div>
               </div>
             </div>
           </div>
@@ -263,35 +229,24 @@ export default function HeroStage({
           initial={{ clipPath: "circle(0% at 50% 92%)" }}
           animate={{ clipPath: "circle(150% at 50% 92%)" }}
           transition={{ duration: DURATION_WAVE, ease: EASE_WAVE }}
-          className="pointer-events-none fixed inset-0 z-10 flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 pt-[64px] pb-[88px] md:px-6 md:pb-[96px] will-change-[clip-path]"
+          className="pointer-events-none fixed inset-0 z-10 flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden pt-[64px] pb-[88px] will-change-[clip-path]"
           aria-hidden
         >
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
               <GradientOrbs theme={THEMES[overlayId!]} />
             </div>
 
-            <div className="relative w-full max-w-[1040px]">
-              <div className="mb-4 flex items-center justify-center gap-3">
-                <span className="h-px w-8" style={{ background: THEMES[overlayId!].faint }} />
-                <span className="font-mono text-[11px] tracking-[0.24em]" style={{ color: THEMES[overlayId!].muted }}>
-                  PERCEPTION · {overlayIsland!.label}
-                </span>
-                <span className="h-px w-8" style={{ background: THEMES[overlayId!].faint }} />
-              </div>
-
+            <div className="relative w-full max-w-[2440px] px-0 md:px-4">
               <div
-                className="relative overflow-hidden rounded-[28px] bg-white shadow-[0_16px_48px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.8)_inset] md:rounded-[32px]"
+                className="relative overflow-hidden bg-white shadow-[0_16px_48px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.8)_inset] md:rounded-[24px]"
                 style={{ border: `1px solid ${THEMES[overlayId!].border}` }}
               >
-                <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-[16/10] lg:aspect-[16/9]">
+                <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-[16/9] lg:aspect-[21/9]">
                   <div className="absolute inset-0">
                     <CardImage island={overlayIsland!} />
                   </div>
-                  <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-10">
+                  <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
                     <TextStack island={overlayIsland!} reduceMotion={false} isOverlay />
-                    <div className="mt-6 flex items-center justify-end border-t border-white/15 pt-4">
-                      <span className="h-1.5 w-8 rounded-full opacity-70" style={{ background: overlayIsland!.color }} />
-                    </div>
                   </div>
                 </div>
               </div>

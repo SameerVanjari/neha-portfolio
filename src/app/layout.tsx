@@ -31,10 +31,14 @@ export const metadata: Metadata = {
     "I design the interfaces where intelligent systems and human needs meet — across every reality.",
 };
 
+import BarbaProvider from "@/components/BarbaProvider";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${bricolage.variable} ${sora.variable} antialiased`}>
-      <body className="h-[100dvh] max-h-[100dvh] overflow-hidden bg-white text-zinc-900">{children}</body>
+      <body className="bg-white text-zinc-900">
+        <BarbaProvider>{children}</BarbaProvider>
+      </body>
     </html>
   );
 }
