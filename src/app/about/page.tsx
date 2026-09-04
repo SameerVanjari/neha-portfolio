@@ -3,7 +3,8 @@
 import Nav from "@/components/Nav";
 import { THEMES } from "@/data/themes";
 import data from "@/data/portfolio.json";
-import Link from "next/link";
+import { AceternityCTA, HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+import { WordStagger } from "@/components/ui/word-stagger";
 
 const NEHA_PHOTO_1 = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=900&auto=format&fit=crop";
 const NEHA_PHOTO_2 = "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=900&auto=format&fit=crop";
@@ -77,8 +78,8 @@ export default function AboutPage() {
                 </div>
                 <div className="rounded-[20px] border bg-zinc-900 p-5 text-white" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
                   <div className="font-mono text-[10px] tracking-[0.14em] text-white/40">Contact</div>
-                  <a href={`mailto:${data.profile.email}`} className="mt-2 block font-mono text-[12px] font-medium text-white underline decoration-white/20 underline-offset-4 hover:decoration-white">
-                    {data.profile.email}
+                  <a href={`mailto:${data.profile.email}`} className="group mt-2 block font-mono text-[12px] font-medium text-white underline decoration-white/20 underline-offset-4 hover:decoration-white">
+                    <WordStagger text={data.profile.email} />
                   </a>
                   <div className="mt-4 h-px w-full bg-white/10" />
                   <div className="mt-3 font-mono text-[10px] tracking-[0.12em] text-white/40">Availability</div>
@@ -126,9 +127,9 @@ export default function AboutPage() {
               </span>
             ))}
           </div>
-          <div className="mt-8 flex gap-3">
-            <Link href="/projects" className="rounded-full bg-zinc-900 px-6 py-3 font-mono text-[12px] tracking-[0.14em] text-white hover:bg-zinc-800">View projects →</Link>
-            <Link href="/#contact" className="rounded-full border bg-white px-6 py-3 font-mono text-[12px] tracking-[0.14em] text-zinc-700" style={{ borderColor: "rgba(0,0,0,0.08)" }}>Contact</Link>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <AceternityCTA href="/projects" variant="dark">View projects</AceternityCTA>
+            <HoverBorderGradient as="a" href="/#contact">Contact</HoverBorderGradient>
           </div>
         </section>
 

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import Nav from "@/components/Nav";
 import { THEMES, type ThemeId } from "@/data/themes";
 import data from "@/data/portfolio.json";
 import Link from "next/link";
+import { WordStagger } from "@/components/ui/word-stagger";
 
 type Project = {
   id: string;
@@ -24,7 +25,6 @@ const FILTERS: (ThemeId | "all")[] = ["all", "ai", "xr", "ux", "product"];
 
 export default function ProjectsPage() {
   const [filter, setFilter] = useState<ThemeId | "all">("all");
-  const reduceMotion = useReducedMotion();
   const themeForFilter: ThemeId = filter === "all" ? "product" : filter;
   const theme = THEMES[themeForFilter];
 
@@ -86,34 +86,21 @@ export default function ProjectsPage() {
             </div>
 
             {/* grid — layoutIds for sort motion */}
-            <motion.div layout className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 md:gap-6">
-              <AnimatePresence initial={false}>
-                {sorted.map((p) => {
-                  const cardTheme = THEMES[p.perception];
-                  const isActive = filter === "all" || p.perception === filter;
-                  return (
-                    <motion.div
-                      key={p.id}
-                      layout={!reduceMotion}
-                      layoutId={`card-${p.id}`}
-                      initial={reduceMotion ? undefined : { opacity: 0, scale: 0.97 }}
-                      animate={{
-                        opacity: 1,
-                        scale: 1,
-                      }}
-                      exit={reduceMotion ? undefined : { opacity: 0, scale: 0.97 }}
-                      transition={
-                        reduceMotion
-                          ? { duration: 0.15 }
-                          : {
-                              layout: { type: "spring", stiffness: 380, damping: 32 },
-                              opacity: { duration: 0.22, ease: [0.23, 1, 0.32, 1] },
-                              scale: { duration: 0.22, ease: [0.23, 1, 0.32, 1] },
-                            }
-                      }
-                      style={{ opacity: isActive ? 1 : 0.38 }}
-                      className="will-change-transform"
-                    >
+            <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 md:gap-6">
+              {sorted.map((p) => {
+                const cardTheme = THEMES[p.perception];
+                const isActive = filter === "all" || p.perception === filter;
+                return (
+                  <motion.div
+                    key={p.id}
+                    layout
+                    layoutId={`project-card-${p.id}`}
+                    transition={{
+                      layout: { type: "spring", stiffness: 420, damping: 30, mass: 0.9 },
+                    }}
+                    style={{ opacity: isActive ? 1 : 0.45 }}
+                    className="will-change-transform"
+                  >
                       <article
                         className="group overflow-hidden rounded-[20px] bg-white transition-all"
                         style={{
@@ -143,8 +130,7 @@ export default function ProjectsPage() {
                     </motion.div>
                   );
                 })}
-              </AnimatePresence>
-            </motion.div>
+            </div>
           </div>
 
           <div className="h-px w-full bg-black/5" />
@@ -152,10 +138,12 @@ export default function ProjectsPage() {
 
         <div className="mx-auto max-w-[1280px] px-6 py-8 md:px-8">
           <div className="flex flex-wrap gap-3">
-            <Link href="/" className="rounded-full border bg-white px-6 py-3 font-mono text-[12px] tracking-[0.12em] text-zinc-700" style={{ borderColor: "rgba(0,0,0,0.08)" }}>
-              ← Back home
+            <Link href="/" className="group rounded-full border bg-white px-6 py-3 font-mono text-[12px] tracking-[0.12em] text-zinc-700" style={{ borderColor: "rgba(0,0,0,0.08)" }}>
+              <WordStagger text="← Back home" />
             </Link>
-            <Link href="/about" className="rounded-full bg-zinc-900 px-6 py-3 font-mono text-[12px] tracking-[0.12em] text-white">About Neha →</Link>
+            <Link href="/about" className="group rounded-full bg-zinc-900 px-6 py-3 font-mono text-[12px] tracking-[0.12em] text-white">
+              <WordStagger text="About Neha →" />
+            </Link>
           </div>
         </div>
 

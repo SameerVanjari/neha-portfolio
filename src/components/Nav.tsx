@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { Theme } from "@/data/themes";
+import { WordStagger } from "./ui/word-stagger";
 
 const NAV_ITEMS = [
   { id: "projects", label: "Projects", num: "01", href: "/projects" },
@@ -53,6 +54,24 @@ export default function Nav({ theme, activeSection }: { theme: Theme; activeSect
 
   return (
     <>
+      <style>{`
+        .nav-link{ --ease-out: cubic-bezier(0.23,1,0.32,1); }
+        .nav-link__label{ transition: transform 150ms var(--ease-out); will-change: transform; }
+        .nav-link__line{ transform: scaleX(0); transition: transform 180ms var(--ease-out); transform-origin: center; will-change: transform; }
+        .nav-link[aria-current="page"] .nav-link__line{ transform: scaleX(1); }
+        @media (hover:hover) and (pointer:fine){
+          .nav-link:hover .nav-link__line{ transform: scaleX(1); }
+          .nav-link:hover .nav-link__label{ transform: translateY(-1px); }
+          .nav-link:active .nav-link__label{ transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion:reduce){
+          .nav-link__label, .nav-link__line{ transition: opacity 150ms ease, color 150ms ease !important; transform: none !important; }
+          .nav-link__line{ opacity: 0; }
+          .nav-link[aria-current="page"] .nav-link__line{ opacity: 1; transform: none !important; }
+          .nav-link:hover .nav-link__line{ opacity: 1; transform: none !important; }
+          .nav-link:hover .nav-link__label{ transform: none !important; }
+        }
+      `}</style>
       <header
         className="fixed inset-x-0 top-0 z-40 border-b transition-colors duration-300"
         style={{
@@ -64,18 +83,63 @@ export default function Nav({ theme, activeSection }: { theme: Theme; activeSect
       >
         <div className="mx-auto flex h-[64px] max-w-[1280px] items-center justify-between gap-4 px-6 md:px-8">
           <Link href="/" className="flex items-baseline gap-2 shrink-0">
-            <span className="font-display text-[18px] font-bold tracking-[-0.025em]" style={{ color: theme.text, letterSpacing: "-0.03em" }}>
+            <span className="font-display text-[18px] font-bold tracking-[-0.025em]" style={{ color: theme.text, letterSpacing: "-0.03em", fontFamily: "var(--font-display)" }}>
               NEHA
             </span>
           </Link>
 
+          {/* Desktop — nav items back in navbar: proper font (Sora) + simple hover micro animation */}
+          <nav aria-label="Primary" className="hidden md:flex items-center gap-7 lg:gap-9">
+            {NAV_ITEMS.map((item) => {
+              const active = isActive(item.id);
+              const isContactAnchor = item.id === "contact" && pathname === "/";
+              const commonCls =
+                "nav-link group relative inline-flex items-center py-2 text-[12.5px] font-medium tracking-[0.08em] transition-colors duration-150";
+              const style = {
+                fontFamily: "var(--font-body)",
+                color: active ? theme.text : "rgba(17,24,39,0.68)",
+              } as React.CSSProperties;
+
+              const inner = (
+                <>
+                  <span className="nav-link__label relative inline-block">{item.label}</span>
+                  <span aria-hidden className="nav-link__line pointer-events-none absolute left-0 right-0 bottom-[2px] h-px bg-current" />
+                </>
+              );
+
+              if (isContactAnchor) {
+                return (
+                  <a
+                    key={item.id}
+                    href="#contact"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToId("contact");
+                    }}
+                    className={commonCls}
+                    style={style}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {inner}
+                  </a>
+                );
+              }
+
+              return (
+                <Link key={item.id} href={item.href} className={commonCls} style={style} aria-current={active ? "page" : undefined}>
+                  {inner}
+                </Link>
+              );
+            })}
+          </nav>
+
           <div className="flex items-center gap-2 shrink-0">
             <a
               href="mailto:hello@neha.design"
-              className="hidden md:inline-flex rounded-full border px-4 py-[7px] font-mono text-[11px] font-medium tracking-[0.14em] backdrop-blur transition-colors hover:opacity-90"
+              className="group hidden md:inline-flex items-center justify-center rounded-full border px-4 py-[7px] font-mono text-[11px] font-medium tracking-[0.14em] backdrop-blur"
               style={{ borderColor: theme.border, background: theme.surface, color: theme.text, boxShadow: "0 1px 8px rgba(0,0,0,0.06)" }}
             >
-              Contact
+              <WordStagger text="Contact" />
             </a>
 
             <button

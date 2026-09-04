@@ -111,8 +111,15 @@ export default function Home() {
         />
       </main>
 
-      <BottomNav theme={theme} activeSection={activeSection} />
-      <IslandNav activeId={activeId} onSelect={setActiveId} theme={theme} />
+      <BottomNav theme={theme} />
+      <IslandNav
+        activeId={activeId}
+        onSelect={(id) => {
+          setActiveId(id);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+        theme={theme}
+      />
     </>
   );
 }

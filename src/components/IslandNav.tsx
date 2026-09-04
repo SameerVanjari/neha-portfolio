@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import type { Theme, ThemeId } from "@/data/themes";
 
 interface IslandItem {
@@ -17,7 +16,6 @@ const ITEMS: IslandItem[] = [
   { id: "product", label: "PRODUCT", color: "#06B6D4" },
 ];
 
-// ——— Icons (thicker strokes) ———
 function VRIcon({ active, color }: { active?: boolean; color: string }) {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -73,38 +71,11 @@ const ICON_MAP: Record<ThemeId, typeof VRIcon> = {
   product: ProductIcon,
 };
 
-// Clay 3D objects — line icon becomes real on select.
-// Optimized WebP (256: 6-9KB, 512: 14-28KB) generated from trimmed 512 PNG.
-// Preloaded eagerly on mount so first tap is instant.
 const CLAY_ASSET: Record<ThemeId, { src: string; srcSet: string; fallback: string }> = {
-  xr: {
-    src: "/clay/xr-256.webp",
-    srcSet: "/clay/xr-256.webp 256w, /clay/xr-512.webp 512w",
-    fallback: "/clay/xr.png",
-  },
-  ux: {
-    src: "/clay/ux-256.webp",
-    srcSet: "/clay/ux-256.webp 256w, /clay/ux-512.webp 512w",
-    fallback: "/clay/ux.png",
-  },
-  ai: {
-    src: "/clay/ai-256.webp",
-    srcSet: "/clay/ai-256.webp 256w, /clay/ai-512.webp 512w",
-    fallback: "/clay/ai.png",
-  },
-  product: {
-    src: "/clay/product-256.webp",
-    srcSet: "/clay/product-256.webp 256w, /clay/product-512.webp 512w",
-    fallback: "/clay/product.png",
-  },
-};
-// Keep string map for preload loops + legacy (used via CLAY_ASSET)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const CLAY_SRC: Record<ThemeId, string> = {
-  xr: CLAY_ASSET.xr.src,
-  ux: CLAY_ASSET.ux.src,
-  ai: CLAY_ASSET.ai.src,
-  product: CLAY_ASSET.product.src,
+  xr: { src: "/clay/xr-256.webp", srcSet: "/clay/xr-256.webp 256w, /clay/xr-512.webp 512w", fallback: "/clay/xr.png" },
+  ux: { src: "/clay/ux-256.webp", srcSet: "/clay/ux-256.webp 256w, /clay/ux-512.webp 512w", fallback: "/clay/ux.png" },
+  ai: { src: "/clay/ai-256.webp", srcSet: "/clay/ai-256.webp 256w, /clay/ai-512.webp 512w", fallback: "/clay/ai.png" },
+  product: { src: "/clay/product-256.webp", srcSet: "/clay/product-256.webp 256w, /clay/product-512.webp 512w", fallback: "/clay/product.png" },
 };
 
 export default function IslandNav({
@@ -116,11 +87,14 @@ export default function IslandNav({
   onSelect: (id: ThemeId) => void;
   theme: Theme;
 }) {
-  const reduceMotion = useReducedMotion();
   const [failed, setFailed] = useState<Set<ThemeId>>(() => new Set());
   const [loaded, setLoaded] = useState<Set<ThemeId>>(() => new Set());
+  const [expanded, setExpanded] = useState(true);
+  const [heroInView, setHeroInView] = useState(true);
+  const collapseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const containerRef = useRef<HTMLElement | null>(null);
 
-  // Eagerly preload all clay assets + inject <link rel="preload"> for high priority fetch.
+  // preload clay
   useEffect(() => {
     (Object.keys(CLAY_ASSET) as ThemeId[]).forEach((id) => {
       const { src, srcSet } = CLAY_ASSET[id];
@@ -130,10 +104,7 @@ export default function IslandNav({
       img.sizes = "84px";
       img.src = src;
       if (img.decode) {
-        img
-          .decode()
-          .then(() => setLoaded((p) => new Set(p).add(id)))
-          .catch(() => setLoaded((p) => new Set(p).add(id)));
+        img.decode().then(() => setLoaded((p) => new Set(p).add(id))).catch(() => setLoaded((p) => new Set(p).add(id)));
       } else {
         img.onload = () => setLoaded((p) => new Set(p).add(id));
       }
@@ -155,179 +126,214 @@ export default function IslandNav({
     });
   }, []);
 
+  // hero in view → expanded (full size), smooth via CSS
+  useEffect(() => {
+    const hero = document.getElementById("hero");
+    if (!hero) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setHeroInView(entry.isIntersecting),
+      { threshold: 0.35, rootMargin: "-64px 0px 0px 0px" }
+    );
+    obs.observe(hero);
+    return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (heroInView) setExpanded(true);
+    else setExpanded(false);
+  }, [heroInView]);
+
+  // auto collapse on scroll when not in hero
+  useEffect(() => {
+    if (!expanded || heroInView) return;
+    const onScroll = () => setExpanded(false);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [expanded, heroInView]);
+
+  // auto collapse after inactivity
+  useEffect(() => {
+    if (!expanded || heroInView) {
+      if (collapseTimeout.current) {
+        clearTimeout(collapseTimeout.current);
+        collapseTimeout.current = null;
+      }
+      return;
+    }
+    if (collapseTimeout.current) clearTimeout(collapseTimeout.current);
+    collapseTimeout.current = setTimeout(() => setExpanded(false), 3200);
+    return () => {
+      if (collapseTimeout.current) clearTimeout(collapseTimeout.current);
+    };
+  }, [expanded, heroInView]);
+
+  // outside click
+  useEffect(() => {
+    if (!expanded || heroInView) return;
+    const handler = (e: MouseEvent) => {
+      const el = containerRef.current as HTMLElement | null;
+      if (el && !el.contains(e.target as Node)) setExpanded(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [expanded, heroInView]);
+
+  const activeItem = ITEMS.find((i) => i.id === activeId)!;
+
+  const renderButton = (item: IslandItem, isActive: boolean) => {
+    const hasFailed = failed.has(item.id);
+    const isLoaded = loaded.has(item.id);
+    const showClay = isActive && !hasFailed && isLoaded;
+    const Icon = ICON_MAP[item.id];
+    const asset = CLAY_ASSET[item.id];
+    return (
+      <button
+        key={item.id}
+        onClick={() => {
+          if (!expanded) {
+            setExpanded(true);
+            return;
+          }
+          onSelect(item.id);
+          if (collapseTimeout.current) clearTimeout(collapseTimeout.current);
+          collapseTimeout.current = setTimeout(() => setExpanded(false), 2200);
+        }}
+        aria-label={item.label}
+        aria-pressed={isActive}
+        className="group relative flex items-center justify-center overflow-visible active:scale-[0.97] transition-transform duration-120 ease-[cubic-bezier(0.23,1,0.32,1)]"
+        style={{ overflow: "visible" }}
+      >
+        {/* active highlight — CSS only */}
+        {isActive && expanded && (
+          <span
+            className="absolute inset-0 rounded-full"
+            style={{
+              backgroundColor: `${item.color}14`,
+              border: `1px solid ${item.color}28`,
+              boxShadow: `0 1px 8px ${item.color}22`,
+              transition: "background-color 200ms cubic-bezier(0.23,1,0.32,1), border-color 200ms cubic-bezier(0.23,1,0.32,1)",
+            }}
+          />
+        )}
+
+        <span className="island-btn relative flex h-[40px] w-[40px] items-center justify-center rounded-full md:h-[44px] md:w-[52px]" style={{ overflow: "visible" }}>
+          {/* line icon — hidden when clay shows, CSS opacity/scale */}
+          <span
+            className="island-icon flex items-center justify-center"
+            style={{
+              color: isActive ? item.color : theme.islandIconIdle,
+              opacity: showClay ? 0 : isActive ? 1 : 0.6,
+              transform: showClay ? "scale(0.94)" : isActive ? "scale(1.06)" : "scale(1)",
+              transition: "opacity 160ms cubic-bezier(0.23,1,0.32,1), transform 160ms cubic-bezier(0.23,1,0.32,1), color 160ms ease",
+              willChange: "transform, opacity",
+            }}
+          >
+            <span style={isActive ? undefined : { filter: "grayscale(1)" }}>
+              <Icon active={isActive} color={item.color} />
+            </span>
+          </span>
+
+          {/* clay — only when active, replaces line icon */}
+          {showClay && (
+            <span
+              className="pointer-events-none absolute left-1/2 top-1/2 z-[2] h-[72px] w-[72px] md:h-[84px] md:w-[84px]"
+              style={{
+                transform: "translate(-50%, -58%) scale(1)",
+                transformOrigin: "50% 72%",
+                opacity: 1,
+                filter: `drop-shadow(0 10px 14px rgba(0,0,0,0.28)) drop-shadow(0 0 10px ${item.color}22)`,
+                transition: "opacity 280ms cubic-bezier(0.23,1,0.32,1), transform 280ms cubic-bezier(0.23,1,0.32,1)",
+                willChange: "transform, opacity",
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={asset.src}
+                srcSet={asset.srcSet}
+                sizes="84px"
+                width={84}
+                height={84}
+                loading="eager"
+                decoding="async"
+                alt=""
+                aria-hidden
+                draggable={false}
+                onLoad={() => setLoaded((p) => new Set(p).add(item.id))}
+                onError={(e) => {
+                  const img = e.currentTarget as HTMLImageElement;
+                  const pathname = new URL(img.src, window.location.href).pathname;
+                  if (pathname !== asset.fallback) {
+                    img.src = asset.fallback;
+                    img.srcset = "";
+                    return;
+                  }
+                  setFailed((prev) => new Set(prev).add(item.id));
+                }}
+                className="h-full w-full select-none object-contain"
+              />
+            </span>
+          )}
+        </span>
+
+        <span className="pointer-events-none absolute -top-9 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-full bg-zinc-900 border border-white/10 px-2.5 py-1 font-mono text-[10px] tracking-[0.12em] text-white opacity-0 shadow-lg transition-[opacity,transform] duration-150 ease-out group-hover:opacity-100 group-hover:translate-y-0 md:block">
+          {item.label}
+        </span>
+      </button>
+    );
+  };
+
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center overflow-visible px-4 md:bottom-8">
-      <motion.nav
-        initial={reduceMotion ? { opacity: 0 } : { opacity: 0, transform: "translateY(12px)" }}
-        animate={reduceMotion ? { opacity: 1 } : { opacity: 1, transform: "translateY(0px)" }}
-        transition={reduceMotion ? { duration: 0.2, ease: "easeOut" } : { duration: 0.5, ease: [0.23, 1, 0.32, 1], delay: 0.15 }}
-        className="pointer-events-auto flex items-center gap-0.5 overflow-visible rounded-full p-[4px] md:gap-1 md:p-[5px]"
+      <nav
+        // @ts-ignore
+        ref={containerRef}
         aria-label="Dimension navigation"
+        aria-expanded={expanded}
+        className="pointer-events-auto flex items-center overflow-visible rounded-full p-[4px] md:p-[5px]"
         style={{
           background: theme.islandBg,
           backdropFilter: "blur(22px) saturate(1.3)",
           WebkitBackdropFilter: "blur(22px) saturate(1.3)",
           border: `1px solid ${theme.islandBorder}`,
-          // craft-floor depth: offset + soft blur, accent inner ring proves source
           boxShadow: `0 12px 36px rgba(0,0,0,0.24), 0 2px 10px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 0 0 1px ${theme.accent}18`,
           overflow: "visible",
+          maxWidth: expanded ? 240 : 68,
+          width: expanded ? 240 : 68,
+          transition: "max-width 340ms cubic-bezier(0.23,1,0.32,1), width 340ms cubic-bezier(0.23,1,0.32,1)",
+          willChange: "width, max-width",
+          justifyContent: expanded ? "flex-start" : "center",
+          gap: expanded ? 4 : 0,
+        }}
+        onClick={() => {
+          if (!expanded) setExpanded(true);
         }}
       >
-        {ITEMS.map((item) => {
-          const isActive = activeId === item.id;
-          const hasFailed = failed.has(item.id);
-          const isLoaded = loaded.has(item.id);
-          const showClay = isActive && !hasFailed;
-          // Keep line visible until clay is decoded — prevents empty island flicker
-          const isClayReady = showClay && isLoaded;
-          const Icon = ICON_MAP[item.id];
-          const asset = CLAY_ASSET[item.id];
-          return (
-            <button
-              key={item.id}
-              onClick={() => onSelect(item.id)}
-              aria-label={item.label}
-              aria-pressed={isActive}
-              className="group relative flex items-center justify-center overflow-visible active:scale-[0.97] transition-transform duration-120 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
-              style={{ overflow: "visible" }}
-            >
-              {isActive && (
-                <motion.div
-                  layout
-                  layoutId="island-active"
-                  className="absolute inset-0 rounded-full"
-                  initial={false}
-                  animate={{
-                    backgroundColor: `${item.color}14`,
-                    borderColor: `${item.color}28`,
-                  }}
-                  style={{
-                    borderWidth: "1px",
-                    borderStyle: "solid",
-                    boxShadow: `0 1px 8px ${item.color}22`,
-                  }}
-                  transition={
-                    reduceMotion
-                      ? { duration: 0.15, ease: "easeOut" }
-                      : {
-                          layout: { type: "spring", duration: 0.30, bounce: 0.08 },
-                          backgroundColor: { duration: 0.20, ease: [0.23, 1, 0.32, 1] as const },
-                          borderColor: { duration: 0.20, ease: [0.23, 1, 0.32, 1] as const },
-                        }
-                  }
-                />
-              )}
-
-              <span
-                className="island-btn relative flex h-[40px] w-[40px] items-center justify-center rounded-full md:h-[44px] md:w-[52px]"
-                style={{ overflow: "visible" }}
+        <div className="flex items-center gap-0.5 md:gap-1">
+          {ITEMS.map((item) => {
+            const isActive = item.id === activeId;
+            const visible = expanded || isActive;
+            return (
+              <div
+                key={item.id}
+                className="shrink-0"
+                style={{
+                  maxWidth: visible ? 52 : 0,
+                  opacity: visible ? 1 : 0,
+                  flex: visible ? "0 0 52px" : "0 0 0px",
+                  overflow: visible ? "visible" : "hidden",
+                  transition: visible
+                    ? "max-width 340ms cubic-bezier(0.23,1,0.32,1), flex-basis 340ms cubic-bezier(0.23,1,0.32,1), opacity 200ms cubic-bezier(0.23,1,0.32,1)"
+                    : "max-width 300ms cubic-bezier(0.32,0.72,0,1), flex-basis 300ms cubic-bezier(0.32,0.72,0,1), opacity 140ms ease-out",
+                  willChange: "max-width, opacity",
+                }}
+                aria-hidden={!visible}
               >
-                {/* Line icon — only transform+opacity (no filter) → compositor only, prevents grayscale/blur conflict flicker */}
-                <motion.span
-                  className="island-icon flex items-center justify-center"
-                  animate={
-                    isClayReady
-                      ? { opacity: 0, transform: "scale(0.94)" }
-                      : isActive
-                        ? reduceMotion
-                          ? { opacity: 1, transform: "scale(1.04)" }
-                          : { opacity: 1, transform: "scale(1.06)" }
-                        : reduceMotion
-                          ? { opacity: 0.6, transform: "scale(1)" }
-                          : { opacity: 1, transform: "scale(1)" }
-                  }
-                  transition={
-                    isClayReady
-                      ? { duration: 0.16, ease: [0.23, 1, 0.32, 1] as const }
-                      : isActive
-                        ? { type: "spring", duration: 0.26, bounce: 0.10 }
-                        : { duration: 0.16, ease: [0.23, 1, 0.32, 1] as const }
-                  }
-                  style={
-                    isActive
-                      ? { color: item.color, willChange: "transform, opacity" }
-                      : { color: theme.islandIconIdle, willChange: "transform, opacity" }
-                  }
-                >
-                  <span style={isActive ? undefined : { filter: "grayscale(1)" }}>
-                    <Icon active={isActive} color={item.color} />
-                  </span>
-                </motion.span>
-
-                {/* Clay 3D — compositor-only (transform+opacity). Shadow is static wrapper, no filter animation → no paint flicker */}
-                <AnimatePresence initial={false}>
-                  {showClay && (
-                    <motion.div
-                      key={`${item.id}-clay-wrap`}
-                      className="pointer-events-none absolute left-1/2 top-1/2 z-[2] h-[72px] w-[72px] md:h-[84px] md:w-[84px]"
-                      style={{
-                        transformOrigin: "50% 72%",
-                        willChange: "transform, opacity",
-                        // static lift shadow — not animated → compositor only for inner
-                        filter: `drop-shadow(0 10px 14px rgba(0,0,0,0.28)) drop-shadow(0 0 10px ${item.color}22)`,
-                      }}
-                      initial={
-                        reduceMotion
-                          ? { opacity: 0, transform: "translate(-50%, -52%) scale(0.96)" }
-                          : { opacity: 0, transform: "translate(-50%, -48%) scale(0.94)" }
-                      }
-                      animate={{ opacity: 1, transform: "translate(-50%, -58%) scale(1)" }}
-                      exit={
-                        reduceMotion
-                          ? { opacity: 0, transform: "translate(-50%, -52%) scale(0.96)" }
-                          : { opacity: 0, transform: "translate(-50%, -52%) scale(0.94)" }
-                      }
-                      transition={
-                        reduceMotion
-                          ? { duration: 0.14, ease: "easeOut" }
-                          : {
-                              type: "spring",
-                              duration: 0.28,
-                              bounce: 0.08,
-                              opacity: { duration: 0.16, ease: [0.23, 1, 0.32, 1] as const },
-                            }
-                      }
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={asset.src}
-                        srcSet={asset.srcSet}
-                        sizes="84px"
-                        width={84}
-                        height={84}
-                        loading="eager"
-                        decoding="async"
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore — fetchPriority types vary across React versions
-                        fetchPriority="high"
-                        alt=""
-                        aria-hidden
-                        draggable={false}
-                        onLoad={() => setLoaded((p) => new Set(p).add(item.id))}
-                        onError={(e) => {
-                          const img = e.currentTarget as HTMLImageElement;
-                          const pathname = new URL(img.src, window.location.href).pathname;
-                          if (pathname !== asset.fallback) {
-                            img.src = asset.fallback;
-                            img.srcset = "";
-                            return;
-                          }
-                          setFailed((prev) => new Set(prev).add(item.id));
-                        }}
-                        className="h-full w-full select-none object-contain"
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </span>
-
-              <span className="pointer-events-none absolute -top-9 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-full bg-zinc-900 border border-white/10 px-2.5 py-1 font-mono text-[10px] tracking-[0.12em] text-white opacity-0 shadow-lg transition-[opacity,transform] duration-150 ease-out group-hover:opacity-100 group-hover:translate-y-0 md:block motion-reduce:transition-none">
-                {item.label}
-              </span>
-            </button>
-          );
-        })}
-      </motion.nav>
+                {renderButton(item, isActive)}
+              </div>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 }

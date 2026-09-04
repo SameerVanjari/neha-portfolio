@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
+import { useEffect, useMemo } from "react";
+import { useReducedMotion } from "framer-motion";
 import type { ThemeId } from "@/data/themes";
-import { THEMES } from "@/data/themes";
-import Link from "next/link";
 
 type Project = {
   id: string;
@@ -18,28 +16,32 @@ type Project = {
   imageAlt: string;
 };
 
-// Full-bleed image card — text over image
+// Featured card — 4:3 landscape; ribbon peaks at center (image zoom parallax: image stays full-cover while card height tapers)
 function FullImageCard({ p }: { p: Project }) {
   return (
     <article
-      className="group relative flex h-[420px] w-[320px] shrink-0 flex-col justify-end overflow-hidden rounded-[24px] md:h-[460px] md:w-[380px] md:rounded-[28px]"
+      className="relative flex w-[300px] shrink-0 flex-col justify-end overflow-hidden ribbon-card will-change-transform aspect-[4/3] md:w-[380px]"
       style={{
         boxShadow: "0 16px 48px rgba(0,0,0,0.12), 0 1px 0 rgba(255,255,255,0.6) inset",
+        transformOrigin: "center center",
       }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={p.image}
-        alt={p.imageAlt}
-        loading="lazy"
-        draggable={false}
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.04]"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-      <div
-        className="absolute inset-0 opacity-30 mix-blend-overlay"
-        style={{ background: `linear-gradient(110deg, transparent 42%, ${p.color}26 100%)` }}
-      />
+      {/* media layer — inverse-scaled to stay full-cover (no stretch), creates zoom parallax when card tapers */}
+      <div className="ribbon-media absolute inset-0 will-change-transform" style={{ transformOrigin: "center center" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={p.image}
+          alt={p.imageAlt}
+          loading="lazy"
+          draggable={false}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+        <div
+          className="absolute inset-0 opacity-30 mix-blend-overlay"
+          style={{ background: `linear-gradient(110deg, transparent 42%, ${p.color}26 100%)` }}
+        />
+      </div>
 
       <div className="absolute left-4 top-4">
         <span className="rounded-full bg-white/92 px-3 py-1.5 font-mono text-[10px] tracking-[0.14em] text-zinc-900 backdrop-blur">
@@ -47,15 +49,15 @@ function FullImageCard({ p }: { p: Project }) {
         </span>
       </div>
 
-      <div className="relative p-6 md:p-7">
+      <div className="relative p-5 md:p-6">
         <h3
-          className="font-display text-[20px] font-semibold leading-[1.05] tracking-[-0.02em] text-white md:text-[22px]"
+          className="font-display text-[16px] font-semibold leading-[1.05] tracking-[-0.02em] text-white md:text-[18px]"
           style={{ fontFamily: "var(--font-display)" }}
         >
           {p.title}
         </h3>
         <p className="mt-1.5 font-mono text-[10px] tracking-[0.16em] text-white/70">{p.subtitle ?? p.dimension}</p>
-        <div className="mt-4 h-px w-8 bg-white/30 group-hover:w-12 transition-all" aria-hidden />
+        <div className="mt-4 h-px w-8 bg-white/30" aria-hidden />
       </div>
     </article>
   );
@@ -63,9 +65,6 @@ function FullImageCard({ p }: { p: Project }) {
 
 export default function ProjectsCarousel({ activeId, projects }: { activeId: ThemeId; projects: Project[] }) {
   const reduce = useReducedMotion();
-  const controls = useAnimationControls();
-  const [paused, setPaused] = useState(false);
-  const [userPaused, setUserPaused] = useState(false);
 
   const filtered = useMemo(() => projects.filter((p) => p.perception === activeId), [projects, activeId]);
   const items = filtered.length ? filtered : projects;
@@ -78,64 +77,130 @@ export default function ProjectsCarousel({ activeId, projects }: { activeId: The
     return [...items, ...items];
   }, [items]);
 
+  // ---- Ribbon effect: center cards full height, edges shorter ----
+  // Uses transform scaleY (compositor-friendly) so carousel stays smooth.
+  // Range: center 1.0 -> edge ~0.74, arch via smoothstep.
   useEffect(() => {
-    if (reduce || !needsLoop) return;
-    if (paused || userPaused) {
-      controls.stop();
-    } else {
-      controls.start({
-        x: ["0%", "-50%"],
-        transition: { duration: 30, ease: "linear", repeat: Infinity, repeatType: "loop" },
+    const isReduced = !!reduce;
+    // ribbon applies to both animated and static, but only when we have enough cards
+    if (items.length <= 1) return;
+
+    let raf = 0;
+    let ticking = false;
+
+    const applyRibbon = () => {
+      const cards = document.querySelectorAll<HTMLElement>(".ribbon-card");
+      if (!cards.length) return;
+      const vw = window.innerWidth;
+      const center = vw / 2;
+      // falloff: 50% viewport — peak at center, valley at edges
+      const maxDist = vw * 0.5;
+      cards.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+        const dist = Math.abs(cardCenter - center);
+        const t = Math.min(dist / maxDist, 1);
+        // smooth arch curve — gentle peak, faster drop at extremes
+        const eased = 1 - Math.pow(1 - t, 1.8);
+        // height taper: center 1 -> edge ~0.68 (4:3 keeps width constant)
+        const scale = 1 - eased * 0.32;
+        const clamped = Math.max(0.66, Math.min(1, scale));
+        // subtle arch: edges dip down to read as hanging ribbon
+        const archY = eased * 18;
+        el.style.transform = `translateY(${archY}px) scaleY(${clamped})`;
+        // keep image full-cover (no stretch) — inverse scale creates zoom parallax: edge cards crop/zoom, center shows full
+        const media = el.querySelector<HTMLElement>(".ribbon-media");
+        if (media) media.style.transform = `scaleY(${1 / clamped})`;
       });
+    };
+
+    const loop = () => {
+      applyRibbon();
+      raf = requestAnimationFrame(loop);
+    };
+
+    const onScrollOrResize = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          applyRibbon();
+          ticking = false;
+        });
+      }
+    };
+
+    if (!isReduced && needsLoop) {
+      // animated marquee: continuous rAF so ribbon follows translateX
+      raf = requestAnimationFrame(loop);
+      window.addEventListener("resize", onScrollOrResize);
+      return () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener("resize", onScrollOrResize);
+      };
+    } else {
+      // static scrollable: update on scroll/resize + initial
+      applyRibbon();
+      window.addEventListener("resize", onScrollOrResize);
+      window.addEventListener("scroll", onScrollOrResize, { passive: true });
+      // also listen to the scroll container itself
+      const scrollers = document.querySelectorAll<HTMLElement>(".ribbon-scroller");
+      scrollers.forEach((s) => s.addEventListener("scroll", onScrollOrResize, { passive: true }));
+      // observe for a couple frames to catch snap positions
+      raf = requestAnimationFrame(() => {
+        applyRibbon();
+        raf = requestAnimationFrame(applyRibbon as FrameRequestCallback);
+      });
+      return () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener("resize", onScrollOrResize);
+        window.removeEventListener("scroll", onScrollOrResize);
+        scrollers.forEach((s) => s.removeEventListener("scroll", onScrollOrResize));
+      };
     }
-  }, [controls, paused, userPaused, reduce, needsLoop, filtered]);
+  }, [reduce, needsLoop, items.length, filtered, track]);
 
   if (reduce || !needsLoop) {
     return (
       <div className="px-6 md:px-8">
-        <div className="flex gap-4 overflow-x-auto scrollbar-none snap-x snap-mandatory pb-2">
+        <div className="ribbon-scroller flex items-center gap-2 overflow-x-auto scrollbar-none snap-x snap-mandatory py-8 md:gap-3 md:py-10">
           {items.map((p) => (
-            <Link key={p.id} href="/projects" className="snap-start shrink-0">
+            <div key={p.id} className="snap-start shrink-0 cursor-default select-none">
               <FullImageCard p={p} />
-            </Link>
+            </div>
           ))}
         </div>
       </div>
     );
   }
 
-  // Full viewport bleed
+  // Full viewport bleed — ribbon arch centered in viewport
+  // Continuous infinite loop — no hover pause/slow
   return (
-    <div
-      className="relative overflow-hidden"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocusCapture={() => setPaused(true)}
-      onBlurCapture={() => setPaused(false)}
-    >
-      <div className="overflow-hidden" aria-roledescription="carousel" aria-label="Projects — infinite loop">
-        <motion.div className="flex w-max gap-4 py-2 md:gap-5 will-change-transform" animate={controls} style={{ willChange: "transform" }}>
-          {track.map((p, i) => (
-            <Link key={`${p.id}-${i}`} href="/projects" className="shrink-0">
-              <FullImageCard p={p} />
-            </Link>
-          ))}
-        </motion.div>
+    <>
+      <style>{`
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        .marquee-track {
+          animation: marquee 30s linear infinite;
+          will-change: transform;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .marquee-track { animation: none !important; }
+        }
+      `}</style>
+      <div className="relative overflow-hidden">
+        <div className="overflow-hidden py-8 md:py-10" aria-roledescription="carousel" aria-label="Projects — infinite loop">
+          <div className="flex w-max items-center gap-2 md:gap-3 will-change-transform marquee-track">
+            {track.map((p, i) => (
+              <div key={`${p.id}-${i}`} className="shrink-0 cursor-default select-none">
+                <FullImageCard p={p} />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-3 px-6 py-4 md:px-8">
-        <button
-          onClick={() => setUserPaused((v) => !v)}
-          aria-pressed={userPaused}
-          className="rounded-full border bg-white px-3.5 py-2 font-mono text-[11px] tracking-[0.14em] text-zinc-700"
-          style={{ borderColor: "rgba(0,0,0,0.08)", boxShadow: "0 1px 8px rgba(0,0,0,0.06)" }}
-        >
-          {userPaused ? "Resume" : "Pause"} motion
-        </button>
-        <span className="font-mono text-[10px] tracking-[0.14em] text-zinc-500">
-          {items.length} in {activeId.toUpperCase()} · <Link href="/projects" className="underline underline-offset-4 decoration-zinc-300 hover:decoration-zinc-600">View all →</Link>
-        </span>
-      </div>
-    </div>
+    </>
   );
 }

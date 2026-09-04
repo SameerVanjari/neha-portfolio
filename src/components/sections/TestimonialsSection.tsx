@@ -36,8 +36,8 @@ export default function TestimonialsSection({ activeId, testimonials }: { active
     <section id="testimonials" className="relative bg-[#f6f6f4]">
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: multiTint }} />
       <div className="mx-auto max-w-[1280px] px-6 md:px-8">
-        <div className="py-8 md:py-10 lg:py-12">
-          <div className="mb-6">
+        <div className="py-14 md:py-18 lg:py-24">
+          <div className="mb-8">
             <h2 className="font-display text-[22px] font-semibold tracking-[-0.03em] md:text-[26px]" style={{ fontFamily: "var(--font-display)", color: "#111827" }}>
               Testimonials
             </h2>

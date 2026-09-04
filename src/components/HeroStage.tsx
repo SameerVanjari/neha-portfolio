@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
 import type { ThemeId } from "@/data/themes";
 import { THEMES } from "@/data/themes";
 import GradientOrbs from "./background/GradientOrbs";
@@ -18,34 +18,6 @@ interface IslandData {
   imageAlt: string;
   stat: string;
 }
-
-const EASE_OUT: [number, number, number, number] = [0.23, 1, 0.32, 1];
-const EASE_WAVE: [number, number, number, number] = [0.32, 0.72, 0, 1];
-const DURATION_WAVE = 2.05; // shared token with ThemeWave — cohesion
-
-const rowStagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.06 } },
-  exit: { transition: { staggerChildren: 0.04, staggerDirection: -1 } },
-};
-
-const rowStaggerOverlay = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.12 } },
-  exit: { transition: { staggerChildren: 0.04, staggerDirection: -1 } },
-};
-
-const rowVariant = {
-  hidden: { opacity: 0, transform: "translateY(14px)" },
-  visible: { opacity: 1, transform: "translateY(0px)", transition: { duration: 0.42, ease: EASE_OUT } },
-  exit: { opacity: 0, transform: "translateY(-8px)", transition: { duration: 0.22, ease: EASE_OUT } },
-};
-
-const rowVariantReduced = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.18, ease: "easeOut" as const } },
-  exit: { opacity: 0, transition: { duration: 0.12, ease: "easeOut" as const } },
-};
 
 function CardImage({ island }: { island: IslandData }) {
   return (
@@ -66,73 +38,31 @@ function CardImage({ island }: { island: IslandData }) {
   );
 }
 
-function TextStack({ island, reduceMotion, isOverlay }: { island: IslandData; reduceMotion: boolean | null; isOverlay?: boolean }) {
-  const stagger = isOverlay ? rowStaggerOverlay : rowStagger;
+function TextStack({ island }: { island: IslandData }) {
   return (
-    <motion.div
-      key={`${island.id}-text`}
-      variants={reduceMotion ? rowVariantReduced : stagger}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-      className="max-w-[560px] will-change-transform"
-    >
-      <motion.div variants={reduceMotion ? rowVariantReduced : rowVariant} className="mb-3 flex items-center gap-2">
+    <div className="max-w-[560px] hero-text">
+      <div className="hero-row mb-3 flex items-center gap-2" style={{ ["--delay" as string]: "60ms" } as React.CSSProperties}>
         <span className="h-2 w-2 rounded-full" style={{ background: island.color, boxShadow: `0 0 10px ${island.color}` }} />
         <span className="font-mono text-[10px] tracking-[0.2em]" style={{ color: island.color }}>
           {island.subtitle}
         </span>
         <span className="font-mono text-[10px] tracking-[0.14em] text-white/60">· {island.stat}</span>
-      </motion.div>
+      </div>
 
-      <motion.h1
-        variants={reduceMotion ? rowVariantReduced : rowVariant}
-        className="font-display text-[30px] font-bold leading-[0.95] tracking-[-0.03em] text-white md:text-[44px] lg:text-[48px]"
-        style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.03em" }}
+      <h1
+        className="hero-row font-display text-[30px] font-bold leading-[0.95] tracking-[-0.03em] text-white md:text-[44px] lg:text-[48px]"
+        style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.03em", ["--delay" as string]: "130ms" } as React.CSSProperties}
       >
         {island.title}
-      </motion.h1>
+      </h1>
 
-      <motion.p
-        variants={reduceMotion ? rowVariantReduced : rowVariant}
-        className="mt-3 max-w-[520px] text-[14px] leading-[1.6] text-white/75 md:mt-4 md:text-[15px]"
-        style={{ fontFamily: "var(--font-body)", fontWeight: 400 }}
+      <p
+        className="hero-row mt-3 max-w-[520px] text-[14px] leading-[1.6] text-white/75 md:mt-4 md:text-[15px]"
+        style={{ fontFamily: "var(--font-body)", fontWeight: 400, ["--delay" as string]: "200ms" } as React.CSSProperties}
       >
         {island.description}
-      </motion.p>
-    </motion.div>
-  );
-}
-
-function HeroPanel({ island, theme }: { island: IslandData; theme: ReturnType<typeof getTheme> }) {
-  return (
-    <>
-      <div
-        className="pointer-events-none absolute inset-0 flex items-center justify-center"
-        aria-hidden
-      >
-        <div
-          className="h-[520px] w-[720px] max-w-[90vw] rounded-[40px] blur-[80px] opacity-40"
-          style={{ background: `radial-gradient(ellipse at center, ${theme.glow} 0%, transparent 72%)` }}
-        />
-      </div>
-
-      <div className="relative w-full max-w-[2440px]">
-        <div
-          className="relative overflow-hidden bg-white shadow-[0_16px_48px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.8)_inset] md:rounded-[24px]"
-          style={{ border: `1px solid ${theme.border}` }}
-        >
-          <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-[16/9] lg:aspect-[21/9]">
-            <div className="absolute inset-0">
-              <CardImage island={island} />
-            </div>
-            <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
-              <TextStack island={island} reduceMotion={null} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+      </p>
+    </div>
   );
 }
 
@@ -151,107 +81,147 @@ export default function HeroStage({
   overlayId: ThemeId | null;
   islands: IslandData[];
 }) {
-  const reduceMotion = useReducedMotion();
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const m = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(m.matches);
+    const h = () => setReduced(m.matches);
+    m.addEventListener("change", h);
+    return () => m.removeEventListener("change", h);
+  }, []);
 
   const activeIsland = islands.find((i) => i.id === activeId)!;
   const baseIsland = islands.find((i) => i.id === baseId)!;
   const overlayIsland = overlayId ? islands.find((i) => i.id === overlayId)! : null;
-
   const isWaving = !!overlayId && !!overlayIsland;
 
-  if (reduceMotion) {
+  // stable hero card height — prevents layout shift on perception change
+  const cardHeight = "clamp(480px, 62vh, 640px)";
+
+  if (reduced) {
     return (
-      <div className="relative flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden pt-[64px] pb-[88px]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeId}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.28, ease: EASE_OUT }}
-            className="relative flex w-full max-w-[2440px] flex-col items-center justify-center px-0 md:px-4"
+      <div className="relative flex min-h-[100dvh] flex-col items-center justify-start overflow-hidden pt-[80px]">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
+          <GradientOrbs theme={THEMES[activeId]} />
+          {/* fade hero into next section — uses below-section color #fafaf9, no layout gap (absolute) */}
+          <div
+            className="absolute inset-x-0 bottom-0 h-[160px] md:h-[220px]"
+            style={{ background: `linear-gradient(to bottom, rgba(255,255,255,0) 0%, ${THEMES[activeId].wash}14 38%, #fafaf9 88%)` }}
+          />
+        </div>
+        <div className="relative w-full max-w-[1280px] px-6 md:px-8">
+          <div
+            className="relative overflow-hidden rounded-[24px] bg-white"
+            style={{ border: `1px solid ${THEMES[activeId].border}`, height: cardHeight }}
           >
-            <HeroPanel island={activeIsland} theme={getTheme(activeId)} />
-          </motion.div>
-        </AnimatePresence>
+            <div className="absolute inset-0">
+              <CardImage island={activeIsland} />
+            </div>
+            <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
+              <TextStack island={activeIsland} />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
     <>
-      {/* Base — always underneath, static */}
-      <div className="relative flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden pt-[64px] pb-[88px]">
+      <style>{`
+        .hero-row{
+          opacity: 0;
+          transform: translateY(14px);
+          transition: opacity 420ms var(--ease-out, cubic-bezier(0.23,1,0.32,1)), transform 420ms var(--ease-out, cubic-bezier(0.23,1,0.32,1));
+          transition-delay: var(--delay, 0ms);
+          will-change: transform, opacity;
+        }
+        .hero-card--visible .hero-row{
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .hero-wave{
+          clip-path: circle(0% at 50% 92%);
+          transition: clip-path 2050ms cubic-bezier(0.32,0.72,0,1);
+          will-change: clip-path;
+        }
+        .hero-wave--expanded{
+          clip-path: circle(150% at 50% 92%);
+        }
+        @media (prefers-reduced-motion: reduce){
+          .hero-row{ transition: opacity 180ms ease-out; transform: none; }
+          .hero-wave{ transition: opacity 250ms ease-out; clip-path: none; opacity: 0; }
+          .hero-wave--expanded{ opacity: 1; }
+        }
+      `}</style>
+
+      {/* Base — static, stable height */}
+      <div className="relative flex min-h-[100dvh] flex-col items-center justify-start overflow-hidden pt-[76px]">
         <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
           <GradientOrbs theme={THEMES[baseId]} />
-        </div>
-        <div className="relative w-full max-w-[2440px] px-0 md:px-4">
+          {/* fade hero into next section — absolute, no extra layout height, matches #fafaf9 below */}
           <div
-            className="relative overflow-hidden bg-white shadow-[0_16px_48px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.8)_inset] md:rounded-[24px]"
-            style={{ border: `1px solid ${THEMES[baseId].border}` }}
+            className="absolute inset-x-0 bottom-0 h-[160px] md:h-[220px]"
+            style={{ background: `linear-gradient(to bottom, rgba(255,255,255,0) 0%, ${THEMES[baseId].wash}14 38%, #fafaf9 88%)` }}
+          />
+        </div>
+        <div className="relative w-full max-w-[1280px] px-6 md:px-8">
+          <div
+            className={`relative overflow-hidden rounded-[24px] bg-white hero-card ${!isWaving ? "hero-card--visible" : ""}`}
+            style={{ border: `1px solid ${THEMES[baseId].border}`, height: cardHeight }}
           >
-            <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-[16/9] lg:aspect-[21/9]">
-              <div className="absolute inset-0">
-                <CardImage island={baseIsland} />
-              </div>
-              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
-                <motion.div
-                  key={baseId}
-                  initial={false}
-                  animate={{ opacity: isWaving ? 0.9 : 1 }}
-                  transition={{ duration: 0.18, ease: EASE_OUT }}
-                  className="max-w-[560px]"
-                >
-                  <div className="mb-3 flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full" style={{ background: baseIsland.color, boxShadow: `0 0 10px ${baseIsland.color}` }} />
-                    <span className="font-mono text-[10px] tracking-[0.2em]" style={{ color: baseIsland.color }}>
-                      {baseIsland.subtitle}
-                    </span>
-                    <span className="font-mono text-[10px] tracking-[0.14em] text-white/60">· {baseIsland.stat}</span>
-                  </div>
-                  <h1 className="font-display text-[30px] font-bold leading-[0.95] tracking-[-0.03em] text-white md:text-[44px] lg:text-[48px]" style={{ fontFamily: "var(--font-display)" }}>
-                    {baseIsland.title}
-                  </h1>
-                  <p className="mt-3 max-w-[520px] text-[14px] leading-[1.6] text-white/75 md:text-[15px]" style={{ fontFamily: "var(--font-body)" }}>
-                    {baseIsland.description}
-                  </p>
-                </motion.div>
+            <div className="absolute inset-0">
+              <CardImage island={baseIsland} />
+            </div>
+            <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
+              <div className="max-w-[560px]" style={{ opacity: isWaving ? 0.9 : 1, transition: "opacity 180ms cubic-bezier(0.23,1,0.32,1)" }}>
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full" style={{ background: baseIsland.color, boxShadow: `0 0 10px ${baseIsland.color}` }} />
+                  <span className="font-mono text-[10px] tracking-[0.2em]" style={{ color: baseIsland.color }}>
+                    {baseIsland.subtitle}
+                  </span>
+                  <span className="font-mono text-[10px] tracking-[0.14em] text-white/60">· {baseIsland.stat}</span>
+                </div>
+                <h1 className="font-display text-[30px] font-bold leading-[0.95] tracking-[-0.03em] text-white md:text-[44px] lg:text-[48px]" style={{ fontFamily: "var(--font-display)" }}>
+                  {baseIsland.title}
+                </h1>
+                <p className="mt-3 max-w-[520px] text-[14px] leading-[1.6] text-white/75 md:text-[15px]" style={{ fontFamily: "var(--font-body)" }}>
+                  {baseIsland.description}
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Overlay — single instance, remounts per overlayId without AnimatePresence double-mount glitch on rapid switches */}
-      {isWaving && (
-        <motion.div
-          key={overlayId}
-          initial={{ clipPath: "circle(0% at 50% 92%)" }}
-          animate={{ clipPath: "circle(150% at 50% 92%)" }}
-          transition={{ duration: DURATION_WAVE, ease: EASE_WAVE }}
-          className="pointer-events-none fixed inset-0 z-10 flex h-[100dvh] max-h-[100dvh] flex-col items-center justify-center overflow-hidden pt-[64px] pb-[88px] will-change-[clip-path]"
+      {/* Overlay — CSS clip-path wave, stable size */}
+      {isWaving && overlayIsland && (
+        <div
+          className={`pointer-events-none fixed inset-0 z-10 flex min-h-[100dvh] flex-col items-center justify-start overflow-hidden pt-[76px] pb-8 hero-wave ${isWaving ? "hero-wave--expanded" : ""}`}
           aria-hidden
         >
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-              <GradientOrbs theme={THEMES[overlayId!]} />
-            </div>
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <GradientOrbs theme={THEMES[overlayId!]} />
+            <div
+              className="absolute inset-x-0 bottom-0 h-[160px] md:h-[220px]"
+              style={{ background: `linear-gradient(to bottom, rgba(255,255,255,0) 0%, ${THEMES[overlayId!].wash}14 38%, #fafaf9 102%)` }}
+            />
+          </div>
 
-            <div className="relative w-full max-w-[2440px] px-0 md:px-4">
-              <div
-                className="relative overflow-hidden bg-white shadow-[0_16px_48px_rgba(0,0,0,0.08),0_1px_0_rgba(255,255,255,0.8)_inset] md:rounded-[24px]"
-                style={{ border: `1px solid ${THEMES[overlayId!].border}` }}
-              >
-                <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-[16/9] lg:aspect-[21/9]">
-                  <div className="absolute inset-0">
-                    <CardImage island={overlayIsland!} />
-                  </div>
-                  <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
-                    <TextStack island={overlayIsland!} reduceMotion={false} isOverlay />
-                  </div>
-                </div>
+          <div className="relative w-full max-w-[1280px] px-6 md:px-8">
+            <div
+              className="relative overflow-hidden rounded-[24px] bg-white hero-card hero-card--visible"
+              style={{ border: `1px solid ${THEMES[overlayId!].border}`, height: cardHeight }}
+            >
+              <div className="absolute inset-0">
+                <CardImage island={overlayIsland!} />
+              </div>
+              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
+                <TextStack island={overlayIsland!} />
               </div>
             </div>
-        </motion.div>
+          </div>
+        </div>
       )}
     </>
   );
