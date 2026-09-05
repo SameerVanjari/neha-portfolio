@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Nav from "@/components/Nav";
 import BottomNav from "@/components/BottomNav";
-import IslandNav from "@/components/IslandNav";
 import HeroStage from "@/components/HeroStage";
-import ThemeWave from "@/components/ThemeWave";
 import ProjectsSection from "@/components/sections/ProjectsSection";
 import AboutSection from "@/components/sections/AboutSection";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
@@ -13,15 +11,14 @@ import ContactSection from "@/components/sections/ContactSection";
 import data from "@/data/portfolio.json";
 import { THEMES, type ThemeId } from "@/data/themes";
 import { useActiveSection } from "@/hooks/useActiveSection";
+import { usePerception } from "@/context/PerceptionContext";
 
 type IslandId = ThemeId;
 
 const ORDER: IslandId[] = ["xr", "ux", "ai", "product"];
 
 export default function Home() {
-  const [activeId, setActiveId] = useState<IslandId>("xr");
-  const [baseId, setBaseId] = useState<IslandId>("xr");
-  const [overlayId, setOverlayId] = useState<IslandId | null>(null);
+  const { activeId, baseId, overlayId, setActiveId } = usePerception();
 
   const islands = data.islands as unknown as Array<{
     id: IslandId;
@@ -54,41 +51,29 @@ export default function Home() {
   const theme = THEMES[activeId];
   const activeSection = useActiveSection(["hero", "projects", "testimonials", "about", "contact"]);
 
-  // trigger wave on change
-  useEffect(() => {
-    if (activeId !== baseId && !overlayId) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setOverlayId(activeId);
-    } else if (activeId !== baseId && overlayId && overlayId !== activeId) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setOverlayId(activeId);
-    }
-  }, [activeId, baseId, overlayId]);
-
-  const handleWaveDone = () => {
-    if (overlayId) {
-      setBaseId(overlayId);
-      setOverlayId(null);
-    }
-  };
-
-  // keyboard arrows for perception
+  // keyboard arrows for perception — also triggers global wave + scroll
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA") return;
       const idx = ORDER.indexOf(activeId);
-      if (e.key === "ArrowRight") setActiveId(ORDER[(idx + 1) % ORDER.length]);
-      if (e.key === "ArrowLeft") setActiveId(ORDER[(idx - 1 + ORDER.length) % ORDER.length]);
+      if (e.key === "ArrowRight") {
+        const next = ORDER[(idx + 1) % ORDER.length];
+        window.dispatchEvent(new CustomEvent("perception:switch", { detail: { id: next } }));
+        setActiveId(next);
+      }
+      if (e.key === "ArrowLeft") {
+        const next = ORDER[(idx - 1 + ORDER.length) % ORDER.length];
+        window.dispatchEvent(new CustomEvent("perception:switch", { detail: { id: next } }));
+        setActiveId(next);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [activeId]);
+  }, [activeId, setActiveId]);
 
   return (
     <>
-      <ThemeWave baseId={baseId} overlayId={overlayId} onOverlayDone={handleWaveDone} />
-
       <Nav theme={theme} activeSection={activeSection} />
 
       <main>
@@ -112,14 +97,6 @@ export default function Home() {
       </main>
 
       <BottomNav theme={theme} />
-      <IslandNav
-        activeId={activeId}
-        onSelect={(id) => {
-          setActiveId(id);
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }}
-        theme={theme}
-      />
     </>
   );
 }

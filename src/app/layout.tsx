@@ -32,12 +32,15 @@ export const metadata: Metadata = {
 };
 
 import BarbaProvider from "@/components/BarbaProvider";
+import { PerceptionProvider } from "@/context/PerceptionContext";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${bricolage.variable} ${sora.variable} antialiased`}>
       <body className="bg-white text-zinc-900">
-        <BarbaProvider>{children}</BarbaProvider>
+        <PerceptionProvider>
+          <BarbaProvider>{children}</BarbaProvider>
+        </PerceptionProvider>
       </body>
     </html>
   );

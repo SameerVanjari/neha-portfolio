@@ -102,6 +102,11 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
     ).finished.catch(() => {});
 
     router.push(href);
+    // scroll to top while overlay is fully covering (hidden from user)
+    // use instant to avoid smooth scroll being visible after transition
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     await new Promise((r) => setTimeout(r, 120));
 
     // contract — same origin
@@ -156,10 +161,58 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
     return () => document.removeEventListener("click", handler, true);
   }, [pathname, reduce]);
 
+  // Perception switch from anywhere — show page change transition (same mask) and scroll to top
+  useEffect(() => {
+    const onPerception = async (e: Event) => {
+      const detail = (e as CustomEvent).detail as { id?: ThemeId } | undefined;
+      const id = detail?.id as ThemeId | undefined;
+      const el = overlayRef.current;
+      if (!el || !id || reduce) {
+        window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+        return;
+      }
+      if (animatingRef.current) return;
+      animatingRef.current = true;
+      const theme = THEMES[id];
+      el.style.background = theme.bgGradient;
+      el.style.display = "block";
+      el.style.clipPath = `circle(0% at ${BARBA_ORIGIN})`;
+      el.style.opacity = "1";
+      try {
+        await el.animate(
+          { clipPath: [`circle(0% at ${BARBA_ORIGIN})`, `circle(150% at ${BARBA_ORIGIN})`] },
+          { duration: BARBA_DUR * 1000, easing: BARBA_EASE, fill: "forwards" }
+        ).finished;
+      } catch {}
+      // scroll while covered
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+      document.documentElement.scrollTop = 0;
+      await new Promise((r) => setTimeout(r, 80));
+      try {
+        await el.animate(
+          { clipPath: [`circle(150% at ${BARBA_ORIGIN})`, `circle(0% at ${BARBA_ORIGIN})`] },
+          { duration: BARBA_DUR * 0.75 * 1000, easing: "cubic-bezier(0.23, 1, 0.32, 1)", fill: "forwards" }
+        ).finished;
+      } catch {}
+      el.style.display = "none";
+      animatingRef.current = false;
+    };
+    window.addEventListener("perception:switch", onPerception as EventListener);
+    return () => window.removeEventListener("perception:switch", onPerception as EventListener);
+  }, [reduce]);
+
   // Also watch pathname changes that were not via our handler (e.g., router.push programmatically)
-  // Ensure overlay is hidden after route settles
+  // Ensure overlay is hidden after route settles and scroll starts at top
   useEffect(() => {
     const el = overlayRef.current;
+    // always start new page at top — prevents scroll position leaking between routes
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    // ensure scroll restoration is manual so browser doesn't restore old position
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
     if (!el) return;
     // small delay to let paint settle
     const t = setTimeout(() => {
