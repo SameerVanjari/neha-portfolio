@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useReducedMotion } from "framer-motion";
 import { THEMES, type ThemeId } from "@/data/themes";
+import { syncLenisToTop } from "@/lib/lenis";
 
 // Barba origin — single fixed point for all site transitions (prevents drift)
 const BARBA_ORIGIN = "50% 50%";
@@ -107,6 +108,7 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
     window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+    syncLenisToTop();
     await new Promise((r) => setTimeout(r, 120));
 
     // contract — same origin
@@ -187,6 +189,7 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
       // scroll while covered
       window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
       document.documentElement.scrollTop = 0;
+      syncLenisToTop();
       await new Promise((r) => setTimeout(r, 80));
       try {
         await el.animate(
@@ -209,6 +212,7 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
     window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+    syncLenisToTop();
     // ensure scroll restoration is manual so browser doesn't restore old position
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";

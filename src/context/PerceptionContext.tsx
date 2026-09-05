@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { THEMES, type ThemeId } from "@/data/themes";
+import { syncLenisToTop } from "@/lib/lenis";
 
 type PerceptionContextType = {
   activeId: ThemeId;
@@ -75,10 +76,17 @@ function GlobalIslandNav() {
   const theme = THEMES[activeId];
 
   const handleSelect = (id: ThemeId) => {
+    if (pathname === "/projects" || pathname.startsWith("/projects/")) {
+      setActiveId(id);
+      router.replace(`/projects?lens=${id}`, { scroll: false });
+      return;
+    }
+
     if (id === activeId) {
       // same perception — just scroll to top with transition if needed
       window.dispatchEvent(new CustomEvent("perception:switch", { detail: { id } }));
       window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+      syncLenisToTop();
       if (pathname !== "/") {
         setActiveId(id);
         router.push("/");
@@ -95,12 +103,14 @@ function GlobalIslandNav() {
       router.push("/");
       setTimeout(() => {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+        syncLenisToTop();
       }, 60);
     } else {
       // on home, scroll to top (Barba handler already does instant scroll while overlay covers)
       // fallback ensure
       setTimeout(() => {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+        syncLenisToTop();
       }, 80);
     }
   };

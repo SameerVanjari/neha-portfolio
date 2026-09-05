@@ -24,16 +24,8 @@ function CardImage({ island }: { island: IslandData }) {
     <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={island.image} alt={island.imageAlt} className="h-full w-full object-cover" draggable={false} />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
       <div className="absolute inset-0 opacity-40 mix-blend-overlay" style={{ background: `linear-gradient(100deg, transparent 40%, ${island.color}18 100%)` }} />
-      <div
-        className="absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
-        }}
-      />
     </>
   );
 }
@@ -41,33 +33,19 @@ function CardImage({ island }: { island: IslandData }) {
 function TextStack({ island }: { island: IslandData }) {
   return (
     <div className="max-w-[560px] hero-text">
-      <div className="hero-row mb-3 flex items-center gap-2" style={{ ["--delay" as string]: "60ms" } as React.CSSProperties}>
-        <span className="h-2 w-2 rounded-full" style={{ background: island.color, boxShadow: `0 0 10px ${island.color}` }} />
-        <span className="font-mono text-[10px] tracking-[0.2em]" style={{ color: island.color }}>
-          {island.subtitle}
-        </span>
-        <span className="font-mono text-[10px] tracking-[0.14em] text-white/60">· {island.stat}</span>
+      <div className="hero-row mb-2 font-mono text-[11px] tracking-[0.18em] text-white/70" style={{ ["--delay" as string]: "60ms" } as React.CSSProperties}>
+        {island.label}
+        {island.stat ? <span className="text-white/45"> · {island.stat}</span> : null}
       </div>
 
       <h1
-        className="hero-row font-display text-[30px] font-bold leading-[0.95] tracking-[-0.03em] text-white md:text-[44px] lg:text-[48px]"
+        className="hero-row font-display text-[28px] font-bold leading-[1.05] tracking-[-0.03em] text-white md:text-[40px] lg:text-[44px]"
         style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.03em", ["--delay" as string]: "130ms" } as React.CSSProperties}
       >
         {island.title}
       </h1>
-
-      <p
-        className="hero-row mt-3 max-w-[520px] text-[14px] leading-[1.6] text-white/75 md:mt-4 md:text-[15px]"
-        style={{ fontFamily: "var(--font-body)", fontWeight: 400, ["--delay" as string]: "200ms" } as React.CSSProperties}
-      >
-        {island.description}
-      </p>
     </div>
   );
-}
-
-function getTheme(id: ThemeId) {
-  return THEMES[id];
 }
 
 export default function HeroStage({
@@ -95,15 +73,13 @@ export default function HeroStage({
   const overlayIsland = overlayId ? islands.find((i) => i.id === overlayId)! : null;
   const isWaving = !!overlayId && !!overlayIsland;
 
-  // stable hero card height — prevents layout shift on perception change
-  const cardHeight = "clamp(480px, 62vh, 640px)";
+  const cardHeight = "clamp(520px, 68vh, 680px)";
 
   if (reduced) {
     return (
       <div className="relative flex min-h-[100dvh] flex-col items-center justify-start overflow-hidden pt-[80px]">
         <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
           <GradientOrbs theme={THEMES[activeId]} />
-          {/* fade hero into next section — uses below-section color #fafaf9, no layout gap (absolute) */}
           <div
             className="absolute inset-x-0 bottom-0 h-[160px] md:h-[220px]"
             style={{ background: `linear-gradient(to bottom, rgba(255,255,255,0) 0%, ${THEMES[activeId].wash}14 38%, #fafaf9 88%)` }}
@@ -155,14 +131,12 @@ export default function HeroStage({
         }
       `}</style>
 
-      {/* Base — static, stable height */}
       <div className="relative flex min-h-[100dvh] flex-col items-center justify-start overflow-hidden pt-[76px]">
         <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
           <GradientOrbs theme={THEMES[baseId]} />
-          {/* fade hero into next section — absolute, no extra layout height, matches #fafaf9 below */}
           <div
             className="absolute inset-x-0 bottom-0 h-[160px] md:h-[220px]"
-            style={{ background: `linear-gradient(to bottom, rgba(255,255,255,0) 0%, ${THEMES[baseId].wash}14 38%, #fafaf9 88%)` }}
+            style={{ background: `linear-gradient(to bottom, rgba(255,255,255,0) 0%, ${THEMES[baseId].wash}14 38%, #fafaf9 102%)` }}
           />
         </div>
         <div className="relative w-full max-w-[1280px] px-6 md:px-8">
@@ -174,27 +148,12 @@ export default function HeroStage({
               <CardImage island={baseIsland} />
             </div>
             <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
-              <div className="max-w-[560px]" style={{ opacity: isWaving ? 0.9 : 1, transition: "opacity 180ms cubic-bezier(0.23,1,0.32,1)" }}>
-                <div className="mb-3 flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full" style={{ background: baseIsland.color, boxShadow: `0 0 10px ${baseIsland.color}` }} />
-                  <span className="font-mono text-[10px] tracking-[0.2em]" style={{ color: baseIsland.color }}>
-                    {baseIsland.subtitle}
-                  </span>
-                  <span className="font-mono text-[10px] tracking-[0.14em] text-white/60">· {baseIsland.stat}</span>
-                </div>
-                <h1 className="font-display text-[30px] font-bold leading-[0.95] tracking-[-0.03em] text-white md:text-[44px] lg:text-[48px]" style={{ fontFamily: "var(--font-display)" }}>
-                  {baseIsland.title}
-                </h1>
-                <p className="mt-3 max-w-[520px] text-[14px] leading-[1.6] text-white/75 md:text-[15px]" style={{ fontFamily: "var(--font-body)" }}>
-                  {baseIsland.description}
-                </p>
-              </div>
+              <TextStack island={baseIsland} />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Overlay — CSS clip-path wave, stable size */}
       {isWaving && overlayIsland && (
         <div
           className={`pointer-events-none fixed inset-0 z-10 flex min-h-[100dvh] flex-col items-center justify-start overflow-hidden pt-[76px] pb-8 hero-wave ${isWaving ? "hero-wave--expanded" : ""}`}
@@ -214,10 +173,10 @@ export default function HeroStage({
               style={{ border: `1px solid ${THEMES[overlayId!].border}`, height: cardHeight }}
             >
               <div className="absolute inset-0">
-                <CardImage island={overlayIsland!} />
+                <CardImage island={overlayIsland} />
               </div>
               <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
-                <TextStack island={overlayIsland!} />
+                <TextStack island={overlayIsland} />
               </div>
             </div>
           </div>

@@ -6,8 +6,8 @@ import data from "@/data/portfolio.json";
 import { AceternityCTA, HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { WordStagger } from "@/components/ui/word-stagger";
 
-const NEHA_PHOTO_1 = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=900&auto=format&fit=crop";
-const NEHA_PHOTO_2 = "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=900&auto=format&fit=crop";
+const NEHA_PHOTO = "/profile/headshot.png";
+const NEHA_PHOTO_ALT = "/profile/portrait-alt.png";
 
 const EXPERTISE: { title: string; items: string[] }[] = [
   { title: "Product & Systems", items: ["Design systems & tokens", "Product strategy", "Interaction & motion"] },
@@ -65,16 +65,12 @@ export default function AboutPage() {
             <div className="grid gap-4 lg:pl-6">
               <div className="overflow-hidden rounded-[20px] border bg-white" style={{ borderColor: "rgba(0,0,0,0.06)", boxShadow: "0 12px 32px rgba(0,0,0,0.08)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={NEHA_PHOTO_1} alt="Neha — portrait" className="aspect-[4/3] w-full object-cover" />
-                <div className="px-4 py-3">
-                  <div className="font-mono text-[10px] tracking-[0.14em] text-zinc-500">Neha · Bangalore · Remote worldwide</div>
-                  <div className="font-display text-[13px] font-medium text-zinc-900">Designing where intelligence meets human need.</div>
-                </div>
+                <img src={NEHA_PHOTO} alt="Neha Mayacharya, portrait" className="aspect-[4/5] w-full object-cover object-[center_20%]" />
               </div>
               <div className="grid grid-cols-[1.1fr_0.9fr] gap-4">
                 <div className="overflow-hidden rounded-[20px] border" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={NEHA_PHOTO_2} alt="Neha — working" className="aspect-[4/3] w-full object-cover" />
+                  <img src={NEHA_PHOTO_ALT} alt="Neha Mayacharya, three-quarter portrait" className="aspect-[4/3] w-full object-cover object-top" />
                 </div>
                 <div className="rounded-[20px] border bg-zinc-900 p-5 text-white" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
                   <div className="font-mono text-[10px] tracking-[0.14em] text-white/40">Contact</div>
@@ -83,7 +79,7 @@ export default function AboutPage() {
                   </a>
                   <div className="mt-4 h-px w-full bg-white/10" />
                   <div className="mt-3 font-mono text-[10px] tracking-[0.12em] text-white/40">Availability</div>
-                  <div className="font-mono text-[11px] text-white">Open for select collaborations</div>
+                  <div className="font-mono text-[11px] text-white">{data.profile.availability}</div>
                 </div>
               </div>
             </div>
@@ -109,6 +105,46 @@ export default function AboutPage() {
                     </li>
                   ))}
                 </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* experience */}
+        <section className="mx-auto max-w-[1280px] px-6 pb-10 md:px-8">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-black/10" />
+            <span className="font-mono text-[11px] tracking-[0.22em] text-zinc-500">EXPERIENCE</span>
+          </div>
+          <div className="mt-6 divide-y" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
+            {data.about.experience.map((job) => (
+              <div key={`${job.where}-${job.when}`} className="grid gap-2 py-4 md:grid-cols-[180px_1fr] md:gap-8">
+                <div className="font-mono text-[11px] tracking-[0.08em] text-zinc-400">{job.when}</div>
+                <div>
+                  <div className="font-display text-[15px] font-semibold tracking-[-0.02em] text-zinc-900">
+                    {job.what}
+                  </div>
+                  <div className="font-mono text-[11px] tracking-[0.08em] text-zinc-500">{job.where}</div>
+                  <p className="mt-2 max-w-[62ch] text-[13px] leading-[1.6] text-zinc-500">{job.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* education */}
+        <section className="mx-auto max-w-[1280px] px-6 pb-10 md:px-8">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-black/10" />
+            <span className="font-mono text-[11px] tracking-[0.22em] text-zinc-500">EDUCATION</span>
+          </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {data.about.education.map((ed) => (
+              <div key={ed.degree} className="rounded-[16px] border bg-white p-5" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
+                <div className="font-mono text-[10px] tracking-[0.14em] text-zinc-400">{ed.period}</div>
+                <div className="mt-2 font-display text-[14px] font-semibold tracking-[-0.02em] text-zinc-900">{ed.degree}</div>
+                <div className="mt-1 text-[13px] text-zinc-500">{ed.school}</div>
+                <div className="mt-2 font-mono text-[10px] tracking-[0.12em] text-zinc-400">{ed.detail}</div>
               </div>
             ))}
           </div>

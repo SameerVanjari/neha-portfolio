@@ -28,10 +28,11 @@ const sora = Sora({
 export const metadata: Metadata = {
   title: "NEHA — Perception, Intelligence, Design",
   description:
-    "I design the interfaces where intelligent systems and human needs meet — across every reality.",
+    "Neha Mayacharya — AI experience, XR, UX, and product designer. Available 2026 · STEM OPT. Work for TD Bank, Harvard MedTech, IFSG, and more.",
 };
 
 import BarbaProvider from "@/components/BarbaProvider";
+import SmoothScroll from "@/components/SmoothScroll";
 import { PerceptionProvider } from "@/context/PerceptionContext";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -39,7 +40,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${bricolage.variable} ${sora.variable} antialiased`}>
       <body className="bg-white text-zinc-900">
         <PerceptionProvider>
-          <BarbaProvider>{children}</BarbaProvider>
+          <SmoothScroll>
+            <BarbaProvider>{children}</BarbaProvider>
+          </SmoothScroll>
         </PerceptionProvider>
       </body>
     </html>

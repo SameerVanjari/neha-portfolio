@@ -9,6 +9,8 @@ type Social = { label: string; handle: string; href: string };
 export default function ContactSection({
   activeId,
   email,
+  location: place,
+  availability,
   socials,
 }: {
   activeId: ThemeId;
@@ -27,7 +29,7 @@ export default function ContactSection({
           Let&apos;s talk<span className="font-light text-white/50">.</span>
         </h2>
 
-        <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-baseline md:justify-between">
+        <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <a
             href={`mailto:${email}`}
             className="group inline-flex font-mono text-[18px] tracking-[-0.02em] text-white md:text-[20px]"
@@ -43,6 +45,11 @@ export default function ContactSection({
                 </a>
               ))}
           </div>
+        </div>
+
+        <div className="mt-8 flex flex-col gap-1 font-mono text-[11px] tracking-[0.1em] text-white/45 md:flex-row md:gap-6">
+          <span>{place}</span>
+          <span>{availability}</span>
         </div>
 
         <div className="mt-12 flex justify-start border-t border-white/10 pt-6 font-mono text-[10px] tracking-[0.12em] text-white/30">

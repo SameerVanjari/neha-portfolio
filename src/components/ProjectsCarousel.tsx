@@ -1,20 +1,10 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
+import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
 import type { ThemeId } from "@/data/themes";
-
-type Project = {
-  id: string;
-  title: string;
-  perception: ThemeId;
-  dimension: string;
-  subtitle?: string;
-  year: string;
-  color: string;
-  image: string;
-  imageAlt: string;
-};
+import type { Project } from "@/types/portfolio";
 
 // Featured card — 4:3 landscape; ribbon peaks at center (image zoom parallax: image stays full-cover while card height tapers)
 function FullImageCard({ p }: { p: Project }) {
@@ -164,9 +154,9 @@ export default function ProjectsCarousel({ activeId, projects }: { activeId: The
       <div className="px-6 md:px-8">
         <div className="ribbon-scroller flex items-center gap-2 overflow-x-auto scrollbar-none snap-x snap-mandatory py-8 md:gap-3 md:py-10">
           {items.map((p) => (
-            <div key={p.id} className="snap-start shrink-0 cursor-default select-none">
+            <Link key={p.id} href={`/projects/${p.id}`} className="snap-start shrink-0 select-none">
               <FullImageCard p={p} />
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -194,9 +184,9 @@ export default function ProjectsCarousel({ activeId, projects }: { activeId: The
         <div className="overflow-hidden py-8 md:py-10" aria-roledescription="carousel" aria-label="Projects — infinite loop">
           <div className="flex w-max items-center gap-2 md:gap-3 will-change-transform marquee-track">
             {track.map((p, i) => (
-              <div key={`${p.id}-${i}`} className="shrink-0 cursor-default select-none">
+              <Link key={`${p.id}-${i}`} href={`/projects/${p.id}`} className="shrink-0 select-none">
                 <FullImageCard p={p} />
-              </div>
+              </Link>
             ))}
           </div>
         </div>

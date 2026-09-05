@@ -5,7 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { Theme } from "@/data/themes";
+import { lenisScrollToId } from "@/lib/lenis";
 import { WordStagger } from "./ui/word-stagger";
+import data from "@/data/portfolio.json";
 
 const NAV_ITEMS = [
   { id: "projects", label: "Projects", num: "01", href: "/projects" },
@@ -14,21 +16,13 @@ const NAV_ITEMS = [
 ] as const;
 
 function scrollToId(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  lenisScrollToId(id);
 }
 
 export default function Nav({ theme, activeSection }: { theme: Theme; activeSection?: string }) {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const reduce = useReducedMotion();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     if (open) {
@@ -46,7 +40,7 @@ export default function Nav({ theme, activeSection }: { theme: Theme; activeSect
   }, [open]);
 
   const isActive = (id: string) => {
-    if (pathname === "/projects" && id === "projects") return true;
+    if (pathname.startsWith("/projects") && id === "projects") return true;
     if (pathname === "/about" && id === "about") return true;
     if (pathname === "/" && activeSection === id) return true;
     return false;
@@ -55,6 +49,35 @@ export default function Nav({ theme, activeSection }: { theme: Theme; activeSect
   return (
     <>
       <style>{`
+        .site-nav__veil{
+          pointer-events:none;
+          position:absolute;
+          inset-inline:0;
+          top:0;
+          height:112px;
+          background:linear-gradient(
+            to bottom,
+            rgb(255 255 255 / .55) 0%,
+            rgb(255 255 255 / .22) 42%,
+            transparent 100%
+          );
+          backdrop-filter:blur(6px);
+          -webkit-backdrop-filter:blur(6px);
+          -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 28%, rgba(0,0,0,.35) 58%, transparent 100%);
+          mask-image:linear-gradient(to bottom, #000 0%, #000 28%, rgba(0,0,0,.35) 58%, transparent 100%);
+        }
+        @media (prefers-reduced-transparency: reduce){
+          .site-nav__veil{
+            backdrop-filter:none;
+            -webkit-backdrop-filter:none;
+            background:linear-gradient(
+              to bottom,
+              rgb(250 250 249 / .96) 0%,
+              rgb(250 250 249 / .7) 48%,
+              transparent 100%
+            );
+          }
+        }
         .nav-link{ --ease-out: cubic-bezier(0.23,1,0.32,1); }
         .nav-link__label{ transition: transform 150ms var(--ease-out); will-change: transform; }
         .nav-link__line{ transform: scaleX(0); transition: transform 180ms var(--ease-out); transform-origin: center; will-change: transform; }
@@ -72,16 +95,9 @@ export default function Nav({ theme, activeSection }: { theme: Theme; activeSect
           .nav-link:hover .nav-link__label{ transform: none !important; }
         }
       `}</style>
-      <header
-        className="fixed inset-x-0 top-0 z-40 border-b transition-colors duration-300"
-        style={{
-          background: scrolled ? "rgba(255,255,255,0.82)" : "transparent",
-          backdropFilter: scrolled ? "blur(16px) saturate(1.2)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(16px) saturate(1.2)" : "none",
-          borderColor: scrolled ? "rgba(0,0,0,0.06)" : "transparent",
-        }}
-      >
-        <div className="mx-auto flex h-[64px] max-w-[1280px] items-center justify-between gap-4 px-6 md:px-8">
+      <header className="site-nav pointer-events-none fixed inset-x-0 top-0 z-40">
+        <div aria-hidden className="site-nav__veil" />
+        <div className="pointer-events-auto relative mx-auto flex h-[64px] max-w-[1280px] items-center justify-between gap-4 px-6 md:px-8">
           <Link href="/" className="flex items-baseline gap-2 shrink-0">
             <span className="font-display text-[18px] font-bold tracking-[-0.025em]" style={{ color: theme.text, letterSpacing: "-0.03em", fontFamily: "var(--font-display)" }}>
               NEHA
@@ -135,7 +151,7 @@ export default function Nav({ theme, activeSection }: { theme: Theme; activeSect
 
           <div className="flex items-center gap-2 shrink-0">
             <a
-              href="mailto:hello@neha.design"
+              href={`mailto:${data.profile.email}`}
               className="group hidden md:inline-flex items-center justify-center rounded-full border px-4 py-[7px] font-mono text-[11px] font-medium tracking-[0.14em] backdrop-blur"
               style={{ borderColor: theme.border, background: theme.surface, color: theme.text, boxShadow: "0 1px 8px rgba(0,0,0,0.06)" }}
             >
@@ -195,19 +211,10 @@ export default function Nav({ theme, activeSection }: { theme: Theme; activeSect
                     </Link>
                   </motion.div>
                 ))}
-                <motion.div initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduce ? 0 : 0.15, duration: 0.32, ease: [0.23, 1, 0.32, 1] as const }}>
-                  <Link href="/" onClick={() => setOpen(false)} className="flex items-baseline justify-between border-b py-5" style={{ borderColor: "rgba(0,0,0,0.08)" }}>
-                    <span className="flex items-baseline gap-4">
-                      <span className="font-mono text-[12px] tracking-[0.18em] text-zinc-400">00</span>
-                      <span className="font-display text-[32px] font-semibold tracking-[-0.03em] text-zinc-900">Home</span>
-                    </span>
-                    <span className="font-mono text-[11px] tracking-[0.16em] text-zinc-400">→</span>
-                  </Link>
-                </motion.div>
               </nav>
 
               <div className="mt-10 flex flex-wrap gap-3">
-                <a href="mailto:hello@neha.design" className="rounded-full bg-zinc-900 px-6 py-3 font-mono text-[12px] tracking-[0.14em] text-white">hello@neha.design</a>
+                  <a href={`mailto:${data.profile.email}`} className="rounded-full bg-zinc-900 px-6 py-3 font-mono text-[12px] tracking-[0.14em] text-white">{data.profile.email}</a>
               </div>
             </div>
           </motion.div>

@@ -32,6 +32,11 @@ html {
   scroll-behavior: smooth;
 }
 
+html.lenis,
+html.lenis-smooth {
+  scroll-behavior: auto;
+}
+
 body {
   background: #fcfcfc;
   color: #1a1625;
