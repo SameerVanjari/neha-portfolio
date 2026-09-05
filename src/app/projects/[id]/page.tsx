@@ -1,54 +1,31 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import data from "@/data/portfolio.json";
+import type { Project } from "@/types/portfolio";
+import ProjectCaseStudy from "@/components/ProjectCaseStudy";
+
+const projects = data.projects as Project[];
 
 export function generateStaticParams() {
-  return data.islands.map((i) => ({ id: i.id }));
+  return projects.map((p) => ({ id: p.id }));
 }
 
-export function generateMetadata({ params }: { params: { id: string } }) {
-  const project = data.islands.find((p) => p.id === params.id);
-  return { title: project ? project.title : "Project" };
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const project = projects.find((p) => p.id === id);
+  if (!project) return { title: "Project — NEHA" };
+  return {
+    title: `${project.title} — NEHA`,
+    description: project.blurb,
+  };
 }
 
-export default function ProjectDetail({ params }: { params: { id: string } }) {
-  const project = data.islands.find((p) => p.id === params.id);
-  if (!project) return notFound();
+export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const project = projects.find((p) => p.id === id);
+  if (!project) notFound();
 
-  return (
-    <div className="mx-auto max-w-3xl px-6 py-12 md:py-16">
-      <Link href="/projects" className="text-sm text-muted-foreground hover:text-foreground hover:underline">
-        ← Back to projects
-      </Link>
-      <div className="mt-6 overflow-hidden rounded-xl border">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={project.image} alt={project.imageAlt} className="aspect-[16/9] w-full object-cover" />
-      </div>
-      <div className="mt-8 flex flex-wrap items-center gap-2">
-        <span
-          className="rounded-full border px-2.5 py-1 text-xs font-semibold"
-          style={{ borderColor: project.color, color: project.color }}
-        >
-          {project.label}
-        </span>
-        <span className="text-xs text-muted-foreground">{project.subtitle}</span>
-        <span className="ml-auto text-xs text-muted-foreground">{project.stat}</span>
-      </div>
-      <h1 className="text-display mt-4 text-3xl font-bold tracking-[-0.03em] md:text-4xl">{project.title}</h1>
-      <p className="mt-4 text-muted-foreground">{project.description}</p>
+  const sameLens = projects.filter((p) => p.id !== project.id && p.perception === project.perception);
+  const related = (sameLens.length ? sameLens : projects.filter((p) => p.id !== project.id)).slice(0, 3);
 
-      <div className="mt-8 rounded-xl border bg-muted/20 p-6">
-        <h2 className="text-display text-sm font-semibold">Case study template</h2>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          This is a placeholder detail page wired to <code className="rounded bg-muted px-1 py-0.5 text-xs">portfolio.json</code>. Replace with
-          real content: problem → approach → outcome, with motion and GSAP flourishes.
-        </p>
-        <ul className="mt-4 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-          <li>Use Motion for entrance + scroll reveals.</li>
-          <li>Use GSAP + ScrollTrigger for pinned or scrubbed sections.</li>
-          <li>Pull real project media into <code className="rounded bg-muted px-1 py-0.5 text-xs">public/</code> and extend the JSON.</li>
-        </ul>
-      </div>
-    </div>
-  );
+  return <ProjectCaseStudy project={project} related={related} />;
 }

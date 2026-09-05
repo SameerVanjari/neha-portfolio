@@ -1,107 +1,198 @@
-import data from "@/data/portfolio.json";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Reveal } from "@/components/site/reveal";
+"use client";
 
-export const metadata = { title: "About" };
+import Nav from "@/components/Nav";
+import { THEMES } from "@/data/themes";
+import data from "@/data/portfolio.json";
+import { AceternityCTA, HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+import { WordStagger } from "@/components/ui/word-stagger";
+
+const NEHA_PHOTO = "/profile/headshot.png";
+const NEHA_PHOTO_ALT = "/profile/portrait-alt.png";
+
+const EXPERTISE: { title: string; items: string[] }[] = [
+  { title: "Product & Systems", items: ["Design systems & tokens", "Product strategy", "Interaction & motion"] },
+  { title: "AI Experience", items: ["Conversational & agent UX", "Prompt & output design", "Human-in-the-loop"] },
+  { title: "Spatial & XR", items: ["AR / VR / MR product design", "Hand & eye tracking", "Spatial prototyping (Unity, WebXR)"] },
+];
 
 export default function AboutPage() {
+  const theme = THEMES.product; // neutral anchor — theme carries softly
+
   return (
-    <div className="mx-auto max-w-6xl px-6 py-12 md:py-16">
-      <Reveal>
-        <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">About</p>
-        <h1 className="text-display mt-3 max-w-3xl text-3xl font-bold tracking-[-0.03em] md:text-5xl">
-          Intelligence should feel less like a machine and more like a <span className="font-light text-muted-foreground">kind companion.</span>
-        </h1>
-      </Reveal>
-
-      <div className="mt-10 grid gap-10 md:grid-cols-[1.4fr_0.9fr]">
-        <Reveal delay={0.08}>
-          <div className="space-y-6 text-[15px] leading-relaxed text-muted-foreground">
-            <p className="text-foreground text-lg leading-relaxed">{data.profile.bio}</p>
-            <p>
-              Over seven years I&apos;ve worked across conversational AI, spatial computing and product systems — from
-              research synthesis to shipping production interfaces. My practice bridges three realities: the
-              conversational (LLMs, voice, agents), the spatial (XR, hand tracking, immersive worlds), and the everyday
-              (design systems, flows, product strategy).
-            </p>
-            <p>
-              Whether it&apos;s a voice companion for healthcare, a hand-tracked XR onboarding, or a trust-first AI
-              assistant, the question is always the same: how do we make intelligence feel human, legible, and kind?
-            </p>
-
-            <div className="flex flex-wrap gap-2 pt-2">
-              {data.profile.roles.map((r) => (
-                <Badge key={r} variant="secondary" className="rounded-full">
-                  {r}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.16}>
-          <Card>
-            <CardContent className="p-6 space-y-4">
-              <div>
-                <div className="text-sm font-semibold">{data.profile.name} · {data.profile.location}</div>
-                <a href={`mailto:${data.profile.email}`} className="text-sm text-primary hover:underline">
-                  {data.profile.email}
-                </a>
+    <>
+      <Nav theme={theme} activeSection="about" />
+      <main className="pt-[64px]">
+        {/* hero with photos */}
+        <section className="mx-auto max-w-[1280px] px-6 md:px-8">
+          <div className="h-px w-full bg-black/5" />
+          <div className="grid gap-8 py-10 md:py-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:py-14">
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <span className="h-px w-10 bg-black/10" />
+                <span className="font-mono text-[11px] tracking-[0.22em] text-zinc-500">ABOUT — NEHA</span>
               </div>
-              <Separator />
-              <dl className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <dt className="text-muted-foreground">Availability</dt>
-                  <dd className="font-medium">{data.profile.availability}</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-muted-foreground">Experience</dt>
-                  <dd className="font-medium">07+ years</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-muted-foreground">Focus</dt>
-                  <dd className="font-medium">AI · XR · UX</dd>
-                </div>
-              </dl>
-              <Separator />
-              <div className="flex flex-wrap gap-2">
-                {data.socials.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-full border px-3 py-1 text-xs font-medium hover:bg-accent"
-                  >
-                    {s.label} — {s.handle}
-                  </a>
+
+              <h1 className="font-display text-[32px] font-semibold leading-[0.9] tracking-[-0.04em] text-zinc-900 md:text-[44px] lg:text-[48px]" style={{ fontFamily: "var(--font-display)" }}>
+                Perception,
+                <br />
+                built for people.
+              </h1>
+
+              <p className="max-w-[560px] text-[16px] leading-[1.7] text-zinc-600 md:text-[17px]" style={{ fontFamily: "var(--font-body)" }}>
+                {data.profile.bio}
+              </p>
+              <p className="max-w-[540px] text-[14px] leading-[1.6] text-zinc-500">{data.profile.tagline}</p>
+
+              <div className="flex flex-wrap gap-1.5 pt-2">
+                {data.profile.roles.map((r) => (
+                  <span key={r} className="rounded-full border bg-white px-3 py-1 font-mono text-[10px] tracking-[0.12em] text-zinc-600" style={{ borderColor: "rgba(0,0,0,0.08)" }}>
+                    {r}
+                  </span>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </Reveal>
-      </div>
 
-      <Reveal delay={0.12}>
-        <div className="mt-16">
-          <h2 className="text-display text-xl font-semibold tracking-tight">What I do</h2>
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {data.islands.map((island) => (
-              <div key={island.id} className="rounded-xl border bg-card p-6">
-                <div className="mb-3 flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full" style={{ background: island.color }} />
-                  <span className="text-xs font-semibold tracking-widest">{island.label}</span>
-                  <span className="ml-auto text-xs text-muted-foreground">{island.stat}</span>
+              <div className="grid grid-cols-2 gap-3 pt-4">
+                {(data as unknown as { stats: { value: string; label: string }[] }).stats.map((s) => (
+                  <div key={s.label} className="rounded-[14px] border bg-white px-4 py-3" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
+                    <div className="font-display text-[20px] font-semibold tracking-[-0.03em] text-zinc-900">{s.value}</div>
+                    <div className="font-mono text-[10px] tracking-[0.12em] text-zinc-500">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* photos */}
+            <div className="grid gap-4 lg:pl-6">
+              <div className="overflow-hidden rounded-[20px] border bg-white" style={{ borderColor: "rgba(0,0,0,0.06)", boxShadow: "0 12px 32px rgba(0,0,0,0.08)" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={NEHA_PHOTO} alt="Neha Mayacharya, portrait" className="aspect-[4/5] w-full object-cover object-[center_20%]" />
+              </div>
+              <div className="grid grid-cols-[1.1fr_0.9fr] gap-4">
+                <div className="overflow-hidden rounded-[20px] border" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={NEHA_PHOTO_ALT} alt="Neha Mayacharya, three-quarter portrait" className="aspect-[4/3] w-full object-cover object-top" />
                 </div>
-                <h3 className="text-display font-semibold">{island.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{island.description}</p>
+                <div className="rounded-[20px] border bg-zinc-900 p-5 text-white" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+                  <div className="font-mono text-[10px] tracking-[0.14em] text-white/40">Contact</div>
+                  <a href={`mailto:${data.profile.email}`} className="group mt-2 block font-mono text-[12px] font-medium text-white underline decoration-white/20 underline-offset-4 hover:decoration-white">
+                    <WordStagger text={data.profile.email} />
+                  </a>
+                  <div className="mt-4 h-px w-full bg-white/10" />
+                  <div className="mt-3 font-mono text-[10px] tracking-[0.12em] text-white/40">Availability</div>
+                  <div className="font-mono text-[11px] text-white">{data.profile.availability}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="h-px w-full bg-black/5" />
+        </section>
+
+        {/* expertise */}
+        <section className="mx-auto max-w-[1280px] px-6 py-10 md:px-8 md:py-12">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-black/10" />
+            <span className="font-mono text-[11px] tracking-[0.22em] text-zinc-500">EXPERTISE</span>
+          </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {EXPERTISE.map((col) => (
+              <div key={col.title} className="rounded-[16px] border bg-white p-5" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
+                <div className="font-display text-[13px] font-semibold tracking-[-0.02em] text-zinc-900">{col.title}</div>
+                <ul className="mt-3 space-y-2">
+                  {col.items.map((it) => (
+                    <li key={it} className="font-mono text-[11px] leading-[1.6] tracking-[0.02em] text-zinc-500">
+                      · {it}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
-        </div>
-      </Reveal>
-    </div>
+        </section>
+
+        {/* experience */}
+        <section className="mx-auto max-w-[1280px] px-6 pb-10 md:px-8">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-black/10" />
+            <span className="font-mono text-[11px] tracking-[0.22em] text-zinc-500">EXPERIENCE</span>
+          </div>
+          <div className="mt-6 divide-y" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
+            {data.about.experience.map((job) => (
+              <div key={`${job.where}-${job.when}`} className="grid gap-2 py-4 md:grid-cols-[180px_1fr] md:gap-8">
+                <div className="font-mono text-[11px] tracking-[0.08em] text-zinc-400">{job.when}</div>
+                <div>
+                  <div className="font-display text-[15px] font-semibold tracking-[-0.02em] text-zinc-900">
+                    {job.what}
+                  </div>
+                  <div className="font-mono text-[11px] tracking-[0.08em] text-zinc-500">{job.where}</div>
+                  <p className="mt-2 max-w-[62ch] text-[13px] leading-[1.6] text-zinc-500">{job.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* education */}
+        <section className="mx-auto max-w-[1280px] px-6 pb-10 md:px-8">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-black/10" />
+            <span className="font-mono text-[11px] tracking-[0.22em] text-zinc-500">EDUCATION</span>
+          </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {data.about.education.map((ed) => (
+              <div key={ed.degree} className="rounded-[16px] border bg-white p-5" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
+                <div className="font-mono text-[10px] tracking-[0.14em] text-zinc-400">{ed.period}</div>
+                <div className="mt-2 font-display text-[14px] font-semibold tracking-[-0.02em] text-zinc-900">{ed.degree}</div>
+                <div className="mt-1 text-[13px] text-zinc-500">{ed.school}</div>
+                <div className="mt-2 font-mono text-[10px] tracking-[0.12em] text-zinc-400">{ed.detail}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* skills */}
+        <section className="mx-auto max-w-[1280px] px-6 pb-10 md:px-8">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-black/10" />
+            <span className="font-mono text-[11px] tracking-[0.22em] text-zinc-500">SKILLS & TOOLKIT</span>
+          </div>
+          <div className="mt-6 flex flex-wrap gap-2">
+            {(data as unknown as { skills: string[] }).skills.map((s) => (
+              <span key={s} className="rounded-full border bg-white px-3 py-1.5 font-mono text-[11px] tracking-[0.08em] text-zinc-700" style={{ borderColor: "rgba(0,0,0,0.08)" }}>
+                {s}
+              </span>
+            ))}
+          </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <AceternityCTA href="/projects" variant="dark">View projects</AceternityCTA>
+            <HoverBorderGradient as="a" href="/#contact">Contact</HoverBorderGradient>
+          </div>
+        </section>
+
+        {/* journey — kept compact */}
+        <section className="mx-auto max-w-[1280px] px-6 pb-10 md:px-8">
+          <div className="rounded-[20px] border bg-zinc-900 p-6 text-white md:p-7" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+            <div className="font-mono text-[10px] tracking-[0.16em] text-white/40">Journey</div>
+            <div className="mt-4 grid gap-6 md:grid-cols-4">
+              {(data as unknown as { milestones: { year: string; title: string; description: string }[] }).milestones.map((m) => (
+                <div key={m.year} className="border-t border-white/10 pt-4 first:border-0 first:pt-0 md:border-0 md:border-l md:pl-4 md:pt-0">
+                  <div className="font-mono text-[11px] tracking-[0.14em] text-white/50">{m.year}</div>
+                  <div className="mt-1 font-display text-[13px] font-semibold text-white">{m.title}</div>
+                  <div className="mt-1 text-[12px] leading-[1.5] text-white/60">{m.description}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* footer hairline */}
+        <footer className="mx-auto max-w-[1280px] px-6 pb-10 md:px-8">
+          <div className="h-px w-full bg-black/5" />
+          <div className="flex justify-start pt-6 font-mono text-[10px] tracking-[0.12em] text-zinc-400">
+            <span>© 2026 NEHA</span>
+          </div>
+        </footer>
+      </main>
+    </>
   );
 }
