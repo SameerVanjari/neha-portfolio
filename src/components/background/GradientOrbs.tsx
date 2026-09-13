@@ -5,7 +5,7 @@ import type { Theme } from "@/data/themes";
 export default function GradientOrbs({ theme }: { theme: Theme }) {
   return (
     <div className="absolute inset-0 overflow-hidden" aria-hidden>
-      <div className="absolute inset-0" style={{ background: theme.bgGradient }} />
+      {/* REMOVED: the full-screen bgGradient div that was covering images */}
 
       {/* CSS-only orbs — compositor-driven, no JS rAF. 3 orbs max, blur ≤20px, will-change: transform */}
       <div
@@ -54,7 +54,7 @@ export default function GradientOrbs({ theme }: { theme: Theme }) {
         .orb-1{
           width: 72vw; height: 72vw; max-width: 880px; max-height: 880px;
           left:-18%; top:2%;
-          opacity:0.58;
+          opacity:0.35;
           background: radial-gradient(circle at 35% 35%, var(--as) 0%, var(--a) 22%, color-mix(in srgb, var(--a) 52%, transparent) 36%, transparent 70%);
           filter: blur(18px);
           animation: orb-drift-1 18s ease-in-out infinite;
@@ -62,7 +62,7 @@ export default function GradientOrbs({ theme }: { theme: Theme }) {
         .orb-2{
           width: 64vw; height: 64vw; max-width: 780px; max-height: 780px;
           right:-16%; top:14%;
-          opacity:0.62;
+          opacity:0.38;
           background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--a) 66%, transparent) 0%, var(--w) 24%, color-mix(in srgb, var(--w) 54%, transparent) 44%, transparent 76%);
           filter: blur(20px);
           animation: orb-drift-2 22s ease-in-out infinite;
@@ -70,7 +70,7 @@ export default function GradientOrbs({ theme }: { theme: Theme }) {
         .orb-3{
           width: 88vw; height: 88vw; max-width: 1100px; max-height: 1100px;
           left:12%; bottom:-28%;
-          opacity:0.52;
+          opacity:0.32;
           background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--w) 82%, transparent) 0%, var(--w) 20%, var(--b) 38%, transparent 72%);
           filter: blur(16px);
           animation: orb-drift-3 26s ease-in-out infinite;

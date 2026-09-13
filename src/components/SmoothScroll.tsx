@@ -25,14 +25,8 @@ function LenisGsapBridge() {
     setLenisInstance(lenis);
     const onScroll = () => ScrollTrigger.update();
     lenis.on("scroll", onScroll);
-    const onTick = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(onTick);
-    gsap.ticker.lagSmoothing(0);
     return () => {
       lenis.off("scroll", onScroll);
-      gsap.ticker.remove(onTick);
       setLenisInstance(null);
     };
   }, [lenis]);
@@ -59,9 +53,8 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
   return (
     <ReactLenis
       root
-      autoRaf={false}
       options={{
-        autoRaf: false,
+        autoRaf: true,
         duration: 1.2,
         smoothWheel: true,
         syncTouch: false,

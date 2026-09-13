@@ -15,9 +15,12 @@ export function syncLenisToTop() {
   instance?.scrollTo(0, { immediate: true, force: true });
 }
 
-export function lenisScrollToId(id: string) {
+export function lenisScrollToId(id: string, offset = -80) {
   const el = document.getElementById(id);
   if (!el) return;
-  if (instance) instance.scrollTo(el, { offset: 0 });
-  else el.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (instance) {
+    instance.scrollTo(el, { offset, duration: 1.1 });
+    return;
+  }
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
 }

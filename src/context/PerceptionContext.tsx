@@ -3,7 +3,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { THEMES, type ThemeId } from "@/data/themes";
-import { syncLenisToTop } from "@/lib/lenis";
 
 type PerceptionContextType = {
   activeId: ThemeId;
@@ -75,6 +74,20 @@ function GlobalIslandNav() {
   const pathname = usePathname();
   const theme = THEMES[activeId];
 
+  // Apply the state change + navigation once the Barba mask has covered the screen.
+  useEffect(() => {
+    const onCommit = (e: Event) => {
+      const id = (e as CustomEvent).detail?.id as ThemeId | undefined;
+      if (!id) return;
+      setActiveId(id);
+      if (pathname !== "/") {
+        router.push("/");
+      }
+    };
+    window.addEventListener("perception:commit", onCommit as EventListener);
+    return () => window.removeEventListener("perception:commit", onCommit as EventListener);
+  }, [pathname, router, setActiveId]);
+
   const handleSelect = (id: ThemeId) => {
     if (pathname === "/projects" || pathname.startsWith("/projects/")) {
       setActiveId(id);
@@ -82,37 +95,9 @@ function GlobalIslandNav() {
       return;
     }
 
-    if (id === activeId) {
-      // same perception — just scroll to top with transition if needed
-      window.dispatchEvent(new CustomEvent("perception:switch", { detail: { id } }));
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
-      syncLenisToTop();
-      if (pathname !== "/") {
-        setActiveId(id);
-        router.push("/");
-      }
-      return;
-    }
-
-    // Trigger page-change transition (Barba mask) for all switches — works from anywhere
+    // Mask expands first; the actual perception change + navigation happens
+    // on 'perception:commit' once the screen is covered.
     window.dispatchEvent(new CustomEvent("perception:switch", { detail: { id } }));
-    setActiveId(id);
-
-    if (pathname !== "/") {
-      // navigate home — BarbaProvider will also scroll to top, but we ensure it while overlay covers
-      router.push("/");
-      setTimeout(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
-        syncLenisToTop();
-      }, 60);
-    } else {
-      // on home, scroll to top (Barba handler already does instant scroll while overlay covers)
-      // fallback ensure
-      setTimeout(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
-        syncLenisToTop();
-      }, 80);
-    }
   };
 
   const IslandNav = require("@/components/IslandNav").default as typeof import("@/components/IslandNav").default;

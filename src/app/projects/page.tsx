@@ -1,10 +1,13 @@
-import { Suspense } from "react";
 import ProjectsList from "@/components/ProjectsList";
 
-export default function ProjectsPage() {
-  return (
-    <Suspense fallback={<div className="min-h-dvh bg-white" />}>
-      <ProjectsList />
-    </Suspense>
-  );
+// Read searchParams on the server and pass `lens` down as a prop.
+// This avoids `useSearchParams()` (which suspends during client navigation
+// and can leave the page stuck on its fallback until a reload).
+export default async function ProjectsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ lens?: string }>;
+}) {
+  const { lens } = await searchParams;
+  return <ProjectsList lens={lens ?? null} />;
 }

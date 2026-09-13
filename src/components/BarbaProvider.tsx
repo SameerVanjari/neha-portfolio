@@ -24,6 +24,7 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
   const overlayRef = useRef<HTMLDivElement>(null);
   const animatingRef = useRef(false);
   const pendingHrefRef = useRef<string | null>(null);
+  const pendingPerceptionRef = useRef<ThemeId | null>(null);
 
   // Keep wrapper/container attributes for barba compliance
   useEffect(() => {
@@ -53,6 +54,11 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
           ],
           // avoid barba prefetch interfering with Next
           prefetchIgnore: true,
+          // Never let barba take over navigation: its click handler fetches the
+          // full HTML and swaps the DOM container, which corrupts React's
+          // hydration and breaks interactivity after client-side navigation.
+          // Next.js + our custom mask handle all routing.
+          prevent: () => true,
         } as unknown as Parameters<typeof barba.init>[0]);
 
         // silence barba's view logic — Next will still do the route change
@@ -103,13 +109,22 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
     ).finished.catch(() => {});
 
     router.push(href);
+    // Wait until the target route is actually live before revealing.
+    // Contracting on a fixed 120ms timer exposed the Suspense fallback
+    // (blank page) mid-contract — the "white flash" on nav.
+    const targetPath = href.split("?")[0].split("#")[0] || "/";
+    for (let i = 0; i < 50 && window.location.pathname !== targetPath; i++) {
+      await new Promise((r) => setTimeout(r, 50));
+    }
+    // let the new route paint a frame while still covered
+    await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
     // scroll to top while overlay is fully covering (hidden from user)
     // use instant to avoid smooth scroll being visible after transition
     window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
     syncLenisToTop();
-    await new Promise((r) => setTimeout(r, 120));
+    await new Promise((r) => setTimeout(r, 60));
 
     // contract — same origin
     await el.animate(
@@ -168,12 +183,18 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
     const onPerception = async (e: Event) => {
       const detail = (e as CustomEvent).detail as { id?: ThemeId } | undefined;
       const id = detail?.id as ThemeId | undefined;
+      if (!id) return;
       const el = overlayRef.current;
-      if (!el || !id || reduce) {
+      if (!el || reduce) {
+        // no mask available — commit immediately so content still updates
         window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+        window.dispatchEvent(new CustomEvent("perception:commit", { detail: { id } }));
         return;
       }
-      if (animatingRef.current) return;
+      if (animatingRef.current) {
+        pendingPerceptionRef.current = id;
+        return;
+      }
       animatingRef.current = true;
       const theme = THEMES[id];
       el.style.background = theme.bgGradient;
@@ -186,10 +207,14 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
           { duration: BARBA_DUR * 1000, easing: BARBA_EASE, fill: "forwards" }
         ).finished;
       } catch {}
+      // mask fully covers now — commit the content change while hidden
+      window.dispatchEvent(new CustomEvent("perception:commit", { detail: { id } }));
       // scroll while covered
       window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
       document.documentElement.scrollTop = 0;
       syncLenisToTop();
+      // let the new content paint a frame while still covered
+      await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
       await new Promise((r) => setTimeout(r, 80));
       try {
         await el.animate(
@@ -199,6 +224,11 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
       } catch {}
       el.style.display = "none";
       animatingRef.current = false;
+      if (pendingPerceptionRef.current) {
+        const next = pendingPerceptionRef.current;
+        pendingPerceptionRef.current = null;
+        window.dispatchEvent(new CustomEvent("perception:switch", { detail: { id: next } }));
+      }
     };
     window.addEventListener("perception:switch", onPerception as EventListener);
     return () => window.removeEventListener("perception:switch", onPerception as EventListener);

@@ -25,20 +25,44 @@ export default function Home() {
   const islands = (data.islands as Island[]).map((island) => {
     const featured = projects.find((p) => p.perception === island.id);
     if (!featured) return island;
-    const overlayTitle: Record<string, string> = {
-      visagenie: "VisaGenie",
-      "ar-real-estate": "AR Real Estate",
-      "interactive-3d": "Interactive 3D",
-      "iot-vr-game": "IoT VR Game",
+
+    const heroContent: Record<string, { title: string; subtitle: string; stat: string }> = {
+      xr: {
+        title: "Spatial worlds that feel inevitable",
+        subtitle: "I design XR experiences — hand-tracked flows, spatial interfaces, immersive environments — that vanish into the task. 20+ products shipped across healthcare, enterprise, and education.",
+        stat: "05 Immersive builds",
+      },
+      ux: {
+        title: "Human flows that just work",
+        subtitle: "Research-driven UX for complex systems — AI dashboards, conversational interfaces, VR training. I turn fragmented workflows into coherent experiences people trust.",
+        stat: "05 Research-led ships",
+      },
+      ai: {
+        title: "Intelligence made kind",
+        subtitle: "Conversational agents, generative systems, adaptive UX — I design AI that explains itself, earns trust, and amplifies human judgment instead of replacing it.",
+        stat: "02 Intelligent systems",
+      },
+      product: {
+        title: "Products people trust",
+        subtitle: "End-to-end product design — strategy, systems, shipping. From fintech dashboards to mobile games, I own the full lifecycle from insight to launch.",
+        stat: "02 Shipped products",
+      },
     };
+
+    const content = heroContent[island.id] ?? {
+      title: island.title,
+      subtitle: island.description,
+      stat: island.stat,
+    };
+
     return {
       ...island,
       image: featured.image,
       imageAlt: featured.imageAlt,
-      title: overlayTitle[featured.id] ?? featured.title.split(":")[0],
-      subtitle: island.label,
+      title: content.title,
+      subtitle: content.subtitle,
       description: "",
-      stat: featured.client ? `${featured.client}, ${featured.year}` : featured.year,
+      stat: content.stat,
     };
   });
 
@@ -53,12 +77,10 @@ export default function Home() {
       if (e.key === "ArrowRight") {
         const next = ORDER[(idx + 1) % ORDER.length];
         window.dispatchEvent(new CustomEvent("perception:switch", { detail: { id: next } }));
-        setActiveId(next);
       }
       if (e.key === "ArrowLeft") {
         const next = ORDER[(idx - 1 + ORDER.length) % ORDER.length];
         window.dispatchEvent(new CustomEvent("perception:switch", { detail: { id: next } }));
-        setActiveId(next);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -67,12 +89,11 @@ export default function Home() {
 
   return (
     <>
-      <Nav theme={theme} activeSection={activeSection} />
+      <Nav theme={theme} activeSection={activeSection} revealDelay={2400} />
 
       <main>
         <section id="hero" className="relative">
           <HeroStage
-            activeId={activeId}
             baseId={baseId}
             overlayId={overlayId}
             islands={islands}

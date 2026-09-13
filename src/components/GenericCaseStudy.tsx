@@ -1,0 +1,157 @@
+"use client";
+
+import CaseStudyShell, {
+  C,
+  CaseBody,
+  CaseCard,
+  CaseCardText,
+  CaseChip,
+  CaseEyebrow,
+  CaseH2,
+  CaseLabel,
+  CaseSection,
+} from "@/components/CaseStudyShell";
+import type { CaseStudyTocItem } from "@/components/CaseStudyToc";
+import type { Project } from "@/types/portfolio";
+import { AceternityCTA, HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+
+const GENERIC_TOC: CaseStudyTocItem[] = [
+  { id: "overview", label: "Story" },
+  { id: "problem", label: "Problem" },
+  { id: "approach", label: "Approach" },
+  { id: "outcomes", label: "Outcomes" },
+  { id: "toolkit", label: "Toolkit" },
+  { id: "credits", label: "Credits" },
+  { id: "related", label: "Related" },
+  { id: "contact", label: "Contact" },
+];
+
+/**
+ * Figma-style case template for every project: single scroll, index nav,
+ * same dark theme as the Millennium flagship — content from portfolio.json.
+ */
+export default function GenericCaseStudy({
+  project,
+  related,
+}: {
+  project: Project;
+  related: Project[];
+}) {
+  const meta = [project.year, project.subtitle ?? project.dimension, project.client]
+    .filter(Boolean)
+    .join(" · ");
+  const stats: string[] = [];
+  if (project.views != null) stats.push(`${project.views} views`);
+  if (project.appreciations != null) stats.push(`${project.appreciations} appreciations`);
+
+  return (
+    <CaseStudyShell project={project} related={related} tocItems={GENERIC_TOC}>
+      {/* STORY / HERO */}
+      <section id="overview" className="scroll-mt-[88px] pb-12 md:pb-16">
+        <CaseEyebrow>{meta}</CaseEyebrow>
+        <h1
+          className="mt-4 max-w-[20ch] font-display text-[32px] font-semibold leading-[1.05] tracking-[-0.03em] md:text-[52px]"
+          style={{ fontFamily: "var(--font-display)", color: C.text }}
+        >
+          {project.title}
+        </h1>
+        <p className="mt-5 max-w-[65ch] text-[16px] leading-[1.7] md:text-[17px]" style={{ fontFamily: "var(--font-body)", color: "rgba(255,255,255,0.82)" }}>
+          {project.description}
+        </p>
+        {project.blurb && project.blurb !== project.description ? (
+          <p className="mt-3 max-w-[65ch] text-[15px] leading-[1.7]" style={{ color: C.muted }}>{project.blurb}</p>
+        ) : null}
+
+        <div className="mt-6 flex flex-wrap gap-1.5">
+          {project.tags.map((tag) => (
+            <CaseChip key={tag}>{tag}</CaseChip>
+          ))}
+        </div>
+
+        <div
+          className="mt-8 overflow-hidden rounded-[16px] border"
+          style={{ borderColor: "rgba(255,255,255,0.10)", background: C.deep, boxShadow: "0 16px 40px rgba(0,0,0,0.45)" }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={project.image} alt={project.imageAlt} className="aspect-[16/9] w-full object-cover" />
+        </div>
+        {project.images && project.images.length > 1 ? (
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {project.images.slice(1).map((src) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={src} src={src} alt="" className="aspect-[16/10] w-full rounded-[16px] object-cover" />
+            ))}
+          </div>
+        ) : null}
+      </section>
+
+      {/* PROBLEM */}
+      <CaseSection id="problem">
+        <CaseEyebrow>01 / PROBLEM & SCOPE</CaseEyebrow>
+        <CaseH2>Why this needed to exist</CaseH2>
+        <div className="mt-8">
+          <CaseCard>
+            <CaseLabel>Problem Statement</CaseLabel>
+            <CaseCardText>{project.details.challenge}</CaseCardText>
+          </CaseCard>
+        </div>
+      </CaseSection>
+
+      {/* APPROACH */}
+      <CaseSection id="approach">
+        <CaseEyebrow>02 / APPROACH</CaseEyebrow>
+        <CaseH2>How the work got done</CaseH2>
+        <div className="mt-8">
+          <CaseCard accent>
+            <CaseLabel>Design Approach</CaseLabel>
+            <CaseCardText>{project.details.approach}</CaseCardText>
+          </CaseCard>
+        </div>
+      </CaseSection>
+
+      {/* OUTCOMES */}
+      <CaseSection id="outcomes">
+        <CaseEyebrow>03 / OUTCOMES</CaseEyebrow>
+        <CaseH2>What changed once it shipped</CaseH2>
+        <div className="mt-8">
+          <CaseCard>
+            <CaseLabel>Result</CaseLabel>
+            <CaseCardText>{project.details.result}</CaseCardText>
+          </CaseCard>
+        </div>
+      </CaseSection>
+
+      {/* TOOLKIT */}
+      <CaseSection id="toolkit">
+        <CaseEyebrow>04 / TOOLKIT</CaseEyebrow>
+        <CaseH2>What it was made with</CaseH2>
+        <div className="mt-6 flex flex-wrap gap-1.5">
+          {project.tags.map((tag) => (
+            <CaseChip key={tag}>{tag}</CaseChip>
+          ))}
+        </div>
+        <CaseBody>
+          {project.year} · {project.dimension}{project.client ? ` · Built for ${project.client}` : ""}
+          {stats.length ? ` · ${stats.join(" · ")}` : ""}.
+        </CaseBody>
+      </CaseSection>
+
+      {/* CREDITS */}
+      <CaseSection id="credits">
+        <CaseEyebrow>05 / CREDITS</CaseEyebrow>
+        <CaseH2>One last thing</CaseH2>
+        <CaseBody>
+          {project.client
+            ? `Designed for ${project.client} — ${project.blurb}`
+            : project.blurb}
+        </CaseBody>
+        <div className="mt-8 flex flex-wrap gap-3">
+          {project.url ? <AceternityCTA href={project.url}>View on Behance</AceternityCTA> : null}
+          <HoverBorderGradient as="a" href="/projects">
+            More projects
+          </HoverBorderGradient>
+        </div>
+      </CaseSection>
+    </CaseStudyShell>
+  );
+}

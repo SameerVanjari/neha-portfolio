@@ -19,10 +19,11 @@ function scrollToId(id: string) {
   lenisScrollToId(id);
 }
 
-export default function Nav({ theme, activeSection }: { theme: Theme; activeSection?: string }) {
+export default function Nav({ theme, activeSection, revealDelay }: { theme: Theme; activeSection?: string; revealDelay?: number }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const reduce = useReducedMotion();
+  const deferred = revealDelay != null;
 
   useEffect(() => {
     if (open) {
@@ -94,10 +95,39 @@ export default function Nav({ theme, activeSection }: { theme: Theme; activeSect
           .nav-link:hover .nav-link__line{ opacity: 1; transform: none !important; }
           .nav-link:hover .nav-link__label{ transform: none !important; }
         }
+        /* Deferred navbar reveal — appears after the hero text settles */
+        .site-nav--deferred .site-nav__veil{
+          opacity: 0;
+          animation: navVeilIn 500ms var(--ease-out, cubic-bezier(0.23,1,0.32,1)) forwards;
+          animation-delay: var(--nav-delay, 0ms);
+        }
+        .site-nav--deferred .site-nav__inner{
+          opacity: 0;
+          transform: translateY(-8px);
+          animation: navInnerIn 500ms var(--ease-out, cubic-bezier(0.23,1,0.32,1)) forwards;
+          animation-delay: var(--nav-delay, 0ms);
+        }
+        @keyframes navVeilIn{
+          to{ opacity: 1; }
+        }
+        @keyframes navInnerIn{
+          to{ opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion:reduce){
+          .site-nav--deferred .site-nav__veil,
+          .site-nav--deferred .site-nav__inner{
+            animation: none !important;
+            opacity: 1;
+            transform: none;
+          }
+        }
       `}</style>
-      <header className="site-nav pointer-events-none fixed inset-x-0 top-0 z-40">
+      <header
+        className={`site-nav pointer-events-none fixed inset-x-0 top-0 z-40 ${deferred ? "site-nav--deferred" : ""}`}
+        style={deferred ? { ["--nav-delay" as string]: `${revealDelay}ms` } : undefined}
+      >
         <div aria-hidden className="site-nav__veil" />
-        <div className="pointer-events-auto relative mx-auto flex h-[64px] max-w-[1280px] items-center justify-between gap-4 px-6 md:px-8">
+        <div className="site-nav__inner pointer-events-auto relative mx-auto flex h-[64px] max-w-[1280px] items-center justify-between gap-4 px-6 md:px-8">
           <Link href="/" className="flex items-baseline gap-2 shrink-0">
             <span className="font-display text-[18px] font-bold tracking-[-0.025em]" style={{ color: theme.text, letterSpacing: "-0.03em", fontFamily: "var(--font-display)" }}>
               NEHA

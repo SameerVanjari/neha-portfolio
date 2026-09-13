@@ -1,9 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { useLenis } from "lenis/react";
 import type { ThemeId } from "@/data/themes";
 import { THEMES } from "@/data/themes";
-import GradientOrbs from "./background/GradientOrbs";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 type IslandId = ThemeId;
 
@@ -23,99 +29,207 @@ function CardImage({ island }: { island: IslandData }) {
   return (
     <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={island.image} alt={island.imageAlt} className="h-full w-full object-cover" draggable={false} />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-      <div className="absolute inset-0 opacity-40 mix-blend-overlay" style={{ background: `linear-gradient(100deg, transparent 40%, ${island.color}18 100%)` }} />
+      <img
+        src={island.image}
+        alt={island.imageAlt}
+        className="h-full w-full object-cover hero-image"
+        draggable={false}
+        loading="eager"
+      />
+      {/* MINIMAL overlay - only for text legibility */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
     </>
   );
 }
 
-function TextStack({ island }: { island: IslandData }) {
+// Row offsets + per-char stagger + the wait for the image zoom to settle.
+const ROW_BASE = [0, 150, 440];
+const CHAR_STAGGER = 7;
+const ZOOM_WAIT = 850;
+
+function Chars({ text, row }: { text: string; row: number }) {
+  const words = text.split(" ");
+  let charIndex = 0;
   return (
-    <div className="max-w-[560px] hero-text">
-      <div className="hero-row mb-2 font-mono text-[11px] tracking-[0.18em] text-white/70" style={{ ["--delay" as string]: "60ms" } as React.CSSProperties}>
-        {island.label}
-        {island.stat ? <span className="text-white/45"> · {island.stat}</span> : null}
-      </div>
+    <>
+      {words.map((word, wi) => (
+        <span key={wi}>
+          <span className="hero-word">
+            {Array.from(word).map((ch, ci) => {
+              const delay = ZOOM_WAIT + ROW_BASE[row] + charIndex * CHAR_STAGGER;
+              charIndex += 1;
+              return (
+                <span
+                  key={ci}
+                  aria-hidden
+                  className="hero-char"
+                  style={{ ["--char-delay" as string]: `${delay}ms` } as React.CSSProperties}
+                >
+                  {ch}
+                </span>
+              );
+            })}
+          </span>
+          {wi < words.length - 1 ? " " : null}
+        </span>
+      ))}
+    </>
+  );
+}
+
+function HeroText({ island }: { island: IslandData }) {
+  return (
+    <div className="hero-text hero-text--visible max-w-[640px] px-6 md:px-10 lg:px-14">
+      <p className="hero-row font-mono text-[12px] tracking-[0.22em] text-white/95 mb-4">
+        <Chars text={island.label} row={0} />
+        {island.stat ? (
+          <span
+            aria-hidden
+            className="hero-stat"
+            style={{
+              color: "rgba(255,255,255,0.65)",
+              ["--char-delay" as string]: `${ZOOM_WAIT + ROW_BASE[0] + island.label.length * CHAR_STAGGER}ms`,
+            } as React.CSSProperties}
+          >
+            · {island.stat}
+          </span>
+        ) : null}
+      </p>
 
       <h1
-        className="hero-row font-display text-[28px] font-bold leading-[1.05] tracking-[-0.03em] text-white md:text-[40px] lg:text-[44px]"
-        style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.03em", ["--delay" as string]: "130ms" } as React.CSSProperties}
+        className="hero-row font-display text-[36px] font-bold leading-[1.05] tracking-[-0.03em] text-white md:text-[52px] lg:text-[64px] xl:text-[72px]"
+        style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.03em" }}
       >
-        {island.title}
+        <Chars text={island.title} row={1} />
       </h1>
+
+      <p className="hero-row mt-6 text-[18px] leading-[1.6] text-white/95 max-w-[540px]" style={{ fontFamily: "var(--font-body)" }}>
+        <Chars text={island.subtitle} row={2} />
+      </p>
+    </div>
+  );
+}
+
+function OverlayHero({ island }: { island: IslandData }) {
+  const frameRef = useRef<HTMLDivElement>(null);
+  return (
+    <div
+      ref={frameRef}
+      className="relative hero-frame hero-frame--base"
+      style={{ height: "100dvh", width: "100%" }}
+      aria-hidden
+    >
+      <div className="absolute inset-0 hero-image-wrapper" style={{ zIndex: 0, transformOrigin: "center center", overflow: "hidden" }}>
+        <CardImage island={island} />
+      </div>
+      <div className="absolute inset-0 flex items-center pointer-events-none" style={{ zIndex: 10 }}>
+        <div className="w-full pointer-events-auto pt-20 md:pt-0">
+          <HeroText island={island} />
+        </div>
+      </div>
     </div>
   );
 }
 
 export default function HeroStage({
-  activeId,
   baseId,
   overlayId,
   islands,
 }: {
-  activeId: ThemeId;
   baseId: ThemeId;
   overlayId: ThemeId | null;
   islands: IslandData[];
 }) {
-  const [reduced, setReduced] = useState(false);
+  const [reduced, setReduced] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+    return false;
+  });
+  const lenis = useLenis();
+  const baseFrameRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const m = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(m.matches);
     const h = () => setReduced(m.matches);
     m.addEventListener("change", h);
     return () => m.removeEventListener("change", h);
   }, []);
 
-  const activeIsland = islands.find((i) => i.id === activeId)!;
   const baseIsland = islands.find((i) => i.id === baseId)!;
   const overlayIsland = overlayId ? islands.find((i) => i.id === overlayId)! : null;
   const isWaving = !!overlayId && !!overlayIsland;
 
-  const cardHeight = "clamp(520px, 68vh, 680px)";
+  // Simple parallax: image moves slightly slower than scroll
+  useEffect(() => {
+    if (reduced || !lenis) return;
 
-  if (reduced) {
-    return (
-      <div className="relative flex min-h-[100dvh] flex-col items-center justify-start overflow-hidden pt-[80px]">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
-          <GradientOrbs theme={THEMES[activeId]} />
-          <div
-            className="absolute inset-x-0 bottom-0 h-[160px] md:h-[220px]"
-            style={{ background: `linear-gradient(to bottom, rgba(255,255,255,0) 0%, ${THEMES[activeId].wash}14 38%, #fafaf9 88%)` }}
-          />
-        </div>
-        <div className="relative w-full max-w-[1280px] px-6 md:px-8">
-          <div
-            className="relative overflow-hidden rounded-[24px] bg-white"
-            style={{ border: `1px solid ${THEMES[activeId].border}`, height: cardHeight }}
-          >
-            <div className="absolute inset-0">
-              <CardImage island={activeIsland} />
-            </div>
-            <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
-              <TextStack island={activeIsland} />
-            </div>
-          </div>
+    const frames = document.querySelectorAll<HTMLElement>(".hero-frame");
+    frames.forEach((frame) => {
+      const image = frame.querySelector<HTMLElement>(".hero-image");
+      if (!image) return;
+      ScrollTrigger.create({
+        trigger: frame,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          // Parallax: image moves at ~30% of scroll speed
+          const yOffset = gsap.utils.interpolate(-60, 60, progress);
+          image.style.transform = `translateY(${yOffset}px)`;
+        },
+      });
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((st) => st.kill());
+    };
+  }, [lenis, reduced]);
+
+  const renderFrame = useCallback((
+    island: IslandData,
+    _theme: typeof THEMES[keyof typeof THEMES],
+    frameRef: React.RefObject<HTMLDivElement | null>
+  ) => (
+    <div
+      ref={frameRef}
+      className="relative hero-frame hero-frame--base"
+      style={{
+        height: "100dvh",
+        width: "100%",
+      }}
+      aria-hidden
+    >
+      {/* Image wrapper — zooms out via CSS animation */}
+      <div className="absolute inset-0 hero-image-wrapper" style={{ zIndex: 0, transformOrigin: "center center", overflow: "hidden" }}>
+        <CardImage island={island} />
+      </div>
+
+      {/* Text layer — top */}
+      <div className="absolute inset-0 flex items-center pointer-events-none" style={{ zIndex: 10 }}>
+        <div className="w-full pointer-events-auto pt-20 md:pt-0">
+          <HeroText island={island} />
         </div>
       </div>
-    );
-  }
+    </div>
+  ), []);
 
   return (
     <>
-      <style>{`
+      <style jsx global>{`
         .hero-row{
-          opacity: 0;
-          transform: translateY(14px);
-          transition: opacity 420ms var(--ease-out, cubic-bezier(0.23,1,0.32,1)), transform 420ms var(--ease-out, cubic-bezier(0.23,1,0.32,1));
-          transition-delay: var(--delay, 0ms);
           will-change: transform, opacity;
         }
-        .hero-card--visible .hero-row{
-          opacity: 1;
-          transform: translateY(0);
+        /* Entrance — image zooms out first (pure CSS, robust to client nav) */
+        .hero-frame--base .hero-image-wrapper{
+          animation: heroZoom 1s var(--ease-out, cubic-bezier(0.23,1,0.32,1)) forwards;
         }
+        @keyframes heroZoom{
+          from{ transform: scale(2); }
+          to{ transform: scale(1); }
+        }
+
         .hero-wave{
           clip-path: circle(0% at 50% 92%);
           transition: clip-path 2050ms cubic-bezier(0.32,0.72,0,1);
@@ -124,64 +238,70 @@ export default function HeroStage({
         .hero-wave--expanded{
           clip-path: circle(150% at 50% 92%);
         }
-        @media (prefers-reduced-motion: reduce){
-          .hero-row{ transition: opacity 180ms ease-out; transform: none; }
-          .hero-wave{ transition: opacity 250ms ease-out; clip-path: none; opacity: 0; }
+
+        /* Character-level blur fade in from the right */
+        .hero-word{
+          display: inline-block;
+          white-space: nowrap;
+        }
+        .hero-char,
+        .hero-stat{
+          display: inline-block;
+          opacity: 0;
+          filter: blur(8px);
+          transform: translateX(24px);
+          will-change: transform, opacity, filter;
+        }
+        .hero-text--visible .hero-char,
+        .hero-text--visible .hero-stat{
+          animation: heroCharIn 520ms var(--ease-out, cubic-bezier(0.23,1,0.32,1)) forwards;
+          animation-delay: var(--char-delay, 0ms);
+        }
+        @keyframes heroCharIn{
+          to{
+            opacity: 1;
+            filter: blur(0);
+            transform: translateX(0);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .hero-frame--base .hero-image-wrapper{
+            animation: none !important;
+            transform: none !important;
+          }
+          .hero-wave{
+            transition: opacity 250ms ease-out;
+            clip-path: none;
+            opacity: 0;
+          }
           .hero-wave--expanded{ opacity: 1; }
+          .hero-char,
+          .hero-stat{
+            animation: none !important;
+            opacity: 1;
+            filter: none;
+            transform: none;
+          }
         }
       `}</style>
 
-      <div className="relative flex min-h-[100dvh] flex-col items-center justify-start overflow-hidden pt-[76px]">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
-          <GradientOrbs theme={THEMES[baseId]} />
-          <div
-            className="absolute inset-x-0 bottom-0 h-[160px] md:h-[220px]"
-            style={{ background: `linear-gradient(to bottom, rgba(255,255,255,0) 0%, ${THEMES[baseId].wash}14 38%, #fafaf9 102%)` }}
-          />
+      <div className="relative min-h-[100dvh] overflow-hidden">
+        <div style={{ height: "100dvh", width: "100%" }}>
+          {renderFrame(baseIsland, THEMES[baseId], baseFrameRef)}
         </div>
-        <div className="relative w-full max-w-[1280px] px-6 md:px-8">
+
+        {isWaving && overlayIsland && (
           <div
-            className={`relative overflow-hidden rounded-[24px] bg-white hero-card ${!isWaving ? "hero-card--visible" : ""}`}
-            style={{ border: `1px solid ${THEMES[baseId].border}`, height: cardHeight }}
+            className={`fixed inset-0 z-10 pointer-events-none hero-wave ${isWaving ? "hero-wave--expanded" : ""}`}
+            aria-hidden
           >
-            <div className="absolute inset-0">
-              <CardImage island={baseIsland} />
-            </div>
-            <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
-              <TextStack island={baseIsland} />
+            <div className="absolute inset-0 pointer-events-auto" style={{ height: "100dvh", width: "100%" }}>
+              <OverlayHero key={overlayId} island={overlayIsland} />
             </div>
           </div>
-        </div>
+        )}
       </div>
-
-      {isWaving && overlayIsland && (
-        <div
-          className={`pointer-events-none fixed inset-0 z-10 flex min-h-[100dvh] flex-col items-center justify-start overflow-hidden pt-[76px] pb-8 hero-wave ${isWaving ? "hero-wave--expanded" : ""}`}
-          aria-hidden
-        >
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <GradientOrbs theme={THEMES[overlayId!]} />
-            <div
-              className="absolute inset-x-0 bottom-0 h-[160px] md:h-[220px]"
-              style={{ background: `linear-gradient(to bottom, rgba(255,255,255,0) 0%, ${THEMES[overlayId!].wash}14 38%, #fafaf9 102%)` }}
-            />
-          </div>
-
-          <div className="relative w-full max-w-[1280px] px-6 md:px-8">
-            <div
-              className="relative overflow-hidden rounded-[24px] bg-white hero-card hero-card--visible"
-              style={{ border: `1px solid ${THEMES[overlayId!].border}`, height: cardHeight }}
-            >
-              <div className="absolute inset-0">
-                <CardImage island={overlayIsland} />
-              </div>
-              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-10">
-                <TextStack island={overlayIsland} />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

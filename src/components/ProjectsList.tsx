@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import Nav from "@/components/Nav";
 import { THEMES, type ThemeId } from "@/data/themes";
@@ -16,16 +16,23 @@ function isThemeId(v: string | null): v is ThemeId {
   return v === "ai" || v === "xr" || v === "ux" || v === "product";
 }
 
-export default function ProjectsList() {
+export default function ProjectsList({ lens }: { lens: string | null }) {
   const router = useRouter();
-  const params = useSearchParams();
   const reduce = useReducedMotion();
-  const lens = params.get("lens");
-  const sort: ThemeId | "all" = isThemeId(lens) ? lens : "all";
+  // Local filter state — responds immediately, independent of server re-render.
+  const [sort, setSort] = useState<ThemeId | "all">(() => (isThemeId(lens) ? lens : "all"));
   const theme = THEMES[sort === "all" ? "product" : sort];
   const projects = data.projects as Project[];
 
-  const setSort = (next: ThemeId | "all") => {
+  // Sync from the URL when it changes externally (deep link, island nav, back/forward).
+  const [prevLens, setPrevLens] = useState(lens);
+  if (lens !== prevLens) {
+    setPrevLens(lens);
+    setSort(isThemeId(lens) ? lens : "all");
+  }
+
+  const changeSort = (next: ThemeId | "all") => {
+    setSort(next);
     router.replace(next === "all" ? "/projects" : `/projects?lens=${next}`, { scroll: false });
   };
 
@@ -72,7 +79,7 @@ export default function ProjectsList() {
                     <button
                       key={s}
                       type="button"
-                      onClick={() => setSort(s)}
+                      onClick={() => changeSort(s)}
                       aria-pressed={isActive}
                       className="cursor-pointer rounded-full border px-3.5 py-1.5 font-mono text-[11px] tracking-[0.12em] transition-colors"
                       style={{
@@ -122,7 +129,7 @@ export default function ProjectsList() {
                               className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 font-mono text-[10px] tracking-[0.12em] backdrop-blur"
                               style={{ color: cardTheme.text, border: `1px solid ${cardTheme.border}` }}
                             >
-                              {p.year} · {p.dimension}
+                              {p.year} · {p.client ?? p.dimension}
                             </div>
                           </div>
                           <div className="px-4 py-4 md:px-5 md:py-5">

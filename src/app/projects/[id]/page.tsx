@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import data from "@/data/portfolio.json";
 import type { Project } from "@/types/portfolio";
-import ProjectCaseStudy from "@/components/ProjectCaseStudy";
+import GenericCaseStudy from "@/components/GenericCaseStudy";
+import MillenniumCaseStudy from "@/components/MillenniumCaseStudy";
 
 const projects = data.projects as Project[];
 
@@ -27,5 +28,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   const sameLens = projects.filter((p) => p.id !== project.id && p.perception === project.perception);
   const related = (sameLens.length ? sameLens : projects.filter((p) => p.id !== project.id)).slice(0, 3);
 
-  return <ProjectCaseStudy project={project} related={related} />;
+  if (project.id === "vr-training-fiber") {
+    return <MillenniumCaseStudy project={project} related={related} />;
+  }
+
+  return <GenericCaseStudy project={project} related={related} />;
 }

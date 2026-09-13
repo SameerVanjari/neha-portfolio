@@ -18,21 +18,40 @@ export function TextGenerateEffect({
   const [visible, setVisible] = useState(false);
   const wordsArray = words.split(" ");
 
+  // Scroll-reveal via IntersectionObserver, with a safety timeout so the
+  // text always appears even if the observer never fires (e.g. after a
+  // client-side navigation).
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const io = new IntersectionObserver(
+
+    let fallback: ReturnType<typeof setTimeout> | null = null;
+    let io: IntersectionObserver | null = null;
+
+    const reveal = () => {
+      setVisible(true);
+      io?.disconnect();
+      if (fallback) clearTimeout(fallback);
+    };
+
+    io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          io.disconnect();
-        }
+        if (entry.isIntersecting) reveal();
       },
-      { threshold: 0.4, rootMargin: "0px 0px -10% 0px" }
+      { threshold: 0.15, rootMargin: "0px 0px -5% 0px" }
     );
     io.observe(el);
-    return () => io.disconnect();
+
+    // Safety net.
+    fallback = setTimeout(reveal, 4000);
+
+    return () => {
+      io?.disconnect();
+      if (fallback) clearTimeout(fallback);
+    };
   }, []);
+
+  const isVisible = visible || !!reduce;
 
   return (
     <>
@@ -71,7 +90,7 @@ export function TextGenerateEffect({
       `}</style>
       <span
         ref={ref}
-        className={cn("tge", visible && "tge--visible", reduce && "tge--reduce", className)}
+        className={cn("tge", isVisible && "tge--visible", reduce && "tge--reduce", className)}
       >
         {wordsArray.map((word, idx) => (
           <span key={`${word}-${idx}`} className="tge-word" style={{ ["--i" as string]: idx }}>
