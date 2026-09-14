@@ -189,3 +189,92 @@ button:focus-visible {
     transition: none;
   }
 }
+
+/* ---- Site preloader (horizontal slot machine) ---- */
+/* CSS lives here (not in a component <style>) so it is server-rendered and
+   the loader renders styled on the very first paint, before hydration. */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  background: #ffffff;
+  animation: loader-fade 550ms cubic-bezier(0.23, 1, 0.32, 1) 2.8s forwards;
+}
+@keyframes loader-fade {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+.loader-mark {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  color: #111111;
+  padding-left: 0.35em;
+}
+.loader-viewport {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  overflow: hidden;
+}
+.loader-viewport::before,
+.loader-viewport::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 44px;
+  z-index: 2;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.loader-viewport::before {
+  left: 0;
+  -webkit-mask-image: linear-gradient(to right, #000, transparent);
+  mask-image: linear-gradient(to right, #000, transparent);
+}
+.loader-viewport::after {
+  right: 0;
+  -webkit-mask-image: linear-gradient(to left, #000, transparent);
+  mask-image: linear-gradient(to left, #000, transparent);
+}
+.loader-reel {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+  animation: loader-slot 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+.loader-reel img {
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
+  object-fit: cover;
+  padding: 10px;
+}
+@keyframes loader-slot {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(0); }
+  25%  { transform: translateX(-160px); }
+  45%  { transform: translateX(-160px); }
+  50%  { transform: translateX(-320px); }
+  70%  { transform: translateX(-320px); }
+  75%  { transform: translateX(-480px); }
+  95%  { transform: translateX(-480px); }
+  100% { transform: translateX(-640px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader-reel {
+    animation: none;
+  }
+}
+

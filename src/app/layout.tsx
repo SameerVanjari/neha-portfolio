@@ -33,6 +33,7 @@ export const metadata: Metadata = {
 
 import BarbaProvider from "@/components/BarbaProvider";
 import SmoothScroll from "@/components/SmoothScroll";
+import Loader from "@/components/Loader";
 import { PerceptionProvider } from "@/context/PerceptionContext";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SmoothScroll>
             <BarbaProvider>{children}</BarbaProvider>
           </SmoothScroll>
+          <Loader />
         </PerceptionProvider>
       </body>
     </html>
