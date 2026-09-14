@@ -1,0 +1,62 @@
+{
+  "id": "meditation-universe",
+  "title": "Designing an Immersive Meditation Universe",
+  "subtitle": "XR · Wellness",
+  "dimension": "XR",
+  "perception": "xr",
+  "year": "2023",
+  "client": "Harvard MedTech",
+  "color": "#ff2bd6",
+  "accent": "neon",
+  "tags": [
+    "VR",
+    "Wellness",
+    "Spatial Audio"
+  ],
+  "url": "https://www.behance.net/gallery/227384681/Designing-an-Immersive-Meditation-Universe",
+  "heroImage": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "VR meditation universe with particles",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "Led design and Unity 3D development of a scalable VR home therapy program for chronic pain and stress relief — storyboarding, shaders, particles, spatial design, and sound design. Built for Harvard MedTech.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "Chronic pain and stress need non-pharmacological relief that holds attention and feels safe at home.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "End-to-end VR universe: storyboarding, custom shaders, particle systems, spatial audio, and narrative pacing for a scalable home-therapy program.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "Delivered for Harvard MedTech — immersive storytelling that grounds users and supports pain reduction through presence.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "VR",
+        "Wellness",
+        "Spatial Audio"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "Designed for Harvard MedTech — Led design and Unity 3D development of a scalable VR home therapy program for chronic pain and stress relief — storyboarding, shaders, particles, spatial design, and sound design. Built for Harvard MedTech.",
+      "images": []
+    }
+  }
+}

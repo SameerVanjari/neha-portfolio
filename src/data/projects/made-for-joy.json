@@ -1,0 +1,81 @@
+{
+  "id": "made-for-joy",
+  "title": "Made for Joy",
+  "subtitle": "XR · Experience",
+  "dimension": "XR",
+  "perception": "xr",
+  "year": "2025",
+  "client": null,
+  "color": "#ff2bd6",
+  "accent": "neon",
+  "tags": [
+    "3D",
+    "Motion",
+    "Experience"
+  ],
+  "url": null,
+  "heroImage": "https://drive.google.com/thumbnail?id=1kqJYuprc6Pv6CZQtwafFXeNesdKFYT9v&sz=w1600",
+  "heroImageAlt": "Made for Joy 3D experience",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "A joy-driven 3D motion piece — a camera-choreographed animation and rendered stills that give a brand’s emotional core room to move. Built as a self-contained piece, from concept and camera direction through to final render.",
+      "images": [
+        {
+          "alt": "Made for Joy — render 23",
+          "src": "https://drive.google.com/thumbnail?id=16NCVY4MVbhgdGUANd6uw-4ZjVrJ4FHF_&sz=w1600"
+        },
+        {
+          "alt": "Made for Joy — render 24",
+          "src": "https://drive.google.com/thumbnail?id=1WwGEXfzB9dwt-n_-EUQpj_zeJiRTtzxd&sz=w1600"
+        }
+      ]
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "Turn a feeling — joy — into something tangible, with no product or interface to anchor the story to.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Directed the piece end-to-end — concept, camera choreography, lighting, and asset direction — iterating on renders until the tone landed.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "A finished 3D camera animation and rendered stills, ready to carry the brand across motion and marketing.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": []
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "A joy-driven 3D motion piece — a camera-choreographed animation and rendered stills that give a brand’s emotional core room to move.",
+      "images": []
+    }
+  },
+  "media": {
+    "heroVideo": "/videos/made-for-joy.mp4",
+    "heroVideoPoster": "/images/made-for-joy-hero.jpg",
+    "videos": [],
+    "images": [
+      {
+        "alt": "Made for Joy — render 23",
+        "src": "/images/made-for-joy-01.png"
+      },
+      {
+        "alt": "Made for Joy — render 24",
+        "src": "/images/made-for-joy-02.png"
+      }
+    ]
+  }
+}

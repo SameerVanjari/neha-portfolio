@@ -1,0 +1,62 @@
+{
+  "id": "iot-vr-game",
+  "title": "Game Design — IoT Based Virtual Reality",
+  "subtitle": "Product · Gaming",
+  "dimension": "PRODUCT",
+  "perception": "product",
+  "year": "2019",
+  "client": null,
+  "color": "#00e5ff",
+  "accent": "cyan",
+  "tags": [
+    "Game Design",
+    "IoT",
+    "VR"
+  ],
+  "url": "https://www.behance.net/nehamayacharya",
+  "heroImage": "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "IoT-based virtual reality game design",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "A game-design exploration that connects IoT hardware to VR — mapping physical sensors and real-world inputs into a spatial game world, so the room and the body become part of the play.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "VR games often ignore the body and the room, keeping play trapped inside the headset; IoT offers a way to close that loop.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Designed game systems that bridge IoT sensors with VR interaction — mapping physical inputs into spatial rules and feedback.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "An early product/game experiment — 15 appreciations and 305 views on Behance — exploring how physical sensors can deepen spatial play.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "Game Design",
+        "IoT",
+        "VR"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "A VR game-design experiment connecting physical IoT sensors to spatial play — bringing the player's body and room into the virtual world.",
+      "images": []
+    }
+  }
+}

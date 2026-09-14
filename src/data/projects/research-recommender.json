@@ -1,0 +1,62 @@
+{
+  "id": "research-recommender",
+  "title": "AI Powered Research Recommender",
+  "subtitle": "AI · Research",
+  "dimension": "AI",
+  "perception": "ai",
+  "year": "2024",
+  "client": null,
+  "color": "#8b5cff",
+  "accent": "sigil",
+  "tags": [
+    "NLP",
+    "Recommendation",
+    "Conversational UX"
+  ],
+  "url": "https://www.behance.net/gallery/231776825/AI-Powered-Research-Recommender",
+  "heroImage": "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "AI recommendation interface for academic research",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "Intelligent recommendation engine combining NLP and adaptive UX to surface contextually relevant academic research — with a conversational interface and personalized discovery flows.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "Researchers drown in fragmented academic sources; generic search surfaces irrelevant papers and breaks exploratory flow.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Built an NLP-driven recommender with adaptive UX and a conversational interface. Intent-aware ranking personalizes discovery by context, not just keywords.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "Faster, more relevant discovery with reduced cognitive load — users follow thread-like explorations instead of fragmented searches.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "NLP",
+        "Recommendation",
+        "Conversational UX"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "Intelligent recommendation engine combining NLP and adaptive UX to surface contextually relevant academic research — with a conversational interface and personalized discovery flows.",
+      "images": []
+    }
+  }
+}

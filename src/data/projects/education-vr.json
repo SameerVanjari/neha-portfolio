@@ -1,0 +1,62 @@
+{
+  "id": "education-vr",
+  "title": "Education in Virtual Reality",
+  "subtitle": "UX · Education",
+  "dimension": "UX",
+  "perception": "ux",
+  "year": "2020",
+  "client": null,
+  "color": "#ffc94d",
+  "accent": "volt",
+  "tags": [
+    "VR",
+    "Education",
+    "Immersive Learning"
+  ],
+  "url": "https://www.behance.net/nehamayacharya",
+  "heroImage": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "Education in virtual reality",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "Immersive learning modules designed and developed in virtual reality for the education domain.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "Classroom STEM stays locked to textbooks and 2D diagrams.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Designed VR learning modules end-to-end as an immersive media designer in education.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "One of Neha's most viewed Behance works (637 views, 20 appreciations).",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "VR",
+        "Education",
+        "Immersive Learning"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "Second Education in VR gallery on Behance — immersive learning modules in the education domain.",
+      "images": []
+    }
+  }
+}

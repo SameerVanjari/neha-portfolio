@@ -11,6 +11,7 @@ export const MILLENNIUM_TOC: CaseStudyTocItem[] = [
   { id: "sound", label: "Sound" },
   { id: "outcomes", label: "Outcomes" },
   { id: "credits", label: "Credits" },
+  { id: "trailer", label: "Trailer" },
   { id: "related", label: "Related" },
   { id: "contact", label: "Contact" },
 ];

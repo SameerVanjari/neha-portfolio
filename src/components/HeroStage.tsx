@@ -23,19 +23,65 @@ interface IslandData {
   image: string;
   imageAlt: string;
   stat: string;
+  video?: string;
+  videoPoster?: string;
 }
 
 function CardImage({ island }: { island: IslandData }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.defaultMuted = true;
+    v.autoplay = true;
+    v.playsInline = true;
+
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    };
+
+    tryPlay();
+    v.addEventListener("loadeddata", tryPlay);
+    v.addEventListener("canplay", tryPlay);
+
+    return () => {
+      v.removeEventListener("loadeddata", tryPlay);
+      v.removeEventListener("canplay", tryPlay);
+    };
+  }, [island.video]);
+
+  const poster = island.videoPoster || island.image;
+
   return (
     <>
+      {/* Poster image — base layer, always visible */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={island.image}
+        src={poster}
         alt={island.imageAlt}
-        className="h-full w-full object-cover hero-image"
+        className="absolute inset-0 h-full w-full object-cover hero-image"
         draggable={false}
         loading="eager"
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = "/placeholder.svg";
+        }}
       />
+      {island.video ? (
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-cover hero-image"
+          src={island.video}
+          muted
+          loop
+          playsInline
+          autoPlay
+          preload="auto"
+        />
+      ) : null}
       {/* MINIMAL overlay - only for text legibility */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
     </>
@@ -166,8 +212,8 @@ export default function HeroStage({
 
     const frames = document.querySelectorAll<HTMLElement>(".hero-frame");
     frames.forEach((frame) => {
-      const image = frame.querySelector<HTMLElement>(".hero-image");
-      if (!image) return;
+      const images = frame.querySelectorAll<HTMLElement>(".hero-image");
+      if (!images.length) return;
       ScrollTrigger.create({
         trigger: frame,
         start: "top bottom",
@@ -177,7 +223,9 @@ export default function HeroStage({
           const progress = self.progress;
           // Parallax: image moves at ~30% of scroll speed
           const yOffset = gsap.utils.interpolate(-60, 60, progress);
-          image.style.transform = `translateY(${yOffset}px)`;
+          images.forEach((image) => {
+            image.style.transform = `translateY(${yOffset}px)`;
+          });
         },
       });
     });

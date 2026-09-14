@@ -12,6 +12,7 @@ import CaseStudyShell, {
   CaseSection,
 } from "@/components/CaseStudyShell";
 import { MILLENNIUM_TOC, MILLENNIUM_DECISIONS, MILLENNIUM_TOOLS } from "@/data/millennium-case";
+import { HeroMedia, MediaGallery } from "@/components/CaseMedia";
 import {
   MILLENNIUM_HERO,
   MILLENNIUM_PROBLEM,
@@ -75,13 +76,10 @@ export default function MillenniumCaseStudy({
           ))}
         </div>
 
-        <div
-          className="mt-8 overflow-hidden rounded-[16px] border"
-          style={{ borderColor: "rgba(255,255,255,0.10)", background: C.deep, boxShadow: "0 16px 40px rgba(0,0,0,0.45)" }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={project.image} alt={project.imageAlt} className="aspect-[16/9] w-full object-cover" />
+        <div className="mt-8">
+          <HeroMedia project={project} />
         </div>
+        {project.media ? <MediaGallery media={project.media} /> : null}
       </section>
 
       {/* PROBLEM */}
@@ -333,6 +331,30 @@ export default function MillenniumCaseStudy({
           </HoverBorderGradient>
         </div>
       </CaseSection>
+
+      {/* TRAILER */}
+      {project.media?.videos?.length ? (
+        <CaseSection id="trailer">
+          <CaseEyebrow>TRAILER</CaseEyebrow>
+          <CaseH2>Watch the trailer</CaseH2>
+          {project.media.videos.map((v) => (
+            <div
+              key={v.src}
+              className="mt-8 overflow-hidden rounded-[16px] border"
+              style={{ borderColor: "rgba(255,255,255,0.10)", background: C.deep, boxShadow: "0 16px 40px rgba(0,0,0,0.45)" }}
+            >
+              <video
+                className="aspect-video w-full"
+                src={v.src}
+                poster={v.poster}
+                controls
+                preload="none"
+                playsInline
+              />
+            </div>
+          ))}
+        </CaseSection>
+      ) : null}
     </CaseStudyShell>
   );
 }

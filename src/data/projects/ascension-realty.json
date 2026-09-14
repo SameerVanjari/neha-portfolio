@@ -1,0 +1,107 @@
+{
+  "id": "ascension-realty",
+  "title": "Ascension Realty — AR Mobile Experience",
+  "subtitle": "XR · AR · Real Estate",
+  "dimension": "XR",
+  "perception": "xr",
+  "year": "2025",
+  "client": "Ascension Realty",
+  "color": "#ff2bd6",
+  "accent": "neon",
+  "tags": [
+    "AR",
+    "Mobile",
+    "Real Estate",
+    "Vuforia",
+    "3D"
+  ],
+  "url": "https://www.figma.com/design/HE8cOOBzOHoLc4xM9nALNy/Ascension-Realty",
+  "heroImage": "https://drive.google.com/thumbnail?id=1V4IFogf_wYS4I_RM9FxSrwRZhC6CO5-b&sz=w1600",
+  "heroImageAlt": "Ascension Realty AR mobile experience",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "",
+      "images": [
+        {
+          "alt": "Ascension Realty AR still",
+          "src": "https://drive.google.com/thumbnail?id=1nAMb8Out5zvbMuDQNkkvt4ALJUjJ9XVc&sz=w1600"
+        },
+        {
+          "alt": "Ascension Realty AR still 002",
+          "src": "https://drive.google.com/thumbnail?id=1H5UE_XG-qEL1Gdhz_hogxggkKWOuvV1i&sz=w1600"
+        },
+        {
+          "alt": "Ascension Realty AR still 004",
+          "src": "https://drive.google.com/thumbnail?id=1jNGkZwRG5TT__Aazn0ilr7IzeNZHQ5H3&sz=w1600"
+        },
+        {
+          "alt": "Ascension Realty AR still 001",
+          "src": "https://drive.google.com/thumbnail?id=1X1zvUaKvhLHOeHxdJcaY9u_IQOLlIQef&sz=w1600"
+        },
+        {
+          "alt": "Ascension Realty AR still 003",
+          "src": "https://drive.google.com/thumbnail?id=1wPEdb1_gq1uhoDxCNpcnKwCfksBGnH3a&sz=w1600"
+        }
+      ]
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": []
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "",
+      "images": []
+    }
+  },
+  "media": {
+    "heroVideo": "/videos/ascension-realty.mp4",
+    "heroVideoPoster": "/images/ascension-hero.jpg",
+    "videos": [],
+    "images": [
+      {
+        "alt": "Ascension Realty AR still",
+        "src": "/images/ascension-01.png"
+      },
+      {
+        "alt": "Ascension Realty AR still 002",
+        "src": "/images/ascension-02.png"
+      },
+      {
+        "alt": "Ascension Realty AR still 004",
+        "src": "/images/ascension-03.png"
+      },
+      {
+        "alt": "Ascension Realty AR still 001",
+        "src": "/images/ascension-04.png"
+      },
+      {
+        "alt": "Ascension Realty AR still 003",
+        "src": "/images/ascension-05.png"
+      }
+    ]
+  }
+}

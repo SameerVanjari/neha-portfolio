@@ -14,6 +14,7 @@ import CaseStudyShell, {
 import type { CaseStudyTocItem } from "@/components/CaseStudyToc";
 import type { Project } from "@/types/portfolio";
 import { AceternityCTA, HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+import { HeroMedia, MediaGallery } from "@/components/CaseMedia";
 
 const GENERIC_TOC: CaseStudyTocItem[] = [
   { id: "overview", label: "Story" },
@@ -68,21 +69,10 @@ export default function GenericCaseStudy({
           ))}
         </div>
 
-        <div
-          className="mt-8 overflow-hidden rounded-[16px] border"
-          style={{ borderColor: "rgba(255,255,255,0.10)", background: C.deep, boxShadow: "0 16px 40px rgba(0,0,0,0.45)" }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={project.image} alt={project.imageAlt} className="aspect-[16/9] w-full object-cover" />
+        <div className="mt-8">
+          <HeroMedia project={project} />
         </div>
-        {project.images && project.images.length > 1 ? (
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {project.images.slice(1).map((src) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img key={src} src={src} alt="" className="aspect-[16/10] w-full rounded-[16px] object-cover" />
-            ))}
-          </div>
-        ) : null}
+        {project.media ? <MediaGallery media={project.media} /> : null}
       </section>
 
       {/* PROBLEM */}

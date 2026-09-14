@@ -1,0 +1,148 @@
+{
+  "project": {
+    "id": "made-for-joy",
+    "slug": "made-for-joy",
+    "title": "Made for Joy",
+    "client": "Private Wellness Client",
+    "perception": "xr",
+    "dimension": "XR",
+    "year": "2025",
+    "role": "Immersive Experience Designer",
+    "agency": "CXR.Agency",
+    "tagline": "Interaction design for a spectacular immersive mindfulness application — visuals and guides approved by national wellness experts.",
+    "source": {
+      "type": "figma-slides",
+      "url": "https://www.figma.com/slides/CX1FBUrTPAs7kWp6oSjSsA/Made-for-Joy-Project--Copy-",
+      "note": "Text extracted from exported slide images via OCR."
+    }
+  },
+  "theme": {
+    "mode": "dark",
+    "accent": "#FF1E1E",
+    "note": "Reuse the shared case-study theme (dark ink + signal red) defined in src/data/case-theme.ts."
+  },
+  "tags": ["VR", "Mindfulness", "Spatial Interaction", "Tilt Brush", "Wellness"],
+  "toolkit": ["Tilt Brush", "OpenBrush", "Multibrush", "Unity 3D"],
+  "sections": [
+    {
+      "index": 1,
+      "slug": "title",
+      "label": "Title",
+      "heading": "Made for Joy",
+      "blocks": [
+        { "type": "kicker", "text": "CXR.AGENCY" },
+        { "type": "subtitle", "text": "Interaction Design for a Spectacular Immersive Mindfulness Application With Visuals and Guides Approved by National Experts" }
+      ],
+      "images": [{ "file": "/projects/made-for-joy/slide-01.png", "alt": "Made for Joy title slide", "role": "hero" }]
+    },
+    {
+      "index": 2,
+      "slug": "overview",
+      "label": "Overview",
+      "eyebrow": "01 Overview",
+      "blocks": [
+        { "type": "paragraph", "text": "Made for Joy set out to revolutionize mindfulness in VR by designing a calming, visually immersive application informed by national wellness experts. Unlike conventional apps that rely on abstract visuals and flat 2D menus, the goal was to create a spatially intuitive, deeply engaging, and emotionally resonant experience for all users — from first-timers to seasoned meditators." }
+      ],
+      "client": {
+        "goal": "Create a joyful, intuitive, and accessible VR-based mindfulness journey",
+        "collaborators": "VR Artist, Creative Director, Strategist",
+        "tools": "Tilt Brush by Google, OpenBrush"
+      },
+      "images": [{ "file": "/projects/made-for-joy/slide-02.png", "alt": "Client, goal, collaborators and tools" }]
+    },
+    {
+      "index": 3,
+      "slug": "challenge",
+      "label": "The Challenge",
+      "eyebrow": "02 The Challenge",
+      "blocks": [
+        { "type": "paragraph", "text": "As the Immersive Experience Designer, my core responsibility was to shape how users interact, engage, and emotionally flow through the VR journey. My approach merged intuitive interaction design with the client's core values: joy, trust, and guided self-exploration." }
+      ],
+      "challenges": [
+        "Avoid typical psychedelic or abstract visuals",
+        "Make it intuitive for first-time users, but novel for seasoned meditators",
+        "Embed joy, trust, and harmony in every interaction",
+        "Business viability without overwhelming users"
+      ],
+      "images": [{ "file": "/projects/made-for-joy/slide-04.png", "alt": "The challenge and my contribution" }]
+    },
+    {
+      "index": 4,
+      "slug": "approach",
+      "label": "Approach",
+      "eyebrow": "03 Approach",
+      "blocks": [
+        { "type": "paragraph", "text": "Attended all client meetings to align experience design with both business objectives and emotional impact, ensuring every interaction supported Made for Joy's mission of cultivating trust, harmony, and inner joy." }
+      ],
+      "contributions": [
+        { "name": "Spatial Interaction Design", "body": "Co-developed spatial concepts alongside the VR artist by layering user-centric interaction logic over existing 3D environments. My focus was to shape how users explore, connect, and feel rewarded through every action." },
+        { "name": "Prototyping with Tilt Brush", "body": "Used Google Tilt Brush to sketch full interaction flows — from the user's first arrival at the Tree of Life to world transitions and multi-island journeys. Each stroke communicated intent, timing, and emotional rhythm." },
+        { "name": "Real-Time Co-Design in VR", "body": "Conducted spatial design reviews in Multibrush, allowing real-time critique and collaborative iteration inside the VR space. My interaction sketches became foundational reference material for the development pipeline." }
+      ],
+      "images": [{ "file": "/projects/made-for-joy/slide-05.png", "alt": "Client collaboration and design alignment" }]
+    },
+    {
+      "index": 5,
+      "slug": "principles",
+      "label": "Principles",
+      "eyebrow": "04 Embodied Interaction Principles",
+      "blocks": [
+        { "type": "paragraph", "text": "A progressive onboarding system taught users how to move through the space, interact with objects and UI, and navigate between thematic islands — Content, Personal, and Community." }
+      ],
+      "principles": [
+        "Gaze-based triggers",
+        "Hand gesture recognition",
+        "Object-based storytelling",
+        "Crystals unlocking content",
+        "Mudras for concierge communication",
+        "Fruit tosses to reveal portals and seeds of intention"
+      ],
+      "statement": { "heading": "Interaction is the new narrative", "items": ["Joy", "Intuition", "Emotional Engagement"] },
+      "images": [{ "file": "/projects/made-for-joy/slide-06.png", "alt": "Embodied interaction principles" }]
+    },
+    {
+      "index": 6,
+      "slug": "journey",
+      "label": "Interaction Journey",
+      "eyebrow": "05 Interaction Journey (Storyboard Flow)",
+      "blocks": [
+        { "type": "paragraph", "text": "The journey from entering the universe to the full, freely explorable world — told through the storyboard that became the development pipeline's reference." }
+      ],
+      "moments": [
+        { "number": "01", "name": "Tree of Life — Entering the Universe", "body": "As night falls, the user steps into the Made for Joy universe, welcomed by the quiet awe of a towering Tree of Life. A radiant stream of light ascends into the sky, then pours into the heart of the tree, awakening the space with warmth and wonder — setting the emotional tone for the journey ahead.", "image": "/projects/made-for-joy/slide-08.png" },
+        { "number": "02", "name": "Central Hub — Starting Island", "body": "As night melts into day, crystals shimmer into view and the soft voice of a virtual concierge welcomes the user. A simple choice awaits: step into the guided path with a 'yes,' or explore freely by choosing 'no.'", "image": "/projects/made-for-joy/slide-09.png" },
+        { "number": "03", "name": "Tutorial — Teleportation", "body": "When the user confirms to begin, a shimmering VFX icon guides them. Interactive indicators mark teleport points, making navigation feel intuitive and magical, while a 3D dashboard presents items that can be interacted with.", "image": "/projects/made-for-joy/slide-10.png" },
+        { "number": "04", "name": "Tutorial — Grabbing Objects", "body": "Focus items glow in distinct colours, guiding the user toward the next stone to grab. Glowing grip buttons and colour cues teach the user to stack and balance each stone through intuitive interaction.", "image": "/projects/made-for-joy/slide-11.png" },
+        { "number": "05", "name": "Tutorial — Fruit Interaction", "body": "The user pulls the right trigger to select a tree-shaped icon. A highlighted fruit detaches and sticks to their hand, revealing the next tutorial step — tossing the fruit into the water reveals a portal and proceeds with the seed.", "image": "/projects/made-for-joy/slide-12.png" },
+        { "number": "06", "name": "Crystals — Gaze Interaction", "body": "A soothing voice-over prompts the user to focus their gaze on the blue crystals. As the circular UI fills, the crystal reveals its hidden information — and beyond the tutorial, a gaze at the blue crystal unlocks the gateway to an immersive 15-minute sizzle experience.", "image": "/projects/made-for-joy/slide-13.png" },
+        { "number": "07", "name": "Tutorial — Island Introductions", "body": "The user's attention turns to the three islands resting in view — Content, Personal, and Community. As each is introduced, it illuminates while the UI and voice-over deliver details, making navigation easy to follow.", "image": "/projects/made-for-joy/slide-14.png" },
+        { "number": "08", "name": "Content Island — Concierge & Terminal", "body": "The user teleports to the Content Island and sets their controllers aside. The concierge asks questions, guiding responses through yoga mudra hand gestures, while the terminal's UI unfolds to open the full Made for Joy content catalogue.", "image": "/projects/made-for-joy/slide-15.png" },
+        { "number": "09", "name": "Content Island — Content Categories", "body": "Content is organized through the vibrant colour coding of trees and their 'Seeds of Joy' fruits. Colourful cards highlight each category, while featured content stands apart with uniquely shaped fruits designed to capture attention.", "image": "/projects/made-for-joy/slide-16.png" },
+        { "number": "10", "name": "Personal Island — User Dashboard", "body": "A large crystal activates and projects a dynamic timeline-feed UI: featured content at centre, upcoming events on the left, and the user's profile on the right. Digital billboards spark excitement about new and upcoming content.", "image": "/projects/made-for-joy/slide-17.png" },
+        { "number": "11", "name": "Personal Island — Inventory", "body": "The UI reveals progress along with an inventory of objects earned or purchased. Users plant items on the Personal Island, causing flowers to bloom — the more they engage, the more their island blossoms, turning growth into a living celebration.", "image": "/projects/made-for-joy/slide-18.png" },
+        { "number": "12", "name": "Featured Crystal — Creating Avatars", "body": "Selecting 'Edit Profile' enters avatar customization. A default avatar gradually transforms as the user fine-tunes its appearance step by step, with customization options clearly displayed.", "image": "/projects/made-for-joy/slide-19.png" },
+        { "number": "13", "name": "Community Island — Multiplayer", "body": "The user learns to start a new session, join a private session with a password, or enter an open session with fellow explorers. Once the tutorial concludes, they're free to venture into the full universe — or roam freely at any time.", "image": "/projects/made-for-joy/slide-20.png" },
+        { "number": "14", "name": "Content Island — Subscription Prompt", "body": "After a set number of free pieces, a subscription prompt gently appears — monthly, annual, and lifetime plans give users the flexibility to choose what best suits their journey.", "image": "/projects/made-for-joy/slide-21.png" },
+        { "number": "15", "name": "Featured Crystal — Subscription Plans", "body": "Within their profile, users sign up for, manage, and update plans with ease. Once active, the profile icon is adorned with a crown or star, and payments are handled securely through the companion app or a single click via Oculus.", "image": "/projects/made-for-joy/slide-22.png" }
+      ]
+    },
+    {
+      "index": 7,
+      "slug": "credits",
+      "label": "Credits",
+      "eyebrow": "06 Credits",
+      "blocks": [
+        { "type": "paragraph", "text": "A joyful, intuitive, and accessible VR mindfulness journey — designed in collaboration with a VR artist, creative director, and strategist, informed by national wellness experts." }
+      ],
+      "team": [
+        { "role": "Agency", "value": "CXR.Agency" },
+        { "role": "Immersive Experience Designer", "value": "Neha Mayacharya", "detail": "Interaction, engagement, and emotional flow" },
+        { "role": "Collaborators", "value": "VR Artist · Creative Director · Strategist" }
+      ]
+    }
+  ],
+  "_meta": {
+    "sectionCount": 7,
+    "note": "Content extracted from exported Figma Slides images via OCR; source deck at figma.com/slides/CX1FBUrTPAs7kWp6oSjSsA."
+  }
+}

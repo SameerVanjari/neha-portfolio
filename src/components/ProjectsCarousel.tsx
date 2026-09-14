@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
 import type { ThemeId } from "@/data/themes";
 import type { Project } from "@/types/portfolio";
+import ProjectCardMedia from "@/components/ProjectCardMedia";
 
 // Featured card — 4:3 landscape; ribbon peaks at center (image zoom parallax: image stays full-cover while card height tapers)
 function FullImageCard({ p }: { p: Project }) {
@@ -18,14 +19,7 @@ function FullImageCard({ p }: { p: Project }) {
     >
       {/* media layer — inverse-scaled to stay full-cover (no stretch), creates zoom parallax when card tapers */}
       <div className="ribbon-media absolute inset-0 will-change-transform" style={{ transformOrigin: "center center" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={p.image}
-          alt={p.imageAlt}
-          loading="lazy"
-          draggable={false}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        <ProjectCardMedia project={p} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
         <div
           className="absolute inset-0 opacity-30 mix-blend-overlay"

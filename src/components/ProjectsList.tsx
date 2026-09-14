@@ -8,6 +8,7 @@ import { THEMES, type ThemeId } from "@/data/themes";
 import data from "@/data/portfolio.json";
 import Link from "next/link";
 import { WordStagger } from "@/components/ui/word-stagger";
+import ProjectCardMedia from "@/components/ProjectCardMedia";
 import type { Project } from "@/types/portfolio";
 
 const SORTS: (ThemeId | "all")[] = ["all", "ai", "xr", "ux", "product"];
@@ -121,10 +122,9 @@ export default function ProjectsList({ lens }: { lens: string | null }) {
                             boxShadow: isMatch ? "0 8px 32px rgba(0,0,0,0.06)" : "0 4px 16px rgba(0,0,0,0.04)",
                           }}
                         >
-                          <div className="relative aspect-[4/3] overflow-hidden bg-zinc-100">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={p.image} alt={p.imageAlt} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+                        <div className="relative aspect-[4/3] overflow-hidden bg-zinc-100">
+                          <ProjectCardMedia project={p} />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
                             <div
                               className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 font-mono text-[10px] tracking-[0.12em] backdrop-blur"
                               style={{ color: cardTheme.text, border: `1px solid ${cardTheme.border}` }}

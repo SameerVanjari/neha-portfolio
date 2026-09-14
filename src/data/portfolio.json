@@ -283,6 +283,72 @@
   ],
   "projects": [
     {
+      "id": "ascension-realty",
+      "title": "Ascension Realty — AR Mobile Experience",
+      "perception": "xr",
+      "subtitle": "XR · AR · Real Estate",
+      "dimension": "XR",
+      "year": "2025",
+      "blurb": "An AR mobile experience letting buyers scan a surface and walk through a full building — down to a single apartment — before it's ever built.",
+      "description": "An AR mobile experience built for a private real estate client, letting buyers scan a surface and walk through a full building, down to a single apartment, before it's ever built. Designed end-to-end in a three-week sprint.",
+      "details": {
+        "challenge": "A private real estate client had an early-stage idea — use AR to let buyers experience developments virtually — but with no clarity, no structure, and no defined user journey, under a three-week deadline and no existing app to reference.",
+        "approach": "Owned concept, storyboard, asset direction, UX, interaction design, and sound. Built a city-to-room AR journey — scan a surface, then move from a city skyline to a tower to a floor plan to a single furnished room — sourcing and optimizing 3D assets and using Vuforia anchor points for stable tracking.",
+        "result": "Delivered a functioning AR platform and a client-ready demo in three weeks, turning a rough idea into proof that AR belongs in real estate marketing."
+      },
+      "tags": [
+        "AR",
+        "Mobile",
+        "Real Estate",
+        "Vuforia",
+        "3D"
+      ],
+      "accent": "neon",
+      "color": "#ff2bd6",
+      "image": "/images/ascension-hero.jpg",
+      "imageAlt": "Ascension Realty AR mobile experience",
+      "url": "https://www.figma.com/design/HE8cOOBzOHoLc4xM9nALNy/Ascension-Realty",
+      "client": "Ascension Realty",
+      "source": "figma",
+      "images": [
+        "/images/ascension-01.png",
+        "/images/ascension-02.png",
+        "/images/ascension-03.png",
+        "/images/ascension-04.png",
+        "/images/ascension-05.png"
+      ]
+    },
+    {
+      "id": "made-for-joy",
+      "title": "Made for Joy",
+      "perception": "xr",
+      "subtitle": "XR · Experience",
+      "dimension": "XR",
+      "year": "2025",
+      "blurb": "A joy-driven 3D motion piece — a camera-choreographed animation and rendered stills that give a brand’s emotional core room to move.",
+      "description": "A joy-driven 3D motion piece — a camera-choreographed animation and rendered stills that give a brand’s emotional core room to move. Built as a self-contained piece, from concept and camera direction through to final render.",
+      "details": {
+        "challenge": "Turn a feeling — joy — into something tangible, with no product or interface to anchor the story to.",
+        "approach": "Directed the piece end-to-end — concept, camera choreography, lighting, and asset direction — iterating on renders until the tone landed.",
+        "result": "A finished 3D camera animation and rendered stills, ready to carry the brand across motion and marketing."
+      },
+      "tags": [
+        "3D",
+        "Motion",
+        "Experience"
+      ],
+      "accent": "neon",
+      "color": "#ff2bd6",
+      "image": "/images/made-for-joy-hero.jpg",
+      "imageAlt": "Made for Joy 3D experience",
+      "client": null,
+      "source": "drive",
+      "images": [
+        "/images/made-for-joy-01.png",
+        "/images/made-for-joy-02.png"
+      ]
+    },
+    {
       "id": "visagenie",
       "title": "VisaGenie: AI-Powered Transparency for Global Migration",
       "perception": "ai",
@@ -486,12 +552,12 @@
       "subtitle": "UX · Spatial",
       "dimension": "UX",
       "year": "2022",
-      "blurb": "Exploration of real-time interactive 3D environments and spatial interaction models.",
-      "description": "Exploration of real-time interactive 3D environments and spatial interaction models.",
+      "blurb": "Real-time interactive 3D — spatial interaction models, lighting, and motion prototyped for the web, built to feel native rather than gimmicky.",
+      "description": "An exploration of real-time interactive 3D on the web — prototyping spatial interaction models, lighting, and motion tuned for performance, to find the patterns that make 3D feel like a native part of an interface rather than a novelty.",
       "details": {
-        "challenge": "3D on the web often feels gimmicky — latency and lack of spatial affordance break presence.",
-        "approach": "Prototyped real-time 3D environments exploring spatial interaction models, lighting and motion tuned for web performance.",
-        "result": "Reusable spatial patterns for interactive 3D that feel native, not novelty."
+        "challenge": "3D on the web often feels gimmicky — latency, missing affordance, and heavy assets break presence and make it feel bolted-on.",
+        "approach": "Prototyped real-time 3D environments, iterating on spatial interaction models, lighting, and motion to keep everything responsive and performant in the browser.",
+        "result": "A set of reusable spatial interaction patterns for interactive 3D that feel native — turning 3D from a novelty into a usable medium."
       },
       "tags": [
         "Interactive 3D",
@@ -518,7 +584,7 @@
       "subtitle": "XR · Modeling",
       "dimension": "XR",
       "year": "2022",
-      "blurb": "3D modeling techniques specific to VR — optimization pipelines for spatial assets, as taught and practiced across client and academic work.",
+      "blurb": "3D modeling techniques built for VR — optimization pipelines for spatial assets, taught and practiced across client and academic work.",
       "description": "3D modeling techniques specific to VR — optimization pipelines for using these models in VR projects. Shown in live demonstrations for IDC IIT Bombay's Design in VR course.",
       "details": {
         "challenge": "Desktop 3D assets fail in headset — polycount, scale, and lighting break presence.",
@@ -532,14 +598,14 @@
       ],
       "accent": "neon",
       "color": "#ff2bd6",
-      "image": "https://images.unsplash.com/photo-1617802690992-d4a80021ea12?q=80&w=1200&auto=format&fit=crop",
+      "image": "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?q=80&w=1200&auto=format&fit=crop",
       "imageAlt": "VR 3D modelling workspace",
       "url": "https://www.behance.net/nehamayacharya",
       "source": "behance",
       "appreciations": 1,
       "views": 41,
       "images": [
-        "https://images.unsplash.com/photo-1617802690992-d4a80021ea12?q=80&w=1200&auto=format&fit=crop"
+        "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?q=80&w=1200&auto=format&fit=crop"
       ]
     },
     {
@@ -596,7 +662,7 @@
       ],
       "accent": "volt",
       "color": "#ffc94d",
-      "image": "https://images.unsplash.com/photo-1636466497217-26a8cbe3270e?q=80&w=1200&auto=format&fit=crop",
+      "image": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1200&auto=format&fit=crop",
       "imageAlt": "Physics in virtual reality",
       "url": "https://www.behance.net/nehamayacharya",
       "source": "behance",
@@ -604,38 +670,7 @@
       "appreciations": 12,
       "views": 334,
       "images": [
-        "https://images.unsplash.com/photo-1636466497217-26a8cbe3270e?q=80&w=1200&auto=format&fit=crop"
-      ]
-    },
-    {
-      "id": "education-vr",
-      "title": "Education in Virtual Reality",
-      "perception": "ux",
-      "subtitle": "UX · Education",
-      "dimension": "UX",
-      "year": "2020",
-      "blurb": "Second Education in VR gallery on Behance — immersive learning modules in the education domain.",
-      "description": "Immersive learning modules designed and developed in virtual reality for the education domain.",
-      "details": {
-        "challenge": "Classroom STEM stays locked to textbooks and 2D diagrams.",
-        "approach": "Designed VR learning modules end-to-end as an immersive media designer in education.",
-        "result": "One of Neha's most viewed Behance works (637 views, 20 appreciations)."
-      },
-      "tags": [
-        "VR",
-        "Education",
-        "Immersive Learning"
-      ],
-      "accent": "volt",
-      "color": "#ffc94d",
-      "image": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop",
-      "imageAlt": "Education in virtual reality",
-      "url": "https://www.behance.net/nehamayacharya",
-      "source": "behance",
-      "appreciations": 20,
-      "views": 637,
-      "images": [
-        "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop"
+        "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1200&auto=format&fit=crop"
       ]
     },
     {
@@ -645,12 +680,12 @@
       "subtitle": "Product · Gaming",
       "dimension": "PRODUCT",
       "year": "2019",
-      "blurb": "IoT-connected VR game design — bridging physical sensors with spatial play.",
-      "description": "Game design for an IoT-based virtual reality experience — physical inputs mapped into a spatial game world.",
+      "blurb": "A VR game-design experiment connecting physical IoT sensors to spatial play — bringing the player's body and room into the virtual world.",
+      "description": "A game-design exploration that connects IoT hardware to VR — mapping physical sensors and real-world inputs into a spatial game world, so the room and the body become part of the play.",
       "details": {
-        "challenge": "VR games often ignore the body and room; IoT can close that loop.",
-        "approach": "Designed game systems that connect IoT hardware with VR interaction and spatial rules.",
-        "result": "Early product/game experiment — 15 appreciations and 305 views on Behance."
+        "challenge": "VR games often ignore the body and the room, keeping play trapped inside the headset; IoT offers a way to close that loop.",
+        "approach": "Designed game systems that bridge IoT sensors with VR interaction — mapping physical inputs into spatial rules and feedback.",
+        "result": "An early product/game experiment — 15 appreciations and 305 views on Behance — exploring how physical sensors can deepen spatial play."
       },
       "tags": [
         "Game Design",
@@ -727,6 +762,37 @@
       "client": "Modelo × Seattle Kraken",
       "images": [
         "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop"
+      ]
+    },
+    {
+      "id": "education-vr",
+      "title": "Education in Virtual Reality",
+      "perception": "ux",
+      "subtitle": "UX · Education",
+      "dimension": "UX",
+      "year": "2020",
+      "blurb": "Second Education in VR gallery on Behance — immersive learning modules in the education domain.",
+      "description": "Immersive learning modules designed and developed in virtual reality for the education domain.",
+      "details": {
+        "challenge": "Classroom STEM stays locked to textbooks and 2D diagrams.",
+        "approach": "Designed VR learning modules end-to-end as an immersive media designer in education.",
+        "result": "One of Neha's most viewed Behance works (637 views, 20 appreciations)."
+      },
+      "tags": [
+        "VR",
+        "Education",
+        "Immersive Learning"
+      ],
+      "accent": "volt",
+      "color": "#ffc94d",
+      "image": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop",
+      "imageAlt": "Education in virtual reality",
+      "url": "https://www.behance.net/nehamayacharya",
+      "source": "behance",
+      "appreciations": 20,
+      "views": 637,
+      "images": [
+        "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop"
       ]
     }
   ],

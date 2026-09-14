@@ -1,0 +1,312 @@
+{
+  "project": {
+    "id": "ascension-realty",
+    "slug": "ascension-realty",
+    "title": "Ascension Realty — AR Mobile Experience",
+    "client": "Private Real Estate Client",
+    "perception": "xr",
+    "dimension": "XR",
+    "year": "2025",
+    "duration": "3-Week Sprint",
+    "type": "Client Concept-to-Demo Build",
+    "role": "XR Designer · Solo Design & 3D Direction",
+    "agency": "CXR.Agency (now Kinemeric)",
+    "tagline": "An AR mobile experience letting buyers scan a surface and walk through a full building — down to a single apartment — before it's ever built.",
+    "source": {
+      "type": "figma-design",
+      "url": "https://www.figma.com/design/HE8cOOBzOHoLc4xM9nALNy/Ascension-Realty",
+      "nodeId": "94-2",
+      "page": "Ascension Realty Portfolio Ready",
+      "canvasId": "94:2",
+      "note": "Text and structure extracted from the Figma design file via REST API."
+    }
+  },
+  "theme": {
+    "mode": "dark",
+    "accent": "#FF1E1E",
+    "note": "Reuse the shared case-study theme (dark ink + signal red) defined in src/data/case-theme.ts, consistent with the Millennium case."
+  },
+  "tags": ["AR", "Mobile", "Real Estate", "Vuforia", "3D", "HoloKit"],
+  "toolkit": [
+    "Unity 3D",
+    "Vuforia",
+    "HoloKit",
+    "Vectary",
+    "Figma",
+    "TurboSquid (asset sourcing)",
+    "Blender"
+  ],
+  "sections": [
+    {
+      "index": 1,
+      "slug": "title",
+      "label": "01 / Title",
+      "heading": "ASCENSION REALTY",
+      "blocks": [
+        { "type": "kicker", "text": "CASE STUDY // PRIVATE CLIENT" },
+        { "type": "subtitle", "text": "An AR mobile experience built for a private real estate client, letting buyers scan a surface and walk through a full building, down to a single apartment, before it's ever built." },
+        { "type": "meta", "text": "Solo Design & 3D Direction" },
+        { "type": "meta", "text": "3-Week Sprint" },
+        { "type": "meta", "text": "Client Concept-to-Demo Build" },
+        { "type": "byline", "text": "Designed end-to-end by Neha Mayacharya while at CXR.Agency (now Kinemeric)" }
+      ],
+      "images": [
+        { "file": "images/01-title.jpg", "alt": "Ascension Realty title slide with cityscape graphic", "role": "hero" }
+      ]
+    },
+    {
+      "index": 2,
+      "slug": "problem-scope",
+      "label": "02 / Problem & Scope",
+      "eyebrow": "02 Problem & Scope",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A private real estate client approached CXR.Agency with an early-stage idea: use AR to let clients and investors experience their developments virtually, from anywhere in the world. The concept was promising but rough — no clarity, no structure, no defined user journey."
+        },
+        { "type": "heading", "text": "The Ask" },
+        { "type": "paragraph", "text": "Scan a surface, walk from a city skyline into one apartment: city → tower → floor plan → room, as one continuous journey." },
+        { "type": "heading", "text": "The Constraint" },
+        { "type": "paragraph", "text": "Three weeks, start to finish, with a five-person team and no existing app to reference." },
+        { "type": "heading", "text": "The Challenge" },
+        { "type": "paragraph", "text": "No onboarding, no walkthrough — it had to read clearly the first time someone picked up a phone." },
+        { "type": "paragraph", "text": "I owned concept, storyboard, asset direction, UX, interaction design, and sound — the next slide breaks this down." }
+      ],
+      "team": [
+        { "role": "XR Designer (me)", "count": 1 },
+        { "role": "Creative Director (oversight & approval)", "count": 1 },
+        { "role": "3D Team", "count": 2 },
+        { "role": "Developers", "count": 2 }
+      ],
+      "images": []
+    },
+    {
+      "index": 3,
+      "slug": "role",
+      "label": "03 / My Role & Contributions",
+      "eyebrow": "03 MY ROLE & CONTRIBUTIONS",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "With the Creative Director's approval and the 3D/dev teams' build support, every other decision on this project ran through me — concept through to final testing."
+        }
+      ],
+      "contributions": [
+        { "name": "Storyboarding", "body": "Created the scale-by-scale journey storyboards that defined the city-to-room experience." },
+        { "name": "Asset Curation & Optimization", "body": "Sourced 3D models from TurboSquid and optimized them for real-time AR performance." },
+        { "name": "Interaction & UX Design", "body": "Designed the entire app journey with gestures, transitions, and room-level navigation." },
+        { "name": "Holographic Shader Direction", "body": "Art directed the UI shading blending behind the AR scan in HoloKit." },
+        { "name": "Prototyping", "body": "Built click-through mockups in Figma to stress-test interaction before any dev handoff." },
+        { "name": "Sound Design", "body": "Designed the audio layer, ambient tone and interaction feedback across the experience." },
+        { "name": "Developer Sync", "body": "Partnered directly with the two-person dev team to get every interaction functioning as singles." },
+        { "name": "Testing & Iteration", "body": "Tested builds across devices and wrote concise notes into the design system." }
+      ],
+      "images": []
+    },
+    {
+      "index": 4,
+      "slug": "design-goals",
+      "label": "04 / Design Goals",
+      "eyebrow": "04 DESIGN GOALS",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Four principles carried the concept from a one-line brief into a scene-by-scene experience — each shows up directly in the storyboard and flow on the next two slides."
+        }
+      ],
+      "goals": [
+        { "number": "01", "name": "Narrative Journey", "body": "Guide the user through an abstract yet emotionally coherent story of ascension, literally rising from a city skyline down into a single home." },
+        { "number": "02", "name": "Minimal UI, Maximum Impact", "body": "Design interactions that feel organic to a 3D space rather than a 2D app squeezed into AR — the space itself does most of the talking." },
+        { "number": "03", "name": "Sensory Immersion", "body": "Blend sound, light, space, and touch into one seamless experience, so the tour feels physical even though nothing in it is real." },
+        { "number": "04", "name": "Speculative Interaction Design", "body": "Explore how someone might naturally interact with an intangible, spatial transition — there was no existing app to borrow patterns from." }
+      ],
+      "images": []
+    },
+    {
+      "index": 5,
+      "slug": "concept-storyboarding",
+      "label": "05 / Concept & Storyboarding",
+      "eyebrow": "05 CONCEPT & STORYBOARDING",
+      "blocks": [
+        { "type": "paragraph", "text": "Eleven sequential wireframes worked out frame-by-frame before a single 3D asset was constructed." },
+        { "type": "paragraph", "text": "The storyboard serves as the design contract. With no preexisting platform references, shot-by-shot planning was vital for the 3D team to build precisely scaled assets." }
+      ],
+      "moments": [
+        { "number": "01", "name": "Splash to scan", "body": "The experience opens in the real world, not a menu — before anything digital appears." },
+        { "number": "02", "name": "City to tower to floor plan", "body": "Three deliberate zoom-in moments carry the 'ascension' narrative forward smoothly." },
+        { "number": "03", "name": "Pinch and proximity together", "body": "Zoom is both a manual screen gesture and a physical side-effect of moving closer." }
+      ],
+      "frames": [
+        "01. Splash Screen — Logo & brand entry",
+        "02. Scan Surface — Detect planar area",
+        "03. AR Cityscape — Digital city emerges",
+        "04. Buildings Rise — 3D cityscape forms",
+        "05. Pinch to Highlight — Apartments pulse on zoom",
+        "06. City Paper Unfolds — Floor plan transition",
+        "07. 3D Floor Plan Extrusion — 2D → 3D model",
+        "08. User Interacts — Pinch-to-zoom gestures",
+        "09. Apartment Saved — Unit specifications overlay",
+        "10. Moving Closer — View adjusts with device",
+        "11. Room Clusters — Apartment view zoomed in",
+        "12. Focused Room View — Living room detailed view"
+      ],
+      "images": [
+        { "file": "images/05-storyboard.jpg", "alt": "Eleven-frame storyboard of the city-to-room AR journey", "role": "storyboard" }
+      ]
+    },
+    {
+      "index": 6,
+      "slug": "ux-flow",
+      "label": "06 / UX Flow",
+      "eyebrow": "06 UX FLOW",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "If the storyboard shows what the user sees, this is the logic underneath it — the six-stage path from opening the app to standing inside one room, and the four gestures that move someone between stages."
+        }
+      ],
+      "stages": [
+        { "number": "1", "name": "Landing", "body": "Start — open the AR app on mobile or tablet." },
+        { "number": "2", "name": "Onboarding", "body": "One instruction, no tutorial screens: \"Scan a flat surface to begin.\"" },
+        { "number": "3", "name": "World Build", "body": "A 2D city grid appears, then extrudes into a full 3D cityscape." },
+        { "number": "4", "name": "Selection", "body": "Pulsing icons mark available units; tapping one zooms into that tower." },
+        { "number": "5", "name": "Interior", "body": "The floor plan extrudes into a 3D interior the user can zoom into." },
+        { "number": "6", "name": "Room Focus", "body": "Tapping a room label surfaces its details, then explore more or end." }
+      ],
+      "triggers": [
+        "Pinch gesture — zooms the 3D interior in or out.",
+        "Tap pulsing icon — selects a unit from the cityscape.",
+        "Tap room label — jumps to Bedroom / Kitchen / Living Room, etc.",
+        "Avatar walk — a 3D figure animates into the selected room, cueing the camera move."
+      ],
+      "images": []
+    },
+    {
+      "index": 7,
+      "slug": "key-challenges",
+      "label": "07 / Key Challenges",
+      "eyebrow": "07 KEY CHALLENGES",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Three problems shaped nearly every design and technical decision on this project — each of them needed a design answer before a single line of Unity code could solve it."
+        }
+      ],
+      "challenges": [
+        {
+          "name": "Plane Tracking",
+          "body": "Buildings and floor plans had to land correctly on the user's real surface — level, stable, and walkable, with no drifting or re-centering needed.",
+          "solution": "I defined multiple Vuforia anchor points so the experience could snap cleanly between city view, tower, and apartment without losing tracking on the handoff."
+        },
+        {
+          "name": "Building Scale",
+          "body": "The models needed to read at full scale while staying detailed, without forcing the user to keep walking around to see everything.",
+          "solution": "Assets sourced from TurboSquid were re-scaled and optimized by hand, and zoom acted as scale — proximity to the device stood in for physically walking closer."
+        },
+        {
+          "name": "Full Cityscape",
+          "body": "Showing the development in the context of a real city made it far more convincing, but building a whole city risked doubling the workload.",
+          "solution": "Surrounding structures were kept as low-detail blockouts with a holographic materialize shader, so only the actual development needed full modeling fidelity."
+        }
+      ],
+      "images": []
+    },
+    {
+      "index": 8,
+      "slug": "core-features",
+      "label": "08 / Core Features",
+      "eyebrow": "08 CORE FEATURES",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Three moments carry the entire experience — each one is a deliberate escalation of detail, from a full building down to a single, well-lit room."
+        }
+      ],
+      "features": [
+        { "number": "01", "name": "Full Models", "body": "Using the device's camera, 3D buildings instantly materialize in the user's own space, giving an immediate sense of a development's true scale before stepping any closer." },
+        { "number": "02", "name": "Furnished Floor Plans", "body": "A tap transports users inside the building to navigate a fully furnished 3D floor plan, exploring each room with real layouts and furniture in place." },
+        { "number": "03", "name": "Unobtrusive Details", "body": "Property and room information lives in a details panel beside the viewfinder, designed to inform without ever crowding the 3D experience itself." }
+      ],
+      "apartmentDetails": {
+        "title": "Apartment Details",
+        "unit": "Unit 2300",
+        "rent": "Rent $2055",
+        "area": "2776 sq.ft",
+        "rooms": ["Pantry", "Bedroom 1", "Kitchen", "Bathroom", "Bedroom 2", "Living Room", "Laundry", "Closet"]
+      },
+      "images": [
+        { "file": "images/08-apartment-details.jpg", "alt": "Apartment details panel showing Unit 2300 with furnished interior", "role": "feature-detail" }
+      ]
+    },
+    {
+      "index": 9,
+      "slug": "mockups",
+      "label": "09 / Mockups",
+      "eyebrow": "09 MOCKUPS",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Vectary let me test scale and interaction in physical AR space with a mobile device before any of this went to Unity — faster iteration, more informed decisions, before handoff to development."
+        }
+      ],
+      "images": [
+        { "file": "images/09-mockup-interior.jpg", "alt": "AR interior, wide view through the phone", "role": "mockup" },
+        { "file": "images/09-mockup-cityscape.jpg", "alt": "Full low-poly cityscape at real-world scale", "role": "mockup" },
+        { "file": "images/09-mockup-room.jpg", "alt": "Furnished room, close-up AR detail", "role": "mockup" },
+        { "file": "images/09-mockup-scan.jpg", "alt": "Scanning a surface, blockout cityscape appears", "role": "mockup" }
+      ]
+    },
+    {
+      "index": 10,
+      "slug": "results",
+      "label": "10 / Results",
+      "eyebrow": "10 RESULTS",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A functioning platform and a sample project the client could put in front of real prospects, turning a rough idea into proof that AR belongs in real estate marketing."
+        },
+        {
+          "type": "quote",
+          "text": "With a functioning platform and a sample project to showcase, the client is ready to build out the use case and change the way shoppers approach real estate."
+        }
+      ],
+      "results": [
+        { "name": "Functioning Platform", "body": "A working mobile AR app, not just a concept deck, ready to demo end to end." },
+        { "name": "Client-Ready Demo", "body": "A sample project the client's team can put directly in front of prospects." },
+        { "name": "Tenant-to-Investor Utility", "body": "Built for the full range of real estate shoppers, not one narrow use case." }
+      ],
+      "images": []
+    },
+    {
+      "index": 11,
+      "slug": "credits",
+      "label": "11 / Credits",
+      "eyebrow": "11 CREDITS",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A five-person team, one continuous experience — from an early-stage idea to a working AR demo in three weeks."
+        }
+      ],
+      "team": [
+        { "role": "Agency", "value": "CXR.Agency" },
+        { "role": "XR Designer", "value": "Neha Mayacharya", "detail": "Neha Mayacharya (concept, storyboard, UX, interaction & sound design)" },
+        { "role": "Creative Director", "value": "Oversight & approval" },
+        { "role": "3D Team", "value": "2 artists — asset production support" },
+        { "role": "Development", "value": "2 engineers — Unity & Vuforia build" }
+      ],
+      "contact": {
+        "role": "AI-Powered XR Designer",
+        "email": "nmayacharya@gmail.com",
+        "links": "behance.net/nehamayacharya · linkedin.com/in/neha-mayacharya-4b293789"
+      },
+      "images": []
+    }
+  ],
+  "_meta": {
+    "sectionCount": 11,
+    "imageStatus": "pending",
+    "note": "Text extracted via Figma REST API (files endpoint works for design files, unlike Slides). Images referenced per section still need to be exported from Figma using GET /v1/images/:key?ids=<node-id> and saved to content/ascension/images/. Image node IDs are recorded in the source Figma file for the mockups (canvas 94:2)."
+  }
+}

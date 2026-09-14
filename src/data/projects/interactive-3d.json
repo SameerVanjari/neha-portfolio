@@ -1,0 +1,62 @@
+{
+  "id": "interactive-3d",
+  "title": "Interactive 3D",
+  "subtitle": "UX · Spatial",
+  "dimension": "UX",
+  "perception": "ux",
+  "year": "2022",
+  "client": null,
+  "color": "#ffc94d",
+  "accent": "volt",
+  "tags": [
+    "Interactive 3D",
+    "Spatial",
+    "Prototyping"
+  ],
+  "url": "https://www.behance.net/gallery/203504355/Interactive-3D",
+  "heroImage": "https://images.unsplash.com/photo-1610296669228-602fa827fc1f?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "Interactive 3D environment exploration",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "An exploration of real-time interactive 3D on the web — prototyping spatial interaction models, lighting, and motion tuned for performance, to find the patterns that make 3D feel like a native part of an interface rather than a novelty.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "3D on the web often feels gimmicky — latency, missing affordance, and heavy assets break presence and make it feel bolted-on.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Prototyped real-time 3D environments, iterating on spatial interaction models, lighting, and motion to keep everything responsive and performant in the browser.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "A set of reusable spatial interaction patterns for interactive 3D that feel native — turning 3D from a novelty into a usable medium.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "Interactive 3D",
+        "Spatial",
+        "Prototyping"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "Real-time interactive 3D — spatial interaction models, lighting, and motion prototyped for the web, built to feel native rather than gimmicky.",
+      "images": []
+    }
+  }
+}

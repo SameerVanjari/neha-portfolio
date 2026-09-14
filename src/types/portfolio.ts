@@ -1,4 +1,5 @@
 import type { ThemeId } from "@/data/themes";
+import type { ProjectMedia } from "@/data/projects-media";
 
 export type ProjectDetails = {
   challenge: string;
@@ -28,6 +29,7 @@ export type Project = {
   client?: string | null;
   source?: string;
   images?: string[];
+  media?: ProjectMedia;
 };
 
 export type Island = {
@@ -40,6 +42,8 @@ export type Island = {
   image: string;
   imageAlt: string;
   stat: string;
+  video?: string;
+  videoPoster?: string;
 };
 
 export type Recognition = {

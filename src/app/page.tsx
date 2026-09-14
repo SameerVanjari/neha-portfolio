@@ -14,6 +14,7 @@ import data from "@/data/portfolio.json";
 import { THEMES, type ThemeId } from "@/data/themes";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { usePerception } from "@/context/PerceptionContext";
+import { PROJECT_MEDIA } from "@/data/projects-media";
 import type { Island, Project, Recognition, Testimonial } from "@/types/portfolio";
 
 const ORDER: ThemeId[] = ["xr", "ux", "ai", "product"];
@@ -55,10 +56,14 @@ export default function Home() {
       stat: island.stat,
     };
 
+    const media = PROJECT_MEDIA[featured.id];
+
     return {
       ...island,
       image: featured.image,
       imageAlt: featured.imageAlt,
+      video: media?.heroVideo ?? undefined,
+      videoPoster: media?.heroVideoPoster ?? undefined,
       title: content.title,
       subtitle: content.subtitle,
       description: "",
