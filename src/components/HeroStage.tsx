@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useLenis } from "lenis/react";
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 import type { ThemeId } from "@/data/themes";
 import { THEMES } from "@/data/themes";
 import gsap from "gsap";
@@ -29,6 +30,23 @@ interface IslandData {
 
 function CardImage({ island }: { island: IslandData }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const reduce = useReducedMotion();
+
+  // Cursor-tracking tilt (wobbles via spring physics).
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [8, -8]), { stiffness: 120, damping: 12, mass: 0.7 });
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-8, 8]), { stiffness: 120, damping: 12, mass: 0.7 });
+
+  useEffect(() => {
+    if (reduce) return;
+    const onMove = (e: MouseEvent) => {
+      mx.set(e.clientX / window.innerWidth - 0.5);
+      my.set(e.clientY / window.innerHeight - 0.5);
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, [mx, my, reduce]);
 
   useEffect(() => {
     const v = videoRef.current;
@@ -57,31 +75,42 @@ function CardImage({ island }: { island: IslandData }) {
 
   return (
     <>
-      {/* Poster image — base layer, always visible */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={poster}
-        alt={island.imageAlt}
-        className="absolute inset-0 h-full w-full object-cover hero-image"
-        draggable={false}
-        loading="eager"
-        onError={(e) => {
-          e.currentTarget.onerror = null;
-          e.currentTarget.src = "/placeholder.svg";
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          rotateX: reduce ? 0 : rotateX,
+          rotateY: reduce ? 0 : rotateY,
+          scale: reduce ? 1 : 1.07,
+          transformPerspective: 1400,
+          transformStyle: "preserve-3d",
         }}
-      />
-      {island.video ? (
-        <video
-          ref={videoRef}
+      >
+        {/* Poster image — base layer, always visible */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={poster}
+          alt={island.imageAlt}
           className="absolute inset-0 h-full w-full object-cover hero-image"
-          src={island.video}
-          muted
-          loop
-          playsInline
-          autoPlay
-          preload="auto"
+          draggable={false}
+          loading="eager"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "/placeholder.svg";
+          }}
         />
-      ) : null}
+        {island.video ? (
+          <video
+            ref={videoRef}
+            className="absolute inset-0 h-full w-full object-cover hero-image"
+            src={island.video}
+            muted
+            loop
+            playsInline
+            autoPlay
+            preload="auto"
+          />
+        ) : null}
+      </motion.div>
       {/* MINIMAL overlay - only for text legibility */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
     </>
