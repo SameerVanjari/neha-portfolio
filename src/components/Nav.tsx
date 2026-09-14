@@ -180,13 +180,27 @@ export default function Nav({ theme, activeSection, revealDelay }: { theme: Them
           </nav>
 
           <div className="flex items-center gap-2 shrink-0">
-            <a
-              href={`mailto:${data.profile.email}`}
-              className="group hidden md:inline-flex items-center justify-center rounded-full border px-4 py-[7px] font-mono text-[11px] font-medium tracking-[0.14em] backdrop-blur"
-              style={{ borderColor: theme.border, background: theme.surface, color: theme.text, boxShadow: "0 1px 8px rgba(0,0,0,0.06)" }}
-            >
-              <WordStagger text="Contact" />
-            </a>
+            {pathname === "/" ? (
+              <a
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToId("contact");
+                }}
+                className="group hidden md:inline-flex items-center justify-center rounded-full border px-4 py-[7px] font-mono text-[11px] font-medium tracking-[0.14em] backdrop-blur"
+                style={{ borderColor: theme.border, background: theme.surface, color: theme.text, boxShadow: "0 1px 8px rgba(0,0,0,0.06)" }}
+              >
+                <WordStagger text="Contact" />
+              </a>
+            ) : (
+              <Link
+                href="/#contact"
+                className="group hidden md:inline-flex items-center justify-center rounded-full border px-4 py-[7px] font-mono text-[11px] font-medium tracking-[0.14em] backdrop-blur"
+                style={{ borderColor: theme.border, background: theme.surface, color: theme.text, boxShadow: "0 1px 8px rgba(0,0,0,0.06)" }}
+              >
+                <WordStagger text="Contact" />
+              </Link>
+            )}
 
             <button
               aria-label={open ? "Close menu" : "Open menu"}

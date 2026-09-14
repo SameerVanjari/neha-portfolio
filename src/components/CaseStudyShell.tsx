@@ -3,9 +3,9 @@
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import CaseStudyToc, { type CaseStudyTocItem } from "@/components/CaseStudyToc";
+import ContactCard from "@/components/ContactCard";
 import { CASE_COLORS, CASE_THEME } from "@/data/case-theme";
 import type { Project } from "@/types/portfolio";
-import data from "@/data/portfolio.json";
 
 export const C = CASE_COLORS;
 
@@ -171,16 +171,9 @@ export default function CaseStudyShell({
 
               <CaseSection id="contact">
                 <CaseH2>Contact</CaseH2>
-                <p className="mt-4 max-w-[65ch] text-[16px] leading-[1.7]" style={{ color: "rgba(255,255,255,0.8)" }}>
-                  {data.profile.availability}
-                </p>
-                <a
-                  href={`mailto:${data.profile.email}`}
-                  className="mt-5 inline-block font-mono text-[13px] tracking-[0.04em] underline underline-offset-4"
-                  style={{ color: C.text, textDecorationColor: C.accent }}
-                >
-                  {data.profile.email}
-                </a>
+                <div className="mt-8">
+                  <ContactCard />
+                </div>
               </CaseSection>
 
               <footer className="pb-10 pt-2">

@@ -3,6 +3,8 @@
 import Nav from "@/components/Nav";
 import { THEMES } from "@/data/themes";
 import data from "@/data/portfolio.json";
+import ContactCard from "@/components/ContactCard";
+import { lenisScrollToId } from "@/lib/lenis";
 import { AceternityCTA, HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { WordStagger } from "@/components/ui/word-stagger";
 
@@ -165,7 +167,27 @@ export default function AboutPage() {
           </div>
           <div className="mt-8 flex flex-wrap gap-3">
             <AceternityCTA href="/projects" variant="dark">View projects</AceternityCTA>
-            <HoverBorderGradient as="a" href="/#contact">Contact</HoverBorderGradient>
+            <HoverBorderGradient
+              as="a"
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                lenisScrollToId("contact");
+              }}
+            >
+              Contact
+            </HoverBorderGradient>
+          </div>
+        </section>
+
+        {/* contact */}
+        <section id="contact" className="mx-auto max-w-[1280px] scroll-mt-[80px] px-6 pb-10 md:px-8">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-black/10" />
+            <span className="font-mono text-[11px] tracking-[0.22em] text-zinc-500">CONTACT</span>
+          </div>
+          <div className="mt-6">
+            <ContactCard />
           </div>
         </section>
 

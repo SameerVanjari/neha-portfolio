@@ -119,13 +119,7 @@ export default function Home() {
           recognition={data.about.recognition as Recognition[]}
         />
 
-        <ContactSection
-          activeId={activeId}
-          email={data.profile.email}
-          location={data.profile.location}
-          availability={data.profile.availability}
-          socials={data.socials}
-        />
+        <ContactSection activeId={activeId} />
       </main>
 
       <BottomNav theme={theme} />
