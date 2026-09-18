@@ -1,0 +1,75 @@
+{
+  "id": "hbo-charm-city-kings",
+  "title": "Charm City Kings — HBO Max AR Face Filters",
+  "subtitle": "XR · Social · Campaign",
+  "dimension": "XR",
+  "perception": "xr",
+  "year": "2020",
+  "client": "HBO Max",
+  "color": "#ff2bd6",
+  "accent": "neon",
+  "tags": [
+    "AR Face Filters",
+    "Instagram",
+    "Social Campaign",
+    "Name Generator"
+  ],
+  "heroImage": "/projects/hbo-charm-city-kings/hero-filter.jpg",
+  "heroImageAlt": "They call me Holy Savage — Charm City Kings AR face filter frame",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "A social AR campaign for HBO Max's first exclusive movie, Charm City Kings — Instagram face filters and a character name generator that let fans claim a Baltimore street name of their own.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "Charm City Kings arrived on HBO Max with no theatrical release, so awareness had to be won in feeds rather than lobbies. The campaign needed shareable, participatory content that put the movie's world — Baltimore dirt-bike culture, its nicknames and swagger — directly into fans' own faces.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Designed a set of 'They call me…' Instagram filters: a polaroid-style frame that dots the viewer's face camera and stamps a random street name — Mouse, Blax, Nicki, Holy Savage — over the shot, branded with the film's neon logo. Worked alongside the campaign build-out of social media assets to carry a consistent visual language from filters to feed.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "Launched as part of the movie's digital marketing push for its HBO Max premiere — fans shared their filter selfies with their new nicknames, turning every post into organic promotion for the October 8 release.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "Instagram Spark AR",
+        "Face Filters",
+        "Social Assets"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "Built for HBO Max — the Charm City Kings Instagram filters and name generator that shipped with the streaming premiere campaign.",
+      "images": []
+    }
+  },
+  "media": {
+    "heroVideo": null,
+    "heroVideoPoster": null,
+    "videos": [
+      { "label": "They call me Mouse filter", "src": "/videos/charm-city-kings/they-call-me-mouse.mp4", "poster": "/projects/hbo-charm-city-kings/they-call-me-mouse-poster.jpg" },
+      { "label": "They call me Blax filter", "src": "/videos/charm-city-kings/they-call-me-blax.mp4", "poster": "/projects/hbo-charm-city-kings/they-call-me-blax-poster.jpg" },
+      { "label": "They call me Nicki filter", "src": "/videos/charm-city-kings/they-call-me-nicki.mp4", "poster": "/projects/hbo-charm-city-kings/they-call-me-nicki-poster.jpg" },
+      { "label": "Mouse and Blax filter demo", "src": "/videos/charm-city-kings/mouse-and-blax.mp4", "poster": "/projects/hbo-charm-city-kings/mouse-and-blax-poster.jpg" }
+    ],
+    "images": [
+      { "src": "/projects/hbo-charm-city-kings/logo.webp", "alt": "Charm City Kings campaign logo lockup" }
+    ]
+  }
+}

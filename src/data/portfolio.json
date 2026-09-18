@@ -283,6 +283,70 @@
   ],
   "projects": [
     {
+      "id": "feed-the-children-truesense",
+      "title": "Feed the Children — WebAR Donation Experience",
+      "perception": "xr",
+      "subtitle": "XR · WebAR · Nonprofit",
+      "dimension": "XR",
+      "year": "2022",
+      "blurb": "A QR-triggered, browser-based AR pantry for Feed the Children — meet a real class, stock the shelves, and tap to donate, no app required.",
+      "description": "A web-based AR donation experience for Feed the Children, developed with the Truesense fundraising team. Scanning a code opens the browser and places a shoppable classroom pantry — stocked shelves, a real student roster, and a donate sign — right in the donor's room. Built on 8th Wall WebAR, handing off to the secure feedthechildren.org donation page.",
+      "details": {
+        "challenge": "Feed the Children needed a donation activation that made impact tangible — a dollar providing $9 of food and essentials felt abstract in a standard give flow, and an app download ahead of the donate button would kill conversion.",
+        "approach": "Built the experience with 8th Wall WebAR: a printed QR magnet opens a 3D classroom food pantry placed on any surface, with drag-to-move interaction, openable cabinet doors, a real class roster with the kids' photos, and a hand-written 'Tap here to donate today' sign that hands off to the secure donation page.",
+        "result": "A complete prototype journey — physical touchpoint to AR to donation page in a single flow — showing how a classroom shelf can become the ask itself, carried through Feed the Children's real brand and store imagery."
+      },
+      "tags": [
+        "WebAR",
+        "8th Wall",
+        "Nonprofit",
+        "Donation Funnel",
+        "Mobile"
+      ],
+      "accent": "cool",
+      "color": "#00e5ff",
+      "image": "/projects/feed-the-children-truesense/hero.webp",
+      "imageAlt": "Feed the Children WebAR donation experience on three phones",
+      "images": [
+        "/projects/feed-the-children-truesense/ar-kiosk.jpg",
+        "/projects/feed-the-children-truesense/ar-pantry.jpg",
+        "/projects/feed-the-children-truesense/donation-page.webp",
+        "/projects/feed-the-children-truesense/concept-fridge.webp"
+      ],
+      "client": "Feed the Children × Truesense",
+      "source": "drive"
+    },
+    {
+      "id": "hbo-charm-city-kings",
+      "title": "Charm City Kings — HBO Max AR Face Filters",
+      "perception": "xr",
+      "subtitle": "XR · Social · Campaign",
+      "dimension": "XR",
+      "year": "2020",
+      "blurb": "Instagram face filters and a street-name generator for HBO Max's first exclusive movie — fans claimed a Baltimore nickname and shared it.",
+      "description": "A social AR campaign for HBO Max's first exclusive movie, Charm City Kings. 'They call me…' Instagram face filters place the viewer in a polaroid frame and stamp a random street name — Mouse, Blax, Nicki, Holy Savage — over the shot, branded with the film's neon logo. Shipped with the streaming premiere campaign.",
+      "details": {
+        "challenge": "Charm City Kings premiered with no theatrical run, so awareness had to be earned in feeds. The campaign needed participatory, shareable content that put the movie's Baltimore world — nicknames, swagger, dirt-bike culture — into fans' own faces.",
+        "approach": "Designed the 'They call me…' filter set: a polaroid-style frame with face tracking and a randomized street-name reveal, plus social media assets and promo cutdowns that kept one visual language from filter to feed.",
+        "result": "Launched with the October 2020 premiere push — fans shared their filter selfies tagged with their new nicknames, turning every post into organic promotion for the film."
+      },
+      "tags": [
+        "AR Face Filters",
+        "Instagram",
+        "Social Campaign",
+        "Name Generator"
+      ],
+      "accent": "neon",
+      "color": "#ff2bd6",
+      "image": "/projects/hbo-charm-city-kings/hero-filter.jpg",
+      "imageAlt": "They call me Holy Savage — Charm City Kings AR face filter frame",
+      "images": [
+        "/projects/hbo-charm-city-kings/logo.webp"
+      ],
+      "client": "HBO Max",
+      "source": "drive"
+    },
+    {
       "id": "ascension-realty",
       "title": "Ascension Realty — AR Mobile Experience",
       "perception": "xr",

@@ -1,0 +1,149 @@
+﻿Developer Handoff Spec
+"The Journey Through Perception"  Neha Mayacharya Portfolio
+Figma wireframes: https://www.figma.com/design/YzfIJURnY0F71LCiya6oCD/Website-Wireframes
+This document is the implementation reference for each screen. Copy is final unless marked otherwise. Bird reference images are in /bird-reference-poses/ alongside this doc.
+________________
+
+
+Global design tokens
+Colors
+--bg-void: #05060A          /* base background */
+--bg-void-alt: #0A0E1A      /* secondary background variant */
+--accent-teal: #3FD8E0      /* AI portal, gradient start */
+--accent-violet: #B96BFF    /* gradient end, XR portal secondary */
+--text-primary: #F4F4F8     /* off-white body/headline text */
+--text-secondary: #8A93A8   /* muted gray-blue, labels & bio */
+--portal-product: #7F77DD   /* violet */
+--portal-ux: #F0997B        /* coral */
+--portal-xr: #B96BFF        /* magenta */
+--portal-ai: #3FD8E0        /* teal */
+
+
+Typography
+* Headings & name (Fraunces, variable serif, Google Fonts): regular weight for names/headlines, italic weight specifically for the word "intelligent" wherever it appears, filled with the teal→violet gradient
+* Labels, tags, bio, UI text (Manrope, Google Fonts): 400 for body/bio copy, 500 with ~0.1em letter-spacing for uppercase labels
+* No other typefaces anywhere in the experience
+Motion conventions
+* Blink duration: 120–150ms (scale or eyelid-cover animation)
+* Idle blink interval: randomized 3–6s, never fixed
+* Reaction/acknowledgment gestures: under 500ms — these are punctuation, not performances
+* Screen-to-screen transitions: short "warp" effect (faster variant of the full tunnel sequence), not a full replay
+________________
+
+
+Screen 1 — Landing
+Layout
+* Desktop 1440px canvas. Center-left vertical text stack starting ~15% from top; right half reserved for the bird.
+* Mobile (390px): bird moves above the text block; all text stacks centered.
+Copy (final)
+NEHA MAYACHARYA
+
+
+Designing the [intelligent] interface.
+(“intelligent” in Fraunces italic, teal→violet gradient fill)
+
+
+AI EXPERIENCE DESIGNER
+XR · AI · UX · PRODUCT DESIGN
+
+
+I design experiences where technology meets human needs across realities.
+
+
+— Scroll to begin the journey
+
+
+Bird
+* Reference: bird_01_flying_arrival.png
+* On page load: bird flies in from the right edge, lands near the name. Name/headline fade up with a slight vertical offset, timed just after or alongside the bird's arrival.
+* On scroll: whole screen recedes/fades as the bird takes off toward Screen 2.
+________________
+
+
+Screen 2 — Tunnel of Perception
+Purpose: pure transition, no UI, no copy. Bridges Landing to the Portal Hub.
+Sequence
+1. Entry moment — reference bird_03_flying_dynamic.png (bird flying toward viewer, bright energy trail, about to turn away)
+2. Main tunnel shot — reference bird_04_tunnel_backview.jfif (back view, wings symmetric, flying away into a swirling tunnel). This is the longer-held shot.
+Visual behavior
+* Background progressively abstracts: starts as the Landing screen's starfield, shifts into concentric glowing energy rings as the bird flies deeper in.
+* Scroll-linked or timed animation — bird's forward speed can increase toward the end of the sequence, with crest/wing-tip glow intensifying slightly with speed.
+________________
+
+
+Screen 3 — Portal Hub
+Purpose: replaces the old timeline + four-circle "select a world" screens. This is both a story beat and real site navigation.
+Layout
+* Four glowing portal rings (Product, UX, XR, AI) arranged in a compact constellation, echoing the ring-around-sphere shape of the final logo.
+* Ring colors: Product --portal-product, UX --portal-ux, XR --portal-xr, AI --portal-ai.
+* A persistent, shrunk version of these four rings must remain visible/clickable once inside any world (see Screen 4), so a visitor can jump to any world or back to the hub at any time.
+Bird state machine (build as discrete states, not one continuous clip)
+State
+	Reference
+	Behavior
+	1. Arrival
+	bird_04_tunnel_backview.jfif → bird_02_idle_landed.png
+	Bird flies in from tunnel, lands centered, turns to face viewer
+	2. Settle
+	bird_02_idle_landed.png
+	Looks directly at viewer, one deliberate blink. This cues state 3
+	3. Idle (waiting)
+	bird_02_idle_landed.png
+	Only starts after state 2 completes. Randomized blink every 3–6s; occasional small head tilt; continuous subtle breathing/scale motion. Stretch goal: slight gaze-follow toward cursor when near an answer chip
+	4. Reaction
+	no dedicated reference — animate off bird_02_idle_landed.png
+	Small perk-up / head-turn toward the chosen portal's direction, under 500ms, immediately on user selection
+	5. Transition
+	bird_03_flying_dynamic.png → bird_04_tunnel_backview.jfif
+	Short warp effect begins, same visual language as Screen 2 but faster
+	Routing question — appears only after state 2 (Settle) completes
+What kind of role are you exploring?
+Pick one to jump straight there — or explore freely below
+
+
+[ AI & conversational design ]      (teal outline)
+[ XR & immersive experience ]       (magenta outline)
+[ UX research & product design ]    (coral outline)
+[ Show me everything ]              (neutral gray outline)
+
+
+* Pill-shaped buttons, sentence case, no exclamation points.
+* "Show me everything" must not gate anything — it leads into the standard hub → Product → UX → XR → AI sequential flow.
+* The four portal rings stay independently clickable at all times, question or no question — the question is a shortcut layered on top, never a gate.
+* Session logic: show this question once per session, on first hub visit only. On any return to the hub later in the same session, show only the four rings (no repeated question).
+________________
+
+
+Screen 4 — Inside a Portal (case-study gallery)
+Status: high-level only — needs its own detailed pass before dev-ready.
+What's decided so far:
+* Cinematic chrome (starfield, tunnel effects, full-screen bird) recedes once inside a world. Replace with a clean, standard case-study gallery: project cards with title, one-line description, thumbnail.
+* That world's accent color runs through as a quiet through-line (borders, hover states, accents) — not a full re-skin of the page.
+* Bird persists only as a small, quiet corner element — not the visual focus here.
+* At the bottom of the project list, a "ready to explore [next world]?" card appears with a glimpse of the next portal; clicking it triggers the same short warp transition used in Screen 2/Screen 3 state 5.
+* Persistent four-ring nav (from Screen 3) stays visible for direct jumps to any other world or back to the hub.
+Open decisions — flag with design/product before building:
+1. Routing architecture: is each world a separate anchored section (#product, #ux, #xr, #ai) on one continuous page, or separate routed pages? This affects whether "jump to any portal directly" is a simple anchor link or a page navigation, and whether a shared link can point straight at one world.
+2. Project-to-world mapping: which case studies live in which of the four worlds. Several existing projects span more than one category and haven't been assigned yet.
+3. Default entry world: when a visitor picks "Show me everything" or otherwise doesn't specify, which world does the sequential path start with?
+4. Frames 09–12 from the original storyboard (bird transitions into its own eye, the Sentient Eye emerges, the logo emerges, logo carries into the next screen) — these predate the portal-hub redesign and haven't been re-integrated into this new structure yet. Needs a decision on whether/where this beat still occurs (e.g., once, before the first portal is ever entered) or whether it's cut in favor of the portal system.
+________________
+
+
+Asset manifest
+Asset
+	Location
+	Used in
+	bird_01_flying_arrival.png
+	/bird-reference-poses/
+	Screen 1
+	bird_02_idle_landed.png
+	/bird-reference-poses/
+	Screen 3 (states 2–4)
+	bird_03_flying_dynamic.png
+	/bird-reference-poses/
+	Screen 2, Screen 3 (state 5)
+	bird_04_tunnel_backview.jfif
+	/bird-reference-poses/
+	Screen 2, Screen 3 (states 1 & 5)
+	No reference image yet exists for the Screen 3 "Reaction" gesture — flagged above, animate as a small gesture off the idle pose until/unless one is generated.
