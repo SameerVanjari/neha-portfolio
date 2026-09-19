@@ -62,8 +62,10 @@ export default function Home() {
       ...island,
       image: featured.image,
       imageAlt: featured.imageAlt,
-      video: media?.heroVideo ?? undefined,
-      videoPoster: media?.heroVideoPoster ?? undefined,
+      // Stand-in: always play the Ascension Realty reel as the homepage hero
+      // background, regardless of the active perception. Replace per-island later.
+      video: "/videos/ascension-realty.mp4",
+      videoPoster: media?.heroVideoPoster ?? media?.images?.[0]?.src ?? undefined,
       title: content.title,
       subtitle: content.subtitle,
       description: "",

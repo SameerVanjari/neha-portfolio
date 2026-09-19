@@ -320,21 +320,22 @@
       "id": "hbo-charm-city-kings",
       "title": "Charm City Kings — HBO Max AR Face Filters",
       "perception": "xr",
-      "subtitle": "XR · Social · Campaign",
+      "subtitle": "XR · AR · Brand Campaign",
       "dimension": "XR",
       "year": "2020",
-      "blurb": "Instagram face filters and a street-name generator for HBO Max's first exclusive movie — fans claimed a Baltimore nickname and shared it.",
-      "description": "A social AR campaign for HBO Max's first exclusive movie, Charm City Kings. 'They call me…' Instagram face filters place the viewer in a polaroid frame and stamp a random street name — Mouse, Blax, Nicki, Holy Savage — over the shot, branded with the film's neon logo. Shipped with the streaming premiere campaign.",
+      "blurb": "A 2-week Spark AR filter campaign for HBO Max's Charm City Kings — 'They call me…' face filters that turn fans into the movie's Baltimore nicknames.",
+      "description": "For the release of Charm City Kings, HBO Max wanted a way to put fans inside the film's dirt-bike world directly from their phone cameras — no app, no download. The filter turns a marketing beat into something a fan can step into and share.",
       "details": {
-        "challenge": "Charm City Kings premiered with no theatrical run, so awareness had to be earned in feeds. The campaign needed participatory, shareable content that put the movie's Baltimore world — nicknames, swagger, dirt-bike culture — into fans' own faces.",
-        "approach": "Designed the 'They call me…' filter set: a polaroid-style frame with face tracking and a randomized street-name reveal, plus social media assets and promo cutdowns that kept one visual language from filter to feed.",
-        "result": "Launched with the October 2020 premiere push — fans shared their filter selfies tagged with their new nicknames, turning every post into organic promotion for the film."
+        "challenge": "Standard promo assets ask an audience to sit back; HBO Max wanted something a fan could step inside and share — a moment of participation instead of a passive trailer view.",
+        "approach": "Pulled visual language from the film's dirt-bike and Baltimore street culture, built the AR triggers and overlays in Spark AR and Blender, aligned type and metrics to HBO Max's campaign guidelines, then cross-device tested and submitted to Instagram and Facebook.",
+        "result": "Shipped as an official HBO Max campaign filter for Charm City Kings, live on Instagram and Facebook — turning a passive trailer moment into a participatory brand touchpoint."
       },
       "tags": [
-        "AR Face Filters",
+        "Spark AR",
+        "Blender",
+        "Adobe CC",
         "Instagram",
-        "Social Campaign",
-        "Name Generator"
+        "Facebook"
       ],
       "accent": "neon",
       "color": "#ff2bd6",
@@ -344,7 +345,30 @@
         "/projects/hbo-charm-city-kings/logo.webp"
       ],
       "client": "HBO Max",
-      "source": "drive"
+      "source": "drive",
+      "process": [
+        {
+          "phase": "Phase 1",
+          "name": "Concept & Mood",
+          "body": "Pulled visual language from the film's dirt-bike and Baltimore street culture."
+        },
+        {
+          "phase": "Phase 2",
+          "name": "Effect Design",
+          "body": "Built the AR triggers and overlays in Spark AR and Blender."
+        },
+        {
+          "phase": "Phase 3",
+          "name": "Brand Pass",
+          "body": "Aligned type and metrics to HBO Max's campaign guidelines."
+        },
+        {
+          "phase": "Phase 4",
+          "name": "Test & Publish",
+          "body": "Cross-device testing, then submission to Instagram and Facebook."
+        }
+      ],
+      "quote": "A filter lives or dies in the first half second — the challenge wasn't the AR technology, it was making the film's world recognizable instantly, in a format most people scroll straight past."
     },
     {
       "id": "ascension-realty",
@@ -353,18 +377,18 @@
       "subtitle": "XR · AR · Real Estate",
       "dimension": "XR",
       "year": "2025",
-      "blurb": "An AR mobile experience letting buyers scan a surface and walk through a full building — down to a single apartment — before it's ever built.",
-      "description": "An AR mobile experience built for a private real estate client, letting buyers scan a surface and walk through a full building, down to a single apartment, before it's ever built. Designed end-to-end in a three-week sprint.",
+      "blurb": "A solo, 3-week AR proof-of-concept for 'reality ecommerce' — buyers preview a pre-construction home room-by-room, on the actual lot, from their phone.",
+      "description": "Ascension Realty wanted to test whether AR could let a buyer preview a home before construction finished — walking room-to-room, on the actual lot, from their phone. Built solo as a three-week proof-of-concept for a 'reality ecommerce' model.",
       "details": {
-        "challenge": "A private real estate client had an early-stage idea — use AR to let buyers experience developments virtually — but with no clarity, no structure, and no defined user journey, under a three-week deadline and no existing app to reference.",
-        "approach": "Owned concept, storyboard, asset direction, UX, interaction design, and sound. Built a city-to-room AR journey — scan a surface, then move from a city skyline to a tower to a floor plan to a single furnished room — sourcing and optimizing 3D assets and using Vuforia anchor points for stable tracking.",
-        "result": "Delivered a functioning AR platform and a client-ready demo in three weeks, turning a rough idea into proof that AR belongs in real estate marketing."
+        "challenge": "You're selling a house that doesn't exist yet. Pre-construction listings rely on flat floor plans and renders, leaving buyers to imagine scale, light, and flow for themselves. Ascension Realty needed an unbuilt home to feel real enough to commit to.",
+        "approach": "Full ownership of ideation, storyboard, 3D asset curation (TurboSquid, optimized for mobile AR), holographic material shaders for placement feedback, UI and spatial audio — in sync with two developers and two 3D artists, then on-site testing for placement accuracy.",
+        "result": "Delivered a working proof-of-concept for 'reality ecommerce' in 3 weeks and validated AR walkthroughs as a pre-construction sales tool for Ascension Realty."
       },
       "tags": [
-        "AR",
-        "Mobile",
+        "Blender",
+        "Spark AR",
         "Real Estate",
-        "Vuforia",
+        "Mobile AR",
         "3D"
       ],
       "accent": "neon",
@@ -380,7 +404,30 @@
         "/images/ascension-03.png",
         "/images/ascension-04.png",
         "/images/ascension-05.png"
-      ]
+      ],
+      "process": [
+        {
+          "phase": "Phase 1",
+          "name": "Storyboarding",
+          "body": "Scripted the walkthrough as a spatial sequence, room-by-room."
+        },
+        {
+          "phase": "Phase 2",
+          "name": "Asset Curation",
+          "body": "Sourced and optimized 3D furniture and fixtures from TurboSquid for mobile AR."
+        },
+        {
+          "phase": "Phase 3",
+          "name": "Shader Setup",
+          "body": "Built holographic material shaders to easily prototype placement feedback."
+        },
+        {
+          "phase": "Phase 4",
+          "name": "UX & QA",
+          "body": "Tested interaction cues and spatial audio, then manual placement accuracy on-site."
+        }
+      ],
+      "quote": "Owning every layer solo — story, assets, shader, sound — meant every constraint was mine to solve, which is its own kind of clarity."
     },
     {
       "id": "made-for-joy",
@@ -418,18 +465,19 @@
       "perception": "ai",
       "subtitle": "AI · Transparency",
       "dimension": "AI",
-      "year": "2025",
-      "blurb": "AI-powered transparency platform that simplifies complex global immigration workflows through intelligent UX and conversational interfaces.",
-      "description": "AI-powered transparency platform that simplifies complex global immigration workflows through intelligent UX and conversational interfaces.",
+      "year": "2024",
+      "blurb": "A guided, context-aware AI visa assistant on LangChain + GPT-4 — 95% task completion where static forms left applicants stuck.",
+      "description": "Visa applications are dense, procedural, and easy to get wrong. VisaGenie turns the process into a guided conversation — an AI assistant, built on LangChain and GPT-4, that asks the right question at the right step and gets applicants to a completed task instead of an abandoned form.",
       "details": {
-        "challenge": "Global immigration is opaque — fragmented rules, forms, and timelines create anxiety and errors.",
-        "approach": "Designed an intelligent UX layer with conversational guidance that translates complex visa logic into clear, stepwise transparency. Anchored to verified sources.",
-        "result": "Simplified comprehension of global migration steps; users complete workflows with confidence and fewer drop-offs."
+        "challenge": "A form doesn't know where you got stuck. Static visa forms and FAQ pages leave applicants to self-diagnose their own confusion. VisaGenie needed to hold context across a multi-step process and respond to wherever the applicant actually was — not a generic script.",
+        "approach": "Mapped the decision tree behind the most common visa paths, structured LangChain prompts to keep GPT-4 on track across multi-turn exchanges, built a chat-first UI with clear progress and context affordances, then iterated prompts against friction points where users dropped off.",
+        "result": "Replaced static forms with a guided, context-aware conversation that held context across the whole process — 95% of applicants completing their visa application to the end."
       },
       "tags": [
-        "Conversational AI",
-        "Transparency",
-        "Global Systems"
+        "LangChain",
+        "GPT-4",
+        "Flask",
+        "Conversation Design"
       ],
       "accent": "sigil",
       "color": "#8b5cff",
@@ -439,11 +487,34 @@
       "galleryId": "237623581",
       "appreciations": 3,
       "views": 39,
-      "client": null,
+      "client": "Self-Initiated / Independent",
       "source": "behance",
       "images": [
         "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&auto=format&fit=crop"
-      ]
+      ],
+      "process": [
+        {
+          "phase": "Phase 1",
+          "name": "Conversation Mapping",
+          "body": "Delineated the decision tree behind the most common visa paths."
+        },
+        {
+          "phase": "Phase 2",
+          "name": "Prompt & Flow Design",
+          "body": "Structured LangChain prompts to keep GPT-4 on track across multi-turn exchanges."
+        },
+        {
+          "phase": "Phase 3",
+          "name": "Interface Design",
+          "body": "Built a chat-first UI with clear progress and context affordances."
+        },
+        {
+          "phase": "Phase 4",
+          "name": "Test & Iterate",
+          "body": "Delivered prompt iterations against friction points where users dropped off."
+        }
+      ],
+      "quote": "The 95% conversion number mattered less than what it represented: a process that finally met people where their actual confusion was, instead of where a form assumed it would be."
     },
     {
       "id": "research-recommender",
@@ -583,12 +654,12 @@
       "subtitle": "XR · Enterprise",
       "dimension": "XR",
       "year": "2022",
-      "blurb": "Sole experience designer on a Meta Quest 2 VR training program. Owned research, client discovery, storyline, interaction design, gamification, ShapesXR storyboarding, asset selection, sound design, and 7+ design documents through to final deployment.",
-      "description": "Sole experience designer on a Meta Quest 2 VR training program. Owned research, client discovery, storyline, interaction design, gamification, ShapesXR storyboarding, asset selection, sound design, and 7+ design documents through to final deployment.",
+      "blurb": "VR fiber-optic field training deployed via ArborXR, published on the Meta Quest Store — a fail-safe place to learn splicing and fault diagnosis.",
+      "description": "Millennium needed field technicians trained on fiber-optic splicing and fault diagnosis without pulling them off paying jobs or risking live customer equipment. The Broken Mile puts them inside a full VR fiber cabinet to run a real troubleshooting job start to finish, as many times as it takes. Deployed via ArborXR and published on the Meta Quest Store.",
       "details": {
-        "challenge": "Fiber-optic field work is high-stakes and costly to train in situ; technicians need safe, repeatable practice.",
-        "approach": "Owned research through deployment — gamified learning loops on Meta Quest 2, ShapesXR storyboarding, haptic-aligned steps, sound design, and 7+ design documents tied to real workflows.",
-        "result": "Enterprise VR training that scales onboarding safely and retains procedural knowledge through play."
+        "challenge": "You can't practice on a live line. Field techs learned splicing by shadowing senior technicians and by trial and error on real customer equipment — expensive when it went wrong, and inconsistent as a way to build judgment.",
+        "approach": "Shadowed field technicians to map the real troubleshooting sequence, then built the fiber cabinet and hand-tracked splice interactions, layered guided and free-play modes so skills build in stages, and packaged the result for ArborXR fleet management.",
+        "result": "Published on the Meta Quest Store and deployed via ArborXR to Millennium's field technician onboarding — replacing live-equipment shadowing with a repeatable, fail-safe practice environment."
       },
       "tags": [
         "Meta Quest 2",
@@ -607,7 +678,12 @@
       "source": "behance",
       "images": [
         "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop"
-      ]
+      ],
+      "notes_wireframe": {
+        "role": "Lead Immersive Experience Designer",
+        "timeline": "12 weeks",
+        "reflection": "Designing for safety-critical, hands-on skills meant the interactive fidelity had to feel like the real tool, not a simplified stand-in — every splice, every fault, had to be trustworthy enough that the learning actually transferred to the field."
+      }
     },
     {
       "id": "interactive-3d",

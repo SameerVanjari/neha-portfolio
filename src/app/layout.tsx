@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Sora } from "next/font/google";
+import { Bricolage_Grotesque, Sora, Newsreader } from "next/font/google";
 import "./globals.css";
 
 // Brandkit — 2 sets / 3 weights
@@ -25,6 +25,14 @@ const sora = Sora({
   weight: ["300", "400", "600"],
 });
 
+const newsreader = Newsreader({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  display: "swap",
+  style: ["normal", "italic"],
+  weight: ["400", "500"],
+});
+
 export const metadata: Metadata = {
   title: "NEHA — Perception, Intelligence, Design",
   description:
@@ -38,7 +46,7 @@ import { PerceptionProvider } from "@/context/PerceptionContext";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${bricolage.variable} ${sora.variable} antialiased`}>
+    <html lang="en" className={`${bricolage.variable} ${sora.variable} ${newsreader.variable} antialiased`}>
       <body className="bg-white text-zinc-900">
         <PerceptionProvider>
           <SmoothScroll>

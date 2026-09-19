@@ -1,0 +1,138 @@
+{
+  "source": {
+    "type": "figma-wireframes",
+    "file": "https://www.figma.com/design/YzfIJURnY0F71LCiya6oCD/Website-Wireframes",
+    "nodeId": "23:43"
+  },
+  "categoryTag": "01 UX CASE STUDY: CONVERSATIONAL PRODUCT",
+  "title": "VisaGenie",
+  "subtitle": "An AI visa assistant built on LangChain, GPT-4, and Flask.",
+  "metaPills": [
+    "Role: AI / Conversation Designer",
+    "Timeline: [Add project details]",
+    "Tools: LangChain, GPT-4, Flask"
+  ],
+  "hero": {
+    "label": "PRODUCT SCREEN STILL",
+    "note": "1440px x 724px (Approx)"
+  },
+  "overview": {
+    "label": "01 — Overview",
+    "body": "Visa applications are dense, procedural, and easy to get wrong. VisaGenie turns the process into a guided conversation — an AI assistant, built on LangChain and GPT-4, that asks the right question at the right step and gets applicants to a completed task instead of an abandoned form."
+  },
+  "problem": {
+    "label": "02 — The Problem",
+    "quote": "\"A form doesn't know where you got stuck.\"",
+    "body": "Static visa forms and FAQ pages leave applicants to self-diagnose their own confusion. VisaGenie needed to hold context across a multi-step process and respond to wherever the applicant actually was — not a generic script.",
+    "mediaLabel": "DECISION TREE SKETCH",
+    "mediaNote": "1000px x 400px"
+  },
+  "scope": {
+    "label": "03 — Scope & Role",
+    "rows": [
+      {
+        "label": "Role",
+        "value": "AI / Conversation Designer"
+      },
+      {
+        "label": "Project",
+        "value": "Self-Initiated / Independent"
+      },
+      {
+        "label": "Tools",
+        "value": "LangChain, GPT-4, Flask"
+      }
+    ]
+  },
+  "process": [
+    {
+      "phase": "PHASE 1",
+      "name": "Conversation Mapping",
+      "body": "Delineate the decision tree behind the most common visa paths. Sketch / Paper",
+      "media": [
+        "DECISION TREE"
+      ]
+    },
+    {
+      "phase": "PHASE 2",
+      "name": "Prompt & Flow Design",
+      "body": "Structured LangChain prompts to keep GPT-4 on track across multi-turn exchanges. System Diagram",
+      "media": [
+        "PROMPT FLOW"
+      ]
+    },
+    {
+      "phase": "PHASE 3",
+      "name": "Interface Design",
+      "body": "Build a chat-first UI with clear progress and context affordances. Figma Design",
+      "media": [
+        "UI WIREFRAME"
+      ]
+    },
+    {
+      "phase": "PHASE 4",
+      "name": "Test & Iterate",
+      "body": "Deliver prompts against friction points where users dropped off. User Testing",
+      "media": [
+        "DROP-OFF MAP"
+      ]
+    }
+  ],
+  "turn": {
+    "actI": "ACT I — THE PROBLEM",
+    "actII": "ACT II — THE SOLUTION"
+  },
+  "finalDesign": {
+    "label": "05 — Final Design",
+    "cards": [
+      [
+        "CONVERSATION FLOW",
+        "UI View",
+        "An applicant steps inside the guided conversation."
+      ],
+      [
+        "PROGRESS AFFORDANCE",
+        "Dynamic UI Details",
+        "Progress and agency affordances on step UI."
+      ],
+      [
+        "MOBILE CHAT VIEW",
+        "Vertical Viewport",
+        "Mobile chat view."
+      ],
+      [
+        "FLOW DIAGRAM",
+        "System Architecture",
+        "Decision tree flow diagram behind the assistant."
+      ]
+    ]
+  },
+  "outcomes": {
+    "label": "06 — Outcomes",
+    "items": [
+      [
+        "95%",
+        "Task completion rate — applicants completing their visa application to end."
+      ],
+      [
+        "Replaced static forms with a guided, context-aware conversation.",
+        "[Add project details] [add user volume metric]",
+        "Held context across a multi-step process instead of resetting at each screen."
+      ]
+    ]
+  },
+  "reflection": {
+    "label": "07 — Reflection",
+    "quote": "The 95% conversion number mattered less than what it represented: a process that finally met people where their actual confusion was, instead of where a form assumed it would be."
+  },
+  "media": {
+    "hero": null,
+    "cards": [
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "id": "visagenie"
+}

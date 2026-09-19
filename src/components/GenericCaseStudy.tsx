@@ -45,8 +45,16 @@ export default function GenericCaseStudy({
   if (project.views != null) stats.push(`${project.views} views`);
   if (project.appreciations != null) stats.push(`${project.appreciations} appreciations`);
 
+  const toc = [
+    ...GENERIC_TOC.slice(0, GENERIC_TOC.findIndex((t) => t.id === "toolkit")),
+    ...(project.process?.length ? [{ id: "process", label: "Process" }] : []),
+    { id: "toolkit", label: "Toolkit" },
+    ...(project.quote ? [{ id: "reflection", label: "Reflection" }] : []),
+    ...GENERIC_TOC.slice(GENERIC_TOC.findIndex((t) => t.id === "credits")),
+  ];
+
   return (
-    <CaseStudyShell project={project} related={related} tocItems={GENERIC_TOC}>
+    <CaseStudyShell project={project} related={related} tocItems={toc}>
       {/* STORY / HERO */}
       <section id="overview" className="scroll-mt-[88px] pb-12 md:pb-16">
         <CaseEyebrow>{meta}</CaseEyebrow>
@@ -111,9 +119,31 @@ export default function GenericCaseStudy({
         </div>
       </CaseSection>
 
+      {/* PROCESS */}
+      {project.process?.length ? (
+        <CaseSection id="process">
+          <CaseEyebrow>04 / DESIGN PROCESS</CaseEyebrow>
+          <CaseH2>How the work got done</CaseH2>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            {project.process.map((phase) => (
+              <CaseCard key={phase.phase}>
+                <CaseLabel>{phase.phase}</CaseLabel>
+                <p
+                  className="mb-2 font-display text-[17px] font-semibold"
+                  style={{ fontFamily: "var(--font-display)", color: C.text }}
+                >
+                  {phase.name}
+                </p>
+                <CaseCardText>{phase.body}</CaseCardText>
+              </CaseCard>
+            ))}
+          </div>
+        </CaseSection>
+      ) : null}
+
       {/* TOOLKIT */}
       <CaseSection id="toolkit">
-        <CaseEyebrow>04 / TOOLKIT</CaseEyebrow>
+        <CaseEyebrow>{project.process?.length ? "05" : "04"} / TOOLKIT</CaseEyebrow>
         <CaseH2>What it was made with</CaseH2>
         <div className="mt-6 flex flex-wrap gap-1.5">
           {project.tags.map((tag) => (
@@ -126,9 +156,31 @@ export default function GenericCaseStudy({
         </CaseBody>
       </CaseSection>
 
+      {/* REFLECTION */}
+      {project.quote ? (
+        <CaseSection id="reflection">
+          <CaseEyebrow>{project.process?.length ? "06" : "05"} / REFLECTION</CaseEyebrow>
+          <CaseH2>Looking back</CaseH2>
+          <blockquote
+            className="mt-6 max-w-[52ch] font-display text-[20px] font-medium leading-[1.5] md:text-[22px]"
+            style={{ fontFamily: "var(--font-display)", color: C.text }}
+          >
+            {project.quote}
+          </blockquote>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {project.url ? <AceternityCTA href={project.url}>View on Behance</AceternityCTA> : null}
+            <HoverBorderGradient as="a" href="/projects">
+              More projects
+            </HoverBorderGradient>
+          </div>
+        </CaseSection>
+      ) : null}
+
       {/* CREDITS */}
       <CaseSection id="credits">
-        <CaseEyebrow>05 / CREDITS</CaseEyebrow>
+        <CaseEyebrow>
+          {project.process?.length && project.quote ? "07" : project.process || project.quote ? "06" : "05"} / CREDITS
+        </CaseEyebrow>
         <CaseH2>One last thing</CaseH2>
         <CaseBody>
           {project.client

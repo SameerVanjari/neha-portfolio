@@ -122,7 +122,7 @@ export default function CaseStudyShell({
   return (
     <>
       <Nav theme={CASE_THEME} activeSection="projects" />
-      <main className="pt-[64px]" style={{ background: C.bg, color: C.text }}>
+      <main className="pt-[64px]" style={{ background: C.bg, color: C.text, overflowX: "clip" }}>
         <div className="mx-auto max-w-[1280px] px-6 md:px-8">
           <div className="h-px w-full" style={{ background: "rgba(255,255,255,0.10)" }} />
           <div className="py-6 md:py-8">

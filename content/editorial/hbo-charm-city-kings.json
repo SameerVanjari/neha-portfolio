@@ -1,0 +1,164 @@
+{
+  "source": {
+    "type": "figma-wireframes",
+    "file": "https://www.figma.com/design/YzfIJURnY0F71LCiya6oCD/Website-Wireframes",
+    "nodeId": "22:43"
+  },
+  "categoryTag": "AR CAMPAIGN: BRAND CAMPAIGN",
+  "title": "Charm City Kings",
+  "subtitle": "An AR filter campaign for HBO Max's Charm City Kings.",
+  "metaPills": [
+    "Role: AR Designer",
+    "Timeline: 2 Weeks (Art direction + development)",
+    "Tools: Spark AR, Blender, Adobe CC"
+  ],
+  "hero": {
+    "label": "FILTER IN-USE CAPTURE",
+    "note": "1000px x 560px"
+  },
+  "overview": {
+    "label": "01 — Overview",
+    "body": "For the release of Charm City Kings, HBO Max wanted a way to put fans inside the film's dirt-bike world directly from their phone cameras — no app, no download. The filter turns a marketing beat into something a fan can step into and share."
+  },
+  "problem": {
+    "label": "02 — The Problem",
+    "quote": "\"A trailer only asks you to watch.\"",
+    "body": "Standard promo assets ask an audience to sit back; HBO Max wanted something a fan could step inside and share, turning a marketing beat into a moment of participation instead of a passive view.",
+    "mediaLabel": "CAMPAIGN VIDEO/DEMO",
+    "mediaNote": "1000px x 400px"
+  },
+  "scope": {
+    "label": "03 — Scope & Role",
+    "rows": [
+      {
+        "label": "ROLE",
+        "value": "AR / UI Designer"
+      },
+      {
+        "label": "STUDIO",
+        "value": "Kineticru"
+      },
+      {
+        "label": "CLIENT",
+        "value": "HBO Max"
+      },
+      {
+        "label": "DELIVERABLE",
+        "value": "Instagram / Facebook AR Filter"
+      }
+    ]
+  },
+  "process": [
+    {
+      "phase": "PHASE 1",
+      "name": "Concept & Mood",
+      "body": "Pulled visual language from the film's dirt-bike and Baltimore street culture.",
+      "media": [
+        "MOODBOARD",
+        "230px x 150px"
+      ]
+    },
+    {
+      "phase": "PHASE 2",
+      "name": "Effect Design",
+      "body": "Built the AR triggers and overlays in Spark AR and Blender.",
+      "media": [
+        "EFFECT SKETCH",
+        "230px x 150px"
+      ]
+    },
+    {
+      "phase": "PHASE 3",
+      "name": "Brand Pass",
+      "body": "Aligned type and metrics to HBO Max's campaign guidelines.",
+      "media": [
+        "BRAND SPEC",
+        "230px x 150px"
+      ]
+    },
+    {
+      "phase": "PHASE 4",
+      "name": "Test & Publish",
+      "body": "Cross-device testing, then submission to Instagram and Facebook.",
+      "media": [
+        "DEVICE TEST GRID",
+        "230px x 150px"
+      ]
+    }
+  ],
+  "turn": {
+    "actI": "ACT I — THE PROBLEM",
+    "actII": "ACT II — THE SOLUTION"
+  },
+  "finalDesign": {
+    "label": "05 — Final Design",
+    "cards": [
+      [
+        "FILTER IN-USE",
+        "Front-camera snapshot",
+        "Front-camera capture of the filter in-use"
+      ],
+      [
+        "WITHOUT FILTER",
+        "Before view",
+        "WITH FILTER",
+        "After view",
+        "Before / after comparison"
+      ],
+      [
+        "EFFECT OVERLAY",
+        "Built in Spark AR",
+        "Effect trigger overlay, built in Spark AR"
+      ],
+      [
+        "STORIES PLACEMENT",
+        "Instagram UI test frame",
+        "Placement in an Instagram Stories frame"
+      ]
+    ]
+  },
+  "outcomes": {
+    "label": "06 — Outcomes",
+    "items": [
+      [
+        "Shipped as an official HBO Max campaign filter for Charm City Kings, live on Instagram and Facebook."
+      ],
+      [
+        "[Add project details] [add reach / uses metric]"
+      ],
+      [
+        "Turned a passive trailer moment into a participatory brand touchpoint."
+      ]
+    ]
+  },
+  "reflection": {
+    "label": "07 — Reflection",
+    "quote": "\"A filter lives or dies in the first half second — the challenge wasn't the AR technology, it was making the film's world recognizable instantly, in a format most people scroll straight past.\""
+  },
+  "media": {
+    "hero": {
+      "type": "image",
+      "src": "/projects/hbo-charm-city-kings/hero-filter.jpg",
+      "alt": "They call me Holy Savage — filter in-use capture"
+    },
+    "problemVideo": {
+      "src": "/videos/charm-city-kings/mouse-and-blax.mp4",
+      "poster": "/projects/hbo-charm-city-kings/mouse-and-blax-poster.jpg"
+    },
+    "cards": [
+      {
+        "src": "/projects/hbo-charm-city-kings/hero-filter.jpg"
+      },
+      {
+        "src": "/projects/hbo-charm-city-kings/they-call-me-blax-poster.jpg"
+      },
+      {
+        "src": "/projects/hbo-charm-city-kings/they-call-me-mouse-poster.jpg"
+      },
+      {
+        "src": "/projects/hbo-charm-city-kings/logo.webp"
+      }
+    ]
+  },
+  "id": "hbo-charm-city-kings"
+}

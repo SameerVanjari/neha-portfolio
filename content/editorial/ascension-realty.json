@@ -1,0 +1,165 @@
+{
+  "source": {
+    "type": "figma-wireframes",
+    "file": "https://www.figma.com/design/YzfIJURnY0F71LCiya6oCD/Website-Wireframes",
+    "nodeId": "26:43"
+  },
+  "categoryTag": "AR CAMPAIGN: REAL ESTATE",
+  "title": "Ascension Realty",
+  "subtitle": "A solo, 3-week AR proof-of-concept for \"reality ecommerce.\"",
+  "metaPills": [
+    "ROLE: SOLO AR DESIGNER",
+    "TIMELINE: 3-WEEK POC",
+    "TOOLS: BLENDER, SPARK AR"
+  ],
+  "hero": {
+    "label": "AR WALKTHROUGH STILL",
+    "note": "1440px x 820px"
+  },
+  "overview": {
+    "label": "01 — Overview",
+    "body": "Ascension Realty wanted to test whether AR could let a buyer preview a home before construction finished — walking room-to-room, on the actual lot, from their phone. Built solo as a three-week proof-of-concept for a 'reality ecommerce' model."
+  },
+  "problem": {
+    "label": "02 — The Problem",
+    "quote": "\"You're selling a house that doesn't exist yet.\"",
+    "body": "Pre-construction listings rely on flat floor plans and renders, leaving buyers to imagine scale, light, and flow for themselves. Ascension Realty needed a way to make an unbuilt home feel real enough to commit to.",
+    "mediaLabel": "LOT PHOTO VS. AR OVERLAY - CONCEPT",
+    "mediaNote": "1000px x 400px"
+  },
+  "scope": {
+    "label": "03 — Scope & Role",
+    "rows": [
+      {
+        "label": "Role",
+        "value": "Solo AR Designer — full ownership"
+      },
+      {
+        "label": "Studio",
+        "value": "Kinetic"
+      },
+      {
+        "label": "Client",
+        "value": "Ascension Realty"
+      },
+      {
+        "label": "Team",
+        "value": "1 AR Designer (Me) — 1 Creative Director — 2 3D Artists — 2 Developers"
+      },
+      {
+        "label": "Scope",
+        "value": "Ideation, storyboard, 3D asset curation, shader setup, UI, sound, dev sync, testing"
+      }
+    ]
+  },
+  "process": [
+    {
+      "phase": "Phase 1",
+      "name": "Storyboarding",
+      "body": "Scripted the walkthrough as a spatial sequence, room-by-room.",
+      "media": [
+        "STORYBOARD",
+        "400px x 300px"
+      ]
+    },
+    {
+      "phase": "Phase 2",
+      "name": "Asset Curation",
+      "body": "Sourced and optimized 3D furniture and fixtures from TurboSquid for mobile AR.",
+      "media": [
+        "ASSET SHEET",
+        "400px x 300px"
+      ]
+    },
+    {
+      "phase": "Phase 3",
+      "name": "Shader Setup",
+      "body": "Built holographic material shaders to easily prototype placement feedback.",
+      "media": [
+        "SHADER TEST",
+        "400px x 300px"
+      ]
+    },
+    {
+      "phase": "Phase 4",
+      "name": "UX & QA",
+      "body": "Tested interaction cues and spatial audio, then manual placement accuracy on-site.",
+      "media": [
+        "ON-SITE TEST",
+        "400px x 300px"
+      ]
+    }
+  ],
+  "turn": {
+    "actI": "ACT I — THE PROBLEM",
+    "actII": "ACT II — THE SOLUTION",
+    "left": "OUT 1 — THE PROBLEM",
+    "right": "OUT 2 — THE SOLUTION"
+  },
+  "finalDesign": {
+    "label": "05 — Final Design",
+    "cards": [
+      [
+        "LIVING ROOM OVERLAY",
+        "500px x 280px",
+        "Living room AR overlay, furnished.",
+        "KITCHEN OVERLAY",
+        "500px x 280px",
+        "Kitchen AR overlay, materials spec."
+      ],
+      [
+        "ON-SITE CAPTURE",
+        "320px x 200px",
+        "Mobile capture, shot on location.",
+        "EMPTY LOT",
+        "320px x 200px",
+        "Empty lot prior to the AR walkthrough overlay.",
+        "AR WALKTHROUGH",
+        "320px x 200px",
+        "Final AR walkthrough video mockup."
+      ]
+    ]
+  },
+  "outcomes": {
+    "label": "06 — Outcomes",
+    "items": [
+      [
+        "Delivered a working proof-of-concept for \"reality ecommerce\" in 3 weeks, solo."
+      ],
+      [
+        "Validated AR walkthroughs as a pre-construction sales tool for Ascension Realty."
+      ],
+      [
+        "[Add project details] Add adoption / next-step metrics"
+      ]
+    ]
+  },
+  "reflection": {
+    "label": "07 — Reflection",
+    "quote": "\"Owning every layer solo — story, assets, shader, sound — meant every constraint was mine to solve, which is its own kind of clarity.\""
+  },
+  "media": {
+    "hero": {
+      "type": "image",
+      "src": "/images/ascension-hero.jpg"
+    },
+    "cards": [
+      {
+        "src": "/images/ascension-01.png"
+      },
+      {
+        "src": "/images/ascension-02.png"
+      },
+      {
+        "src": "/images/ascension-03.png"
+      },
+      {
+        "src": "/images/ascension-04.png"
+      },
+      {
+        "src": "/images/ascension-05.png"
+      }
+    ]
+  },
+  "id": "ascension-realty"
+}

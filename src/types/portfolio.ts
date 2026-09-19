@@ -7,6 +7,12 @@ export type ProjectDetails = {
   result: string;
 };
 
+export type ProcessPhase = {
+  phase: string;
+  name: string;
+  body: string;
+};
+
 export type Project = {
   id: string;
   title: string;
@@ -30,6 +36,8 @@ export type Project = {
   source?: string;
   images?: string[];
   media?: ProjectMedia;
+  process?: ProcessPhase[];
+  quote?: string;
 };
 
 export type Island = {

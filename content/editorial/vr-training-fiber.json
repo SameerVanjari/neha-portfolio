@@ -1,0 +1,159 @@
+{
+  "source": {
+    "type": "figma-wireframes",
+    "file": "https://www.figma.com/design/YzfIJURnY0F71LCiya6oCD/Website-Wireframes",
+    "nodeId": "24:43"
+  },
+  "categoryTag": "VR CAMPAIGN: FIELD TRAINING",
+  "title": "The Broken Mile",
+  "subtitle": "VR fiber-optic field training deployed via ArborXR, published on the Meta Quest Store.",
+  "metaPills": [
+    "Role: Lead VR Designer",
+    "Timeline: Sep–Dec 2026 (12 wks)",
+    "Tools: Unity, ArborXR, Meta Quest"
+  ],
+  "hero": {
+    "label": "VR ENVIRONMENT SCENE · FIBER SPLICE BAY",
+    "note": "1000px x 560px"
+  },
+  "overview": {
+    "label": "01 — Overview",
+    "body": "Millennium needed field technicians trained on fiber-optic splicing and fault diagnosis without pulling them off paying jobs or risking live customer equipment. The Broken Mile puts them inside a full VR fiber cabinet to run a real troubleshooting job start to finish, as many times as it takes. Deployed via ArborXR and published on the Meta Quest Store."
+  },
+  "problem": {
+    "label": "02 — The Problem",
+    "quote": "\"You can't practice on a live line.\"",
+    "body": "Field techs learned splicing by shadowing senior technicians and by trial and error on real customer equipment — expensive when it went wrong, and inconsistent as a way to build judgment. Millennium needed a way for techs to fail safely, as many times as it took.",
+    "mediaLabel": "TRAINING GAP: CURRENT VS. NEEDED STATE",
+    "mediaNote": "1000px x 400px"
+  },
+  "scope": {
+    "label": "03 — Scope & Role",
+    "rows": [
+      {
+        "label": "ROLE",
+        "value": "Lead Immersive Experience Designer"
+      },
+      {
+        "label": "TIMELINE",
+        "value": "12 weeks"
+      },
+      {
+        "label": "CLIENT",
+        "value": "Millennium"
+      },
+      {
+        "label": "TEAM",
+        "value": "[Add project details] [Add team composition]"
+      }
+    ]
+  },
+  "process": [
+    {
+      "phase": "PHASE 1",
+      "name": "Task Mapping",
+      "body": "Shadowed field technicians to map the real troubleshooting sequence step-by-step.",
+      "media": [
+        "TASK MAP / FLOW",
+        "320px x 180px"
+      ]
+    },
+    {
+      "phase": "PHASE 2",
+      "name": "Environment & Interaction",
+      "body": "Built the fiber cabinet and the hand-tracked splice interactions that stand in for the real tool.",
+      "media": [
+        "ENVIRONMENT SKETCH",
+        "320px x 180px"
+      ]
+    },
+    {
+      "phase": "PHASE 3",
+      "name": "Instructional Scaffolding",
+      "body": "Layered guided and free-play modes so skill-builds fold in stages, not all at once.",
+      "media": [
+        "FLOW DIAGRAM",
+        "320px x 180px"
+      ]
+    },
+    {
+      "phase": "PHASE 4",
+      "name": "Deployment & QA",
+      "body": "Packaged for ArborXR fleet management and passed Meta Quest Store certification.",
+      "media": [
+        "DEVICE / STORE FLOW",
+        "320px x 180px"
+      ]
+    }
+  ],
+  "turn": {
+    "actI": "ACT I — THE PROBLEM",
+    "actII": "ACT II — THE SOLUTION",
+    "left": "LEFT / / THE PROBLEM",
+    "right": "RIGHT / / THE SOLUTION"
+  },
+  "finalDesign": {
+    "label": "05 — Final Design",
+    "cards": [
+      [
+        "FIBER CABINET - FULL SCENE",
+        "GALLERY",
+        "The full fiber cabinet environment, built to match the real-world equipment layouts."
+      ],
+      [
+        "SPLICE INTERACTION",
+        "VIDEO / MOTION CAPTURE",
+        "Hand-tracked splice interaction — guided vs. intuitive capture."
+      ],
+      [
+        "MODE SELECT",
+        "SLIDES",
+        "Guided vs. Free-play mode selection screens."
+      ],
+      [
+        "QUEST STORE LISTING",
+        "SERIES / PANEL",
+        "Published training on the Meta Quest Store."
+      ]
+    ]
+  },
+  "outcomes": {
+    "label": "06 — Outcomes",
+    "items": [
+      [
+        "Published on the Meta Quest Store and deployed via ArborXR to Millennium's field technician onboarding."
+      ],
+      [
+        "Replaced live equipment shadowing with a repeatable, fail-safe practice environment."
+      ],
+      [
+        "[Add project details] [Add completion / retention metrics]"
+      ]
+    ]
+  },
+  "reflection": {
+    "label": "07 — Reflection",
+    "quote": "Designing for safety-critical, hands-on skills meant the interactive fidelity had to feel like the real tool, not a simplified stand-in — every splice, every fault, had to be trustworthy enough that the learning actually transferred to the field."
+  },
+  "media": {
+    "hero": {
+      "type": "video",
+      "src": "/videos/vr-training-fiber.mp4"
+    },
+    "cards": [
+      {
+        "src": "/images/millennium/materials-grid.jpg"
+      },
+      {
+        "src": "/images/millennium/field-desk.jpg"
+      },
+      {
+        "src": "/images/millennium/onboarding-ready.jpg"
+      },
+      {
+        "src": "/images/millennium/final-score-10.jpg"
+      }
+    ]
+  },
+  "id": "vr-training-fiber"
+}
