@@ -2,11 +2,7 @@ import { notFound } from "next/navigation";
 import data from "@/data/portfolio.json";
 import type { Project } from "@/types/portfolio";
 import { PROJECT_MEDIA } from "@/data/projects-media";
-import MillenniumCaseStudy from "@/components/MillenniumCaseStudy";
-import AscensionRealtyCaseStudy from "@/components/AscensionRealtyCaseStudy";
-import MadeForJoyCaseStudy from "@/components/MadeForJoyCaseStudy";
 import EditorialCaseStudy from "@/components/EditorialCaseStudy";
-import { editorialContentFor } from "@/data/editorial-content";
 
 const projects = data.projects as Project[];
 
@@ -35,21 +31,5 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   const sameLens = projects.filter((p) => p.id !== project.id && p.perception === project.perception);
   const related = (sameLens.length ? sameLens : projects.filter((p) => p.id !== project.id)).slice(0, 3);
 
-  if (editorialContentFor(project)) {
-    return <EditorialCaseStudy project={enriched} />;
-  }
-
-  if (project.id === "vr-training-fiber") {
-    return <MillenniumCaseStudy project={enriched} related={related} />;
-  }
-
-  if (project.id === "ascension-realty") {
-    return <AscensionRealtyCaseStudy project={enriched} related={related} />;
-  }
-
-  if (project.id === "made-for-joy") {
-    return <MadeForJoyCaseStudy project={enriched} related={related} />;
-  }
-
-  return <EditorialCaseStudy project={enriched} />;
+  return <EditorialCaseStudy project={enriched} related={related} />;
 }

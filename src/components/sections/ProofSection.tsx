@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ThemeId } from "@/data/themes";
 import { THEMES } from "@/data/themes";
 import type { Recognition } from "@/types/portfolio";
+import ClientLogoLoop from "@/components/ClientLogoLoop";
 
 type Props = {
   activeId: ThemeId;
@@ -32,12 +33,8 @@ export default function ProofSection({ activeId, clients, recognition }: Props) 
             </span>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-y py-6" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
-            {clients.map((name) => (
-              <span key={name} className="font-display text-[15px] font-semibold tracking-[-0.02em] text-zinc-800 md:text-[18px]">
-                {name}
-              </span>
-            ))}
+          <div className="mt-8 border-y py-8" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
+            <ClientLogoLoop clientNames={clients} bare />
           </div>
 
           <div className="mt-8 grid gap-4 md:grid-cols-3">

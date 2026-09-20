@@ -15,6 +15,7 @@ import { THEMES, type ThemeId } from "@/data/themes";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { usePerception } from "@/context/PerceptionContext";
 import { PROJECT_MEDIA } from "@/data/projects-media";
+import { visibleProjects } from "@/data/project-tiers";
 import type { Island, Project, Recognition, Testimonial } from "@/types/portfolio";
 
 const ORDER: ThemeId[] = ["xr", "ux", "ai", "product"];
@@ -22,7 +23,7 @@ const ORDER: ThemeId[] = ["xr", "ux", "ai", "product"];
 export default function Home() {
   const { activeId, baseId, overlayId, setActiveId } = usePerception();
 
-  const projects = data.projects as Project[];
+  const projects = visibleProjects(data.projects as Project[]);
   const islands = (data.islands as Island[]).map((island) => {
     const featured = projects.find((p) => p.perception === island.id);
     if (!featured) return island;

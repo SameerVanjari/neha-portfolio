@@ -6,6 +6,7 @@ import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import Nav from "@/components/Nav";
 import { THEMES, type ThemeId } from "@/data/themes";
 import data from "@/data/portfolio.json";
+import { visibleProjects } from "@/data/project-tiers";
 import Link from "next/link";
 import { WordStagger } from "@/components/ui/word-stagger";
 import ProjectCardMedia from "@/components/ProjectCardMedia";
@@ -23,7 +24,7 @@ export default function ProjectsList({ lens }: { lens: string | null }) {
   // Local filter state — responds immediately, independent of server re-render.
   const [sort, setSort] = useState<ThemeId | "all">(() => (isThemeId(lens) ? lens : "all"));
   const theme = THEMES[sort === "all" ? "product" : sort];
-  const projects = data.projects as Project[];
+  const projects = visibleProjects(data.projects as Project[]);
 
   // Sync from the URL when it changes externally (deep link, island nav, back/forward).
   const [prevLens, setPrevLens] = useState(lens);

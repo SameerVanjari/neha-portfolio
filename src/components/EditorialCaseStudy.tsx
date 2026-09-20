@@ -6,6 +6,8 @@ import type { Theme } from "@/data/themes";
 import type { Project } from "@/types/portfolio";
 import ContactCard from "@/components/ContactCard";
 import { editorialContentFor, type EditorialContent, type EditorialVisual } from "@/data/editorial-content";
+import EditorialRuler, { type RulerItem } from "@/components/EditorialRuler";
+import { behanceUrlOf } from "@/data/project-tiers";
 
 /**
  * Editorial case-study layout — shared skeleton for all projects.
@@ -124,7 +126,9 @@ function defaultContentFor(project: Project): EditorialContent {
     },
     overview: project.description || project.blurb,
     problem: {
-      quote: "The problem worth solving",
+      quote: project.details?.challenge
+        ? project.details.challenge.split(".")[0].split(" — ")[0] + "."
+        : project.blurb.split(".")[0] + ".",
       body: project.details?.challenge ?? "",
       visual: firstVisual,
     },
@@ -139,17 +143,51 @@ function defaultContentFor(project: Project): EditorialContent {
   };
 }
 
-export default function EditorialCaseStudy({ project }: { project: Project }) {
+export default function EditorialCaseStudy({
+  project,
+  related,
+}: {
+  project: Project;
+  related?: Project[];
+}) {
   const content =
     editorialContentFor(project) ?? defaultContentFor(project);
 
   const images = content.finalDesign;
+  const next = related?.[0];
+  const behance = behanceUrlOf(project);
+
+  const hasProcess = content.phases.length > 0;
+  const hasFinal = images.statics.length > 0 || Boolean(images.mobile);
+  const hasOutcomes = content.outcomes.length > 0;
+  let n = 0;
+  const num = () => String(++n).padStart(2, "0");
+  const ids = {
+    overview: num(),
+    problem: num(),
+    scope: num(),
+    process: hasProcess ? num() : null,
+    final: hasFinal ? num() : null,
+    outcomes: hasOutcomes ? num() : null,
+    reflection: num(),
+  };
+  const rulerItems: RulerItem[] = [
+    { id: "sec-overview", label: "Overview" },
+    { id: "sec-problem", label: "The Problem" },
+    { id: "sec-scope", label: "Scope & Role" },
+    ...(content.phases.length ? [{ id: "sec-process", label: "Design Process" } as RulerItem] : []),
+    { id: "sec-final", label: "Final Design" },
+    { id: "sec-outcomes", label: "Outcomes" },
+    { id: "sec-reflection", label: "Reflection" },
+  ];
 
   return (
     <>
       <Nav theme={EDITORIAL_THEME} activeSection="projects" />
       <main className="min-h-screen" style={{ background: P.bg, color: P.ink }}>
         <div className="mx-auto max-w-[880px] px-6 pb-28 md:px-8">
+          <EditorialRuler items={rulerItems} />
+
           {/* Back link */}
           <div className="pt-[92px]">
             <Link
@@ -180,6 +218,23 @@ export default function EditorialCaseStudy({ project }: { project: Project }) {
               {content.meta.timeline ? <MetaChip label="Timeline" value={content.meta.timeline} /> : null}
               {content.meta.tools?.length ? <MetaChip label="Tools" value={content.meta.tools.join(", ")} /> : null}
             </div>
+            {behance ? (
+              <div className="mt-7 flex flex-wrap items-center gap-4">
+                <a
+                  href={behance}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="group inline-flex items-center gap-3 rounded-full px-5 py-2.5 text-[13px] font-semibold transition-opacity hover:opacity-85"
+                  style={{ background: P.accent, color: "#F2EEE6", ...sans }}
+                >
+                  View the full case on Behance
+                  <span aria-hidden className="text-[15px] leading-none transition-transform group-hover:translate-x-0.5">↗</span>
+                </a>
+                <span className="text-[11px] leading-[1.4]" style={{ color: P.muted, ...sans }}>
+                  Full visuals, process boards, and the complete case live on Behance — opens in a new tab.
+                </span>
+              </div>
+            ) : null}
           </header>
 
           {/* Hero visual */}
@@ -188,16 +243,16 @@ export default function EditorialCaseStudy({ project }: { project: Project }) {
           </div>
 
           {/* 01 — OVERVIEW */}
-          <section className="mt-16 md:mt-20">
-            <SectionHead n="01" label="Overview" />
+          <section id="sec-overview" className="mt-16 md:mt-20">
+            <SectionHead n={ids.overview} label="Overview" />
             <p className="mt-5 max-w-[66ch] text-[16px] leading-[1.75]" style={{ color: P.ink, ...sans }}>
               {content.overview || project.description}
             </p>
           </section>
 
           {/* 02 — THE PROBLEM */}
-          <section className="mt-16 md:mt-20">
-            <SectionHead n="02" label="The Problem" />
+          <section id="sec-problem" className="mt-16 md:mt-20">
+            <SectionHead n={ids.problem} label="The Problem" />
             <h2
               className="mt-6 max-w-[28ch] text-[30px] font-medium italic leading-[1.15] md:text-[40px]"
               style={{ ...serif, color: P.ink }}
@@ -219,8 +274,8 @@ export default function EditorialCaseStudy({ project }: { project: Project }) {
           </section>
 
           {/* 03 — SCOPE & ROLE */}
-          <section className="mt-16 md:mt-20">
-            <SectionHead n="03" label="Scope & Role" />
+          <section id="sec-scope" className="mt-16 md:mt-20">
+            <SectionHead n={ids.scope} label="Scope & Role" />
             <dl className="mt-6 max-w-[560px]">
               {(
                 [
@@ -250,8 +305,8 @@ export default function EditorialCaseStudy({ project }: { project: Project }) {
 
           {/* 04 — DESIGN PROCESS */}
           {content.phases.length > 0 ? (
-          <section className="mt-16 md:mt-20">
-            <SectionHead n="04" label="Design Process" />
+          <section id="sec-process" className="mt-16 md:mt-20">
+            <SectionHead n={ids.process ?? "04"} label="Design Process" />
             <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {content.phases.map((phase, i) => (
                 <div key={phase.title}>
@@ -307,8 +362,9 @@ export default function EditorialCaseStudy({ project }: { project: Project }) {
           </div>
 
           {/* 05 — FINAL DESIGN */}
-          <section className="mt-16 md:mt-20">
-            <SectionHead n="05" label="Final Design" />
+          {hasFinal ? (
+          <section id="sec-final" className="mt-16 md:mt-20">
+            <SectionHead n={ids.final ?? "05"} label="Final Design" />
             <div className="mt-8 grid gap-6 md:grid-cols-2 md:gap-8">
               {images.statics?.map((v) => (
                 <EditorialImg key={v.src} src={v.src} alt={v.alt} caption={v.caption} />
@@ -325,10 +381,12 @@ export default function EditorialCaseStudy({ project }: { project: Project }) {
               </div>
             ) : null}
           </section>
+          ) : null}
 
           {/* 06 — OUTCOMES */}
-          <section className="mt-16 md:mt-20">
-            <SectionHead n="06" label="Outcomes" />
+          {hasOutcomes ? (
+          <section id="sec-outcomes" className="mt-16 md:mt-20">
+            <SectionHead n={ids.outcomes ?? "06"} label="Outcomes" />
             <ul className="mt-6 max-w-[640px]">
               {(content.outcomes.length ? content.outcomes : [project.details?.result]).filter(Boolean).map((o) => (
                 <li
@@ -344,10 +402,11 @@ export default function EditorialCaseStudy({ project }: { project: Project }) {
               ))}
             </ul>
           </section>
+          ) : null}
 
           {/* 07 — REFLECTION */}
-          <section className="mt-16 md:mt-20">
-            <SectionHead n="07" label="Reflection" />
+          <section id="sec-reflection" className="mt-16 md:mt-20">
+            <SectionHead n={ids.reflection} label="Reflection" />
             <p
               className="mt-6 max-w-[60ch] border-l-2 pl-5 text-[16px] italic leading-[1.7]"
               style={{ borderColor: P.accent, color: P.ink, ...serif }}
@@ -361,20 +420,31 @@ export default function EditorialCaseStudy({ project }: { project: Project }) {
             <p className="text-[10.5px] uppercase tracking-[0.22em]" style={{ color: P.muted, ...sans }}>
               Next project
             </p>
-            <Link
-              href="/projects"
-              className="group mt-3 flex items-baseline justify-between gap-6"
-            >
-              <span
-                className="text-[24px] font-medium tracking-[-0.01em] group-hover:opacity-70"
-                style={{ ...serif, color: P.ink }}
-              >
-                View all projects
-              </span>
-              <span className="text-[11px] tracking-[0.14em]" style={{ color: P.muted, ...sans }}>
-                ← back
-              </span>
-            </Link>
+            {next ? (
+              <Link href={`/projects/${next.id}`} className="group mt-3 flex items-baseline justify-between gap-6">
+                <span
+                  className="text-[24px] font-medium tracking-[-0.01em] group-hover:opacity-70"
+                  style={{ ...serif, color: P.ink }}
+                >
+                  {next.title.split(" — ")[0]}
+                </span>
+                <span className="text-[11px] tracking-[0.14em]" style={{ color: P.muted, ...sans }}>
+                  View →
+                </span>
+              </Link>
+            ) : (
+              <Link href="/projects" className="group mt-3 flex items-baseline justify-between gap-6">
+                <span
+                  className="text-[24px] font-medium tracking-[-0.01em] group-hover:opacity-70"
+                  style={{ ...serif, color: P.ink }}
+                >
+                  View all projects
+                </span>
+                <span className="text-[11px] tracking-[0.14em]" style={{ color: P.muted, ...sans }}>
+                  ← back
+                </span>
+              </Link>
+            )}
           </section>
 
           {/* Contact */}
