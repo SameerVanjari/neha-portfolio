@@ -11,7 +11,7 @@ export default function ManifestoSection({ activeId }: { activeId: ThemeId }) {
   const theme = THEMES[activeId];
 
   return (
-    <section id="manifesto" className="relative bg-[#fafaf9]">
+    <section id="manifesto" className="relative bg-[#F2EEE6]">
       <div className="mx-auto max-w-[1280px] px-6 py-16 md:px-8 md:py-20 lg:py-24">
         <h2
           className="w-full font-display text-[28px] font-semibold leading-[1.15] tracking-[-0.035em] text-zinc-900 md:w-3/4 md:text-[40px] lg:text-[44px]"

@@ -21,7 +21,7 @@ export default function ThemeWave({
   if (reduce) {
     // reduced: simple crossfade of background color, no clip
     return (
-      <div className="fixed inset-0 -z-10 overflow-hidden">
+      <div className="fixed inset-0 -z-10 overflow-hidden bg-[#F2EEE6]">
         <motion.div
           key={baseId}
           initial={{ opacity: 0 }}
@@ -35,7 +35,7 @@ export default function ThemeWave({
   }
 
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-white">
+    <div className="fixed inset-0 -z-10 overflow-hidden bg-[#F2EEE6]">
       {/* base — always full */}
       <div className="absolute inset-0" style={{ background: base.bgGradient }} />
 

@@ -17,7 +17,7 @@ export default function ProofSection({ activeId, clients, recognition }: Props) 
   const multiTint = `linear-gradient(135deg, ${THEMES.ux.wash}12 0%, ${THEMES.xr.wash}10 40%, ${THEMES.ai.wash}10 80%)`;
 
   return (
-    <section id="proof" className="relative bg-[#f6f6f4]">
+    <section id="proof" className="relative bg-[#F2EEE6]">
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: multiTint }} />
       <div className="mx-auto max-w-[1280px] px-6 md:px-8">
         <div className="py-14 md:py-18 lg:py-24">

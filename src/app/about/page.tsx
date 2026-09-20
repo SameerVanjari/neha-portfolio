@@ -23,7 +23,7 @@ export default function AboutPage() {
   return (
     <>
       <Nav theme={theme} activeSection="about" />
-      <main className="pt-[64px]">
+      <main className="pt-[64px] bg-[#F2EEE6]">
         {/* hero with photos */}
         <section className="mx-auto max-w-[1280px] px-6 md:px-8">
           <div className="h-px w-full bg-black/5" />

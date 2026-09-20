@@ -23,20 +23,25 @@ export interface Theme {
 const ISLAND_BG = "rgba(18,18,22,0.92)";
 const ISLAND_IDLE = "rgba(255,255,255,0.52)";
 
+// Site-wide cream (editorial paper) — one background across all perceptions.
+// Subtle tonal gradient keeps transitions visible while staying cream-family.
+const CREAM_BG = "#F2EEE6";
+const CREAM_GRADIENT =
+  "linear-gradient(175deg, #F6F1E9 0%, #F2EEE6 45%, #ECE6DA 100%)";
+
 export const THEMES: Record<ThemeId, Theme> = {
   xr: {
     id: "xr",
     accent: "#FF2BD6",
     accentStrong: "#D60AA8",
-    bg: "#FFF0F7",
-    wash: "#FFC2DD", // rose — tonal to magenta
-    bgGradient:
-      "radial-gradient(130% 100% at 50% 108%, #FF9AD0 0%, #FFB5DD 22%, #FFD0E8 36%, #FFE0F0 54%, #FFF0F7 72%, #FFD6E8 88%, #FFC2DD 100%)",
-    glow: "rgba(255,43,214,0.22)",
-    text: "#2A1020",
-    muted: "#7A4A62",
-    faint: "#E8A8C8",
-    border: "rgba(255,43,214,0.16)",
+    bg: CREAM_BG,
+    wash: "#E9E2D4", // cream-tonal shadow for transitions
+    bgGradient: CREAM_GRADIENT,
+    glow: "rgba(53,51,158,0.10)",
+    text: "#16161E",
+    muted: "#71716D",
+    faint: "#DDD6CA",
+    border: "rgba(22,22,30,0.10)",
     surface: "#FFFFFF",
     islandBg: ISLAND_BG,
     islandBorder: "rgba(255,255,255,0.10)",
@@ -46,15 +51,14 @@ export const THEMES: Record<ThemeId, Theme> = {
     id: "ux",
     accent: "#FFC94D",
     accentStrong: "#B77900",
-    bg: "#FFF4CC",
-    wash: "#FFE7A3", // warm gold — tonal
-    bgGradient:
-      "radial-gradient(130% 100% at 50% 108%, #FFD84D 0%, #FFE27A 24%, #FFE9A3 40%, #FFF0C2 58%, #FFF4CC 74%, #FFEEC2 88%, #FFE7A3 100%)",
-    glow: "rgba(255,201,77,0.26)",
-    text: "#231C0A",
-    muted: "#7A652F",
-    faint: "#E8D090",
-    border: "rgba(214,162,0,0.20)",
+    bg: CREAM_BG,
+    wash: "#E9E2D4",
+    bgGradient: CREAM_GRADIENT,
+    glow: "rgba(53,51,158,0.10)",
+    text: "#16161E",
+    muted: "#71716D",
+    faint: "#DDD6CA",
+    border: "rgba(22,22,30,0.10)",
     surface: "#FFFFFF",
     islandBg: ISLAND_BG,
     islandBorder: "rgba(255,255,255,0.10)",
@@ -64,15 +68,14 @@ export const THEMES: Record<ThemeId, Theme> = {
     id: "ai",
     accent: "#8B5CF6",
     accentStrong: "#6D28D9",
-    bg: "#EDE8FF",
-    wash: "#D8D0FF", // lavender — tonal to violet
-    bgGradient:
-      "radial-gradient(130% 100% at 50% 108%, #B8A6FF 0%, #C7B8FF 24%, #DDD6FE 40%, #E9E2FF 58%, #EDE8FF 74%, #E6E0FF 88%, #D8D0FF 100%)",
-    glow: "rgba(139,92,246,0.22)",
-    text: "#1A1630",
-    muted: "#5E5878",
-    faint: "#C8C2E0",
-    border: "rgba(139,92,246,0.16)",
+    bg: CREAM_BG,
+    wash: "#E9E2D4",
+    bgGradient: CREAM_GRADIENT,
+    glow: "rgba(53,51,158,0.10)",
+    text: "#16161E",
+    muted: "#71716D",
+    faint: "#DDD6CA",
+    border: "rgba(22,22,30,0.10)",
     surface: "#FFFFFF",
     islandBg: ISLAND_BG,
     islandBorder: "rgba(255,255,255,0.10)",
@@ -82,15 +85,14 @@ export const THEMES: Record<ThemeId, Theme> = {
     id: "product",
     accent: "#06B6D4",
     accentStrong: "#0E7490",
-    bg: "#CFF5FA",
-    wash: "#A5F3FC", // sky — tonal to cyan
-    bgGradient:
-      "radial-gradient(130% 100% at 50% 108%, #67E8F9 0%, #8EF0FB 24%, #A5F3FC 40%, #BEF8FE 56%, #CFF5FA 72%, #D1F2FA 88%, #A5F3FC 100%)",
-    glow: "rgba(6,182,214,0.22)",
-    text: "#0F1F25",
-    muted: "#4A6570",
-    faint: "#8EC8D1",
-    border: "rgba(6,182,214,0.16)",
+    bg: CREAM_BG,
+    wash: "#E9E2D4",
+    bgGradient: CREAM_GRADIENT,
+    glow: "rgba(53,51,158,0.10)",
+    text: "#16161E",
+    muted: "#71716D",
+    faint: "#DDD6CA",
+    border: "rgba(22,22,30,0.10)",
     surface: "#FFFFFF",
     islandBg: ISLAND_BG,
     islandBorder: "rgba(255,255,255,0.10)",

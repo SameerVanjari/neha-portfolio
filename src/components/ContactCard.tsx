@@ -1,10 +1,13 @@
 "use client";
 
 import data from "@/data/portfolio.json";
+import { WordStagger } from "@/components/ui/word-stagger";
 
 /**
  * Reusable contact card — all contact options in one place.
  * Used by the home ContactSection and every case-study Contact section.
+ * The email CTA animates with the same WordStagger roll as the site's other
+ * CTA buttons (two-layer letter roll on hover).
  */
 export default function ContactCard() {
   const { email, location, availability } = data.profile;
@@ -17,10 +20,11 @@ export default function ContactCard() {
           <div className="font-mono text-[11px] tracking-[0.18em] text-white/40">CONTACT</div>
           <a
             href={`mailto:${email}`}
-            className="mt-4 inline-block font-display text-[24px] font-semibold tracking-[-0.03em] text-white transition-colors hover:text-white/70 md:text-[30px]"
+            className="group mt-4 inline-block font-display text-[24px] font-semibold tracking-[-0.03em] text-white transition-colors hover:text-white/80 md:text-[30px]"
             style={{ fontFamily: "var(--font-display)", overflowWrap: "anywhere" }}
+            aria-label={`Email Neha at ${email}`}
           >
-            {email}
+            <WordStagger text={email} stagger={22} />
           </a>
           <div className="mt-4 flex flex-col gap-1 font-mono text-[11px] tracking-[0.1em] text-white/45">
             <span>{location}</span>

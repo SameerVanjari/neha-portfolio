@@ -12,7 +12,7 @@ export default function ProjectsSection({ activeId, projects }: { activeId: Them
   const multiWash = `linear-gradient(135deg, ${THEMES.xr.wash}14 0%, ${THEMES.ux.wash}14 28%, ${THEMES.ai.wash}14 56%, ${THEMES.product.wash}14 84%, transparent 100%)`;
 
   return (
-    <section id="projects" className="relative bg-[#fafaf9]">
+    <section id="projects" className="relative bg-[#F2EEE6]">
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: multiWash, opacity: 0.7 }} />
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[96px]" style={{ background: `linear-gradient(to bottom, ${theme.wash}10 0%, transparent 100%)` }} />
 

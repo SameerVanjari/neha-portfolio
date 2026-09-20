@@ -10,7 +10,7 @@ type Props = {
   profile: { name: string; tagline: string; roles: string[]; bio: string; location: string; email: string; availability: string };
 };
 
-export default function AboutSection({ activeId, profile }: Props) {
+export default function AboutSection({ activeId }: Omit<Props, "profile">) {
   const theme = THEMES[activeId];
 
   // 5 images provided by user — replace background only, keep text
@@ -54,7 +54,7 @@ export default function AboutSection({ activeId, profile }: Props) {
 
   const multiTint = `linear-gradient(135deg, ${THEMES.xr.wash}10 0%, ${THEMES.ai.wash}10 50%, ${THEMES.product.wash}10 100%)`;
   return (
-    <section id="about" className="relative bg-[#fafaf9]">
+    <section id="about" className="relative bg-[#F2EEE6]">
       <style>{`
         .process-card{ --ease-out: cubic-bezier(0.23,1,0.32,1); transition: transform 180ms var(--ease-out); will-change: transform; }
         .process-card__media{ transition: transform 220ms var(--ease-out); will-change: transform; }

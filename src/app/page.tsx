@@ -112,7 +112,7 @@ export default function Home() {
 
         <ProjectsSection activeId={activeId} projects={projects} />
 
-        <AboutSection activeId={activeId} profile={data.profile} />
+        <AboutSection activeId={activeId} />
 
         <TestimonialsSection activeId={activeId} testimonials={data.testimonials as Testimonial[]} />
 

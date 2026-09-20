@@ -138,14 +138,14 @@ export default function ClientLogoLoop({
 
   if (bare) {
     return (
-      <section aria-label="Companies Neha has worked with" className="relative">
+      <section aria-label="Companies Neha has worked with" className="relative overflow-hidden">
         {marquee}
       </section>
     );
   }
 
   return (
-    <section aria-label="Companies Neha has worked with" className="relative overflow-hidden bg-[#fafaf9] py-12 md:py-14">
+    <section aria-label="Companies Neha has worked with" className="relative overflow-hidden bg-[#F2EEE6] py-12 md:py-14">
       <p
         className="mb-7 text-center text-[10px] tracking-[0.28em] text-zinc-400"
         style={{ fontFamily: "var(--font-body)", textTransform: "uppercase" }}

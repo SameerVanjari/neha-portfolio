@@ -31,7 +31,7 @@ export default function TestimonialsSection({
   const initial = active.author.slice(0, 1).toUpperCase();
 
   return (
-    <section id="testimonials" className="relative bg-[#f6f6f4]">
+    <section id="testimonials" className="relative bg-[#F2EEE6]">
       <div className="mx-auto max-w-[1280px] px-6 py-14 md:px-8 md:py-18 lg:py-24">
         <h2
           className="font-display text-[22px] font-semibold tracking-[-0.03em] text-zinc-900 md:text-[26px]"

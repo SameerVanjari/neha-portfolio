@@ -47,7 +47,7 @@ import { PerceptionProvider } from "@/context/PerceptionContext";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${bricolage.variable} ${sora.variable} ${newsreader.variable} antialiased`}>
-      <body className="bg-white text-zinc-900">
+      <body className="bg-[#F2EEE6] text-zinc-900">
         <PerceptionProvider>
           <SmoothScroll>
             <BarbaProvider>{children}</BarbaProvider>
