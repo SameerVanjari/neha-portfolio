@@ -23,11 +23,42 @@ export type EditorialContent = {
   };
   outcomes: string[];
   reflection: string;
+  /** Optional "In their words" recognition block (quote + where it was presented + event photos). */
+  recognition?: {
+    quote: string;
+    quoteBy: string;
+    presented: string;
+    photos: EditorialVisual[];
+  };
 };
 
 export const EDITORIAL_PAGE_CONTENT: Record<string, EditorialContent> = {
   "vr-training-fiber": {
     category: "Immersive VR · Enterprise Training",
+    recognition: {
+      quote:
+        "We've never seen anything like it in our training modules. Realism and simplicity, exactly what we needed.",
+      quoteBy: "VP of Marketing, Millennium",
+      presented:
+        "Guest lecture, IDC IIT Bombay (2022) and the Seekar Innovation & Entrepreneurship Symposium, MIT ADT University.",
+      photos: [
+        {
+          src: "/images/millennium/present-01.jpg",
+          alt: "Live VR demo of the fiber training simulation projected on stage",
+          caption: "The simulation live on the big screen — a hand-tracked demo runs above the audience.",
+        },
+        {
+          src: "/images/millennium/present-02.jpg",
+          alt: "Neha wearing the Meta Quest 2 headset, presenting at the SEEKERS Innovation and Entrepreneurship Symposium, MIT ADT University",
+          caption: "On stage at SEEKERS — Innovation & Entrepreneurship Symposium, MIT ADT University (Sept 2022).",
+        },
+        {
+          src: "/images/millennium/present-03.jpg",
+          alt: "Guest lecture at IIT Bombay presenting the ShapesXR storyboarding process",
+          caption: "Guest lecture at IDC, IIT Bombay — walking through the ShapesXR storyboarding process.",
+        },
+      ],
+    },
     description:
       "VR fiber-optic field training deployed via ArborXR, published on the Meta Quest Store — a fail-safe place to learn splicing and fault diagnosis.",
     meta: {

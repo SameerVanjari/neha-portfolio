@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import type { Theme } from "@/data/themes";
@@ -77,6 +79,8 @@ function EditorialImg({ src, alt, caption, className = "" }: { src: string; alt:
     </figure>
   );
 }
+
+
 
 function SectionHead({ n, label }: { n: string; label: string }) {
   return (
@@ -169,6 +173,7 @@ export default function EditorialCaseStudy({
     process: hasProcess ? num() : null,
     final: hasFinal ? num() : null,
     outcomes: hasOutcomes ? num() : null,
+    recognition: content.recognition ? num() : null,
     reflection: num(),
   };
   const rulerItems: RulerItem[] = [
@@ -178,6 +183,7 @@ export default function EditorialCaseStudy({
     ...(content.phases.length ? [{ id: "sec-process", label: "Design Process" } as RulerItem] : []),
     { id: "sec-final", label: "Final Design" },
     { id: "sec-outcomes", label: "Outcomes" },
+    ...(content.recognition ? [{ id: "sec-recognition", label: "In Their Words" } as RulerItem] : []),
     { id: "sec-reflection", label: "Reflection" },
   ];
 
@@ -404,9 +410,44 @@ export default function EditorialCaseStudy({
           </section>
           ) : null}
 
+          {/* RECOGNITION — In their words */}
+          {content.recognition ? (
+          <section id="sec-recognition" className="mt-16 md:mt-20">
+            <SectionHead n={ids.recognition ?? "07"} label="In Their Words" />
+            <blockquote
+              className="mt-6 max-w-[36ch] text-[26px] font-medium italic leading-[1.35] md:text-[34px]"
+              style={{ ...serif, color: P.ink }}
+            >
+              {"\u201C"}{content.recognition.quote}{"\u201D"}
+              <footer className="mt-3 text-[11px] not-italic uppercase tracking-[0.18em]" style={{ color: P.muted, fontFamily: "var(--font-body)" }}>
+                {"\u2014 "}{content.recognition.quoteBy}
+              </footer>
+            </blockquote>
+
+            {content.recognition.photos.length ? (
+              <div className="mt-10 grid gap-6 md:grid-cols-3">
+                {content.recognition.photos.map((v) => (
+                  <EditorialImg key={v.src} src={v.src} alt={v.alt} caption={v.caption} />
+                ))}
+              </div>
+            ) : null}
+
+            <dl className="mt-10 max-w-[560px]">
+              <div className="grid grid-cols-[110px_1fr] items-baseline gap-4 border-t py-3" style={{ borderColor: P.hairline }}>
+                <dt className="text-[10.5px] font-semibold uppercase tracking-[0.18em]" style={{ color: P.muted, fontFamily: "var(--font-body)" }}>
+                  Presented at
+                </dt>
+                <dd className="text-[13.5px] leading-[1.6]" style={{ color: P.ink, fontFamily: "var(--font-body)" }}>
+                  {content.recognition.presented}
+                </dd>
+              </div>
+            </dl>
+          </section>
+          ) : null}
+
           {/* 07 — REFLECTION */}
           <section id="sec-reflection" className="mt-16 md:mt-20">
-            <SectionHead n={ids.reflection} label="Reflection" />
+            <SectionHead n={ids.reflection ?? "07"} label="Reflection" />
             <p
               className="mt-6 max-w-[60ch] border-l-2 pl-5 text-[16px] italic leading-[1.7]"
               style={{ borderColor: P.accent, color: P.ink, ...serif }}
