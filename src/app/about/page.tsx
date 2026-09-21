@@ -7,6 +7,9 @@ import ContactCard from "@/components/ContactCard";
 import { lenisScrollToId } from "@/lib/lenis";
 import { AceternityCTA, HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { WordStagger } from "@/components/ui/word-stagger";
+import { AnnotatedBio } from "@/components/BioLens";
+import { BIO_ANNOTATIONS, annotationLinkTarget } from "@/data/bio-annotations";
+import type { Project } from "@/types/portfolio";
 
 const NEHA_PHOTO = "/profile/headshot.png";
 const NEHA_PHOTO_ALT = "/profile/portrait-alt.png";
@@ -41,7 +44,14 @@ export default function AboutPage() {
               </h1>
 
               <p className="max-w-[560px] text-[16px] leading-[1.7] text-zinc-600 md:text-[17px]" style={{ fontFamily: "var(--font-body)" }}>
-                {data.profile.bio}
+                <AnnotatedBio
+                  bio={data.profile.bio}
+                  annotations={BIO_ANNOTATIONS}
+                  popupFor={(a) => ({
+                    ...a,
+                    link: annotationLinkTarget(a.linkTo, data.projects as Project[]) ?? undefined,
+                  })}
+                />
               </p>
               <p className="max-w-[540px] text-[14px] leading-[1.6] text-zinc-500">{data.profile.tagline}</p>
 
