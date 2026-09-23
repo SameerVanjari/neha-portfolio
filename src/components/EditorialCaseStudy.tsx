@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import type { Theme } from "@/data/themes";

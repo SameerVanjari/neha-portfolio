@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { CLIENT_LOGO_FILES } from "@/data/client-logo-map";
 
 /**
  * Loop-style client logo marquee for the homepage.
@@ -10,6 +11,13 @@ import { useEffect, useState } from "react";
  */
 
 type MarkStyle = "caps" | "serif" | "mono" | "italic";
+
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
 
 type ClientMark = { name: string; slug: string; style: MarkStyle };
 
@@ -55,9 +63,13 @@ function wordmarkCss(style: MarkStyle): React.CSSProperties {
 }
 
 function ClientMarkItem({ mark }: { mark: ClientMark }) {
-  const [logoSrc, setLogoSrc] = useState<string | null>(null);
+  const known = CLIENT_LOGO_FILES[mark.slug];
+  const [logoSrc, setLogoSrc] = useState<string | null>(known ?? null);
 
+  // Runtime probe only for slugs missing from the build-time map —
+  // covers files dropped into /public/clients/ after the last build.
   useEffect(() => {
+    if (known) return;
     let alive = true;
     (async () => {
       for (const ext of FILE_EXTS) {
@@ -73,7 +85,7 @@ function ClientMarkItem({ mark }: { mark: ClientMark }) {
     return () => {
       alive = false;
     };
-  }, [mark.slug]);
+  }, [mark.slug, known]);
 
   const isFile = Boolean(logoSrc);
   return (
@@ -106,14 +118,16 @@ export default function ClientLogoLoop({
 }) {
   const marks: ClientMark[] =
     clientNames && clientNames.length > 0
-      ? clientNames.map((name) => ({
-          name,
-          slug: name
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/^-|-$/g, ""),
-          style: "caps" as MarkStyle,
-        }))
+      ? clientNames.map((name) => {
+          // canonical list owns the slug + wordmark style for a known company
+          const canonical =
+            CLIENTS.find((c) => slugify(name).startsWith(c.slug)) ?? CLIENTS.find((c) => c.name.toLowerCase() === name.toLowerCase());
+          return {
+            name,
+            slug: canonical?.slug ?? slugify(name),
+            style: (canonical?.style ?? "caps") as MarkStyle,
+          };
+        })
       : CLIENTS;
 
   const marquee = (

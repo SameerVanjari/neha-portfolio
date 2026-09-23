@@ -16,7 +16,7 @@ import { useActiveSection } from "@/hooks/useActiveSection";
 import { usePerception } from "@/context/PerceptionContext";
 import { PROJECT_MEDIA } from "@/data/projects-media";
 import { visibleProjects } from "@/data/project-tiers";
-import type { Island, Project, Recognition, Testimonial } from "@/types/portfolio";
+import type { Island, Project, Recognition } from "@/types/portfolio";
 
 const ORDER: ThemeId[] = ["xr", "ux", "ai", "product"];
 
@@ -114,7 +114,7 @@ export default function Home() {
 
         <AboutSection activeId={activeId} />
 
-        <TestimonialsSection activeId={activeId} testimonials={data.testimonials as Testimonial[]} />
+        <TestimonialsSection />
 
         <ProofSection
           activeId={activeId}
