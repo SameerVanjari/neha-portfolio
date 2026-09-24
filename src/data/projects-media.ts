@@ -18,9 +18,7 @@ export interface ProjectMedia {
 
 import vrTrainingFiber from "./projects/vr-training-fiber.json";
 import virtualRetail from "./projects/virtual-retail.json";
-import ascensionRealty from "./projects/ascension-realty.json";
 import madeForJoy from "./projects/made-for-joy.json";
-import feedTheChildrenTruesense from "./projects/feed-the-children-truesense.json";
 import hboCharmCityKings from "./projects/hbo-charm-city-kings.json";
 
 type MediaFile = {
@@ -31,9 +29,7 @@ type MediaFile = {
 const files: MediaFile[] = [
   vrTrainingFiber,
   virtualRetail,
-  ascensionRealty,
   madeForJoy,
-  feedTheChildrenTruesense,
   hboCharmCityKings,
 ];
 

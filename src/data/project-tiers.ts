@@ -8,9 +8,7 @@ import type { Project } from "@/types/portfolio";
  *  C — thin copy + no dedicated gallery: hidden from all listings for now.
  */
 export const TIER_A_IDS = [
-  "feed-the-children-truesense",
   "hbo-charm-city-kings",
-  "ascension-realty",
   "made-for-joy",
   "vr-training-fiber",
 ] as const;

@@ -284,40 +284,6 @@
   ],
   "projects": [
     {
-      "id": "feed-the-children-truesense",
-      "title": "Feed the Children — WebAR Donation Experience",
-      "perception": "xr",
-      "subtitle": "XR · WebAR · Nonprofit",
-      "dimension": "XR",
-      "year": "2022",
-      "blurb": "A QR-triggered, browser-based AR pantry for Feed the Children — meet a real class, stock the shelves, and tap to donate, no app required.",
-      "description": "A web-based AR donation experience for Feed the Children, developed with the Truesense fundraising team. Scanning a code opens the browser and places a shoppable classroom pantry — stocked shelves, a real student roster, and a donate sign — right in the donor's room. Built on 8th Wall WebAR, handing off to the secure feedthechildren.org donation page.",
-      "details": {
-        "challenge": "Feed the Children needed a donation activation that made impact tangible — a dollar providing $9 of food and essentials felt abstract in a standard give flow, and an app download ahead of the donate button would kill conversion.",
-        "approach": "Built the experience with 8th Wall WebAR: a printed QR magnet opens a 3D classroom food pantry placed on any surface, with drag-to-move interaction, openable cabinet doors, a real class roster with the kids' photos, and a hand-written 'Tap here to donate today' sign that hands off to the secure donation page.",
-        "result": "A complete prototype journey — physical touchpoint to AR to donation page in a single flow — showing how a classroom shelf can become the ask itself, carried through Feed the Children's real brand and store imagery."
-      },
-      "tags": [
-        "WebAR",
-        "8th Wall",
-        "Nonprofit",
-        "Donation Funnel",
-        "Mobile"
-      ],
-      "accent": "cool",
-      "color": "#00e5ff",
-      "image": "/projects/feed-the-children-truesense/hero.webp",
-      "imageAlt": "Feed the Children WebAR donation experience on three phones",
-      "images": [
-        "/projects/feed-the-children-truesense/ar-kiosk.jpg",
-        "/projects/feed-the-children-truesense/ar-pantry.jpg",
-        "/projects/feed-the-children-truesense/donation-page.webp",
-        "/projects/feed-the-children-truesense/concept-fridge.webp"
-      ],
-      "client": "Feed the Children × Truesense",
-      "source": "drive"
-    },
-    {
       "id": "hbo-charm-city-kings",
       "title": "Charm City Kings — HBO Max AR Face Filters",
       "perception": "xr",
@@ -370,65 +336,6 @@
         }
       ],
       "quote": "A filter lives or dies in the first half second — the challenge wasn't the AR technology, it was making the film's world recognizable instantly, in a format most people scroll straight past."
-    },
-    {
-      "id": "ascension-realty",
-      "title": "Ascension Realty — AR Mobile Experience",
-      "perception": "xr",
-      "subtitle": "XR · AR · Real Estate",
-      "dimension": "XR",
-      "year": "2025",
-      "blurb": "A solo, 3-week AR proof-of-concept for 'reality ecommerce' — buyers preview a pre-construction home room-by-room, on the actual lot, from their phone.",
-      "description": "Ascension Realty wanted to test whether AR could let a buyer preview a home before construction finished — walking room-to-room, on the actual lot, from their phone. Built solo as a three-week proof-of-concept for a 'reality ecommerce' model.",
-      "details": {
-        "challenge": "You're selling a house that doesn't exist yet. Pre-construction listings rely on flat floor plans and renders, leaving buyers to imagine scale, light, and flow for themselves. Ascension Realty needed an unbuilt home to feel real enough to commit to.",
-        "approach": "Full ownership of ideation, storyboard, 3D asset curation (TurboSquid, optimized for mobile AR), holographic material shaders for placement feedback, UI and spatial audio — in sync with two developers and two 3D artists, then on-site testing for placement accuracy.",
-        "result": "Delivered a working proof-of-concept for 'reality ecommerce' in 3 weeks and validated AR walkthroughs as a pre-construction sales tool for Ascension Realty."
-      },
-      "tags": [
-        "Blender",
-        "Spark AR",
-        "Real Estate",
-        "Mobile AR",
-        "3D"
-      ],
-      "accent": "neon",
-      "color": "#ff2bd6",
-      "image": "/images/ascension-hero.jpg",
-      "imageAlt": "Ascension Realty AR mobile experience",
-      "url": "https://www.figma.com/design/HE8cOOBzOHoLc4xM9nALNy/Ascension-Realty",
-      "client": "Ascension Realty",
-      "source": "figma",
-      "images": [
-        "/images/ascension-01.png",
-        "/images/ascension-02.png",
-        "/images/ascension-03.png",
-        "/images/ascension-04.png",
-        "/images/ascension-05.png"
-      ],
-      "process": [
-        {
-          "phase": "Phase 1",
-          "name": "Storyboarding",
-          "body": "Scripted the walkthrough as a spatial sequence, room-by-room."
-        },
-        {
-          "phase": "Phase 2",
-          "name": "Asset Curation",
-          "body": "Sourced and optimized 3D furniture and fixtures from TurboSquid for mobile AR."
-        },
-        {
-          "phase": "Phase 3",
-          "name": "Shader Setup",
-          "body": "Built holographic material shaders to easily prototype placement feedback."
-        },
-        {
-          "phase": "Phase 4",
-          "name": "UX & QA",
-          "body": "Tested interaction cues and spatial audio, then manual placement accuracy on-site."
-        }
-      ],
-      "quote": "Owning every layer solo — story, assets, shader, sound — meant every constraint was mine to solve, which is its own kind of clarity."
     },
     {
       "id": "made-for-joy",

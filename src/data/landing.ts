@@ -72,6 +72,19 @@ export const SELECTED_WORK: SelectedWorkCard[] = [
     href: "/projects/broken-mile",
   },
   {
+    id: "pausa",
+    title: "Pausa",
+    meta: "AI · Conversational agent",
+    year: "2026",
+    description:
+      "An AI check-in companion that knows its limits — a mental-wellness companion designed end to end, from a research paper on companion AI to hi-fi on mobile and web.",
+    role: "Product & Conversation Designer · Independent project",
+    lens: "ai",
+    image: "/case/pausa/visual-webshot.png",
+    imageAlt: "Pausa web dashboard: check-in, conversation, 7-day mood and a breathing card",
+    href: "/projects/pausa",
+  },
+  {
     id: "visagenie",
     title: "VisaGenie",
     meta: "AI · Conversational assistant",
@@ -118,9 +131,9 @@ export const SELECTED_WORK: SelectedWorkCard[] = [
       "Scanning a QR code places a classroom food pantry in the donor's room, one tap from giving, with no app to install.",
     role: "Experience Designer · CXR Agency (Kinemeric)",
     lens: "xr",
-    image: "/projects/feed-the-children-truesense/ar-pantry.jpg",
+    image: "/case/ftc/media/ar-pantry.jpg",
     imageAlt: "The AR pantry, cropped to the AR view only",
-    href: "/projects/feed-the-children-truesense",
+    href: "/projects/feed-the-children",
   },
   {
     id: "vantage-ai",
