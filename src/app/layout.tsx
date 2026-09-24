@@ -1,28 +1,25 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Sora, Newsreader } from "next/font/google";
+import { Hanken_Grotesk, Newsreader } from "next/font/google";
 import "./globals.css";
 
-// Brandkit — 2 sets / 3 weights
-// Strategy: NEHA is a perception system — how intelligence is seen across realities.
-// Visual world: light paper washes (full-bleed gradients) vs dark charcoal island as
-// the emission source. Typography must carry calm authority with construction.
-// Set 1 — Display: Bricolage Grotesque (ink traps + rounded terminals = tool + warmth)
-//   400 Regular for UI, 600 SemiBold for headings, 800 ExtraBold for NEHA wordmark
-// Set 2 — Body: Sora (generous apertures, neutral grotesk, calm reading)
-//   300 Light for hero large type, 400 Regular for body, 600 SemiBold for labels
+// Design system (from Website Wireframes — Landing Desktop 1440).
+// Single type family: Hanken Grotesk everywhere (400 Regular, 500 Medium,
+// 600 SemiBold). Display + body vars point at the same family so existing
+// component references keep working; serif (Newsreader) retained for
+// case-study/editorial pages.
 
-const bricolage = Bricolage_Grotesque({
+const hankenDisplay = Hanken_Grotesk({
   variable: "--font-display",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const sora = Sora({
+const hankenBody = Hanken_Grotesk({
   variable: "--font-body",
   subsets: ["latin"],
   display: "swap",
-  weight: ["300", "400", "600"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const newsreader = Newsreader({
@@ -46,8 +43,8 @@ import { PerceptionProvider } from "@/context/PerceptionContext";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${bricolage.variable} ${sora.variable} ${newsreader.variable} antialiased`}>
-      <body className="bg-[#F2EEE6] text-zinc-900">
+    <html lang="en" className={`${hankenDisplay.variable} ${hankenBody.variable} ${newsreader.variable} antialiased`}>
+      <body className="bg-[#F2EEE7] text-[#17161B]">
         <PerceptionProvider>
           <SmoothScroll>
             <BarbaProvider>{children}</BarbaProvider>
