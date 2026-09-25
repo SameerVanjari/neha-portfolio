@@ -231,7 +231,7 @@ export const NEIGHBORS = [
     direction: "Next · Mobile web · Game",
     title: "Modelo × Seattle Kraken",
     highlight: "The Skate Challenge",
-    href: "/projects",
+    href: "/projects/modelo-seattle-kraken",
     thumbBg: "#18201B",
     thumbFg: "#7FDB8F",
   },
