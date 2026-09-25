@@ -1,7 +1,7 @@
 {
   "profile": {
     "name": "Neha Mayacharya",
-    "tagline": "Perception, powered by design + AI — Designing the intelligent interface.",
+    "tagline": "Perception, powered by design + AI \u2014 Designing the intelligent interface.",
     "roles": [
       "AI Experience Designer",
       "Immersive Experience Designer",
@@ -9,19 +9,19 @@
       "Product Designer"
     ],
     "bio": "I design experiences at the intersection of intelligent systems and spatial computing, intuitive, empathetic, and technically grounded. Over five years, I've delivered 20+ digital products across healthcare, enterprise, and education: it runs from AI-driven dashboards and conversational interfaces to immersive VR therapy programs and luxury metaverse retail. I move fluidly between 2D UX and 3D interaction design, between research insight and shipped product. Currently completing an Executive Master's in Artificial Intelligence (GPA 4.0), sharpening the bridge between design craft and machine intelligence.",
-    "location": "Charlotte, North Carolina · Available 2026",
+    "location": "Charlotte, North Carolina \u00b7 Available 2026",
     "email": "nmayacharya@gmail.com",
-    "availability": "Available 2026 · STEM OPT · Open to roles & collaborations",
+    "availability": "Available 2026 \u00b7 STEM OPT \u00b7 Open to roles & collaborations",
     "image": "/profile/headshot.png",
-    "imageAlt": "Portrait of Neha Mayacharya — AI Experience Designer",
+    "imageAlt": "Portrait of Neha Mayacharya \u2014 AI Experience Designer",
     "logo": "/profile/logo.png"
   },
   "about": {
-    "lead": "I design experiences that sit at the intersection of intelligent systems and spatial computing — intuitive, empathetic, and technically grounded.",
+    "lead": "I design experiences that sit at the intersection of intelligent systems and spatial computing \u2014 intuitive, empathetic, and technically grounded.",
     "story": [
-      "Over five years, I've delivered 20+ digital products across healthcare, enterprise, and education — from AI-driven dashboards and conversational interfaces to immersive VR therapy programs and luxury metaverse retail. I move fluidly between 2D UX and 3D interaction design, between research insight and shipped product.",
+      "Over five years, I've delivered 20+ digital products across healthcare, enterprise, and education \u2014 from AI-driven dashboards and conversational interfaces to immersive VR therapy programs and luxury metaverse retail. I move fluidly between 2D UX and 3D interaction design, between research insight and shipped product.",
       "I'm currently completing an Executive Master's in Artificial Intelligence (GPA 4.0), sharpening the bridge between design craft and machine intelligence. Authorized to work in the U.S. on STEM OPT.",
-      "I work where intelligent systems meet spatial computing — where perception is powered by design + AI."
+      "I work where intelligent systems meet spatial computing \u2014 where perception is powered by design + AI."
     ],
     "personality": {
       "traits": [
@@ -33,10 +33,10 @@
       ],
       "principles": [
         "Intelligence should feel less like a machine and more like a kind companion",
-        "Bridging 2D UX and 3D interaction — from insight to shipped product",
+        "Bridging 2D UX and 3D interaction \u2014 from insight to shipped product",
         "Human-centered design for spatial and intelligent systems"
       ],
-      "focus": "AI + XR + Human-Centered Design — 20+ products shipped for clients including TD Bank, Harvard MedTech, and Richemont"
+      "focus": "AI + XR + Human-Centered Design \u2014 20+ products shipped for clients including TD Bank, Harvard MedTech, and Richemont"
     },
     "capabilities": {
       "design": [
@@ -109,19 +109,19 @@
       {
         "degree": "Executive Master's in Artificial Intelligence",
         "school": "University of the Cumberlands, USA",
-        "period": "2025–26 (exp.)",
+        "period": "2025\u201326 (exp.)",
         "detail": "GPA 4.0"
       },
       {
         "degree": "Master's in Immersive Media Design",
         "school": "MIT ADT University, India",
-        "period": "2018–20",
+        "period": "2018\u201320",
         "detail": "GPA 3.98"
       },
       {
         "degree": "Bachelor's in Industrial & Product Design",
         "school": "Savitribai Phule Pune University, India",
-        "period": "2014–17",
+        "period": "2014\u201317",
         "detail": "GPA 3.41"
       }
     ],
@@ -149,60 +149,66 @@
     ],
     "experience": [
       {
-        "when": "Mar 2024 – Jun 2024",
+        "when": "Mar 2024 \u2013 Jun 2024",
         "what": "Product Design Consultant",
         "where": "Chatoor.ai",
-        "desc": "Redesigned complex financial workflows using user research, reducing task completion time by 20%. Built responsive, WCAG-accessible dashboards with QR-based expense tracking."
+        "desc": "Redesigned complex financial workflows using user research, reducing task completion time by 20%. Built responsive, WCAG-accessible dashboards with QR-based expense tracking.",
+        "url": "https://chatoor.ai"
       },
       {
-        "when": "Mar 2023 – Mar 2024",
+        "when": "Mar 2023 \u2013 Mar 2024",
         "what": "Lead Immersive Experience Designer",
-        "where": "CXR Agency · Cemtrex Technologies",
-        "desc": "Led end-to-end XR design across Web, VR, AR, and MR while managing cross-functional 3D and dev teams. Key work: TD Bank WebAR (One Vanderbilt NYC), Harvard MedTech VR therapy, Modelo × Seattle Kraken, Millennium Meta Quest 2 training, IFSG luxury metaverse retail."
+        "where": "CXR Agency \u00b7 Cemtrex Technologies",
+        "desc": "Led end-to-end XR design across Web, VR, AR, and MR while managing cross-functional 3D and dev teams. Key work: TD Bank WebAR (One Vanderbilt NYC), Harvard MedTech VR therapy, Modelo \u00d7 Seattle Kraken, Millennium Meta Quest 2 training, IFSG luxury metaverse retail.",
+        "url": "https://www.cemtrexlabs.com"
       },
       {
-        "when": "Aug 2020 – Mar 2023",
+        "when": "Aug 2020 \u2013 Mar 2023",
         "what": "Immersive Experience Designer",
         "where": "Cemtrex Inc.",
-        "desc": "Designed immersive solutions for global clients including TD Bank, Richemont, and Vicon Security. Bridged 2D UX and 3D interaction design across Figma, Adobe XD, and Unity 3D, and mentored junior designers."
+        "desc": "Designed immersive solutions for global clients including TD Bank, Richemont, and Vicon Security. Bridged 2D UX and 3D interaction design across Figma, Adobe XD, and Unity 3D, and mentored junior designers.",
+        "url": "https://www.cemtrex.com"
       },
       {
-        "when": "Dec 2019 – May 2020",
+        "when": "Dec 2019 \u2013 May 2020",
         "what": "VR Experience Designer & Developer",
         "where": "Inspirit VR",
-        "desc": "Designed VR-based STEM curriculum improving student comprehension by 35% through immersive, evidence-backed storytelling. Owned the full design lifecycle from research to deployment."
+        "desc": "Designed VR-based STEM curriculum improving student comprehension by 35% through immersive, evidence-backed storytelling. Owned the full design lifecycle from research to deployment.",
+        "url": "https://www.inspiritvr.com"
       },
       {
-        "when": "Apr 2019 – Jun 2019",
+        "when": "Apr 2019 \u2013 Jun 2019",
         "what": "Immersive Media Designer",
         "where": "Immertive",
-        "desc": "Designed VR experiences for the healthcare domain."
+        "desc": "Designed VR experiences for the healthcare domain.",
+        "url": "https://www.immertive.com"
       },
       {
-        "when": "2016 – 2018",
-        "what": "Product Designer · Design Intern",
-        "where": "Srishti Design · IDC, IIT Bombay",
-        "desc": "Early product and industrial design practice — from studio work at Srishti to an internship at the Industrial Design Centre, IIT Bombay."
+        "when": "2016 \u2013 2018",
+        "what": "Product Designer \u00b7 Design Intern",
+        "where": "Srishti Design \u00b7 IDC, IIT Bombay",
+        "desc": "Early product and industrial design practice \u2014 from studio work at Srishti to an internship at the Industrial Design Centre, IIT Bombay.",
+        "url": "https://www.srishti.design"
       }
     ],
     "recognition": [
       {
         "kind": "Visiting Faculty",
         "place": "MIT Institute of Design",
-        "meta": "Sep 2024 · Charlotte, NC",
-        "body": "Conducted a Data Visualization module for the Immersive Media Design Batch of 2026 — Gestalt principles, color theory, cognitive analysis, and visual storytelling."
+        "meta": "Sep 2024 \u00b7 Charlotte, NC",
+        "body": "Conducted a Data Visualization module for the Immersive Media Design Batch of 2026 \u2014 Gestalt principles, color theory, cognitive analysis, and visual storytelling."
       },
       {
         "kind": "Board Member",
-        "place": "MIT Institute of Design · Board of Studies",
-        "meta": "Apr 2023 · Pune, India",
+        "place": "MIT Institute of Design \u00b7 Board of Studies",
+        "meta": "Apr 2023 \u00b7 Pune, India",
         "body": "Invited to represent the first graduating batch, collaborating with faculty and industry experts including Microsoft to evolve the curriculum."
       },
       {
         "kind": "Visiting Faculty",
         "place": "IDC School of Design, IIT Bombay",
-        "meta": "Aug 2022 & Aug 2023 · Mumbai",
-        "body": "Invited twice to lead sessions for the 'Design for VR' course — client project showcases, live VR demos, and VR optimization pipelines."
+        "meta": "Aug 2022 & Aug 2023 \u00b7 Mumbai",
+        "body": "Invited twice to lead sessions for the 'Design for VR' course \u2014 client project showcases, live VR demos, and VR optimization pipelines."
       }
     ]
   },
@@ -211,9 +217,9 @@
       "id": "xr",
       "label": "XR",
       "title": "Spatial Worlds",
-      "subtitle": "XR · Immersive",
+      "subtitle": "XR \u00b7 Immersive",
       "color": "#ff2bd6",
-      "description": "Worlds you can enter — spatial interfaces, hand-tracked flows, immersive environments.",
+      "description": "Worlds you can enter \u2014 spatial interfaces, hand-tracked flows, immersive environments.",
       "image": "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?q=80&w=1200&auto=format&fit=crop",
       "imageAlt": "XR headset in spatial environment",
       "stat": "05 Immersive builds"
@@ -222,9 +228,9 @@
       "id": "ux",
       "label": "UX",
       "title": "Human Flows",
-      "subtitle": "UX · Research",
+      "subtitle": "UX \u00b7 Research",
       "color": "#ffc94d",
-      "description": "Experiences that flow — research-driven interfaces that vanish into the task.",
+      "description": "Experiences that flow \u2014 research-driven interfaces that vanish into the task.",
       "image": "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?q=80&w=1200&auto=format&fit=crop",
       "imageAlt": "UX design workspace with wireframes",
       "stat": "05 Research-led ships"
@@ -233,9 +239,9 @@
       "id": "ai",
       "label": "AI",
       "title": "Kind Intelligence",
-      "subtitle": "AI · Systems",
+      "subtitle": "AI \u00b7 Systems",
       "color": "#8b5cff",
-      "description": "Intelligence made kind — conversational agents, generative systems, trust-first AI UX.",
+      "description": "Intelligence made kind \u2014 conversational agents, generative systems, trust-first AI UX.",
       "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1200&auto=format&fit=crop",
       "imageAlt": "AI neural network visualization",
       "stat": "02 Intelligent systems"
@@ -244,9 +250,9 @@
       "id": "product",
       "label": "PRODUCT",
       "title": "Products People Trust",
-      "subtitle": "Product · Systems",
+      "subtitle": "Product \u00b7 Systems",
       "color": "#00e5ff",
-      "description": "End-to-end product design — strategy, systems, shipping.",
+      "description": "End-to-end product design \u2014 strategy, systems, shipping.",
       "image": "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1200&auto=format&fit=crop",
       "imageAlt": "Product design system overview",
       "stat": "02 Shipped products"
@@ -285,17 +291,17 @@
   "projects": [
     {
       "id": "hbo-charm-city-kings",
-      "title": "Charm City Kings — HBO Max AR Face Filters",
+      "title": "Charm City Kings \u2014 HBO Max AR Face Filters",
       "perception": "xr",
-      "subtitle": "XR · AR · Brand Campaign",
+      "subtitle": "XR \u00b7 AR \u00b7 Brand Campaign",
       "dimension": "XR",
       "year": "2020",
-      "blurb": "A 2-week Spark AR filter campaign for HBO Max's Charm City Kings — 'They call me…' face filters that turn fans into the movie's Baltimore nicknames.",
-      "description": "For the release of Charm City Kings, HBO Max wanted a way to put fans inside the film's dirt-bike world directly from their phone cameras — no app, no download. The filter turns a marketing beat into something a fan can step into and share.",
+      "blurb": "A 2-week Spark AR filter campaign for HBO Max's Charm City Kings \u2014 'They call me\u2026' face filters that turn fans into the movie's Baltimore nicknames.",
+      "description": "For the release of Charm City Kings, HBO Max wanted a way to put fans inside the film's dirt-bike world directly from their phone cameras \u2014 no app, no download. The filter turns a marketing beat into something a fan can step into and share.",
       "details": {
-        "challenge": "Standard promo assets ask an audience to sit back; HBO Max wanted something a fan could step inside and share — a moment of participation instead of a passive trailer view.",
+        "challenge": "Standard promo assets ask an audience to sit back; HBO Max wanted something a fan could step inside and share \u2014 a moment of participation instead of a passive trailer view.",
         "approach": "Pulled visual language from the film's dirt-bike and Baltimore street culture, built the AR triggers and overlays in Spark AR and Blender, aligned type and metrics to HBO Max's campaign guidelines, then cross-device tested and submitted to Instagram and Facebook.",
-        "result": "Shipped as an official HBO Max campaign filter for Charm City Kings, live on Instagram and Facebook — turning a passive trailer moment into a participatory brand touchpoint."
+        "result": "Shipped as an official HBO Max campaign filter for Charm City Kings, live on Instagram and Facebook \u2014 turning a passive trailer moment into a participatory brand touchpoint."
       },
       "tags": [
         "Spark AR",
@@ -307,7 +313,7 @@
       "accent": "neon",
       "color": "#ff2bd6",
       "image": "/projects/hbo-charm-city-kings/hero-filter.jpg",
-      "imageAlt": "They call me Holy Savage — Charm City Kings AR face filter frame",
+      "imageAlt": "They call me Holy Savage \u2014 Charm City Kings AR face filter frame",
       "images": [
         "/projects/hbo-charm-city-kings/logo.webp"
       ],
@@ -335,21 +341,21 @@
           "body": "Cross-device testing, then submission to Instagram and Facebook."
         }
       ],
-      "quote": "A filter lives or dies in the first half second — the challenge wasn't the AR technology, it was making the film's world recognizable instantly, in a format most people scroll straight past."
+      "quote": "A filter lives or dies in the first half second \u2014 the challenge wasn't the AR technology, it was making the film's world recognizable instantly, in a format most people scroll straight past."
     },
     {
       "id": "visagenie",
       "title": "VisaGenie: AI-Powered Transparency for Global Migration",
       "perception": "ai",
-      "subtitle": "AI · Transparency",
+      "subtitle": "AI \u00b7 Transparency",
       "dimension": "AI",
       "year": "2024",
-      "blurb": "A guided, context-aware AI visa assistant on LangChain + GPT-4 — 95% task completion where static forms left applicants stuck.",
-      "description": "Visa applications are dense, procedural, and easy to get wrong. VisaGenie turns the process into a guided conversation — an AI assistant, built on LangChain and GPT-4, that asks the right question at the right step and gets applicants to a completed task instead of an abandoned form.",
+      "blurb": "A guided, context-aware AI visa assistant on LangChain + GPT-4 \u2014 95% task completion where static forms left applicants stuck.",
+      "description": "Visa applications are dense, procedural, and easy to get wrong. VisaGenie turns the process into a guided conversation \u2014 an AI assistant, built on LangChain and GPT-4, that asks the right question at the right step and gets applicants to a completed task instead of an abandoned form.",
       "details": {
-        "challenge": "A form doesn't know where you got stuck. Static visa forms and FAQ pages leave applicants to self-diagnose their own confusion. VisaGenie needed to hold context across a multi-step process and respond to wherever the applicant actually was — not a generic script.",
+        "challenge": "A form doesn't know where you got stuck. Static visa forms and FAQ pages leave applicants to self-diagnose their own confusion. VisaGenie needed to hold context across a multi-step process and respond to wherever the applicant actually was \u2014 not a generic script.",
         "approach": "Mapped the decision tree behind the most common visa paths, structured LangChain prompts to keep GPT-4 on track across multi-turn exchanges, built a chat-first UI with clear progress and context affordances, then iterated prompts against friction points where users dropped off.",
-        "result": "Replaced static forms with a guided, context-aware conversation that held context across the whole process — 95% of applicants completing their visa application to the end."
+        "result": "Replaced static forms with a guided, context-aware conversation that held context across the whole process \u2014 95% of applicants completing their visa application to the end."
       },
       "tags": [
         "LangChain",
@@ -398,15 +404,15 @@
       "id": "research-recommender",
       "title": "AI Powered Research Recommender",
       "perception": "ai",
-      "subtitle": "AI · Research",
+      "subtitle": "AI \u00b7 Research",
       "dimension": "AI",
       "year": "2024",
-      "blurb": "Intelligent recommendation engine combining NLP and adaptive UX to surface contextually relevant academic research — with a conversational interface and personalized discovery flows.",
-      "description": "Intelligent recommendation engine combining NLP and adaptive UX to surface contextually relevant academic research — with a conversational interface and personalized discovery flows.",
+      "blurb": "Intelligent recommendation engine combining NLP and adaptive UX to surface contextually relevant academic research \u2014 with a conversational interface and personalized discovery flows.",
+      "description": "Intelligent recommendation engine combining NLP and adaptive UX to surface contextually relevant academic research \u2014 with a conversational interface and personalized discovery flows.",
       "details": {
         "challenge": "Researchers drown in fragmented academic sources; generic search surfaces irrelevant papers and breaks exploratory flow.",
         "approach": "Built an NLP-driven recommender with adaptive UX and a conversational interface. Intent-aware ranking personalizes discovery by context, not just keywords.",
-        "result": "Faster, more relevant discovery with reduced cognitive load — users follow thread-like explorations instead of fragmented searches."
+        "result": "Faster, more relevant discovery with reduced cognitive load \u2014 users follow thread-like explorations instead of fragmented searches."
       },
       "tags": [
         "NLP",
@@ -430,7 +436,7 @@
       "id": "ar-real-estate",
       "title": "AR Experience for Real Estate Showcases",
       "perception": "xr",
-      "subtitle": "XR · WebAR",
+      "subtitle": "XR \u00b7 WebAR",
       "dimension": "XR",
       "year": "2023",
       "blurb": "WebAR experience for TD Bank VIP clientele celebrating the opening of One Vanderbilt, NYC. Delivered 3D modeling, visual effects, sprite sheets, 8th Wall integration, sound design, and spatial analytics.",
@@ -438,7 +444,7 @@
       "details": {
         "challenge": "Celebrate an architectural milestone for VIPs without app installs or friction, while showcasing scale and detail.",
         "approach": "Owned 3D modeling, VFX, sprite sheets, 8th Wall integration, sound design, and analytics for an in-situ WebAR showcase of One Vanderbilt.",
-        "result": "Exclusive, shareable WebAR for the TD Bank One Vanderbilt launch — premium spatial storytelling at true scale."
+        "result": "Exclusive, shareable WebAR for the TD Bank One Vanderbilt launch \u2014 premium spatial storytelling at true scale."
       },
       "tags": [
         "WebAR",
@@ -463,15 +469,15 @@
       "id": "virtual-retail",
       "title": "Immersive Virtual Retail Experience",
       "perception": "xr",
-      "subtitle": "XR · Retail",
+      "subtitle": "XR \u00b7 Retail",
       "dimension": "XR",
       "year": "2023",
       "blurb": "Luxury metaverse shopping experience for IFSG. 2D/3D concept, spatial and interaction design, UX, and creative team direction.",
       "description": "Luxury metaverse shopping experience for IFSG. 2D/3D concept, spatial and interaction design, UX, and creative team direction.",
       "details": {
         "challenge": "Translate luxury retail presence into metaverse without losing tactility or curation.",
-        "approach": "Directed spatial concept across 2D/3D — interaction design, environmental storytelling and team leadership for a shoppable virtual flagship.",
-        "result": "IFSG luxury metaverse retail — immersive commerce that preserves brand world while enabling spatial exploration."
+        "approach": "Directed spatial concept across 2D/3D \u2014 interaction design, environmental storytelling and team leadership for a shoppable virtual flagship.",
+        "result": "IFSG luxury metaverse retail \u2014 immersive commerce that preserves brand world while enabling spatial exploration."
       },
       "tags": [
         "Metaverse",
@@ -496,15 +502,15 @@
       "id": "meditation-universe",
       "title": "Designing an Immersive Meditation Universe",
       "perception": "xr",
-      "subtitle": "XR · Wellness",
+      "subtitle": "XR \u00b7 Wellness",
       "dimension": "XR",
       "year": "2023",
-      "blurb": "Led design and Unity 3D development of a scalable VR home therapy program for chronic pain and stress relief — storyboarding, shaders, particles, spatial design, and sound design. Built for Harvard MedTech.",
-      "description": "Led design and Unity 3D development of a scalable VR home therapy program for chronic pain and stress relief — storyboarding, shaders, particles, spatial design, and sound design. Built for Harvard MedTech.",
+      "blurb": "Led design and Unity 3D development of a scalable VR home therapy program for chronic pain and stress relief \u2014 storyboarding, shaders, particles, spatial design, and sound design. Built for Harvard MedTech.",
+      "description": "Led design and Unity 3D development of a scalable VR home therapy program for chronic pain and stress relief \u2014 storyboarding, shaders, particles, spatial design, and sound design. Built for Harvard MedTech.",
       "details": {
         "challenge": "Chronic pain and stress need non-pharmacological relief that holds attention and feels safe at home.",
         "approach": "End-to-end VR universe: storyboarding, custom shaders, particle systems, spatial audio, and narrative pacing for a scalable home-therapy program.",
-        "result": "Delivered for Harvard MedTech — immersive storytelling that grounds users and supports pain reduction through presence."
+        "result": "Delivered for Harvard MedTech \u2014 immersive storytelling that grounds users and supports pain reduction through presence."
       },
       "tags": [
         "VR",
@@ -529,15 +535,15 @@
       "id": "vr-training-fiber",
       "title": "Immersive VR Training for Fiber Optic Technicians",
       "perception": "xr",
-      "subtitle": "XR · Enterprise",
+      "subtitle": "XR \u00b7 Enterprise",
       "dimension": "XR",
       "year": "2022",
-      "blurb": "VR fiber-optic field training deployed via ArborXR, published on the Meta Quest Store — a fail-safe place to learn splicing and fault diagnosis.",
+      "blurb": "VR fiber-optic field training deployed via ArborXR, published on the Meta Quest Store \u2014 a fail-safe place to learn splicing and fault diagnosis.",
       "description": "Millennium needed field technicians trained on fiber-optic splicing and fault diagnosis without pulling them off paying jobs or risking live customer equipment. The Broken Mile puts them inside a full VR fiber cabinet to run a real troubleshooting job start to finish, as many times as it takes. Deployed via ArborXR and published on the Meta Quest Store.",
       "details": {
-        "challenge": "You can't practice on a live line. Field techs learned splicing by shadowing senior technicians and by trial and error on real customer equipment — expensive when it went wrong, and inconsistent as a way to build judgment.",
+        "challenge": "You can't practice on a live line. Field techs learned splicing by shadowing senior technicians and by trial and error on real customer equipment \u2014 expensive when it went wrong, and inconsistent as a way to build judgment.",
         "approach": "Shadowed field technicians to map the real troubleshooting sequence, then built the fiber cabinet and hand-tracked splice interactions, layered guided and free-play modes so skills build in stages, and packaged the result for ArborXR fleet management.",
-        "result": "Published on the Meta Quest Store and deployed via ArborXR to Millennium's field technician onboarding — replacing live-equipment shadowing with a repeatable, fail-safe practice environment."
+        "result": "Published on the Meta Quest Store and deployed via ArborXR to Millennium's field technician onboarding \u2014 replacing live-equipment shadowing with a repeatable, fail-safe practice environment."
       },
       "tags": [
         "Meta Quest 2",
@@ -560,22 +566,22 @@
       "notes_wireframe": {
         "role": "Lead Immersive Experience Designer",
         "timeline": "12 weeks",
-        "reflection": "Designing for safety-critical, hands-on skills meant the interactive fidelity had to feel like the real tool, not a simplified stand-in — every splice, every fault, had to be trustworthy enough that the learning actually transferred to the field."
+        "reflection": "Designing for safety-critical, hands-on skills meant the interactive fidelity had to feel like the real tool, not a simplified stand-in \u2014 every splice, every fault, had to be trustworthy enough that the learning actually transferred to the field."
       }
     },
     {
       "id": "interactive-3d",
       "title": "Interactive 3D",
       "perception": "ux",
-      "subtitle": "UX · Spatial",
+      "subtitle": "UX \u00b7 Spatial",
       "dimension": "UX",
       "year": "2022",
-      "blurb": "Real-time interactive 3D — spatial interaction models, lighting, and motion prototyped for the web, built to feel native rather than gimmicky.",
-      "description": "An exploration of real-time interactive 3D on the web — prototyping spatial interaction models, lighting, and motion tuned for performance, to find the patterns that make 3D feel like a native part of an interface rather than a novelty.",
+      "blurb": "Real-time interactive 3D \u2014 spatial interaction models, lighting, and motion prototyped for the web, built to feel native rather than gimmicky.",
+      "description": "An exploration of real-time interactive 3D on the web \u2014 prototyping spatial interaction models, lighting, and motion tuned for performance, to find the patterns that make 3D feel like a native part of an interface rather than a novelty.",
       "details": {
-        "challenge": "3D on the web often feels gimmicky — latency, missing affordance, and heavy assets break presence and make it feel bolted-on.",
+        "challenge": "3D on the web often feels gimmicky \u2014 latency, missing affordance, and heavy assets break presence and make it feel bolted-on.",
         "approach": "Prototyped real-time 3D environments, iterating on spatial interaction models, lighting, and motion to keep everything responsive and performant in the browser.",
-        "result": "A set of reusable spatial interaction patterns for interactive 3D that feel native — turning 3D from a novelty into a usable medium."
+        "result": "A set of reusable spatial interaction patterns for interactive 3D that feel native \u2014 turning 3D from a novelty into a usable medium."
       },
       "tags": [
         "Interactive 3D",
@@ -599,13 +605,13 @@
       "id": "vr-3d-modelling",
       "title": "VR 3D Modelling",
       "perception": "xr",
-      "subtitle": "XR · Modeling",
+      "subtitle": "XR \u00b7 Modeling",
       "dimension": "XR",
       "year": "2022",
-      "blurb": "3D modeling techniques built for VR — optimization pipelines for spatial assets, taught and practiced across client and academic work.",
-      "description": "3D modeling techniques specific to VR — optimization pipelines for using these models in VR projects. Shown in live demonstrations for IDC IIT Bombay's Design in VR course.",
+      "blurb": "3D modeling techniques built for VR \u2014 optimization pipelines for spatial assets, taught and practiced across client and academic work.",
+      "description": "3D modeling techniques specific to VR \u2014 optimization pipelines for using these models in VR projects. Shown in live demonstrations for IDC IIT Bombay's Design in VR course.",
       "details": {
-        "challenge": "Desktop 3D assets fail in headset — polycount, scale, and lighting break presence.",
+        "challenge": "Desktop 3D assets fail in headset \u2014 polycount, scale, and lighting break presence.",
         "approach": "Modeled and optimized spatial assets for VR, covering the 3D pipeline from sculpt to engine-ready meshes.",
         "result": "Reusable VR modeling and optimization patterns, later demonstrated live for IDC IIT Bombay."
       },
@@ -630,15 +636,15 @@
       "id": "vr-stem-inspirit",
       "title": "Education in Virtual Reality",
       "perception": "ux",
-      "subtitle": "UX · Education",
+      "subtitle": "UX \u00b7 Education",
       "dimension": "UX",
       "year": "2020",
       "blurb": "Research-backed VR biology and physics modules for K-12. Immersive storytelling improved student comprehension by 35%, across the full design lifecycle.",
       "description": "Research-backed VR biology and physics modules for K-12. Immersive storytelling improved student comprehension by 35%, across the full design lifecycle.",
       "details": {
         "challenge": "K-12 STEM is abstract on flat screens; students struggle to connect concepts to experience.",
-        "approach": "Designed biology/physics modules end-to-end — research, narrative, interaction and deployment — using immersive storytelling at true scale.",
-        "result": "35% lift in student comprehension — research-backed VR that turns lessons into explorable worlds."
+        "approach": "Designed biology/physics modules end-to-end \u2014 research, narrative, interaction and deployment \u2014 using immersive storytelling at true scale.",
+        "result": "35% lift in student comprehension \u2014 research-backed VR that turns lessons into explorable worlds."
       },
       "tags": [
         "VR",
@@ -663,10 +669,10 @@
       "id": "physics-vr",
       "title": "Physics in Virtual Reality",
       "perception": "ux",
-      "subtitle": "UX · Education",
+      "subtitle": "UX \u00b7 Education",
       "dimension": "UX",
       "year": "2020",
-      "blurb": "Research-backed VR physics modules — turning abstract forces into explorable worlds for K-12 learners.",
+      "blurb": "Research-backed VR physics modules \u2014 turning abstract forces into explorable worlds for K-12 learners.",
       "description": "VR physics curriculum for K-12. Immersive, evidence-backed storytelling so students feel gravity, motion, and scale instead of reading them.",
       "details": {
         "challenge": "Physics is abstract on a flat page; students struggle to connect equations to experience.",
@@ -693,17 +699,17 @@
     },
     {
       "id": "iot-vr-game",
-      "title": "Game Design — IoT Based Virtual Reality",
+      "title": "Game Design \u2014 IoT Based Virtual Reality",
       "perception": "product",
-      "subtitle": "Product · Gaming",
+      "subtitle": "Product \u00b7 Gaming",
       "dimension": "PRODUCT",
       "year": "2019",
-      "blurb": "A VR game-design experiment connecting physical IoT sensors to spatial play — bringing the player's body and room into the virtual world.",
-      "description": "A game-design exploration that connects IoT hardware to VR — mapping physical sensors and real-world inputs into a spatial game world, so the room and the body become part of the play.",
+      "blurb": "A VR game-design experiment connecting physical IoT sensors to spatial play \u2014 bringing the player's body and room into the virtual world.",
+      "description": "A game-design exploration that connects IoT hardware to VR \u2014 mapping physical sensors and real-world inputs into a spatial game world, so the room and the body become part of the play.",
       "details": {
         "challenge": "VR games often ignore the body and the room, keeping play trapped inside the headset; IoT offers a way to close that loop.",
-        "approach": "Designed game systems that bridge IoT sensors with VR interaction — mapping physical inputs into spatial rules and feedback.",
-        "result": "An early product/game experiment — 15 appreciations and 305 views on Behance — exploring how physical sensors can deepen spatial play."
+        "approach": "Designed game systems that bridge IoT sensors with VR interaction \u2014 mapping physical inputs into spatial rules and feedback.",
+        "result": "An early product/game experiment \u2014 15 appreciations and 305 views on Behance \u2014 exploring how physical sensors can deepen spatial play."
       },
       "tags": [
         "Game Design",
@@ -726,15 +732,15 @@
       "id": "chatoor-dashboards",
       "title": "Chatoor.ai Financial Dashboards",
       "perception": "ux",
-      "subtitle": "UX · Fintech",
+      "subtitle": "UX \u00b7 Fintech",
       "dimension": "UX",
       "year": "2024",
-      "blurb": "Redesigned complex financial workflows through user research and iterative testing — cutting task completion time by 20%. WCAG-accessible dashboards with QR-based expense tracking.",
-      "description": "Redesigned complex financial workflows through user research and iterative testing — cutting task completion time by 20%. WCAG-accessible dashboards with QR-based expense tracking.",
+      "blurb": "Redesigned complex financial workflows through user research and iterative testing \u2014 cutting task completion time by 20%. WCAG-accessible dashboards with QR-based expense tracking.",
+      "description": "Redesigned complex financial workflows through user research and iterative testing \u2014 cutting task completion time by 20%. WCAG-accessible dashboards with QR-based expense tracking.",
       "details": {
         "challenge": "Complex financial workflows were slow and inaccessible, increasing errors and task time.",
         "approach": "Led user research and iterative testing to simplify flows, then rebuilt responsive, WCAG-accessible dashboards with QR-based expense tracking.",
-        "result": "20% reduction in task completion time and more inclusive access — dashboard adoption grew with tested clarity."
+        "result": "20% reduction in task completion time and more inclusive access \u2014 dashboard adoption grew with tested clarity."
       },
       "tags": [
         "Fintech",
@@ -754,16 +760,16 @@
     },
     {
       "id": "modelo-kraken",
-      "title": "Modelo × Seattle Kraken Mobile Game",
+      "title": "Modelo \u00d7 Seattle Kraken Mobile Game",
       "perception": "product",
-      "subtitle": "Product · Gaming",
+      "subtitle": "Product \u00b7 Gaming",
       "dimension": "PRODUCT",
       "year": "2023",
       "blurb": "Retro-style, app-less mobile game driving sweepstakes participation. Full ownership of UX/UI, mobile design, and spritesheet development.",
       "description": "Retro-style, app-less mobile game driving sweepstakes participation. Full ownership of UX/UI, mobile design, and spritesheet development.",
       "details": {
         "challenge": "Drive sweepstakes participation without app friction while keeping brand energy high.",
-        "approach": "Designed a retro-style, app-less mobile game — owned UX/UI, mobile flows and spritesheet animation for lightweight, shareable play.",
+        "approach": "Designed a retro-style, app-less mobile game \u2014 owned UX/UI, mobile flows and spritesheet animation for lightweight, shareable play.",
         "result": "Engagement-driven sweepstakes touchpoint that converts through instant play, not installs."
       },
       "tags": [
@@ -777,7 +783,7 @@
       "imageAlt": "Modelo x Seattle Kraken retro mobile game",
       "url": "https://www.behance.net/nehamayacharya",
       "source": "resume",
-      "client": "Modelo × Seattle Kraken",
+      "client": "Modelo \u00d7 Seattle Kraken",
       "images": [
         "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop"
       ]
@@ -786,10 +792,10 @@
       "id": "education-vr",
       "title": "Education in Virtual Reality",
       "perception": "ux",
-      "subtitle": "UX · Education",
+      "subtitle": "UX \u00b7 Education",
       "dimension": "UX",
       "year": "2020",
-      "blurb": "Second Education in VR gallery on Behance — immersive learning modules in the education domain.",
+      "blurb": "Second Education in VR gallery on Behance \u2014 immersive learning modules in the education domain.",
       "description": "Immersive learning modules designed and developed in virtual reality for the education domain.",
       "details": {
         "challenge": "Classroom STEM stays locked to textbooks and 2D diagrams.",
@@ -819,7 +825,7 @@
       "id": "PRODUCT",
       "color": "#00e5ff",
       "headline": "Products people trust",
-      "description": "End-to-end product design — strategy, systems, shipping."
+      "description": "End-to-end product design \u2014 strategy, systems, shipping."
     },
     {
       "id": "UX",
@@ -844,22 +850,22 @@
     {
       "year": "2017",
       "title": "Industrial & Product Design",
-      "description": "Bachelor's at Savitribai Phule Pune University — product and industrial design foundations, first shipped products (GPA 3.41)."
+      "description": "Bachelor's at Savitribai Phule Pune University \u2014 product and industrial design foundations, first shipped products (GPA 3.41)."
     },
     {
       "year": "2020",
       "title": "Immersive Media Design",
-      "description": "Master's at MIT ADT University (GPA 3.98). Moved into AR/VR — discovering how depth changes the meaning of every pixel."
+      "description": "Master's at MIT ADT University (GPA 3.98). Moved into AR/VR \u2014 discovering how depth changes the meaning of every pixel."
     },
     {
-      "year": "2020–24",
+      "year": "2020\u201324",
       "title": "XR & Product Shipped",
-      "description": "20+ products across healthcare, enterprise & education — VR therapy for Harvard MedTech, WebAR for TD Bank, luxury metaverse retail for Richemont."
+      "description": "20+ products across healthcare, enterprise & education \u2014 VR therapy for Harvard MedTech, WebAR for TD Bank, luxury metaverse retail for Richemont."
     },
     {
       "year": "NOW",
-      "title": "AI × Spatial Craft",
-      "description": "Executive Master's in AI (GPA 4.0, 2025–26). Designing where intelligent systems meet spatial computing — intuitive, empathetic, technically grounded. STEM OPT authorized."
+      "title": "AI \u00d7 Spatial Craft",
+      "description": "Executive Master's in AI (GPA 4.0, 2025\u201326). Designing where intelligent systems meet spatial computing \u2014 intuitive, empathetic, technically grounded. STEM OPT authorized."
     }
   ],
   "skills": [
@@ -900,7 +906,7 @@
     },
     {
       "value": "4.0",
-      "label": "GPA — Exec. Master's AI (2025–26)"
+      "label": "GPA \u2014 Exec. Master's AI (2025\u201326)"
     }
   ],
   "socials": [

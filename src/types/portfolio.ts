@@ -73,4 +73,5 @@ export type Experience = {
   what: string;
   where: string;
   desc: string;
+  url?: string;
 };
