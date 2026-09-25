@@ -338,36 +338,6 @@
       "quote": "A filter lives or dies in the first half second — the challenge wasn't the AR technology, it was making the film's world recognizable instantly, in a format most people scroll straight past."
     },
     {
-      "id": "made-for-joy",
-      "title": "Made for Joy",
-      "perception": "xr",
-      "subtitle": "XR · Experience",
-      "dimension": "XR",
-      "year": "2025",
-      "blurb": "A joy-driven 3D motion piece — a camera-choreographed animation and rendered stills that give a brand’s emotional core room to move.",
-      "description": "A joy-driven 3D motion piece — a camera-choreographed animation and rendered stills that give a brand’s emotional core room to move. Built as a self-contained piece, from concept and camera direction through to final render.",
-      "details": {
-        "challenge": "Turn a feeling — joy — into something tangible, with no product or interface to anchor the story to.",
-        "approach": "Directed the piece end-to-end — concept, camera choreography, lighting, and asset direction — iterating on renders until the tone landed.",
-        "result": "A finished 3D camera animation and rendered stills, ready to carry the brand across motion and marketing."
-      },
-      "tags": [
-        "3D",
-        "Motion",
-        "Experience"
-      ],
-      "accent": "neon",
-      "color": "#ff2bd6",
-      "image": "/images/made-for-joy-hero.jpg",
-      "imageAlt": "Made for Joy 3D experience",
-      "client": null,
-      "source": "drive",
-      "images": [
-        "/images/made-for-joy-01.png",
-        "/images/made-for-joy-02.png"
-      ]
-    },
-    {
       "id": "visagenie",
       "title": "VisaGenie: AI-Powered Transparency for Global Migration",
       "perception": "ai",

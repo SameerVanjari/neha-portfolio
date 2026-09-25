@@ -6,8 +6,10 @@ import EditorialCaseStudy from "@/components/EditorialCaseStudy";
 
 const projects = data.projects as Project[];
 
+const CUSTOM_CASE_IDS = new Set(["hbo-charm-city-kings", "td-bank-one-vanderbilt"]);
+
 export function generateStaticParams() {
-  return projects.map((p) => ({ id: p.id }));
+  return projects.filter((p) => !CUSTOM_CASE_IDS.has(p.id)).map((p) => ({ id: p.id }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {

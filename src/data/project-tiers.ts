@@ -9,7 +9,6 @@ import type { Project } from "@/types/portfolio";
  */
 export const TIER_A_IDS = [
   "hbo-charm-city-kings",
-  "made-for-joy",
   "vr-training-fiber",
 ] as const;
 

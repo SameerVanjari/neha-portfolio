@@ -120,7 +120,7 @@ export const SELECTED_WORK: SelectedWorkCard[] = [
       "A mortgage copilot for loan officers and borrowers, where the AI guides and analyzes and a person makes every consequential decision.",
     role: "Concept, research, and product design",
     lens: "ai",
-    href: "/projects",
+    href: "/projects/clarity",
   },
   {
     id: "feed-the-children",
