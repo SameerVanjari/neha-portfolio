@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLoadStage } from "@/components/LoadStage";
 
 const SLOT_IMAGES = [
   { src: "/loader/robo.png", alt: "AI" },
@@ -12,19 +13,42 @@ const SLOT_IMAGES = [
 // Reel is doubled for a seamless loop (translateX(-100% of one set)).
 const REEL = [...SLOT_IMAGES, ...SLOT_IMAGES];
 
+/** Don't flash the preloader on a warm cache. */
+const MIN_VISIBLE_MS = 900;
+/** Must match the loader-fade duration in globals.css. */
+const FADE_MS = 550;
+
 export default function Loader() {
-  const [mounted, setMounted] = useState(true);
+  const { assetsReady, revealText } = useLoadStage();
+  const [phase, setPhase] = useState<"show" | "exit" | "gone">("show");
+  const shownAt = useRef<number>(0);
 
   useEffect(() => {
-    // Unmount only after the CSS fade-out (2.8s delay + 550ms fade) has finished.
-    const t = setTimeout(() => setMounted(false), 3500);
-    return () => clearTimeout(t);
+    shownAt.current = Date.now();
   }, []);
 
-  if (!mounted) return null;
+  // Hold until the critical media has actually arrived, but never flash.
+  useEffect(() => {
+    if (!assetsReady || phase !== "show") return;
+    const elapsed = Date.now() - shownAt.current;
+    const t = window.setTimeout(() => setPhase("exit"), Math.max(0, MIN_VISIBLE_MS - elapsed));
+    return () => window.clearTimeout(t);
+  }, [assetsReady, phase]);
+
+  // The copy is released only once the overlay is out of the way.
+  useEffect(() => {
+    if (phase !== "exit") return;
+    const t = window.setTimeout(() => {
+      revealText();
+      setPhase("gone");
+    }, FADE_MS);
+    return () => window.clearTimeout(t);
+  }, [phase, revealText]);
+
+  if (phase === "gone") return null;
 
   return (
-    <div className="loader-overlay" aria-hidden>
+    <div className="loader-overlay" data-exiting={phase === "exit"} aria-hidden>
       <div className="loader-mark">NEHA</div>
       <div className="loader-viewport">
         <div className="loader-reel">

@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import type { Theme } from "@/data/themes";
@@ -9,7 +7,7 @@ import type { Project } from "@/types/portfolio";
 import ContactCard from "@/components/ContactCard";
 import { editorialContentFor, type EditorialContent, type EditorialVisual } from "@/data/editorial-content";
 import EditorialRuler, { type RulerItem } from "@/components/EditorialRuler";
-import { behanceUrlOf } from "@/data/project-tiers";
+import { behanceUrlOf } from "@/data/legacy-projects/project-tiers";
 
 /**
  * Editorial case-study layout — shared skeleton for all projects.

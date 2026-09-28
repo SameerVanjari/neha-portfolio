@@ -1,0 +1,15 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="760" height="760" viewBox="0 0 760 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Hero graphic (replace with 3D scene)" clip-path="url(#clip0_125_150)">
+<path id="Perspective grid" d="M760 560L380 300L0 560M380 300L80 760M380 300L230 760M380 300V760M380 300L530 760M380 300L680 760M0 330H760M0 370H760M0 430H760M0 520H760M0 640H760" stroke="#F2EEE7" stroke-opacity="0.16"/>
+<rect id="Tower" x="340.6" y="120.6" width="58.8" height="228.8" stroke="#F2EEE7" stroke-opacity="0.45" stroke-width="1.2"/>
+<rect id="Tower_2" x="410.6" y="200.6" width="46.8" height="148.8" stroke="#F2EEE7" stroke-opacity="0.45" stroke-width="1.2"/>
+<rect id="Tower_3" x="280.6" y="230.6" width="42.8" height="118.8" stroke="#F2EEE7" stroke-opacity="0.45" stroke-width="1.2"/>
+<rect id="Tower_4" x="470.6" y="250.6" width="68.8" height="98.8" stroke="#F2EEE7" stroke-opacity="0.45" stroke-width="1.2"/>
+<rect id="Accent" x="340" y="118" width="60" height="3" fill="#3B33B5"/>
+</g>
+<defs>
+<clipPath id="clip0_125_150">
+<rect width="760" height="760" fill="white"/>
+</clipPath>
+</defs>
+</svg>

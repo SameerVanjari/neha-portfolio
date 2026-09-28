@@ -1,13 +1,29 @@
 import { notFound } from "next/navigation";
-import data from "@/data/portfolio.json";
+import { LEGACY_PROJECTS, PROJECT_MEDIA } from "@/data/legacy-projects";
 import type { Project } from "@/types/portfolio";
-import { PROJECT_MEDIA } from "@/data/projects-media";
 import EditorialCaseStudy from "@/components/EditorialCaseStudy";
 
-const projects = data.projects as Project[];
+/**
+ * Dormant archive route. Still generates pages for the 15 legacy projects so
+ * old links keep resolving, but nothing in the UI links here any more — the
+ * listings read the `case-studies` registry instead.
+ */
+const projects: Project[] = LEGACY_PROJECTS;
+
+const CUSTOM_CASE_IDS = new Set([
+  "hbo-charm-city-kings",
+  "td-bank-one-vanderbilt",
+  "modelo-seattle-kraken",
+  "harvard-medtech",
+  "turtle-bay-resort",
+  "ifsg-virtual-retail",
+  "research-recommender",
+  "vantage-ai",
+  "visagenie",
+]);
 
 export function generateStaticParams() {
-  return projects.map((p) => ({ id: p.id }));
+  return projects.filter((p) => !CUSTOM_CASE_IDS.has(p.id)).map((p) => ({ id: p.id }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {

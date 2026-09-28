@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import type { ProjectMedia } from "@/data/projects-media";
+import type { ProjectMedia } from "@/data/legacy-projects/projects-media";
 import { CASE_COLORS as C } from "@/data/case-theme";
 import type { Project } from "@/types/portfolio";
 import { gsap, useGSAP } from "@/hooks/use-gsap";

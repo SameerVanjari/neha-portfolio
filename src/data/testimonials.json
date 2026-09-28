@@ -1,0 +1,159 @@
+{
+  "featured": [
+    {
+      "id": "aditya-vishwanath",
+      "quote": "She has a keen eye for detail and brings powerful ideas into the conversation. I enjoyed working with her!",
+      "name": "Aditya Vishwanath",
+      "title": "Co-founder, InspiritVR",
+      "relation": "Mentor — Neha interned with the team in its early days",
+      "source": "LinkedIn",
+      "year": "2024",
+      "verified": true
+    },
+    {
+      "id": "kevin-clayton",
+      "quote": "Neha is truly outstanding. Her work is exceptional and her passion for design is infectious. We've worked together on several projects and she's repeatedly proven herself to be indispensable.",
+      "name": "Kevin Clayton",
+      "title": "COO, SkillSaige",
+      "relation": "Managed Neha directly",
+      "source": "LinkedIn",
+      "year": null,
+      "verified": false
+    },
+    {
+      "id": "kanishka-gavali",
+      "quote": "She has consistently demonstrated exceptional skills and dedication as an Immersive Experience Designer during our time working together. She has been instrumental in designing virtual reality (VR) and mixed reality (MR) applications, from the initial brainstorming sessions to the final product delivery. She possesses a rare combination of technical expertise and artistic flair, allowing us to craft immersive experiences that are both visually stunning and functionally seamless.",
+      "name": "Kanishka Gavali",
+      "title": "AI-Driven Engineering Manager",
+      "relation": "Teammate",
+      "source": "LinkedIn",
+      "year": "2024",
+      "verified": false
+    },
+    {
+      "id": "bhavesh-patel",
+      "quote": "Neha is creative, dependable and practical in her work. She possesses a great combination of domain knowledge and design sense. Her eagerness to share the latest industry trends fosters a culture of knowledge sharing and cumulative learning. One can say without hesitation that she will be an asset to any team she is part of.",
+      "name": "Bhavesh Patel",
+      "title": "Lead UX/Product Designer, Enterprise & Fintech Platforms",
+      "relation": "Teammate",
+      "source": "LinkedIn",
+      "year": "2022",
+      "verified": false
+    },
+    {
+      "id": "min-song",
+      "quote": "I have worked with Neha for about 3 years. She is an excellent communicator, eager to learn, and passionate about delivering great products. Her work ethic is commendable, and she is an exceptional team player who brings positive energy to the room.",
+      "name": "Min Song",
+      "title": "Senior Product Designer",
+      "relation": "Senior colleague, about 3 years working together",
+      "source": "LinkedIn",
+      "year": null,
+      "verified": false
+    },
+    {
+      "id": "bk-chakravarthy",
+      "quote": "Neha worked with me as an intern and her hard work and dedication stood out in our studio. She is a fabulous designer and can go to the depths of the problem and solve.",
+      "name": "Prof. B. K. Chakravarthy",
+      "title": "Dean, School of Design Innovation, Mahindra University Hyderabad",
+      "relation": "Mentor — Neha interned in his studio",
+      "source": "LinkedIn",
+      "year": null,
+      "verified": false
+    }
+  ],
+  "library": [
+    {
+      "id": "bibhishan-gorule",
+      "quote": "Neha is an exceptional team player with a keen eye for detail and a proactive approach to problem-solving. Her dedication and professionalism make her an invaluable asset to any organization.",
+      "name": "Bibhishan Gorule",
+      "title": "Creative Director",
+      "relation": "Senior to Neha",
+      "source": "LinkedIn",
+      "year": "2024",
+      "verified": false
+    },
+    {
+      "id": "kanishka-gavali-full",
+      "quote": "I am pleased to write this recommendation for Neha, who has consistently demonstrated exceptional skills and dedication as an Immersive Experience Designer during our time working together. She has been instrumental in designing virtual reality (VR) and mixed reality (MR) applications, from the initial brainstorming sessions to the final product delivery. Neha is a true visionary in the field of immersive experience design, constantly pushing the boundaries of creativity and innovation. She possesses a rare combination of technical expertise and artistic flair, allowing us to craft immersive experiences that are both visually stunning and functionally seamless. One of Neha's greatest strengths is her ability to adapt to various domains and industries. Whether it's healthcare, education, entertainment, or any other sector, She has consistently delivered outstanding results. Her diverse skill set and deep understanding of user experience have been invaluable assets to our studio.",
+      "name": "Kanishka Gavali",
+      "title": "AI-Driven Engineering Manager",
+      "relation": "Teammate",
+      "source": "LinkedIn",
+      "year": "2024",
+      "verified": false,
+      "note": "Copy truncated at “more” on LinkedIn — confirm full text before publishing"
+    },
+    {
+      "id": "subir-das",
+      "quote": "For the world of design, couldn't ask for better mind. Neha is persistent in unraveling complexities in user perceptions and addressing them via design extensions which was apparent during my time teaching in Pune. Always there to think thru possible outliers.",
+      "name": "Subir Das",
+      "title": "Enterprise knowledge and data governance, Sherwin-Williams",
+      "relation": "Neha's teacher",
+      "source": "LinkedIn",
+      "year": "2024",
+      "verified": false
+    },
+    {
+      "id": "bhavesh-patel-full",
+      "quote": "Neha is creative, dependable and practical in her work. She possesses a great combination of domain knowledge and design sense. Quick to learn and respond, Neha has the capability of being on top of the projects she undertakes, and leading them to their conclusion. Her sensitivity and humility are endearing, and the presence of someone like her in the team ensures seamless functioning. More so, her eagerness to share the latest industry trends fosters a culture of knowledge sharing and cumulative learning. One can say without hesitation that she will be an asset to any team she is part of. Good luck Neha, it was amazing working with you!",
+      "name": "Bhavesh Patel",
+      "title": "Lead UX/Product Designer, Enterprise & Fintech Platforms",
+      "relation": "Teammate",
+      "source": "LinkedIn",
+      "year": "2022",
+      "verified": false
+    },
+    {
+      "id": "shakti-banerjee",
+      "quote": "Neha is one of the pioneer students of mine of Immersive Media Design (IMD) at MITID. She pays attention to details while working on Immersive design assignment and the quality work produced by her was appreciated. I noticed her as a very hard-working and energetic who is committed and passionate about her work. As a person, she is adorable and fantastic. I have seen her as faculty how excited she has been always towards the projects she has been involved. She understands very quickly the objectives and proactive creativity of given tasks. Over a period of time, I've seen her evolve and the versatility amazements me. She has grown as professional as excellent Immersive Media Designer. I wish her good luck in practicing the world of Immersive Media and to be a catalyst of change.",
+      "name": "Prof. Dr. Shakti Banerjee",
+      "title": "Design educator and immersive experience designer, MITID",
+      "relation": "Mentor and teacher, Immersive Media Design",
+      "source": "LinkedIn",
+      "year": "2020",
+      "verified": false
+    },
+    {
+      "id": "avik-mallick",
+      "quote": "I had the pleasure of working with Neha for six months at Inspirit Learning, collaborating on several occasions. I was particularly impressed by her sincerity, tenacity, and her eye for detail, all of which seemed to come naturally to her. Flawless at her work, she was also a delight to have around. As a team member or a leader, she earns my highest recommendation.",
+      "name": "Avik Mallick",
+      "title": "Sr. Specialist, Tokenization and PKI, Inspirit Learning",
+      "relation": "Teammate",
+      "source": "LinkedIn",
+      "year": "2020",
+      "verified": false
+    },
+    {
+      "id": "karthi-subbaraman",
+      "quote": "I taught Neha, Semiotics and Human Cognition in 2018 @ MIT I guess. Till date Neha and cohort is my most memorable bunch. What an amazing enthusiasm, curiosity, playfulness and hunger to learn? I never thought a student teacher relationship will turn into a mentor mentee relationship. I have seen her grow over a period of time and the adaptability awes me. Wishing her all the best and good luck in the path of changing the world of immersive media.",
+      "name": "Karthi Subbaraman",
+      "title": "Design and Site Leadership, ServiceNow",
+      "relation": "Teacher",
+      "source": "LinkedIn",
+      "year": "2020",
+      "verified": false
+    }
+  ],
+  "pullQuotes": [
+    {
+      "id": "aditya-story",
+      "text": "It's so exciting to review designs when you have talented artists like Neha on your team!",
+      "name": "Aditya Vishwanath",
+      "title": "Co-founder, InspiritVR",
+      "source": "Instagram story",
+      "note": "Ask Aditya before using — a story is more casual than a recommendation. Quote the text only, no screenshots or handles."
+    }
+  ],
+  "checklist": [
+    "Get each person's OK before publishing",
+    "Kevin Clayton: confirm current title",
+    "Kanishka Gavali: full recommendation was cut off on LinkedIn — confirm full text",
+    "Aditya Vishwanath: ask about LinkedIn text and Instagram story line separately",
+    "Bhavesh Patel: confirm title",
+    "Min Song: confirm title",
+    "Prof. B. K. Chakravarthy: keep “intern” in the attribution",
+    "Match the Inspirit name to the resume (Inspirit / Inspirit Learning / InspiritVR)",
+    "Tell each person about small edits (trims, minor fixes)",
+    "Honor a “no” or a request to appear anonymously"
+  ]
+}

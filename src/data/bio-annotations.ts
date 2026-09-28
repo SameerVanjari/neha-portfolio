@@ -1,4 +1,3 @@
-import type { Project } from "@/types/portfolio";
 
 /**
  * Bio hover-lens annotations for the About page.
@@ -109,7 +108,9 @@ export const BIO_ANNOTATIONS: BioAnnotation[] = [
 
 export function annotationLinkTarget(
   linkTo: string | undefined,
-  projects: Project[]
+  // Structural on purpose: the About bio links into both the current works
+  // registry and the dormant archive, and only needs id + title from either.
+  projects: { id: string; title: string }[]
 ): { href: string; label: string } | null {
   if (!linkTo) return null;
   if (linkTo === "projects") return { href: "/projects", label: "Browse the case studies →" };

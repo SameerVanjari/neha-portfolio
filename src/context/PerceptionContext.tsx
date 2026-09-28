@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { THEMES, type ThemeId } from "@/data/themes";
+import { usePathname } from "next/navigation";
+import type { ThemeId } from "@/data/themes";
 
 type PerceptionContextType = {
   activeId: ThemeId;
@@ -27,12 +27,16 @@ export function PerceptionProvider({ children }: { children: React.ReactNode }) 
   const [overlayId, setOverlayId] = useState<ThemeId | null>(null);
 
   // trigger wave when activeId changes (mimic home logic)
+  // Legacy transition machinery — inert on the new landing (hero lens is
+  // local state) but kept for the /projects lens flow.
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (activeId !== baseId && !overlayId) {
       setOverlayId(activeId);
     } else if (activeId !== baseId && overlayId && overlayId !== activeId) {
       setOverlayId(activeId);
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [activeId, baseId, overlayId]);
 
   const handleWaveDone = () => {
@@ -42,9 +46,6 @@ export function PerceptionProvider({ children }: { children: React.ReactNode }) 
     }
   };
 
-  // expose for IslandNav to use via context
-  // we also need a method for switching perception from anywhere with transition
-  // This will be used by GlobalIslandNav
   return (
     <PerceptionContext.Provider value={{ activeId, baseId, overlayId, setActiveId, setBaseId, setOverlayId }}>
       {children}
@@ -52,7 +53,6 @@ export function PerceptionProvider({ children }: { children: React.ReactNode }) 
       {/* We can render it here and let it handle overlayId */}
       {/* Import dynamically to avoid circular */}
       <PerceptionWaveHandler onDone={handleWaveDone} />
-      <GlobalIslandNav />
     </PerceptionContext.Provider>
   );
 }
@@ -66,40 +66,4 @@ function PerceptionWaveHandler({ onDone }: { onDone: () => void }) {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const ThemeWave = require("@/components/ThemeWave").default as typeof import("@/components/ThemeWave").default;
   return <ThemeWave baseId={baseId} overlayId={overlayId} onOverlayDone={onDone} />;
-}
-
-function GlobalIslandNav() {
-  const { activeId, setActiveId } = usePerception();
-  const router = useRouter();
-  const pathname = usePathname();
-  const theme = THEMES[activeId];
-
-  // Apply the state change + navigation once the Barba mask has covered the screen.
-  useEffect(() => {
-    const onCommit = (e: Event) => {
-      const id = (e as CustomEvent).detail?.id as ThemeId | undefined;
-      if (!id) return;
-      setActiveId(id);
-      if (pathname !== "/") {
-        router.push("/");
-      }
-    };
-    window.addEventListener("perception:commit", onCommit as EventListener);
-    return () => window.removeEventListener("perception:commit", onCommit as EventListener);
-  }, [pathname, router, setActiveId]);
-
-  const handleSelect = (id: ThemeId) => {
-    if (pathname === "/projects" || pathname.startsWith("/projects/")) {
-      setActiveId(id);
-      router.replace(`/projects?lens=${id}`, { scroll: false });
-      return;
-    }
-
-    // Mask expands first; the actual perception change + navigation happens
-    // on 'perception:commit' once the screen is covered.
-    window.dispatchEvent(new CustomEvent("perception:switch", { detail: { id } }));
-  };
-
-  const IslandNav = require("@/components/IslandNav").default as typeof import("@/components/IslandNav").default;
-  return <IslandNav activeId={activeId} onSelect={handleSelect} theme={theme} />;
 }
