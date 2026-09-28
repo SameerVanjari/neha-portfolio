@@ -13,6 +13,7 @@ import {
   TOOLS,
 } from "@/data/ifsg";
 import { FOOTER_LINKS } from "@/data/landing";
+import { caseStudyThumb } from "@/data/case-studies";
 
 const DARK = "#141210";
 const FAINT_DARK = "#0E0C0A";
@@ -487,14 +488,14 @@ function MoreProjects() {
             href={n.href}
             className="group flex items-center gap-5 rounded-[18px] bg-white p-[14px] transition-transform motion-safe:hover:-translate-y-[2px]"
           >
-            <span
-              className="flex h-[110px] w-[150px] shrink-0 items-end rounded-[12px] p-2"
-              style={{ background: n.thumbBg }}
-            >
-              <span className="text-[11px]" style={{ ...BODY, color: n.thumbFg }}>
-                [Thumbnail]
-              </span>
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+<img
+  src={caseStudyThumb(n.href)}
+  alt={n.title}
+  loading="lazy"
+  draggable={false}
+  className="h-[110px] w-[150px] shrink-0 rounded-[12px] object-cover motion-safe:group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:transform-none"
+/>
             <span className="min-w-0">
               <span className="block text-[12px]" style={{ ...BODY, color: MUTED }}>
                 {n.direction}

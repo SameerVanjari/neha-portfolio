@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   BRIEF,
@@ -14,6 +15,7 @@ import {
   TESTING,
 } from "@/data/turtle";
 import { FOOTER_LINKS } from "@/data/landing";
+import { caseStudyThumb } from "@/data/case-studies";
 
 const DARK = "#10272B";
 const FAINT_DARK = "#0B1D20";
@@ -26,7 +28,6 @@ const MUTED = "#5E6A6C";
 const PANEL = "#234549";
 const HAIR = "#1D3A3E";
 const CRAFT_CARD = "#183539";
-const FINISH_PANEL = "#E9E4DC";
 
 const DISPLAY = { fontFamily: "var(--font-display)" } as const;
 const BODY = { fontFamily: "var(--font-body)" } as const;
@@ -85,34 +86,74 @@ function Icon({ name, size = 20, className = "" }: { name: string; size?: number
   );
 }
 
-function DropZone({
-  note,
-  className = "",
-  play,
-  tone = "dark",
-}: {
-  note: string;
+type MediaItem = {
+  src: string;
+  poster?: string;
+  alt: string;
   className?: string;
-  play?: boolean;
-  tone?: "dark" | "sand";
-}) {
-  const sand = tone === "sand";
+  /** Render a <video> instead of an <img>. */
+  video?: boolean;
+  /** Native controls, unmuted — used where the audio is the point. */
+  controls?: boolean;
+};
+
+/**
+ * Renders a still or a clip. Clips without `controls` autoplay muted on a loop
+ * (the visual tests and the hero); clips with `controls` stay unmuted and
+ * load on demand, because the sound comparison is the whole point of them.
+ *
+ * Chrome defers autoplay for offscreen media, so looping clips are additionally
+ * driven by an IntersectionObserver: they start when scrolled into view and pause
+ * when they leave, which also keeps off-screen clips from burning decode.
+ */
+function Media({ src, poster, alt, video, controls, className = "" }: MediaItem) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const loop = Boolean(video) && !controls;
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !loop) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) void el.play().catch(() => {});
+        else el.pause();
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [loop, src]);
+
+  if (video) {
+    return (
+      <video
+        ref={ref}
+        src={src}
+        poster={poster}
+        aria-label={alt}
+        muted={!controls}
+        loop={!controls}
+        autoPlay={!controls}
+        playsInline
+        controls={controls}
+        preload={controls ? "none" : "metadata"}
+        style={{ background: PANEL }}
+        className={`block object-cover ${className}`}
+      />
+    );
+  }
   return (
-    <div
-      aria-label={`Media placeholder: ${note}`}
-      className={`relative flex flex-col items-center justify-center overflow-hidden ${className}`}
-      style={{ background: sand ? FINISH_PANEL : PANEL }}
-    >
-      {play && <Icon name="icon-play-sm" size={22} />}
-      <span
-        className="mt-1 px-2 text-center text-[9px] leading-[1.4]"
-        style={{ ...BODY, color: sand ? MUTED : PALE }}
-      >
-        {play ? "Drop video" : "Drop image"}
-        <br />
-        {note}
-      </span>
-    </div>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      draggable={false}
+      onError={(e) => {
+        e.currentTarget.src = "/placeholder.svg";
+      }}
+      className={`block object-cover ${className}`}
+    />
   );
 }
 
@@ -214,20 +255,17 @@ function Hero() {
           <img
             src={HERO.shells.src}
             alt={HERO.shells.alt}
+            loading="lazy"
             draggable={false}
-            className="absolute left-[165px] top-[62px] h-[489px] w-[220px] max-w-none select-none"
+            className="absolute left-[165px] top-[62px] h-[489px] w-[220px] max-w-none rounded-[20px] object-cover select-none"
           />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={HERO.video.src}
-            alt={HERO.video.alt}
-            draggable={false}
-            className="absolute left-0 top-0 z-10 h-[556px] w-[260px] max-w-none select-none"
+          <Media
+            {...HERO.video}
+            className="absolute left-0 top-0 z-10 h-[556px] w-[260px] max-w-none rounded-[24px]"
           />
         </div>
         <div className="mx-auto w-[250px] sm:hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={HERO.video.src} alt={HERO.video.alt} draggable={false} className="h-auto w-full select-none" />
+          <Media {...HERO.video} className="h-auto w-full max-w-none rounded-[20px]" />
         </div>
       </div>
     </section>
@@ -292,7 +330,7 @@ function Journey() {
       <ol className="grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
         {JOURNEY.steps.map((step, i) => (
           <li key={step.note}>
-            <DropZone note={step.note} className="aspect-[163/361] rounded-[18px]" />
+            <Media {...step} className="aspect-[163/361] rounded-[18px]" />
             <p className="mt-2 flex items-center gap-2">
               <span
                 className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
@@ -323,7 +361,7 @@ function Testing() {
         <div className="grid grid-cols-2 gap-[14px] lg:grid-cols-4">
           {TESTING.scale.captures.map((cap) => (
             <figure key={cap.note}>
-              <DropZone note={cap.note} className="aspect-[248.5/552] rounded-[16px]" />
+              <Media {...cap} className="aspect-[248.5/552] rounded-[16px]" />
               <figcaption className="mt-[6px] text-[14px] font-semibold" style={{ ...BODY, color: INK }}>
                 {cap.title}
               </figcaption>
@@ -339,7 +377,7 @@ function Testing() {
         <div className="grid grid-cols-2 gap-[14px] sm:grid-cols-3 lg:grid-cols-5">
           {TESTING.integrity.captures.map((cap) => (
             <figure key={cap.note}>
-              <DropZone note={cap.note} play={cap.video} className="aspect-[196/435] rounded-[16px]" />
+              <Media {...cap} className="aspect-[196/435] rounded-[16px]" />
               <figcaption className="mt-[6px] text-[14px] font-semibold" style={{ ...BODY, color: INK }}>
                 {cap.title}
               </figcaption>
@@ -352,7 +390,7 @@ function Testing() {
         <div className="grid gap-[14px] md:grid-cols-3">
           {TESTING.sound.captures.map((cap) => (
             <figure key={cap.note}>
-              <DropZone note={cap.note} play className="aspect-[336/300] rounded-[16px]" />
+              <Media {...cap} className="aspect-[9/16] rounded-[16px]" />
               <figcaption className="mt-[6px] text-[14px] font-semibold" style={{ ...BODY, color: INK }}>
                 {cap.title}
               </figcaption>
@@ -376,7 +414,7 @@ function Builds() {
       <div className="grid gap-6 md:grid-cols-3">
         {BUILDS.cards.map((card) => (
           <article key={card.note} className="flex items-start gap-4 rounded-[18px] bg-white p-4">
-            <DropZone note={card.note} className="h-[267px] w-[120px] shrink-0 rounded-[14px]" />
+            <Media {...card} className="h-[267px] w-[120px] shrink-0 rounded-[14px]" />
             <div className="min-w-0 py-[2px]">
               <p className="text-[10px] font-bold tracking-[1px]" style={{ ...BODY, color: ACCENT }}>
                 {card.build}
@@ -426,13 +464,13 @@ function Finished() {
       <SectionHead eyebrow={FINISHED.eyebrow} heading={FINISHED.heading} note={FINISHED.note} />
       <div className="grid items-start gap-4 lg:grid-cols-[1fr_320px]">
         <figure>
-          <DropZone note={FINISHED.wide.note} tone="sand" className="aspect-[700/566] rounded-[18px]" />
+          <Media {...FINISHED.wide} className="aspect-[700/566] rounded-[18px]" />
           <figcaption className="mt-[10px] text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
             {FINISHED.wide.caption}
           </figcaption>
         </figure>
         <figure>
-          <DropZone note={FINISHED.walkthrough.note} play className="aspect-[320/566] rounded-[28px]" />
+          <Media {...FINISHED.walkthrough} className="aspect-[320/457] rounded-[24px]" />
           <figcaption className="mt-[10px] text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
             {FINISHED.walkthrough.caption}
           </figcaption>
@@ -497,14 +535,14 @@ function MoreProjects() {
             href={n.href}
             className="group flex items-center gap-5 rounded-[18px] bg-white p-[14px] transition-transform motion-safe:hover:-translate-y-[2px]"
           >
-            <span
-              className="flex h-[110px] w-[150px] shrink-0 items-end rounded-[12px] p-2"
-              style={{ background: n.thumbBg }}
-            >
-              <span className="text-[11px]" style={{ ...BODY, color: n.thumbFg }}>
-                [Thumbnail]
-              </span>
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+<img
+  src={caseStudyThumb(n.href)}
+  alt={n.title}
+  loading="lazy"
+  draggable={false}
+  className="h-[110px] w-[150px] shrink-0 rounded-[12px] object-cover motion-safe:group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:transform-none"
+/>
             <span className="min-w-0">
               <span className="block text-[12px]" style={{ ...BODY, color: MUTED }}>
                 {n.direction}

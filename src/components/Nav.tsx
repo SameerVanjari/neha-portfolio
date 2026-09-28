@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useMotionPref } from "@/components/motion/reveal";
 import type { Theme } from "@/data/themes";
 import { lenisScrollToId } from "@/lib/lenis";
+import { useLoadStage } from "@/components/LoadStage";
 import data from "@/data/portfolio.json";
 
 const NAV_ITEMS = [
@@ -21,7 +23,10 @@ function scrollToId(id: string) {
 export default function Nav({ theme }: { theme?: Theme; activeSection?: string; revealDelay?: number }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const reduce = useReducedMotion();
+  const reduce = useMotionPref();
+  // Last thing to arrive: the header drops in once the hero copy has landed.
+  const { stage } = useLoadStage();
+  const shown = stage === "nav";
   void theme;
 
   useEffect(() => {
@@ -43,7 +48,12 @@ export default function Nav({ theme }: { theme?: Theme; activeSection?: string; 
 
   return (
     <>
-      <header className="border-b border-[#DAD3C8] bg-[#F2EEE7]">
+      <motion.header
+        initial={{ transform: "translateY(-100%)" }}
+        animate={{ transform: shown ? "translateY(0%)" : "translateY(-100%)" }}
+        transition={{ duration: reduce ? 0.2 : 0.65, ease: [0.23, 1, 0.32, 1] }}
+        className="border-b border-[#DAD3C8] bg-[#F2EEE7]"
+      >
         <div className="mx-auto flex h-[85px] w-full max-w-[1200px] items-center justify-between px-6 lg:px-0">
           <Link
             href="/"
@@ -109,7 +119,7 @@ export default function Nav({ theme }: { theme?: Theme; activeSection?: string; 
             </span>
           </button>
         </div>
-      </header>
+      </motion.header>
 
       <AnimatePresence>
         {open && (

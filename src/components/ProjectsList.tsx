@@ -2,15 +2,14 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
+import { LayoutGroup, motion } from "framer-motion";
+import { useMotionPref } from "@/components/motion/reveal";
 import Nav from "@/components/Nav";
 import { THEMES, type ThemeId } from "@/data/themes";
-import data from "@/data/portfolio.json";
-import { visibleProjects } from "@/data/project-tiers";
+import { CASE_STUDIES } from "@/data/case-studies";
 import Link from "next/link";
 import { WordStagger } from "@/components/ui/word-stagger";
-import ProjectCardMedia from "@/components/ProjectCardMedia";
-import type { Project } from "@/types/portfolio";
+import CaseStudyCardMedia from "@/components/CaseStudyCardMedia";
 
 const SORTS: (ThemeId | "all")[] = ["all", "ai", "xr", "ux", "product"];
 
@@ -20,11 +19,12 @@ function isThemeId(v: string | null): v is ThemeId {
 
 export default function ProjectsList({ lens }: { lens: string | null }) {
   const router = useRouter();
-  const reduce = useReducedMotion();
+  const reduce = useMotionPref();
   // Local filter state — responds immediately, independent of server re-render.
   const [sort, setSort] = useState<ThemeId | "all">(() => (isThemeId(lens) ? lens : "all"));
   const theme = THEMES[sort === "all" ? "product" : sort];
-  const projects = visibleProjects(data.projects as Project[]);
+  // The same registry the homepage draws from, so the two can never disagree.
+  const projects = CASE_STUDIES;
 
   // Sync from the URL when it changes externally (deep link, island nav, back/forward).
   const [prevLens, setPrevLens] = useState(lens);
@@ -43,8 +43,8 @@ export default function ProjectsList({ lens }: { lens: string | null }) {
       projects.map((p, index) => ({
         p,
         index,
-        order: sort === "all" ? index : p.perception === sort ? index : 1000 + index,
-        isMatch: sort === "all" || p.perception === sort,
+        order: sort === "all" ? index : p.lens === sort ? index : 1000 + index,
+        isMatch: sort === "all" || p.lens === sort,
       })),
     [projects, sort]
   );
@@ -100,7 +100,7 @@ export default function ProjectsList({ lens }: { lens: string | null }) {
             <LayoutGroup id="projects-sort">
               <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 md:gap-6">
                 {ranked.map(({ p, order, isMatch }) => {
-                  const cardTheme = THEMES[p.perception];
+                  const cardTheme = THEMES[p.lens];
                   return (
                     <motion.div
                       key={p.id}
@@ -124,21 +124,21 @@ export default function ProjectsList({ lens }: { lens: string | null }) {
                           }}
                         >
                         <div className="relative aspect-[4/3] overflow-hidden bg-zinc-100">
-                          <ProjectCardMedia project={p} />
+                          <CaseStudyCardMedia study={p} />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
                             <div
                               className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 font-mono text-[10px] tracking-[0.12em] backdrop-blur"
                               style={{ color: cardTheme.text, border: `1px solid ${cardTheme.border}` }}
                             >
-                              {p.year} · {p.client ?? p.dimension}
+                              {[p.year, p.meta].filter(Boolean).join(" · ")}
                             </div>
                           </div>
                           <div className="px-4 py-4 md:px-5 md:py-5">
                             <h3 className="font-display text-[16px] font-semibold leading-[1.15] tracking-[-0.02em] text-zinc-900" style={{ fontFamily: "var(--font-display)" }}>
                               {p.title}
                             </h3>
-                            <p className="mt-1 font-mono text-[10px] tracking-[0.14em] text-zinc-500">{p.subtitle ?? p.dimension}</p>
-                            <p className="mt-3 line-clamp-2 text-[13px] leading-[1.55] text-zinc-500">{p.blurb}</p>
+                            <p className="mt-1 font-mono text-[10px] tracking-[0.14em] text-zinc-500">{p.role}</p>
+                            <p className="mt-3 line-clamp-2 text-[13px] leading-[1.55] text-zinc-500">{p.description}</p>
                           </div>
                         </article>
                       </Link>

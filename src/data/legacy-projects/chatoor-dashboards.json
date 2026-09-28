@@ -1,0 +1,62 @@
+{
+  "id": "chatoor-dashboards",
+  "title": "Chatoor.ai Financial Dashboards",
+  "subtitle": "UX · Fintech",
+  "dimension": "UX",
+  "perception": "ux",
+  "year": "2024",
+  "client": "Chatoor.ai",
+  "color": "#ffc94d",
+  "accent": "volt",
+  "tags": [
+    "Fintech",
+    "WCAG",
+    "Dashboards"
+  ],
+  "url": "https://www.behance.net/nehamayacharya",
+  "heroImage": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "Financial dashboard UX",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "Redesigned complex financial workflows through user research and iterative testing — cutting task completion time by 20%. WCAG-accessible dashboards with QR-based expense tracking.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "Complex financial workflows were slow and inaccessible, increasing errors and task time.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Led user research and iterative testing to simplify flows, then rebuilt responsive, WCAG-accessible dashboards with QR-based expense tracking.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "20% reduction in task completion time and more inclusive access — dashboard adoption grew with tested clarity.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "Fintech",
+        "WCAG",
+        "Dashboards"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "Designed for Chatoor.ai — Redesigned complex financial workflows through user research and iterative testing — cutting task completion time by 20%. WCAG-accessible dashboards with QR-based expense tracking.",
+      "images": []
+    }
+  }
+}

@@ -1,6 +1,10 @@
 /**
  * Charm City Kings (AR Filter) — transcribed from Website Wireframes
  * node 151:217. Copy and layout specs are from Figma as-is.
+ *
+ * Clips were synced from the project Drive folder and re-encoded for the web
+ * (silent, muted autoplay loops, except the 44s behind-the-scenes cut which
+ * gets native controls). `note` keeps the original Drive filename.
  */
 
 const IMG = "/projects/hbo-charm-city-kings";
@@ -134,40 +138,54 @@ export const CAMPAIGN = {
   heading: "Sizzle reel, character spotlights, social cuts",
   note: "Produced as 20 static and dynamic assets, optimized for Instagram’s specs without losing polish.",
   sizzle: {
+    src: `${VID}/sizzle-reel.mp4`,
+    poster: `${IMG}/sizzle-reel-poster.webp`,
+    alt: "The “They call me… Holy Savage” card drifting across a blurred backdrop: a portrait in a white polaroid frame, the name in neon pink script, and the Charm City Kings logo",
     note: "VIDEO · FULL_SIZZLE_VIDEO_W_O_TEXT.mp4 (HBO file · 05)",
+    video: true as const,
   },
   spotlights: [
     {
       label: "They call me… Mouse",
-      note: "VIDEO · THEY_CALL_ME_MOUSE.mp4",
       src: `${VID}/they-call-me-mouse.mp4`,
       poster: `${IMG}/they-call-me-mouse-poster.jpg`,
+      alt: "The “They call me… Mouse” card: a portrait inside a white polaroid frame, the name in neon pink script",
+      note: "VIDEO · THEY_CALL_ME_MOUSE.mp4",
+      video: true as const,
     },
     {
       label: "They call me… Blax",
-      note: "VIDEO · THEY_CALL_ME_BLAX.MP4",
       src: `${VID}/they-call-me-blax.mp4`,
       poster: `${IMG}/they-call-me-blax-poster.jpg`,
+      alt: "The “They call me… Blax” card: a portrait inside a white polaroid frame, the name in neon pink script",
+      note: "VIDEO · THEY_CALL_ME_BLAX.MP4",
+      video: true as const,
     },
     {
       label: "They call me… Nicki",
-      note: "VIDEO · THEY_CALL_ME_NICKI.mp4",
       src: `${VID}/they-call-me-nicki.mp4`,
       poster: `${IMG}/they-call-me-nicki-poster.jpg`,
+      alt: "The “They call me… Nicki” card: a portrait inside a white polaroid frame, the name in neon pink script",
+      note: "VIDEO · THEY_CALL_ME_NICKI.mp4",
+      video: true as const,
     },
   ] as const,
   cuts: [
     {
       label: "Mouse & Blax",
-      note: "VIDEO · MOUSE_AND_BLAX.mp4",
       src: `${VID}/mouse-and-blax.mp4` as string | undefined,
       poster: `${IMG}/mouse-and-blax-poster.jpg` as string | undefined,
+      alt: "Mouse and Blax together under the Charm City Kings logo",
+      note: "VIDEO · MOUSE_AND_BLAX.mp4",
+      video: true as const,
     },
     {
       label: "Three Friends",
+      src: `${VID}/three-friends.mp4` as string | undefined,
+      poster: `${IMG}/three-friends-poster.webp` as string | undefined,
+      alt: "A fan in sunglasses cast as a character: “They call me… SwearTagawd” in neon pink script over the Charm City Kings logo",
       note: "VIDEO · THREE_FRIENDS.mp4",
-      src: undefined as string | undefined,
-      poster: undefined as string | undefined,
+      video: true as const,
     },
   ] as const,
 };
@@ -177,8 +195,20 @@ export const MECHANIC = {
   heading: "The live AR mechanic",
   note: "Built in Unity 3D with live face-tracking for Instagram and Facebook.",
   phones: [
-    { note: "VIDEO · HBO_Filter.mp4 (filter reveal)" },
-    { note: "VIDEO · face_filter_IG_Demo.MOV (Instagram demo)" },
+    {
+      src: `${VID}/hbo-filter.mp4`,
+      poster: `${IMG}/hbo-filter-poster.webp`,
+      alt: "The filter running inside a phone frame: the “They call me… Holy Savage” card tracking the user’s face",
+      note: "VIDEO · HBO_Filter.mp4 (filter reveal)",
+      video: true as const,
+    },
+    {
+      src: `${VID}/face-filter-ig-demo.mp4`,
+      poster: `${IMG}/face-filter-ig-demo-poster.webp`,
+      alt: "The filter full screen on Instagram: the Holy Savage polaroid with the neon script title resolving over the face",
+      note: "VIDEO · face_filter_IG_Demo.MOV (Instagram demo)",
+      video: true as const,
+    },
   ] as const,
   steps: [
     {
@@ -199,17 +229,50 @@ export const MECHANIC = {
   ] as const,
   recordingsEyebrow: "Captured live · screen recordings",
   recordings: [
-    { note: "VIDEO · Filter_screen_recording_1.mp4" },
-    { note: "VIDEO · Filter_screen_recording_2.mp4" },
-    { note: "VIDEO · Filter_screen_recording_3.mp4" },
-    { note: "VIDEO · Filter_screen_recording_4.mp4" },
+    {
+      src: `${VID}/filter-recording-1.mp4`,
+      poster: `${IMG}/filter-recording-1-poster.webp`,
+      alt: "After Effects screen recording: the Blax character card comp being built in the timeline",
+      note: "VIDEO · Filter_screen_recording_1.mp4",
+      video: true as const,
+    },
+    {
+      src: `${VID}/filter-recording-2.mp4`,
+      poster: `${IMG}/filter-recording-2-poster.webp`,
+      alt: "After Effects screen recording: the neon script title and underline animating onto the Blax card",
+      note: "VIDEO · Filter_screen_recording_2.mp4",
+      video: true as const,
+    },
+    {
+      src: `${VID}/filter-recording-3.mp4`,
+      poster: `${IMG}/filter-recording-3-poster.webp`,
+      alt: "After Effects screen recording: the Blax card comp previewed at full size in the composition panel",
+      note: "VIDEO · Filter_screen_recording_3.mp4",
+      video: true as const,
+    },
+    {
+      src: `${VID}/filter-recording-4.mp4`,
+      poster: `${IMG}/filter-recording-4-poster.webp`,
+      alt: "After Effects screen recording: the Blax card comp previewed in the composition panel",
+      note: "VIDEO · Filter_screen_recording_4.mp4",
+      video: true as const,
+    },
   ] as const,
 };
 
 export const BTS = {
   eyebrow: "Behind the scenes",
   heading: "Building the assets",
-  note: "VIDEO · CCK_Gifs_making_process.mp4 (HBO file · 14)",
+  // 44s is far too long to loop, so this one gets native controls and only
+  // loads when the visitor asks for it.
+  video: {
+    src: `${VID}/bts-making-process.mp4`,
+    poster: `${IMG}/bts-making-process-poster.webp`,
+    alt: "After Effects screen recording of the build: footage curation in the project panel, the comp in two program monitors, and the full timeline",
+    note: "VIDEO · CCK_Gifs_making_process.mp4 (HBO file · 14)",
+    video: true as const,
+    controls: true as const,
+  },
   body: "Footage curation, template design, and motion work happened in After Effects and Premiere Pro, then handed off to Unity for the live face-tracking build.",
   tools: ["After Effects", "Premiere Pro", "Unity 3D"] as const,
 };

@@ -1,0 +1,62 @@
+{
+  "id": "ar-real-estate",
+  "title": "AR Experience for Real Estate Showcases",
+  "subtitle": "XR · WebAR",
+  "dimension": "XR",
+  "perception": "xr",
+  "year": "2023",
+  "client": "TD Bank",
+  "color": "#ff2bd6",
+  "accent": "neon",
+  "tags": [
+    "WebAR",
+    "8th Wall",
+    "3D Modeling"
+  ],
+  "url": "https://www.behance.net/gallery/229336055/AR-Experience-for-Real-Estate-Showcases",
+  "heroImage": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "WebAR real estate showcase at One Vanderbilt",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "WebAR experience for TD Bank VIP clientele celebrating the opening of One Vanderbilt, NYC. Delivered 3D modeling, visual effects, sprite sheets, 8th Wall integration, sound design, and spatial analytics.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "Celebrate an architectural milestone for VIPs without app installs or friction, while showcasing scale and detail.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Owned 3D modeling, VFX, sprite sheets, 8th Wall integration, sound design, and analytics for an in-situ WebAR showcase of One Vanderbilt.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "Exclusive, shareable WebAR for the TD Bank One Vanderbilt launch — premium spatial storytelling at true scale.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "WebAR",
+        "8th Wall",
+        "3D Modeling"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "Designed for TD Bank — WebAR experience for TD Bank VIP clientele celebrating the opening of One Vanderbilt, NYC. Delivered 3D modeling, visual effects, sprite sheets, 8th Wall integration, sound design, and spatial analytics.",
+      "images": []
+    }
+  }
+}

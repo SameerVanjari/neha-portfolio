@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { motion, type Variants } from "framer-motion";
 import {
   COMPARATIVE,
   FACTS,
@@ -17,6 +19,8 @@ import {
   WIREFRAMES,
 } from "@/data/clarity";
 import { FOOTER_LINKS } from "@/data/landing";
+import { EASE_OUT, Reveal, useStagger, useMotionPref } from "@/components/motion/reveal";
+import { useLoadStage } from "@/components/LoadStage";
 
 /* ---------------------------------- tokens --------------------------------- */
 
@@ -32,6 +36,63 @@ const MUTED = "#5E6A6E";
 
 const DISPLAY = { fontFamily: "var(--font-display)" } as const;
 const BODY = { fontFamily: "var(--font-body)" } as const;
+
+/* ---------------------------------- motion --------------------------------- */
+
+/**
+ * Above the fold, the hero plays on load rather than on scroll, so it can't
+ * use the shared `useStagger` (viewport-triggered, never fires above the
+ * fold). Same easing and 500ms-class timing as the other case studies.
+ * Opacity lives on the items, never the container, so no branch can trap the
+ * hero at zero; reduced motion keeps the fade and drops all movement.
+ */
+function heroMotion(mode: "pending" | boolean): { group: Variants; item: Variants } {
+  if (mode === "pending") {
+    return {
+      group: { hidden: {}, visible: {} },
+      item: { hidden: { opacity: 0 }, visible: { opacity: 1 } },
+    };
+  }
+  if (mode) {
+    return {
+      group: { hidden: {}, visible: { transition: { duration: 0.3 } } },
+      item: {
+        hidden: { opacity: 0, transform: "translateY(0px)" },
+        visible: { opacity: 1, transform: "translateY(0px)", transition: { duration: 0.3 } },
+      },
+    };
+  }
+  return {
+    group: {
+      hidden: {},
+      visible: { transition: { delayChildren: 0.05, staggerChildren: 0.09 } },
+    },
+    item: {
+      hidden: { opacity: 0, transform: "translateY(20px)" },
+      visible: {
+        opacity: 1,
+        transform: "translateY(0px)",
+        transition: { duration: 0.55, ease: EASE_OUT },
+      },
+    },
+  };
+}
+
+/**
+ * The media query is unavailable during SSR, so the preference is read only
+ * after mount. Server markup and the first client frame therefore match, and
+ * the reduced-motion variant applies as a normal update.
+ */
+function useMotionReady(): boolean {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      setReady(true);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
+  return ready;
+}
 
 /* ------------------------------ shared pieces ------------------------------ */
 
@@ -63,9 +124,20 @@ function SectionHead({
   onDark?: boolean;
   size?: "lg" | "md";
 }) {
+  // Every section announces itself identically: heading block lands, note
+  // follows a beat behind. Uniform arrival lets a long scroll read as one
+  // document rather than a dozen separate screens.
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.07 });
+
   return (
-    <div className="flex flex-wrap items-start justify-between gap-6 pb-9">
-      <div className="max-w-[800px]">
+    <motion.div
+      variants={group}
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewport}
+      className="flex flex-wrap items-start justify-between gap-6 pb-9"
+    >
+      <motion.div variants={item} className="max-w-[800px]">
         <p className={`text-[11px] font-bold uppercase tracking-[1.32px] ${onDark ? "text-[#F2B872]" : "text-[#1D4F5C]"}`} style={BODY}>
           {eyebrow}
         </p>
@@ -75,13 +147,17 @@ function SectionHead({
         >
           {heading}
         </h2>
-      </div>
+      </motion.div>
       {note && (
-        <p className={`max-w-[340px] pt-[24px] text-[14px] leading-[1.5] ${onDark ? "text-[#B3C0C3]" : "text-[#5E6A6E]"}`} style={BODY}>
+        <motion.p
+          variants={item}
+          className={`max-w-[340px] pt-[24px] text-[14px] leading-[1.5] ${onDark ? "text-[#B3C0C3]" : "text-[#5E6A6E]"}`}
+          style={BODY}
+        >
           {note}
-        </p>
+        </motion.p>
       )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -115,11 +191,573 @@ function DropZone({
   );
 }
 
+/*
+ * A filled screen when the data has real media, otherwise the Figma drop-zone.
+ * `fillClassName` lets a slot keep its note-positioning classes for the fallback
+ * while the image gets frame-filling ones.
+ */
+function Shot({
+  src,
+  alt,
+  screen,
+  note,
+  className = "",
+  fillClassName,
+  style,
+  noteClass = "text-[#5E6A6E]",
+  noteStyle,
+  loading = "lazy",
+}: {
+  src?: string;
+  alt?: string;
+  /** Key into SCREENS, for slots whose artwork was never drawn. */
+  screen?: string;
+  note: string;
+  className?: string;
+  fillClassName?: string;
+  style?: React.CSSProperties;
+  noteClass?: string;
+  noteStyle?: React.CSSProperties;
+  /** Above-the-fold media opts out of lazy loading so it can be the LCP. */
+  loading?: "eager" | "lazy";
+}) {
+  if (screen && SCREENS[screen]) {
+    return (
+      <div className={`overflow-hidden ${fillClassName ?? className}`}>
+        <div className="h-full w-full" role="img" aria-label={alt ?? note}>
+          {SCREENS[screen]}
+        </div>
+      </div>
+    );
+  }
+  if (!src) {
+    return <DropZone note={note} className={className} style={style} noteClass={noteClass} noteStyle={noteStyle} />;
+  }
+  return (
+    <div className={`overflow-hidden ${fillClassName ?? className}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt ?? ""}
+        loading={loading}
+        draggable={false}
+        onError={(e) => {
+          e.currentTarget.src = "/placeholder.svg";
+        }}
+        className="h-full w-full object-cover"
+      />
+    </div>
+  );
+}
+
+/* --------------------- reconstructed concept screens --------------------- */
+/*
+ * The project's Drive export shipped with most screen frames empty, so the
+ * screens below are concept reconstructions, built as live components in the
+ * same design language as the three real screens recovered from Cover.html and
+ * Wireframes.html (IBM Plex Sans body, Newsreader display, teal #1D4F5C primary,
+ * amber #B45309 flag accent, #F5F3EE canvas). `tone` switches a screen between
+ * the grayscale wireframe stages and full colour.
+ */
+
+const CANVAS = "#F5F3EE";
+const CARD = "#FFFFFF";
+const LINE = "#E4E0D8";
+const TINT = "#E4EEF0";
+const MINT = "#F3F8F8";
+const AMBER_D = "#B45309";
+const WIRE_BG = "#EDEBE6";
+const WIRE_CARD = "#F7F6F2";
+const WIRE_BAR = "#D9D5CD";
+const WIRE_TEXT = "#9A978F";
+
+function Desk({ children, tone = "hi" }: { children: React.ReactNode; tone?: ScreenTone }) {
+  const wire = tone !== "hi";
+  const items = ["Pipeline", "Customers", "Risk", "Documents"];
+  return (
+    <div className="flex h-full w-full overflow-hidden" style={{ background: wire ? WIRE_BG : CANVAS }}>
+      <div
+        className="flex w-[68px] shrink-0 flex-col gap-[7px] p-[9px]"
+        style={{ background: wire ? "#E2DFD8" : DARK }}
+      >
+        <p className="text-[9px] font-semibold" style={{ ...DISPLAY, color: wire ? INK : "#F2F6F5" }}>
+          Clarity
+        </p>
+        {items.map((label, i) => (
+          <div
+            key={label}
+            className="rounded-[3px] px-[5px] py-[3px] text-[7px]"
+            style={{
+              background: !wire && i === 2 ? "rgba(242,184,114,0.16)" : wire ? WIRE_CARD : "rgba(255,255,255,0.06)",
+              color: wire ? WIRE_TEXT : i === 2 ? AMBER : "rgba(242,246,245,0.55)",
+            }}
+          >
+            {wire ? "••••" : label}
+          </div>
+        ))}
+        <div className="mt-auto space-y-[5px]">
+          <div className="h-[14px] w-[26px] rounded-[3px]" style={{ background: wire ? WIRE_BAR : "rgba(255,255,255,0.08)" }} />
+          <div className="h-[14px] w-[26px] rounded-[3px]" style={{ background: wire ? WIRE_BAR : "rgba(255,255,255,0.08)" }} />
+        </div>
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col">{children}</div>
+    </div>
+  );
+}
+
+function DeskTabs({ tone = "hi" }: { tone?: ScreenTone }) {
+  const wire = tone !== "hi";
+  return (
+    <div className="flex items-center gap-[10px] border-b px-[11px] py-[7px]" style={{ borderColor: LINE, background: wire ? WIRE_CARD : CARD }}>
+      {["Laura Bennett #48213", "Daniel Ortiz #51190"].map((t, i) => (
+        <span key={t} className="flex items-center gap-[4px] text-[8px]" style={{ color: wire ? WIRE_TEXT : INK }}>
+          <span className="size-[5px] rounded-full" style={{ background: wire ? WIRE_BAR : AMBER_D }} />
+          {wire ? `Customer ${i + 1}` : t}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function Phone({ children, tone = "hi" }: { children: React.ReactNode; tone?: ScreenTone }) {
+  const wire = tone !== "hi";
+  return (
+    <div className="flex h-full w-full flex-col overflow-hidden" style={{ background: wire ? WIRE_BG : CANVAS }}>
+      <div className="px-[11px] pt-[13px]" style={{ ...DISPLAY, color: wire ? WIRE_TEXT : TEAL }}>
+        Clarity
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function Tracker({ stage = 2, wire = false }: { stage?: number; wire?: boolean }) {
+  return (
+    <div className="relative mx-[11px] mt-[9px] h-[12px]">
+      <div className="absolute left-[6px] right-[6px] top-[5px] h-[2px]" style={{ background: wire ? WIRE_BAR : LINE }} />
+      {[0, 1, 2, 3, 4].map((i) => (
+        <span
+          key={i}
+          className="absolute top-[1px] size-[10px] rounded-full border-2"
+          style={{
+            left: `${i * 25}%`,
+            marginLeft: "-5px",
+            background: i <= stage ? (wire ? "#BFBBB2" : i === stage ? CANVAS : TEAL) : wire ? WIRE_BG : CARD,
+            borderColor: i <= stage ? (wire ? "#BFBBB2" : TEAL) : wire ? WIRE_BAR : LINE,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function Bar({ w = "100%", h = 6, wire = false }: { w?: string; h?: number; wire?: boolean }) {
+  return <div className="rounded-full" style={{ width: w, height: h, background: wire ? WIRE_BAR : "#E9E5DD" }} />;
+}
+
+/** The same four-tab bar documented in the component section, grounding the phone screens. */
+function PhoneTabs({ active = 0, wire = false }: { active?: number; wire?: boolean }) {
+  const items = ["Home", "Docs", "Status", "Messages"];
+  return (
+    <div className="mt-auto flex shrink-0 border-t px-[6px] pt-[6px] pb-[8px]" style={{ borderColor: wire ? WIRE_BAR : LINE, background: wire ? WIRE_CARD : CARD }}>
+      {items.map((t, i) => (
+        <span key={t} className="flex flex-1 flex-col items-center gap-[3px]">
+          <span
+            className="h-[9px] w-[9px] rounded-[2px]"
+            style={{ background: wire ? WIRE_BAR : i === active ? TEAL : "#D9D5CD" }}
+          />
+          <span className="text-[5.5px]" style={{ color: wire ? WIRE_TEXT : i === active ? TEAL : MUTED }}>
+            {t}
+          </span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
+/* --- wireframe stages (grayscale) --- */
+
+function WfAdamLoFi() {
+  return (
+    <Desk tone="lo">
+      <DeskTabs tone="lo" />
+      <div className="flex-1 space-y-[7px] p-[11px]">
+        {[100, 92, 96].map((w, i) => (
+          <div key={i} className="space-y-[5px] rounded-[4px] p-[7px]" style={{ background: WIRE_CARD }}>
+            <Bar w={`${w}%`} wire />
+            <Bar w="58%" h={5} wire />
+          </div>
+        ))}
+      </div>
+    </Desk>
+  );
+}
+
+function WfAdamMidFi() {
+  return (
+    <Desk tone="mid">
+      <DeskTabs tone="mid" />
+      <div className="flex flex-1 gap-[8px] p-[10px]">
+        <div className="flex-[2] space-y-[6px]">
+          {["Income calculation", "Asset verification", "Debt load"].map((t) => (
+            <div key={t} className="rounded-[4px] p-[6px]" style={{ background: WIRE_CARD, border: `1px solid ${WIRE_BAR}` }}>
+              <p className="text-[7px] font-semibold" style={{ color: WIRE_TEXT }}>{t}</p>
+              <div className="mt-[4px] space-y-[3px]">
+                <Bar w="92%" h={4} wire />
+                <Bar w="64%" h={4} wire />
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex-1 space-y-[6px]">
+          <div className="rounded-[4px] p-[6px]" style={{ background: WIRE_CARD, border: `1px solid ${WIRE_BAR}` }}>
+            <p className="text-[7px] font-semibold" style={{ color: WIRE_TEXT }}>Your decision</p>
+            <div className="mt-[5px] space-y-[4px]">
+              {[100, 88, 70].map((w) => <div key={w} className="h-[9px] rounded-[3px]" style={{ width: `${w}%`, background: WIRE_BAR }} />)}
+            </div>
+          </div>
+        </div>
+      </div>
+    </Desk>
+  );
+}
+
+function WfLauraMidFi() {
+  return (
+    <Phone tone="mid">
+      <div className="mt-[2px] px-[11px] text-[7px]" style={{ color: WIRE_TEXT }}>Good morning, Laura</div>
+      <div className="px-[11px] text-[12px] font-semibold leading-tight" style={{ ...DISPLAY, color: WIRE_TEXT }}>You&apos;re in underwriting.</div>
+      <Tracker stage={2} wire />
+      <div className="mx-[11px] mt-[11px] space-y-[3px] rounded-[5px] p-[7px]" style={{ background: WIRE_CARD }}>
+        <p className="text-[6px] font-bold tracking-[0.4px]" style={{ color: WIRE_TEXT }}>PLAIN-LANGUAGE STATUS</p>
+        <Bar w="94%" h={4} wire /><Bar w="72%" h={4} wire /><Bar w="84%" h={4} wire />
+      </div>
+      <div className="mt-[9px] grid grid-cols-3 gap-[5px] px-[11px]">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="space-y-[3px] rounded-[4px] p-[5px]" style={{ background: WIRE_CARD }}>
+            <Bar w="70%" h={4} wire /><Bar w="46%" h={3} wire />
+          </div>
+        ))}
+      </div>
+      <PhoneTabs active={0} wire />
+    </Phone>
+  );
+}
+
+/* --- hi-fi, Laura --- */
+
+function HiLauraHome() {
+  return (
+    <Phone>
+      <div className="px-[11px] text-[7px]" style={{ color: MUTED }}>Good morning, Laura</div>
+      <div className="px-[11px] text-[15px] font-semibold leading-tight" style={{ ...DISPLAY, color: INK }}>Nothing to do today.</div>
+      <Tracker stage={1} />
+      <div className="mx-[11px] mt-[11px] rounded-[6px] p-[8px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+        <p className="text-[6px] font-bold tracking-[0.4px]" style={{ color: TEAL }}>NEXT UP</p>
+        <p className="mt-[3px] text-[8px] leading-[1.35]" style={{ color: INK }}>
+          Two pages are still needed. Adam Webb will send a specific request — no guessing.
+        </p>
+        <div className="mt-[6px] rounded-[4px] py-[5px] text-center text-[7px] font-semibold text-white" style={{ background: TEAL }}>
+          See what&apos;s outstanding
+        </div>
+      </div>
+      <div className="mt-[9px] grid grid-cols-3 gap-[5px] px-[11px]">
+        {[["7 of 9", "Documents"], ["2–4 d", "Typical"], ["Oct 30", "Closing"]].map(([n, l]) => (
+          <div key={l} className="rounded-[5px] p-[6px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+            <p className="text-[10px] font-semibold leading-none" style={{ ...DISPLAY, color: INK }}>{n}</p>
+            <p className="mt-[3px] text-[6px]" style={{ color: MUTED }}>{l}</p>
+          </div>
+        ))}
+      </div>
+      <PhoneTabs active={0} />
+    </Phone>
+  );
+}
+
+function HiLauraRejection() {
+  return (
+    <Phone>
+      <div className="px-[11px] text-[7px]" style={{ color: MUTED }}>Documents</div>
+      <div className="px-[11px] text-[14px] font-semibold leading-tight" style={{ ...DISPLAY, color: INK }}>One document needs replacing</div>
+      <div className="mx-[11px] mt-[11px] rounded-[6px] p-[8px]" style={{ background: "#FDF4E8", border: `1px solid #E8C89A` }}>
+        <p className="text-[6px] font-bold tracking-[0.4px]" style={{ color: AMBER_D }}>WHY IT WAS SENT BACK</p>
+        <p className="mt-[3px] text-[8px] leading-[1.35]" style={{ color: INK }}>
+          Page 2 of the 2024 W-2 is missing. The first scan was cut off at the bottom edge.
+        </p>
+      </div>
+      <div className="mx-[11px] mt-[8px] rounded-[6px] p-[8px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+        <p className="text-[6px] font-bold tracking-[0.4px]" style={{ color: TEAL }}>WHAT TO DO</p>
+        <p className="mt-[3px] text-[8px] leading-[1.35]" style={{ color: INK }}>
+          Photograph or scan page 2 in good light. Nothing else is missing.
+        </p>
+        <div className="mt-[6px] rounded-[4px] py-[5px] text-center text-[7px] font-semibold text-white" style={{ background: TEAL }}>
+          Upload page 2
+        </div>
+      </div>
+      <p className="mx-[11px] mt-[9px] text-[6.5px] leading-[1.4]" style={{ color: MUTED }}>
+        Asked for by Adam Webb · reviewed 2:14 PM
+      </p>
+      <PhoneTabs active={1} />
+    </Phone>
+  );
+}
+
+function HiLauraClosing() {
+  return (
+    <Phone>
+      <div className="px-[11px] text-[7px]" style={{ color: MUTED }}>Closing</div>
+      <div className="px-[11px] text-[14px] font-semibold leading-tight" style={{ ...DISPLAY, color: INK }}>A change was flagged early</div>
+      <div className="mx-[11px] mt-[11px] rounded-[6px] p-[8px]" style={{ background: "#FDF4E8", border: `1px solid #E8C89A` }}>
+        <div className="flex items-baseline justify-between">
+          <p className="text-[7px] font-semibold" style={{ color: AMBER_D }}>Title fee</p>
+          <p className="text-[11px] font-semibold" style={{ ...DISPLAY, color: AMBER_D }}>+$1,200</p>
+        </div>
+        <p className="mt-[3px] text-[8px] leading-[1.35]" style={{ color: INK }}>
+          The title company amended the fee 11 days before signing. Here is the change, in writing.
+        </p>
+      </div>
+      <div className="mt-[9px] space-y-[3px] rounded-[6px] p-[8px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+        {[["Cash to close", "$8,940"], ["Title fee", "$1,200"], ["Recorded 12 Oct", "—"]].map(([k, v]) => (
+          <div key={k} className="flex items-center justify-between text-[7.5px]">
+            <span style={{ color: MUTED }}>{k}</span>
+            <span style={{ color: INK }}>{v}</span>
+          </div>
+        ))}
+      </div>
+      <div className="mx-[11px] mt-[9px] rounded-[4px] py-[5px] text-center text-[7px] font-semibold" style={{ background: MINT, color: TEAL }}>
+        Verified by Adam Webb
+      </div>
+      <PhoneTabs active={2} />
+    </Phone>
+  );
+}
+
+/* --- hi-fi, Adam --- */
+
+function HiAdamPipeline() {
+  const rows = [
+    ["Ortiz, D", "Income", "High", AMBER_D],
+    ["Bennett, L", "Income", "High", AMBER_D],
+    ["Pham, T", "Assets", "Med", "#A8581F"],
+    ["Cole, R", "Clear", "Low", "#5E7D5A"],
+  ] as const;
+  return (
+    <Desk>
+      <DeskTabs />
+      <div className="flex flex-1">
+        <div className="flex-1 border-r p-[10px]" style={{ borderColor: LINE }}>
+          <p className="text-[7px] font-bold tracking-[0.5px]" style={{ color: MUTED }}>TRIAGE ORDER · RISK FIRST</p>
+          <div className="mt-[7px] space-y-[5px]">
+            {rows.map(([n, t, risk, tone]) => (
+              <div key={n} className="flex items-center gap-[6px] rounded-[4px] px-[7px] py-[6px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+                <span className="size-[5px] shrink-0 rounded-full" style={{ background: tone }} />
+                <span className="text-[8px] font-semibold" style={{ color: INK }}>{n}</span>
+                <span className="text-[7px]" style={{ color: MUTED }}>{t}</span>
+                <span className="ml-auto text-[6.5px] font-bold" style={{ color: tone }}>{risk.toUpperCase()}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="w-[42%] p-[10px]">
+          <div className="rounded-[5px] p-[8px]" style={{ background: TINT }}>
+            <p className="text-[6.5px] font-bold tracking-[0.4px]" style={{ color: TEAL }}>CLARITY SUGGESTS</p>
+            <p className="mt-[4px] text-[8px] leading-[1.35]" style={{ color: INK }}>
+              Two files can be cleared on income evidence alone. Two cannot, and one of those is a fair-lending flag.
+            </p>
+          </div>
+          <div className="mt-[7px] space-y-[4px]">
+            {["Clear 2 on evidence", "Review 1 flagged", "1 needs a human call"].map((t) => (
+              <div key={t} className="flex items-center gap-[5px] text-[7.5px]" style={{ color: MUTED }}>
+                <span className="h-[9px] w-[9px] rounded-[2px]" style={{ border: `1px solid ${LINE}` }} />{t}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </Desk>
+  );
+}
+
+function HiAdamDocRequest() {
+  return (
+    <Desk>
+      <DeskTabs />
+      <div className="flex flex-1 gap-[10px] p-[10px]">
+        <div className="flex-1 space-y-[5px]">
+          <div className="rounded-[4px] p-[7px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+            <Bar w="86%" h={5} /><div className="mt-[4px]"><Bar w="94%" h={4} /></div><div className="mt-[3px]"><Bar w="78%" h={4} /></div>
+          </div>
+          <div className="rounded-[4px] p-[7px]" style={{ background: MINT, border: `1px solid #CFE3E3` }}>
+            <p className="text-[6.5px] font-bold tracking-[0.4px]" style={{ color: TEAL }}>UPLOADED 2 MIN AGO</p>
+            <p className="mt-[3px] text-[8px] font-semibold" style={{ color: INK }}>W-2_2024_p2.pdf</p>
+          </div>
+        </div>
+        <div className="w-[46%] rounded-[5px] p-[9px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+          <p className="text-[6.5px] font-bold tracking-[0.4px]" style={{ color: AMBER_D }}>DRAFTED BY CLARITY · UNSENT</p>
+          <p className="mt-[5px] text-[8px] leading-[1.4]" style={{ color: INK }}>
+            Hi Laura — page 2 of your 2024 W-2 came through cut off at the bottom. Could you resend just that
+            page? Nothing else is outstanding.
+          </p>
+          <div className="mt-[8px] flex gap-[5px]">
+            <div className="flex-1 rounded-[4px] py-[5px] text-center text-[7px] font-semibold text-white" style={{ background: TEAL }}>Edit &amp; send</div>
+            <div className="flex-1 rounded-[4px] py-[5px] text-center text-[7px]" style={{ border: `1px solid ${LINE}`, color: MUTED }}>Discard</div>
+          </div>
+          <p className="mt-[6px] text-[6.5px]" style={{ color: MUTED }}>Nothing reaches Laura without you.</p>
+        </div>
+      </div>
+    </Desk>
+  );
+}
+
+function HiAdamClosing() {
+  return (
+    <Desk>
+      <DeskTabs />
+      <div className="flex flex-1 gap-[10px] p-[10px]">
+        <div className="flex-[3]">
+          <div className="rounded-[4px]" style={{ border: `1px solid ${LINE}`, background: CARD }}>
+            <div className="flex items-center justify-between border-b px-[8px] py-[6px]" style={{ borderColor: LINE }}>
+              <p className="text-[7px] font-bold tracking-[0.4px]" style={{ color: MUTED }}>CLOSING DISCLOSURE · VERSION 3</p>
+              <span className="rounded-full px-[6px] py-[2px] text-[6px] font-bold" style={{ background: TINT, color: TEAL }}>AMENDED</span>
+            </div>
+            {[["Title fee", "$1,000", "$1,200", "+$200"], ["Recording", "$120", "$120", "—"], ["Cash to close", "$8,740", "$8,940", "+$200"]].map(([k, a, b, d]) => (
+              <div key={k} className="grid grid-cols-[1fr_60px_60px_52px] items-center gap-[6px] border-b px-[8px] py-[6px] text-[7.5px] last:border-0" style={{ borderColor: LINE, color: INK }}>
+                <span>{k}</span><span style={{ color: MUTED }}>{a}</span><span>{b}</span>
+                <span className="font-semibold" style={{ color: d === "—" ? MUTED : AMBER_D }}>{d}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex-1 space-y-[6px]">
+          <div className="rounded-[4px] p-[8px]" style={{ background: "#FDF4E8", border: "1px solid #E8C89A" }}>
+            <p className="text-[6.5px] font-bold tracking-[0.4px]" style={{ color: AMBER_D }}>CLARITY FLAGGED</p>
+            <p className="mt-[3px] text-[7.5px] leading-[1.35]" style={{ color: INK }}>
+              Title fee moved $200 on 29 Oct, 11 days before signing.
+            </p>
+          </div>
+          <div className="rounded-[4px] py-[6px] text-center text-[7.5px] font-semibold text-white" style={{ background: TEAL }}>Approve explanation</div>
+          <p className="text-[6.5px] leading-[1.35]" style={{ color: MUTED }}>Logged under your name for fair-lending review.</p>
+        </div>
+      </div>
+    </Desk>
+  );
+}
+
+/* --- wide single-slot pieces --- */
+
+function FlowUnderwritingFlag() {
+  const steps = [
+    ["Borrower uploads", "Income and assets land in the shared record", "Laura · 2 min", "uploads"],
+    ["Clarity cross-checks", "Finds the 9.9% gap between stated income and pay stubs, and cites the rule behind it", "Machine · always", "flags"],
+    ["Adam decides", "Recalculate on base income, request the bonus history, or clear the flag — with a rationale logged under his name", "Adam · 4 min", "decisions"],
+    ["Laura is told", "Only what Adam approved reaches her, in plain words, with a named owner and an expected window", "Laura · then nothing", "approved updates"],
+  ] as const;
+  return (
+    <div className="flex h-full w-full flex-col p-[16px]" style={{ background: "#EDF1F1" }}>
+      <div className="grid flex-1 grid-cols-4 gap-[10px]">
+        {steps.map(([t, b, who, verb], i) => (
+          <div
+            key={t}
+            className="relative flex flex-col rounded-[6px] p-[11px]"
+            style={{ background: i === 2 ? DARK : CARD, border: `1px solid ${i === 2 ? DARK : LINE}` }}
+          >
+            <div className="flex items-center gap-[6px]">
+              <span
+                className="flex size-[17px] items-center justify-center rounded-full text-[8px] font-bold"
+                style={{ background: i === 2 ? AMBER : TINT, color: i === 2 ? DARK : TEAL }}
+              >
+                {i + 1}
+              </span>
+              <span className="text-[7px] font-bold tracking-[0.5px]" style={{ color: i === 2 ? AMBER : TEAL }}>
+                {verb.toUpperCase()}
+              </span>
+            </div>
+            <p className="mt-[9px] text-[10px] font-semibold leading-tight" style={{ color: i === 2 ? "#F2F6F5" : INK }}>
+              {t}
+            </p>
+            <p className="mt-[6px] text-[8.5px] leading-[1.45]" style={{ color: i === 2 ? "#AFC3C2" : MUTED }}>
+              {b}
+            </p>
+            <div
+              className="mt-auto flex items-center gap-[5px] rounded-[4px] px-[7px] py-[5px]"
+              style={{ background: i === 2 ? "rgba(255,255,255,0.07)" : "#F7F6F2" }}
+            >
+              <span className="size-[4px] rounded-full" style={{ background: i === 2 ? AMBER : TEAL }} />
+              <span className="text-[7.5px]" style={{ color: i === 2 ? "#C9D6D4" : MUTED }}>
+                {who}
+              </span>
+            </div>
+            {i < 3 && <span className="absolute -right-[10px] top-1/2 z-10 -translate-y-1/2 text-[11px]" style={{ color: TEAL }}>→</span>}
+          </div>
+        ))}
+      </div>
+      <div className="mt-[12px] flex items-center gap-[8px] rounded-[6px] px-[11px] py-[8px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+        <span className="shrink-0 text-[8px] font-bold tracking-[0.5px]" style={{ color: AMBER_D }}>NO MATTER HOW SURE THE AI IS</span>
+        <span className="text-[8.5px]" style={{ color: INK }}>
+          every file still gets a flag-or-clear moment, reviewed by a named person. The left column never moves right.
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function TabBarComponent() {
+  const states = [
+    ["Default", "#FFFFFF", LINE, MUTED],
+    ["Hover", "#F1F4F4", LINE, TEAL],
+    ["Flagged", "#FDF4E8", "#E8C89A", AMBER_D],
+    ["Active + flagged", TINT, TEAL, TEAL],
+  ] as const;
+  return (
+    <div className="flex h-full w-full items-stretch gap-[8px] p-[10px]" style={{ background: "#EDF1F1" }}>
+      {states.map(([label, bg, bd, fg]) => (
+        <div key={label} className="flex flex-1 flex-col justify-center gap-[10px] rounded-[6px] p-[8px]" style={{ background: bg, border: `1px solid ${bd}` }}>
+          <span className="text-[7px] font-bold tracking-[0.4px]" style={{ color: MUTED }}>{label.toUpperCase()}</span>
+          <div className="flex items-center gap-[6px]">
+            <span className="relative flex size-[14px] items-center justify-center rounded-[4px]" style={{ background: fg }}>
+              <span className="size-[5px] rounded-full bg-white" />
+              {label !== "Default" && <span className="absolute -right-[2px] -top-[2px] size-[5px] rounded-full" style={{ background: AMBER_D, border: "1px solid white" }} />}
+            </span>
+            <span className="text-[8.5px] font-semibold" style={{ color: fg }}>Ortiz, D</span>
+            <span className="ml-auto text-[7px]" style={{ color: MUTED }}>2 flags</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+type ScreenTone = "lo" | "mid" | "hi";
+
+const SCREENS: Record<string, React.ReactNode> = {
+  "wf-adam-lofi": <WfAdamLoFi />,
+  "wf-adam-midfi": <WfAdamMidFi />,
+  "wf-laura-midfi": <WfLauraMidFi />,
+  "flow-underwriting-flag": <FlowUnderwritingFlag />,
+  "hi-laura-home": <HiLauraHome />,
+  "hi-laura-rejection": <HiLauraRejection />,
+  "hi-laura-closing": <HiLauraClosing />,
+  "hi-adam-pipeline": <HiAdamPipeline />,
+  "hi-adam-docreq": <HiAdamDocRequest />,
+  "hi-adam-closing": <HiAdamClosing />,
+  "component-tabbar": <TabBarComponent />,
+};
+
 /* ---------------------------------- chrome ---------------------------------- */
 
 function Nav() {
+  const reduce = useMotionPref();
+  // Same load choreography as the site header: the bar drops in last, once the
+  // hero copy has landed, so the two never arrive on top of each other.
+  const { stage } = useLoadStage();
+
   return (
-    <header style={{ background: PAPER }}>
+    <motion.header
+      initial={{ transform: "translateY(-100%)" }}
+      animate={{ transform: stage === "nav" ? "translateY(0%)" : "translateY(-100%)" }}
+      transition={{ duration: reduce ? 0.2 : 0.65, ease: EASE_OUT }}
+      style={{ background: PAPER }}
+    >
       <div className="mx-auto flex h-[68px] w-full max-w-[1036px] items-center justify-between px-6 lg:px-0">
         <Link href="/" className="text-[16px] font-semibold text-[#1B2A30]" style={DISPLAY}>
           Neha Mayacharya
@@ -128,32 +766,40 @@ function Nav() {
           <Link href="/projects" className="border-b border-[#1B2A30] pb-[3px] text-[14px] text-[#1B2A30]">
             Work
           </Link>
-          <Link href="/about" className="text-[14px] text-[#1B2A30] transition-opacity hover:opacity-70">
+          <Link href="/about" className="text-[14px] text-[#1B2A30] transition-opacity duration-200 hover:opacity-70">
             About
           </Link>
-          <a href="/resume.pdf" className="text-[14px] text-[#1B2A30] transition-opacity hover:opacity-70">
+          <a href="/resume.pdf" className="text-[14px] text-[#1B2A30] transition-opacity duration-200 hover:opacity-70">
             Résumé (PDF)
           </a>
           <Link
             href="/#contact"
-            className="inline-flex h-[40px] items-center rounded-[999px] bg-[#1B2A30] px-[20px] text-[14px] font-semibold text-white"
+            className="inline-flex h-[40px] items-center rounded-[999px] bg-[#1B2A30] px-[20px] text-[14px] font-semibold text-white transition-[transform,opacity] duration-150 motion-safe:hover:-translate-y-[1px] motion-safe:active:scale-[0.98]"
           >
             Contact
           </Link>
         </nav>
         <Link
           href="/#contact"
-          className="inline-flex h-[40px] items-center rounded-[999px] bg-[#1B2A30] px-[20px] text-[14px] font-semibold text-white md:hidden"
+          className="inline-flex h-[40px] items-center rounded-[999px] bg-[#1B2A30] px-[20px] text-[14px] font-semibold text-white transition-[transform,opacity] duration-150 motion-safe:hover:-translate-y-[1px] motion-safe:active:scale-[0.98] md:hidden"
           style={BODY}
         >
           Contact
         </Link>
       </div>
-    </header>
+    </motion.header>
   );
 }
 
 function Hero() {
+  const reduce = useMotionPref();
+  const ready = useMotionReady();
+  // The hero is above the fold, so it animates on load rather than on scroll.
+  // It stays hidden until the preloader releases, otherwise it would play out
+  // unseen behind the gate.
+  const { stage } = useLoadStage();
+  const { group, item } = heroMotion(!ready ? "pending" : !!reduce);
+
   return (
     <header className="relative overflow-hidden" style={{ background: DARK }}>
       <div
@@ -162,9 +808,14 @@ function Hero() {
         style={{ width: 900, height: 900, right: -220, top: -260, borderColor: "rgba(255,255,255,0.06)" }}
       />
       <div className="relative mx-auto w-full max-w-[1036px] px-6 pb-[70px] pt-[60px] lg:px-0 lg:pb-16 lg:pt-[70px]">
-        <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
+        <motion.div
+          variants={group}
+          initial="hidden"
+          animate={stage === "loading" ? "hidden" : "visible"}
+          className="flex flex-col gap-10 lg:flex-row lg:justify-between"
+        >
           <div className="flex max-w-[540px] flex-col items-start gap-9">
-            <div className="flex flex-col items-start gap-[18px]">
+            <motion.div variants={item} className="flex flex-col items-start gap-[18px]">
               <p className="text-[13px] font-semibold" style={{ ...BODY, color: AMBER }}>
                 {HERO.eyebrow}
               </p>
@@ -180,50 +831,83 @@ function Hero() {
               <p className="text-[22px] font-semibold text-white" style={DISPLAY}>
                 {HERO.principle}
               </p>
-            </div>
-            <div className="border-l-2 pl-4" style={{ borderColor: AMBER }}>
+            </motion.div>
+            <motion.div variants={item} className="border-l-2 pl-4" style={{ borderColor: AMBER }}>
               <p className="text-[16px] text-[#C3CDCF]" style={BODY}>
                 {HERO.role}
               </p>
               <p className="mt-[2px] text-[14px] text-[#93A3A7]" style={BODY}>
                 {HERO.roleNote}
               </p>
-            </div>
-            <a
+            </motion.div>
+            <motion.a
+              variants={item}
               href={HERO.cta.href}
-              className="inline-flex h-[46px] items-center rounded-[999px] px-[22px] text-[15px] font-semibold text-[#1B2A30] transition-opacity hover:opacity-90"
+              className="inline-flex h-[46px] items-center rounded-[999px] px-[22px] text-[15px] font-semibold text-[#1B2A30] transition-[transform,opacity] duration-150 motion-safe:hover:-translate-y-[1px] motion-safe:active:scale-[0.98] motion-safe:hover:opacity-90"
               style={{ ...BODY, background: PAPER }}
             >
               {HERO.cta.label}
-            </a>
+            </motion.a>
           </div>
 
           {/* Drop-zones, exactly as designed */}
-          <div aria-hidden className="relative hidden shrink-0 lg:block" style={{ width: 700, minHeight: 493 }}>
+          <motion.div
+            variants={item}
+            aria-hidden
+            className="relative hidden shrink-0 lg:block"
+            style={{ width: 700, minHeight: 493 }}
+          >
             <div className="absolute left-[90px] top-[54px] h-[360px] w-[576px] rounded-[12px] p-[10px]" style={{ background: "#2A424B" }}>
-              <DropZone note={"Drop image\n01-hero-adam-risk-review.png"} className="pl-1 pt-[150px]" noteClass="text-[#F2B872]" />
+              <Shot
+                src={HERO.copilot.src}
+                alt={HERO.copilot.alt}
+                note={"Drop image\n01-hero-adam-risk-review.png"}
+                className="pl-1 pt-[150px]"
+                fillClassName="h-full w-full"
+                noteClass="text-[#F2B872]"
+                loading="eager"
+              />
             </div>
             <div
               className="absolute left-0 top-[154px] h-[433px] w-[200px] rounded-[28px] p-[10px]"
               style={{ background: DARK2, border: "6px solid #0E1A1F" }}
             >
-              <DropZone note={"Drop image\n02-hero-laura-home.png"} className="pl-1 pt-[185px]" noteClass="text-[#F2B872]" />
+              <Shot
+                src={HERO.borrower.src}
+                alt={HERO.borrower.alt}
+                note={"Drop image\n02-hero-laura-home.png"}
+                className="pl-1 pt-[185px]"
+                fillClassName="h-full w-full"
+                noteClass="text-[#F2B872]"
+                loading="eager"
+              />
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </header>
   );
 }
 
 function Facts() {
+  // A tight band of metadata: the four facts assemble in one beat rather than
+  // each getting its own moment.
+  const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
+
   return (
     <section aria-label="At a glance" style={{ background: "#0F1C21" }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 lg:px-0">
-        <ul className="grid grid-cols-2 lg:grid-cols-4">
+        <motion.ul
+          variants={group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          className="grid grid-cols-2 lg:grid-cols-4"
+        >
           {FACTS.map((fact, i) => (
-            <li
+            <motion.li
               key={fact.label}
+              variants={item}
               className="flex items-start gap-3 py-[22px] lg:px-5 lg:first:pl-0"
               style={{ borderLeft: i > 0 ? "1px solid #28393F" : undefined }}
             >
@@ -236,21 +920,33 @@ function Facts() {
                   {fact.value}
                 </p>
               </div>
-            </li>
+            </motion.li>
           ))}
-        </ul>
+        </motion.ul>
       </div>
     </section>
   );
 }
 
 function Problem() {
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.07 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[90px] lg:px-0">
       <SectionHead eyebrow={PROBLEM.label} heading={PROBLEM.heading} note={PROBLEM.note} />
-      <div className="grid gap-[18px] lg:grid-cols-2">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid gap-[18px] lg:grid-cols-2"
+      >
         {PROBLEM.personas.map((p) => (
-          <article key={p.name} className="flex flex-col gap-[18px] rounded-[20px] bg-white px-[30px] py-7">
+          <motion.article
+            key={p.name}
+            variants={item}
+            className="flex flex-col gap-[18px] rounded-[20px] bg-white px-[30px] py-7"
+          >
             <div className="flex items-start gap-[14px]">
               <span
                 className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-[999px] text-[14px] font-bold"
@@ -285,9 +981,9 @@ function Problem() {
             <span className="mt-2 inline-flex w-fit items-center rounded-[999px] bg-[#E4EEF0] px-3 py-[6px] text-[12px] font-semibold text-[#1D4F5C]" style={BODY}>
               {p.chip}
             </span>
-          </article>
+          </motion.article>
         ))}
-      </div>
+      </motion.div>
       <div className="mt-4 flex flex-col gap-2 rounded-[14px] px-[26px] py-5 sm:flex-row sm:items-center sm:gap-6" style={{ background: DARK }}>
         <p className="shrink-0 text-[11px] font-bold tracking-[1.32px]" style={{ ...BODY, color: AMBER }}>
           {PROBLEM.constraint.label.toUpperCase()}
@@ -317,21 +1013,33 @@ function ConfidenceChart() {
 }
 
 function Journey() {
+  // The stage pills are the column's signposts, so they land in order. The
+  // table cells and confidence chart stay static: they are data to read, not
+  // decoration to perform.
+  const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
+  const patterns = useStagger({ distance: 14, step: 0.06 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[90px] lg:px-0">
       <SectionHead eyebrow={JOURNEY.label} heading={JOURNEY.heading} note={JOURNEY.note} />
       <div className="min-w-0 overflow-x-auto">
         <div className="min-w-[880px]">
-          <div className="flex gap-2 pb-2">
+          <motion.div
+            variants={group}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewport}
+            className="flex gap-2 pb-2"
+          >
             <div className="w-[110px] shrink-0" />
             {JOURNEY.stages.map((stage) => (
-              <div key={stage} className="min-w-0 flex-1">
+              <motion.div key={stage} variants={item} className="min-w-0 flex-1">
                 <span className="flex h-[41px] items-center rounded-[8px] px-[14px] text-[14px] font-semibold text-white" style={{ ...BODY, background: DARK }}>
                   {stage}
                 </span>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
           {JOURNEY.rows.map((row) => (
             <div key={row.who} className="flex gap-2 pb-2">
               <div className="w-[110px] shrink-0 pt-[10px]">
@@ -373,26 +1081,35 @@ function Journey() {
           </div>
         </div>
       </div>
-      <div className="mt-7 grid gap-6 md:grid-cols-3">
+      <motion.div
+        variants={patterns.group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={patterns.viewport}
+        className="mt-7 grid gap-6 md:grid-cols-3"
+      >
         {JOURNEY.patterns.map((pat) => (
-          <div key={pat.label} className="flex flex-col gap-[6px] border-t border-[#1B2A30] pt-3">
+          <motion.div key={pat.label} variants={patterns.item} className="flex flex-col gap-[6px] border-t border-[#1B2A30] pt-3">
             <p className="text-[11px] font-bold tracking-[1.1px]" style={{ ...BODY, color: TEAL }}>
               {pat.label.toUpperCase()}
             </p>
             <p className="text-[16px] font-semibold leading-[1.5] text-[#1B2A30]" style={DISPLAY}>
               {pat.text}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
 
 function HowMightWe() {
+  const { group, item, viewport } = useStagger({ distance: 14, step: 0.06 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[90px] lg:px-0">
-      <div className="flex flex-col gap-[18px] rounded-[22px] bg-[#16262D] p-8 md:p-11">
+      <Reveal distance={22}>
+        <div className="flex flex-col gap-[18px] rounded-[22px] bg-[#16262D] p-8 md:p-11">
         <p className="text-[11px] font-bold uppercase tracking-[1.32px]" style={{ ...BODY, color: AMBER }}>
           How might we
         </p>
@@ -401,7 +1118,13 @@ function HowMightWe() {
           cognitive load through guidance and analysis, while keeping the human as the sole decision-maker at every
           consequential step?
         </p>
-        <div className="grid gap-[14px] pt-[10px] md:grid-cols-3">
+        <motion.div
+          variants={group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          className="grid gap-[14px] pt-[10px] md:grid-cols-3"
+        >
           {[
             {
               label: "FROM PATTERN 1 · RECONCILIATION",
@@ -416,21 +1139,27 @@ function HowMightWe() {
               text: "…give both sides one shared source of truth, where nothing reaches Laura without Adam’s review?",
             },
           ].map((c) => (
-            <div key={c.label} className="flex flex-col gap-[10px] rounded-[14px] p-5" style={{ background: DARK2 }}>
+            <motion.div
+              key={c.label}
+              variants={item}
+              className="flex flex-col gap-[10px] rounded-[14px] p-5"
+              style={{ background: DARK2 }}
+            >
               <p className="text-[10px] font-bold tracking-[1px] text-[#93A3A7]" style={BODY}>
                 {c.label}
               </p>
               <p className="text-[15px] leading-[1.45] text-[#EEF2F2]" style={BODY}>
                 {c.text}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
         <p className="pt-[12px] text-[14px] text-[#C3CDCF]" style={BODY}>
           Success looks like: fewer systems in Adam’s day · no silent stretches for Laura · every decision traceable to a named
           human
         </p>
-      </div>
+        </div>
+      </Reveal>
     </section>
   );
 }
@@ -640,13 +1369,22 @@ function DirectionDiagram({ kind, dark }: { kind: string; dark: boolean }) {
 }
 
 function Ideation() {
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.07 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[90px] lg:px-0">
       <SectionHead eyebrow={IDEATION.label} heading={IDEATION.heading} note={IDEATION.note} />
-      <div className="grid gap-4 lg:grid-cols-3">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid gap-4 lg:grid-cols-3"
+      >
         {IDEATION.directions.map((dir) => (
-          <article
+          <motion.article
             key={dir.tag}
+            variants={item}
             className="flex flex-col gap-4 rounded-[18px] p-6"
             style={{ background: dir.dark ? DARK : "#FFFFFF" }}
           >
@@ -673,9 +1411,9 @@ function Ideation() {
                 {dir.aside}
               </p>
             </div>
-          </article>
+          </motion.article>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -683,28 +1421,38 @@ function Ideation() {
 /* ----------------------------- design principle ----------------------------- */
 
 function Principle() {
+  // Only the header pills move: they are signposts, while the rule rows are
+  // data to read and the RULE line is a compliance statement that stays put.
+  const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[90px] lg:px-0">
       <SectionHead eyebrow={PRINCIPLE.eyebrow} heading={PRINCIPLE.heading} note={PRINCIPLE.note} size="md" />
       {/* header pills */}
-      <div className="hidden gap-2 pb-2 lg:flex">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="hidden gap-2 pb-2 lg:flex"
+      >
         <div className="w-[130px] shrink-0" />
-        <div className="flex-1">
+        <motion.div variants={item} className="flex-1">
           <span className="flex h-[41px] items-center rounded-[8px] px-[14px] text-[14px] font-bold text-[#1D4F5C]" style={{ ...BODY, background: "#E4EEF0" }}>
             {PRINCIPLE.columns[0]}
           </span>
-        </div>
-        <div className="flex-1">
+        </motion.div>
+        <motion.div variants={item} className="flex-1">
           <span className="flex h-[41px] items-center rounded-[8px] px-[14px] text-[14px] font-bold text-white" style={{ ...BODY, background: DARK }}>
             {PRINCIPLE.columns[1]}
           </span>
-        </div>
-        <div className="flex-1">
+        </motion.div>
+        <motion.div variants={item} className="flex-1">
           <span className="flex h-[41px] items-center rounded-[8px] px-[14px] text-[14px] font-bold text-[#2E6B45]" style={{ ...BODY, background: "#E6F1EA" }}>
             {PRINCIPLE.columns[2]}
           </span>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
       {/* rows */}
       {PRINCIPLE.rows.map((row) => (
         <div key={row.stage} className="flex flex-col gap-2 pb-2 lg:flex-row">
@@ -923,7 +1671,9 @@ function UxFlow() {
         <Architecture />
       </div>
       <SectionHead eyebrow={UX_FLOW.flow.eyebrow} heading={UX_FLOW.flow.heading} note={UX_FLOW.flow.note} size="md" />
-      <DropZone
+      <Shot
+        screen={UX_FLOW.flow.screen}
+        alt={UX_FLOW.flow.alt}
         note={UX_FLOW.flow.placeholder.replace("Drop image ", "Drop image\n")}
         className="h-[506px] rounded-[12px] p-2"
         style={{ background: "#EDF1F1" }}
@@ -937,6 +1687,11 @@ function UxFlow() {
 /* --------------------------- wireframes to hi-fi ----------------------------- */
 
 function Wireframes() {
+  // Lo-fi → mid-fi → hi-fi is a transformation, so each group's stages arrive
+  // in order with the arrow between them. The whole stage column (frame plus
+  // tag) moves as one unit.
+  const stages = useStagger({ distance: 18, step: 0.09 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[90px] lg:px-0">
       <SectionHead eyebrow={WIREFRAMES.label} heading={WIREFRAMES.heading} note={WIREFRAMES.note} />
@@ -945,16 +1700,29 @@ function Wireframes() {
           <p className="text-[15px] font-semibold" style={{ ...BODY, color: TEAL }}>
             {group.title}
           </p>
-          <div className="mt-[10px] flex flex-wrap items-start gap-[18px]">
+          <motion.div
+            variants={stages.group}
+            initial="hidden"
+            whileInView="visible"
+            viewport={stages.viewport}
+            className="mt-[10px] flex flex-wrap items-start gap-[18px]"
+          >
             {group.stages.map((stage, i) => (
               <div key={stage.tag} className="contents">
                 {i > 0 && (
-                  <span className="hidden h-[36px] w-[36px] shrink-0 items-center justify-center self-center rounded-[999px] md:flex" style={{ background: TEAL }}>
+                  <Reveal
+                    distance={12}
+                    className="hidden h-[36px] w-[36px] shrink-0 items-center justify-center self-center rounded-[999px] md:flex"
+                    style={{ background: TEAL }}
+                  >
                     <Icon name="icon-arrow" size={18} />
-                  </span>
+                  </Reveal>
                 )}
-                <div className="flex flex-col gap-[10px]">
-                  <DropZone
+                <motion.div variants={stages.item} className="flex flex-col gap-[10px]">
+                  <Shot
+                    src={"src" in stage ? stage.src : undefined}
+                    screen={"screen" in stage ? stage.screen : undefined}
+                    alt={"alt" in stage ? stage.alt : undefined}
                     note={stage.placeholder.replace("Drop image ", "Drop image\n")}
                     className={
                       group.size === "desktop"
@@ -970,10 +1738,10 @@ function Wireframes() {
                   <p className="text-[11px] font-bold tracking-[0.88px] text-[#5E6A6E]" style={BODY}>
                     {stage.tag}
                   </p>
-                </div>
+                </motion.div>
               </div>
             ))}
-          </div>
+          </motion.div>
         </div>
       ))}
     </section>
@@ -983,16 +1751,28 @@ function Wireframes() {
 /* ------------------------------ key decisions -------------------------------- */
 
 function KeyDecisions() {
+  const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
+
   return (
     <section className="mt-[90px]" style={{ background: DARK }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 py-24 lg:px-0">
         <SectionHead onDark eyebrow={KEY_DECISIONS.eyebrow} heading={KEY_DECISIONS.heading} />
-        <div className="grid gap-4 lg:grid-cols-2">
-          {KEY_DECISIONS.items.map((item) => (
-            <article key={item.title} className="flex items-start gap-[24px] rounded-[20px] bg-[#1F333B] p-[26px]">
+        <motion.div
+          variants={group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          className="grid gap-4 lg:grid-cols-2"
+        >
+          {KEY_DECISIONS.items.map((decision) => (
+            <motion.article
+              key={decision.title}
+              variants={item}
+              className="flex items-start gap-[24px] rounded-[20px] bg-[#1F333B] p-[26px]"
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={item.art}
+                src={decision.art}
                 width={104}
                 height={104}
                 alt=""
@@ -1002,15 +1782,15 @@ function KeyDecisions() {
               />
               <div>
                 <h3 className="text-[18px] font-semibold leading-[1.5] text-[#EEF2F2]" style={DISPLAY}>
-                  {item.title}
+                  {decision.title}
                 </h3>
                 <p className="mt-[5px] max-w-[330px] text-[14px] leading-[1.5] text-[#B3C0C3]" style={BODY}>
-                  {item.body}
+                  {decision.body}
                 </p>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -1019,37 +1799,77 @@ function KeyDecisions() {
 /* ---------------------------------- hi-fi ------------------------------------ */
 
 function HifiSection() {
+  // Each screen-plus-caption arrives as one unit, so the frame and its label
+  // never separate mid-entrance.
+  const laura = useStagger({ distance: 20, step: 0.07 });
+  const adam = useStagger({ distance: 20, step: 0.08 });
+
   return (
     <section id="hifi" className="mx-auto w-full max-w-[1036px] px-6 pt-[90px] lg:px-0">
       <SectionHead eyebrow={HIFI.eyebrow} heading={HIFI.heading} note={HIFI.note} />
       <p className="text-[15px] font-semibold" style={{ ...BODY, color: TEAL }}>
         {HIFI.laura.title}
       </p>
-      <div className="mt-[14px] grid gap-[30px] pb-12 sm:grid-cols-2 lg:grid-cols-4">
+      <motion.div
+        variants={laura.group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={laura.viewport}
+        className="mt-[14px] grid gap-[30px] pb-12 sm:grid-cols-2 lg:grid-cols-4"
+      >
         {HIFI.laura.screens.map((s) => (
-          <figure key={s.caption}>
-            <DropZone note={"Drop image\n" + s.placeholder.split(" ")[2]} className="h-[511px] rounded-[26px] border p-2" style={{ background: "#ECE9E2", borderColor: HAIR }} />
+          <motion.figure key={s.caption} variants={laura.item}>
+            <Shot
+              src={"src" in s ? s.src : undefined}
+              screen={"screen" in s ? s.screen : undefined}
+              alt={"alt" in s ? s.alt : undefined}
+              note={"Drop image\n" + s.placeholder.split(" ")[2]}
+              className="h-[511px] rounded-[26px] border p-2"
+              style={{ background: "#ECE9E2", borderColor: HAIR }}
+            />
             <figcaption className="mt-[10px] text-[13px] text-[#5E6A6E]" style={BODY}>
               {s.caption}
             </figcaption>
-          </figure>
+          </motion.figure>
         ))}
-      </div>
+      </motion.div>
       <p className="text-[15px] font-semibold" style={{ ...BODY, color: TEAL }}>
         {HIFI.adam.title}
       </p>
-      <div className="mt-[14px] grid gap-x-[18px] gap-y-6 pb-10 lg:grid-cols-2">
+      <motion.div
+        variants={adam.group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={adam.viewport}
+        className="mt-[14px] grid gap-x-[18px] gap-y-6 pb-10 lg:grid-cols-2"
+      >
         {HIFI.adam.screens.map((s) => (
-          <figure key={s.caption}>
-            <DropZone note={"Drop image\n" + s.placeholder.split(" ")[2]} className="h-[318px] rounded-[12px] p-2" style={{ background: DARK2 }} noteClass="text-[#F2B872]" />
+          <motion.figure key={s.caption} variants={adam.item}>
+            <Shot
+              src={"src" in s ? s.src : undefined}
+              screen={"screen" in s ? s.screen : undefined}
+              alt={"alt" in s ? s.alt : undefined}
+              note={"Drop image\n" + s.placeholder.split(" ")[2]}
+              className="h-[318px] rounded-[12px] p-2"
+              style={{ background: DARK2 }}
+              noteClass="text-[#F2B872]"
+            />
             <figcaption className="mt-[10px] text-[13px] text-[#5E6A6E]" style={BODY}>
               {s.caption}
             </figcaption>
-          </figure>
+          </motion.figure>
         ))}
-      </div>
-      <div className="flex flex-col gap-6 rounded-[18px] bg-white p-6 lg:flex-row lg:items-center">
-        <DropZone note={"Drop image\n" + HIFI.component.placeholder.split(" ")[2]} className="h-[150px] w-full max-w-[604px] shrink-0 rounded-[10px] p-2" style={{ background: "#EDF1F1" }} noteStyle={{ color: TEAL }} />
+      </motion.div>
+      <Reveal distance={20}>
+        <div className="flex flex-col gap-6 rounded-[18px] bg-white p-6 lg:flex-row lg:items-center">
+        <Shot
+          screen={HIFI.component.screen}
+          alt={HIFI.component.alt}
+          note={"Drop image\n" + HIFI.component.placeholder.split(" ")[2]}
+          className="h-[150px] w-full max-w-[604px] shrink-0 rounded-[10px] p-2"
+          style={{ background: "#EDF1F1" }}
+          noteStyle={{ color: TEAL }}
+        />
         <div className="min-w-0">
           <p className="text-[10px] font-bold tracking-[1px] text-[#1D4F5C]" style={BODY}>
             {HIFI.component.label.toUpperCase()}
@@ -1057,11 +1877,12 @@ function HifiSection() {
           <h3 className="mt-[6px] text-[20px] font-semibold leading-[1.5] text-[#1B2A30]" style={DISPLAY}>
             {HIFI.component.title}
           </h3>
-          <p className="mt-[6px] max-w-[330px] text-[14px] leading-[1.5] text-[#5E6A6E]" style={BODY}>
-            {HIFI.component.body}
-          </p>
+            <p className="mt-[6px] max-w-[330px] text-[14px] leading-[1.5] text-[#5E6A6E]" style={BODY}>
+              {HIFI.component.body}
+            </p>
+          </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -1069,13 +1890,23 @@ function HifiSection() {
 /* --------------------------------- outcome ----------------------------------- */
 
 function Outcome() {
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.07 });
+  const capabilities = useStagger({ distance: 14, step: 0.06 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[90px] lg:px-0">
       <SectionHead eyebrow={OUTCOME.eyebrow} heading={OUTCOME.heading} />
-      <div className="grid gap-[14px] md:grid-cols-3">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid gap-[14px] md:grid-cols-3"
+      >
         {OUTCOME.stats.map((stat) => (
-          <div
+          <motion.div
             key={stat.num}
+            variants={item}
             className="rounded-[18px] p-6"
             style={{ background: stat.tone === "amber" ? AMBER : DARK }}
           >
@@ -1085,27 +1916,33 @@ function Outcome() {
             <p className="mt-[12px] text-[14px] leading-[1.5]" style={{ ...BODY, color: stat.tone === "amber" ? DARK : "#C6D2D4" }}>
               {stat.body}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
       <p className="mt-[10px] text-[12px] text-[#5E6A6E]" style={BODY}>
         {OUTCOME.caption}
       </p>
       <p className="mt-[36px] text-[11px] font-bold tracking-[1.32px]" style={{ ...BODY, color: TEAL }}>
         {OUTCOME.showsLabel.toUpperCase()}
       </p>
-      <div className="mt-[14px] grid gap-[14px] pb-2 sm:grid-cols-2 lg:grid-cols-4">
+      <motion.div
+        variants={capabilities.group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={capabilities.viewport}
+        className="mt-[14px] grid gap-[14px] pb-2 sm:grid-cols-2 lg:grid-cols-4"
+      >
         {OUTCOME.capabilities.map((cap) => (
-          <div key={cap.title} className="rounded-[16px] bg-white p-5 pb-[22px]">
+          <motion.div key={cap.title} variants={capabilities.item} className="rounded-[16px] bg-white p-5 pb-[22px]">
             <p className="text-[16px] font-semibold leading-[1.5] text-[#1B2A30]" style={DISPLAY}>
               {cap.title}
             </p>
             <p className="mt-[6px] text-[13px] leading-[1.5] text-[#5E6A6E]" style={BODY}>
               {cap.body}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
       <p className="mt-6 max-w-[900px] text-[12px] leading-[1.5] text-[#5E6A6E]" style={BODY}>
         {OUTCOME.disclaimer}
       </p>
@@ -1116,36 +1953,46 @@ function Outcome() {
 /* ------------------------------- more projects -------------------------------- */
 
 function MoreProjects() {
+  const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[90px] lg:px-0">
       <div className="flex items-center justify-between">
         <p className="text-[12px] tracking-[1.2px] text-[#5E6A6E]" style={BODY}>
           MORE PROJECTS
         </p>
-        <Link href="/projects" className="border-b border-[#1B2A30] pb-[2px] text-[14px] font-semibold text-[#1B2A30]" style={BODY}>
+        <Link href="/projects" className="border-b border-[#1B2A30] pb-[2px] text-[14px] font-semibold text-[#1B2A30] transition-opacity duration-200 hover:opacity-70" style={BODY}>
           All work
         </Link>
       </div>
-      <div className="mt-[28px] grid gap-4 md:grid-cols-2">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="mt-[28px] grid gap-4 md:grid-cols-2"
+      >
         {NEIGHBORS.map((n) => (
-          <Link
-            key={n.title}
-            href={n.href}
-            className="group flex items-center gap-[20px] rounded-[18px] bg-white p-[14px] transition-transform motion-safe:group-hover:-translate-y-[2px]"
-          >
-            <span
-              className="relative h-[110px] w-[150px] shrink-0 overflow-hidden rounded-[12px]"
-              style={{ background: n.thumbDark ? "#231B1D" : "#E6DFD3" }}
+          /* The motion wrapper only carries the entrance, so the CSS hover
+             lift on the card never fights it for `transform`. */
+          <motion.div key={n.title} variants={item}>
+            <Link
+              href={n.href}
+              className="group flex items-center gap-[20px] rounded-[18px] bg-white p-[14px] transition-transform duration-200 motion-safe:group-hover:-translate-y-[2px] motion-safe:active:scale-[0.99] motion-reduce:transition-none motion-reduce:transform-none"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={n.thumb}
-                alt={n.title}
-                className="absolute inset-[10px] h-[calc(100%-20px)] w-[calc(100%-20px)] rounded-[6px] object-cover"
-                loading="lazy"
-                draggable={false}
-              />
-            </span>
+              <span
+                className="relative h-[110px] w-[150px] shrink-0 overflow-hidden rounded-[12px]"
+                style={{ background: n.thumbDark ? "#231B1D" : "#E6DFD3" }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={n.thumb}
+                  alt={n.title}
+                  className="absolute inset-[10px] h-[calc(100%-20px)] w-[calc(100%-20px)] rounded-[6px] object-cover transition-transform duration-200 motion-safe:group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:transform-none"
+                  loading="lazy"
+                  draggable={false}
+                />
+              </span>
             <span className="min-w-0">
               <span className="block text-[12px] text-[#5E6A6E]" style={BODY}>
                 {n.direction}
@@ -1158,8 +2005,9 @@ function MoreProjects() {
               </span>
             </span>
           </Link>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -1167,33 +2015,38 @@ function MoreProjects() {
 function Footer() {
   return (
     <footer style={{ background: DARK }}>
-      <div className="mx-auto flex w-full max-w-[1036px] flex-wrap items-center justify-between gap-6 px-6 py-14 lg:px-0">
-        <div>
-          <p className="text-[32px] font-semibold text-[#EEF2F2]" style={DISPLAY}>
-            Let&apos;s talk.
-          </p>
-          <a
-            href="mailto:nmayacharya@gmail.com"
-            className="mt-[10px] inline-block border-b border-[#56606B] pb-[2px] text-[16px] text-[#C3CDCF] transition-opacity hover:opacity-80"
-            style={BODY}
-          >
-            nmayacharya@gmail.com
-          </a>
-        </div>
-        <nav aria-label="Footer links" className="flex items-center gap-8" style={BODY}>
-          {FOOTER_LINKS.map((link) => (
+      {/* One quiet rise for the whole row — a footer is a sign-off, not a
+          section, and per-link entrances would overplay it. */}
+      <Reveal distance={16}>
+        <div className="mx-auto flex w-full max-w-[1036px] flex-wrap items-center justify-between gap-6 px-6 py-14 lg:px-0">
+          <div>
+            <p className="text-[32px] font-semibold text-[#EEF2F2]" style={DISPLAY}>
+              Let&apos;s talk.
+            </p>
             <a
-              key={link.label}
-              href={link.href}
-              target={link.href.startsWith("http") ? "_blank" : undefined}
-              rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-              className="text-[14px] text-[#EEF2F2] transition-opacity hover:opacity-80"
+              href="mailto:nmayacharya@gmail.com"
+              className="mt-[10px] inline-block border-b border-[#56606B] pb-[2px] text-[16px] text-[#C3CDCF] transition-opacity duration-200 hover:opacity-80"
+              style={BODY}
             >
-              {link.label}
+              nmayacharya@gmail.com
             </a>
-          ))}
-        </nav>
-      </div>
+          </div>
+          <nav aria-label="Footer links" className="flex items-center gap-8" style={BODY}>
+            {FOOTER_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                className="text-[14px] text-[#EEF2F2] transition-opacity duration-200 hover:opacity-80"
+                style={BODY}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </Reveal>
     </footer>
   );
 }

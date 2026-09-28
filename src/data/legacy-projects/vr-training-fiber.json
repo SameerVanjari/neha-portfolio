@@ -1,0 +1,79 @@
+{
+  "id": "vr-training-fiber",
+  "title": "Immersive VR Training for Fiber Optic Technicians",
+  "subtitle": "XR · Enterprise",
+  "dimension": "XR",
+  "perception": "xr",
+  "year": "2022",
+  "client": "Millennium",
+  "color": "#ff2bd6",
+  "accent": "neon",
+  "tags": [
+    "Meta Quest 2",
+    "Gamification",
+    "Enterprise VR"
+  ],
+  "url": "https://www.behance.net/gallery/204895093/Immersive-VR-Training-for-Fiber-Optic-Technicians",
+  "heroImage": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "VR training for fiber-optic technicians",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "Sole experience designer on a Meta Quest 2 VR training program. Owned research, client discovery, storyline, interaction design, gamification, ShapesXR storyboarding, asset selection, sound design, and 7+ design documents through to final deployment.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "Fiber-optic field work is high-stakes and costly to train in situ; technicians need safe, repeatable practice.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Owned research through deployment — gamified learning loops on Meta Quest 2, ShapesXR storyboarding, haptic-aligned steps, sound design, and 7+ design documents tied to real workflows.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "Enterprise VR training that scales onboarding safely and retains procedural knowledge through play.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "Meta Quest 2",
+        "Gamification",
+        "Enterprise VR"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "Designed for Millennium — Sole experience designer on a Meta Quest 2 VR training program. Owned research, client discovery, storyline, interaction design, gamification, ShapesXR storyboarding, asset selection, sound design, and 7+ design documents through to final deployment.",
+      "images": []
+    }
+  },
+  "media": {
+    "heroVideo": "/videos/vr-training-fiber.mp4",
+    "heroVideoPoster": "/images/vr-training-fiber-hero.jpg",
+    "videos": [
+      {
+        "label": "Trailer",
+        "src": "https://drive.google.com/uc?export=download&id=1BG_OINXUq9XxL9VjyvlvVlmlNICu_Or9",
+        "poster": "/images/vr-training-fiber-trailer.jpg"
+      },
+      {
+        "label": "Footage",
+        "src": "https://drive.google.com/uc?export=download&id=1Kn8sxe6DH85XWbrMoWfnjE4Pfayke4Bf",
+        "poster": "/images/vr-training-fiber-footage.jpg"
+      }
+    ],
+    "images": []
+  }
+}

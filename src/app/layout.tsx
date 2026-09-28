@@ -39,18 +39,30 @@ export const metadata: Metadata = {
 import BarbaProvider from "@/components/BarbaProvider";
 import SmoothScroll from "@/components/SmoothScroll";
 import Loader from "@/components/Loader";
+import { LoadStageProvider } from "@/components/LoadStage";
 import { PerceptionProvider } from "@/context/PerceptionContext";
+import MotionPrefs from "@/components/MotionPrefs";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${hankenDisplay.variable} ${hankenBody.variable} ${newsreader.variable} antialiased`}>
       <body className="bg-[#F2EEE7] text-[#17161B]">
         <PerceptionProvider>
-          <SmoothScroll>
-            <BarbaProvider>{children}</BarbaProvider>
-          </SmoothScroll>
-          <Loader />
+          <LoadStageProvider>
+            <MotionPrefs>
+              <SmoothScroll>
+                <BarbaProvider>{children}</BarbaProvider>
+              </SmoothScroll>
+              <Loader />
+            </MotionPrefs>
+          </LoadStageProvider>
         </PerceptionProvider>
+        {/* Every entrance animation writes an inline opacity:0 on first paint.
+            Without JS those never clear, so force everything visible for
+            no-JS visitors rather than showing them a blank page. */}
+        <noscript>
+          <style>{`[style*="opacity:0"]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
 import type { ThemeId } from "@/data/themes";
-import type { ProjectMedia } from "@/data/projects-media";
+import type { ProjectMedia } from "@/data/legacy-projects/projects-media";
 
 export type ProjectDetails = {
   challenge: string;

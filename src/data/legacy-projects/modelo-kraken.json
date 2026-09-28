@@ -1,0 +1,62 @@
+{
+  "id": "modelo-kraken",
+  "title": "Modelo × Seattle Kraken Mobile Game",
+  "subtitle": "Product · Gaming",
+  "dimension": "PRODUCT",
+  "perception": "product",
+  "year": "2023",
+  "client": "Modelo × Seattle Kraken",
+  "color": "#00e5ff",
+  "accent": "cyan",
+  "tags": [
+    "Mobile",
+    "Gaming",
+    "Spritesheet"
+  ],
+  "url": "https://www.behance.net/nehamayacharya",
+  "heroImage": "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "Modelo x Seattle Kraken retro mobile game",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "Retro-style, app-less mobile game driving sweepstakes participation. Full ownership of UX/UI, mobile design, and spritesheet development.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "Drive sweepstakes participation without app friction while keeping brand energy high.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Designed a retro-style, app-less mobile game — owned UX/UI, mobile flows and spritesheet animation for lightweight, shareable play.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "Engagement-driven sweepstakes touchpoint that converts through instant play, not installs.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "Mobile",
+        "Gaming",
+        "Spritesheet"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "Designed for Modelo × Seattle Kraken — Retro-style, app-less mobile game driving sweepstakes participation. Full ownership of UX/UI, mobile design, and spritesheet development.",
+      "images": []
+    }
+  }
+}

@@ -113,10 +113,29 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
     // Contracting on a fixed 120ms timer exposed the Suspense fallback
     // (blank page) mid-contract — the "white flash" on nav.
     const targetPath = href.split("?")[0].split("#")[0] || "/";
+    let routeCommitted = false;
     for (let i = 0; i < 50 && window.location.pathname !== targetPath; i++) {
       await new Promise((r) => setTimeout(r, 50));
     }
-    // let the new route paint a frame while still covered
+    if (window.location.pathname === targetPath) {
+      /* The URL is not the whole truth: a router whose route render fails
+         (a tab holding chunks from an older build is the classic case)
+         still commits history, leaving the old tree under the new URL.
+         The container's own namespace only updates when React has really
+         swapped the tree — wait for that before unmasking, and if it never
+         arrives, fall back to a full navigation, which the mask covers. */
+      const targetNs = targetPath.replace(/\//g, "-") || "-";
+      for (let i = 0; i < 50; i++) {
+        const ns = document.querySelector("[data-barba-container], [data-barba-namespace]")
+          ?.getAttribute("data-barba-namespace");
+        if (ns === targetNs) { routeCommitted = true; break; }
+        await new Promise((r) => setTimeout(r, 50));
+      }
+    }
+    if (!routeCommitted) {
+      window.location.assign(href);
+      return;
+    }
     await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
     // scroll to top while overlay is fully covering (hidden from user)
     // use instant to avoid smooth scroll being visible after transition

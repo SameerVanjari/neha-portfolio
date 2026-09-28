@@ -1,0 +1,62 @@
+{
+  "id": "vr-3d-modelling",
+  "title": "VR 3D Modelling",
+  "subtitle": "XR · Modeling",
+  "dimension": "XR",
+  "perception": "xr",
+  "year": "2022",
+  "client": null,
+  "color": "#ff2bd6",
+  "accent": "neon",
+  "tags": [
+    "VR",
+    "3D Modeling",
+    "Optimization"
+  ],
+  "url": "https://www.behance.net/nehamayacharya",
+  "heroImage": "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "VR 3D modelling workspace",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "3D modeling techniques specific to VR — optimization pipelines for using these models in VR projects. Shown in live demonstrations for IDC IIT Bombay's Design in VR course.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "Desktop 3D assets fail in headset — polycount, scale, and lighting break presence.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Modeled and optimized spatial assets for VR, covering the 3D pipeline from sculpt to engine-ready meshes.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "Reusable VR modeling and optimization patterns, later demonstrated live for IDC IIT Bombay.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "VR",
+        "3D Modeling",
+        "Optimization"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "3D modeling techniques built for VR — optimization pipelines for spatial assets, taught and practiced across client and academic work.",
+      "images": []
+    }
+  }
+}

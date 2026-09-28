@@ -220,7 +220,6 @@ export const NEIGHBORS = [
     highlight: "VR Awards finalist, live on Meta Quest",
     href: "/projects/broken-mile",
     thumbDark: true,
-    thumb: "/projects/hbo-charm-city-kings/hero-filter.jpg",
   },
   {
     direction: "Next · AI · Conversational assistant",
@@ -228,7 +227,5 @@ export const NEIGHBORS = [
     highlight: "95% task conversion",
     href: "/projects/visagenie",
     thumbDark: false,
-    thumb:
-      "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&auto=format&fit=crop",
   },
 ] as const;

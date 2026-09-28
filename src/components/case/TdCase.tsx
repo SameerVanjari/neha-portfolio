@@ -13,6 +13,7 @@ import {
   TAKEAWAYS,
 } from "@/data/td";
 import { FOOTER_LINKS } from "@/data/landing";
+import { caseStudyThumb } from "@/data/case-studies";
 
 const DARK = "#101A14";
 const FAINT_DARK = "#0B130E";
@@ -483,14 +484,19 @@ function MoreProjects() {
             href={n.href}
             className="group flex items-center gap-5 rounded-[18px] bg-white p-[14px] transition-transform motion-safe:hover:-translate-y-[2px]"
           >
-            <span
-              className="flex h-[110px] w-[150px] shrink-0 items-end rounded-[12px] p-2"
-              style={{ background: n.thumbBg }}
-            >
-              <span className="text-[11px]" style={{ ...BODY, color: n.thumbFg }}>
-                [Thumbnail]
+                          <span
+                className="relative h-[110px] w-[150px] shrink-0 overflow-hidden rounded-[12px]"
+                style={{ background: n.thumbBg }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={caseStudyThumb(n.href)}
+                  alt={n.title}
+                  loading="lazy"
+                  draggable={false}
+                  className="absolute inset-0 h-full w-full object-cover motion-safe:group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:transform-none"
+                />
               </span>
-            </span>
             <span className="min-w-0">
               <span className="block text-[12px]" style={{ ...BODY, color: MUTED }}>
                 {n.direction}

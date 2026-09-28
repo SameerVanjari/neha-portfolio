@@ -1,0 +1,68 @@
+{
+  "id": "virtual-retail",
+  "title": "Immersive Virtual Retail Experience",
+  "subtitle": "XR · Retail",
+  "dimension": "XR",
+  "perception": "xr",
+  "year": "2023",
+  "client": "IFSG",
+  "color": "#ff2bd6",
+  "accent": "neon",
+  "tags": [
+    "Metaverse",
+    "Retail",
+    "Spatial Concept"
+  ],
+  "url": "https://www.behance.net/gallery/228915999/Immersive-Virtual-Retail-Experience",
+  "heroImage": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "Luxury virtual retail metaverse interior",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "Luxury metaverse shopping experience for IFSG. 2D/3D concept, spatial and interaction design, UX, and creative team direction.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "Translate luxury retail presence into metaverse without losing tactility or curation.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Directed spatial concept across 2D/3D — interaction design, environmental storytelling and team leadership for a shoppable virtual flagship.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "IFSG luxury metaverse retail — immersive commerce that preserves brand world while enabling spatial exploration.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "Metaverse",
+        "Retail",
+        "Spatial Concept"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "Designed for IFSG — Luxury metaverse shopping experience for IFSG. 2D/3D concept, spatial and interaction design, UX, and creative team direction.",
+      "images": []
+    }
+  },
+  "media": {
+    "heroVideo": "/videos/virtual-retail.mp4",
+    "heroVideoPoster": "/images/virtual-retail-hero.jpg",
+    "videos": [],
+    "images": []
+  }
+}

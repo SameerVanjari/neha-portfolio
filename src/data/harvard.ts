@@ -1,8 +1,21 @@
 /**
  * Harvard MedTech (VR for healthcare) — transcribed from Website Wireframes
- * node 196:217. Copy and layout specs are from Figma as-is. Image slots are
- * drop-zones: the Figma file holds placeholder frames, no image fills.
+ * node 196:217. Copy and layout specs are from Figma as-is.
+ *
+ * Media was synced from the project Drive folder. `src` points at the
+ * optimised file in public/case/harvard; `note` keeps the original Drive
+ * filename for provenance. The hero clip is a trimmed, re-encoded 21s cut of
+ * HMT_VR.mp4 (24MB, 78s) — the full source stays in assets/harvard-medtech.
  */
+
+const C = "/case/harvard";
+
+/** The project cover, used by the homepage and /projects cards. */
+export const THUMB = {
+  src: `${C}/hb-12-world-crystal-bay.webp`,
+  alt: "Crystal Bay Beach: a wooden deck over turquoise water, a boat moored among palms",
+  note: "HMT-tropical-scene.webp",
+};
 
 export const HERO = {
   eyebrowLead: "Harvard MedTech",
@@ -14,7 +27,13 @@ export const HERO = {
   roleAgency: " · CXR Agency (Kinemeric)",
   roleNote: "Ideation to tested build · 2022",
   cta: "Step inside",
-  coverNote: "hb-01-cover-tropical.png (right side, full height)",
+  cover: {
+    src: `${C}/hero-vr.mp4`,
+    poster: `${C}/hero-vr-poster.webp`,
+    alt: "A person in a VR headset using the experience from a lobby armchair, then the worlds it opens: a sunset forest, a log cabin, night particles and a tropical beach",
+    note: "HMT_VR.mp4 (muted loop, 24s–45s)",
+    video: true as const,
+  },
 };
 
 export const FACTS = [
@@ -125,8 +144,18 @@ export const DOCS = {
   eyebrow: "Research & documentation",
   heading: "From mood board to design document",
   panels: [
-    { note: "hb-02-moodboard.png", caption: "Mood boards set the look and feel of each world" },
-    { note: "hb-03-design-doc.png", caption: "Design documents showed the whole team how it would look and work" },
+    {
+      src: `${C}/hb-02-moodboard.webp`,
+      alt: "The Crystal Bay Environment moodboard: night photography of a lit overwater pavilion, a moonlit sea and a bioluminescent beach, with notes on lighting and sound",
+      note: "hb-02-moodboard.png",
+      caption: "Mood boards set the look and feel of each world",
+    },
+    {
+      src: `${C}/hb-03-design-doc.webp`,
+      alt: "A two-page storyboard: the Japanese Zen Garden environment on the left and Crystal Bay on the right, four captioned frames each, with notes on lighting, night sounds and what to animate",
+      note: "hb-03-design-doc.png",
+      caption: "Design documents showed the whole team how it would look and work",
+    },
   ] as const,
 };
 
@@ -136,14 +165,44 @@ export const STORYBOARDS = {
   note: "Plan views and perspectives for every world, handed to developers as the build reference.",
   rows: [
     [
-      { note: "hb-04-sb-coastal-plan.png", caption: "Coastal retreat · plan view" },
-      { note: "hb-05-sb-forest-cabin.png", caption: "Forest cabin" },
-      { note: "hb-06-sb-forest-plan.png", caption: "Forest cabin · plan view" },
+      {
+        src: `${C}/hb-04-sb-coastal-plan.webp`,
+        alt: "Plan view of the coastal retreat: buildings, pools and terraces stepping down to the water",
+        note: "hb-04-sb-coastal-plan.png",
+        caption: "Coastal retreat · plan view",
+      },
+      {
+        src: `${C}/hb-05-sb-forest-cabin.webp`,
+        alt: "The forest cabin among pines on a riverbank, a canoe pulled up on the sand",
+        note: "hb-05-sb-forest-cabin.png",
+        caption: "Forest cabin",
+      },
+      {
+        src: `${C}/hb-06-sb-forest-plan.webp`,
+        alt: "Plan view of the forest garden: a path winding between planting beds to a deck over the water",
+        note: "hb-06-sb-forest-plan.png",
+        caption: "Forest cabin · plan view",
+      },
     ],
     [
-      { note: "hb-07-sb-zen-plan.png", caption: "Zen garden · plan view" },
-      { note: "hb-08-sb-zen-garden.png", caption: "Zen garden" },
-      { note: "hb-09-sb-snow-mountains.png", caption: "Snow mountains" },
+      {
+        src: `${C}/hb-07-sb-zen-plan.webp`,
+        alt: "Plan view of the zen garden: raked gravel, stepping stones and a dark meditation platform",
+        note: "hb-07-sb-zen-plan.png",
+        caption: "Zen garden · plan view",
+      },
+      {
+        src: `${C}/hb-08-sb-zen-garden.webp`,
+        alt: "Standing in the zen garden, raked gravel either side of a gravel path, a stilted house to the right",
+        note: "hb-08-sb-zen-garden.png",
+        caption: "Zen garden",
+      },
+      {
+        src: `${C}/hb-09-sb-snow-mountains.webp`,
+        alt: "Snow mountains at sunrise, with a snowcat, a snowmobile and a shovel on the ice",
+        note: "hb-09-sb-snow-mountains.png",
+        caption: "Snow mountains",
+      },
     ],
   ] as const,
 };
@@ -175,8 +234,24 @@ export const UI3D = {
   heading: "A 3D interface that asks almost nothing",
   note: "I prototyped the 3D UI and designed the 3D icons for all three home worlds in Vectary. Each panel floats in the scene with one short description and a single choice.",
   panels: [
-    { note: "hb-10-ui-choose-home.png", caption: "Choose your home world", wide: true as const },
-    { note: "hb-11-ui-crystal-bay.png", caption: "Crystal Bay Beach, one description, one choice", wide: false as const },
+    {
+      src: `${C}/hb-10-ui-choose-home.mp4`,
+      poster: `${C}/hb-10-ui-choose-home-poster.webp`,
+      alt: "The 3D home panel floating in the scene: “Choose Your Home Environment”, with Log Cabin, Crystal Bay Beach and Zen Garden picked out by a gaze pointer",
+      note: "hb-10-ui-choose-home.png",
+      caption: "Choose your home world",
+      wide: true as const,
+      video: true as const,
+    },
+    {
+      src: `${C}/hb-11-ui-crystal-bay.mp4`,
+      poster: `${C}/hb-11-ui-crystal-bay-poster.webp`,
+      alt: "The Crystal Bay Beach panel: one illustration, one line of description, and a single “Let’s go” choice under the gaze pointer",
+      note: "hb-11-ui-crystal-bay.png",
+      caption: "Crystal Bay Beach, one description, one choice",
+      wide: false as const,
+      video: true as const,
+    },
   ] as const,
 };
 
@@ -185,16 +260,40 @@ export const WORLDS = {
   heading: "From storyboard to world",
   note: "In each world, users can follow a guided box-breathing meditation or simply take in the place.",
   panels: [
-    { note: "hb-12-world-crystal-bay.png", caption: "Crystal Bay Beach", span: "wide" as const },
-    { note: "hb-13-world-log-cabin.png", caption: "Log Cabin", span: "narrow" as const },
-    { note: "hb-14-world-zen-garden.png", caption: "Zen Garden", span: "narrow" as const },
+    {
+      src: THUMB.src,
+      alt: THUMB.alt,
+      note: "hb-12-world-crystal-bay.png",
+      caption: "Crystal Bay Beach",
+      span: "wide" as const,
+    },
+    {
+      src: `${C}/hb-13-world-log-cabin.webp`,
+      alt: "The log cabin entrance: a wooden deck leading to open carved doors under a thatched roof",
+      note: "hb-13-world-log-cabin.png",
+      caption: "Log Cabin",
+      span: "narrow" as const,
+    },
+    {
+      src: `${C}/hb-14-world-zen-garden.webp`,
+      alt: "A red torii gate at the head of mossy stone steps, with paper lanterns, cherry blossom and stepping stones",
+      note: "hb-14-world-zen-garden.png",
+      caption: "Zen Garden",
+      span: "narrow" as const,
+    },
   ] as const,
 };
 
 export const BREATH = {
   eyebrow: "Guided by breath",
   heading: "Seated, still, and guided by breath",
-  imageNote: "hb-15-seated-breathing.png",
+  image: {
+    src: `${C}/hb-15-seated-breathing.mp4`,
+    poster: `${C}/hb-15-seated-breathing-poster.webp`,
+    alt: "Split view: the user seated and still in a VR headset, beside the night water where a glowing particle trail rises and falls with the breath",
+    note: "hb-15-seated-breathing.png",
+    video: true as const,
+  },
   notes: [
     {
       icon: "icon-wind",
@@ -241,6 +340,9 @@ export const NEIGHBORS = [
     title: "Turtle Bay Resort",
     highlight: "A door onto the beach at Turtle Bay",
     href: "/projects/turtle-bay-resort",
+    thumb: "/case/turtle/tb-15-finished-three-screens.webp",
+    thumbAlt:
+      "Three Turtle Bay screens side by side: the welcome screen, a turtle on the beach, and the invitation to visit",
     thumbBg: "#18201A",
     thumbFg: "#A9D4B3",
   },

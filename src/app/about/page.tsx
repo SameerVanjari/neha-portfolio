@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import Nav from "@/components/Nav";
 import { THEMES } from "@/data/themes";
 import data from "@/data/portfolio.json";
@@ -10,8 +10,10 @@ import SiteFooter from "@/components/landing/SiteFooter";
 import { lenisScrollToId } from "@/lib/lenis";
 import { AceternityCTA, HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { AnnotatedBio } from "@/components/BioLens";
+import { Reveal, TextRow, LineReveal, EASE_OUT, useMotionPref } from "@/components/motion/reveal";
 import { BIO_ANNOTATIONS, annotationLinkTarget } from "@/data/bio-annotations";
-import type { Project } from "@/types/portfolio";
+import { LEGACY_PROJECTS } from "@/data/legacy-projects";
+import { CASE_STUDIES } from "@/data/case-studies";
 import type { ReactNode } from "react";
 
 /* Home design tokens — paper / ink / muted / hairline / accent */
@@ -62,90 +64,6 @@ function Eyebrow({ children }: { children: ReactNode }) {
   );
 }
 
-const EASE_OUT: [number, number, number, number] = [0.23, 1, 0.32, 1];
-
-function Reveal({
-  children,
-  delay = 0,
-  className,
-  distance = 24,
-}: {
-  children: ReactNode;
-  delay?: number;
-  className?: string;
-  distance?: number;
-}) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.div
-      className={className}
-      initial={reduce ? { opacity: 0 } : { opacity: 0, transform: `translateY(${distance}px)` }}
-      whileInView={{ opacity: 1, transform: "translateY(0px)" }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: reduce ? 0.3 : 0.5, delay, ease: EASE_OUT }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-/**
- * One visual row of text rising from below its own position. Rendered as a
- * span so it stays valid inside phrasing content (<p>, <h1>) — a div there
- * would break hydration.
- */
-function TextRow({ children, delay = 0, distance = 18 }: { children: ReactNode; delay?: number; distance?: number }) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.span
-      className="block"
-      initial={reduce ? { opacity: 0 } : { opacity: 0, transform: `translateY(${distance}px)` }}
-      whileInView={{ opacity: 1, transform: "translateY(0px)" }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: reduce ? 0.3 : 0.5, delay, ease: EASE_OUT }}
-    >
-      {children}
-    </motion.span>
-  );
-}
-
-/**
- * Multi-line body copy, revealed row by row from the bottom: the clip window
- * opens upward while the text rises into it, so each line arrives in turn.
- * The clip is dropped once the sweep ends — the bio's hover pop-ups are
- * absolutely positioned inside the paragraph, so a permanent clip (or a
- * permanent overflow:hidden) would cut them off.
- */
-function LineReveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
-  const reduce = useReducedMotion();
-  const [settled, setSettled] = useState(false);
-
-  if (reduce) return <TextRow delay={delay}>{children}</TextRow>;
-  if (settled) return <span className="block">{children}</span>;
-
-  return (
-    <motion.span
-      className="block"
-      style={{ pointerEvents: "none" }}
-      initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
-      whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.62, delay, ease: EASE_OUT }}
-      onAnimationComplete={() => setSettled(true)}
-    >
-      <motion.span
-        className="block"
-        initial={{ transform: "translateY(18px)" }}
-        whileInView={{ transform: "translateY(0px)" }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.58, delay, ease: EASE_OUT }}
-      >
-        {children}
-      </motion.span>
-    </motion.span>
-  );
-}
-
 function Photo({ photo }: { photo: (typeof PHOTOS)[number] }) {
   return (
     <figure className="group flex w-full flex-col items-start gap-[12px]">
@@ -171,7 +89,7 @@ function Photo({ photo }: { photo: (typeof PHOTOS)[number] }) {
 
 export default function AboutPage() {
   const theme = THEMES.product; // neutral anchor — theme carries softly
-  const reduce = useReducedMotion();
+  const reduce = useMotionPref();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [atStart, setAtStart] = useState(true);
@@ -274,7 +192,7 @@ export default function AboutPage() {
                     annotations={BIO_ANNOTATIONS}
                     popupFor={(a) => ({
                       ...a,
-                      link: annotationLinkTarget(a.linkTo, data.projects as Project[]) ?? undefined,
+                      link: annotationLinkTarget(a.linkTo, [...CASE_STUDIES, ...LEGACY_PROJECTS]) ?? undefined,
                     })}
                   />
                 </LineReveal>

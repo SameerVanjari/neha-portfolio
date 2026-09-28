@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { PROJECT_MEDIA } from "@/data/projects-media";
+import { PROJECT_MEDIA } from "@/data/legacy-projects/projects-media";
 import type { Project } from "@/types/portfolio";
 
 /**

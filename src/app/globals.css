@@ -204,6 +204,77 @@ button:focus-visible {
   }
 }
 
+/* ---- Case studies: hover / press feedback ----
+   Interaction states, not decoration. These sit in the "tens of times a day"
+   tier, so every one is near-imperceptible: 150–200ms, one or two pixels,
+   transform and opacity only. Hover sits behind a real-pointer query so a tap
+   can't leave a card stranded in its hover state, and the whole set collapses
+   to nothing under reduced motion.
+
+   Only genuinely interactive elements carry these. A lift on a non-clickable
+   card would be a false affordance — it advertises a click that isn't there. */
+.case-cta,
+.case-card,
+.case-thumb,
+.case-link {
+  transition:
+    transform 180ms var(--ease-out),
+    opacity 180ms ease,
+    color 180ms ease,
+    background-color 180ms ease;
+}
+.case-cta {
+  transition:
+    transform 150ms var(--ease-out),
+    background-color 180ms ease,
+    color 180ms ease;
+}
+.case-link {
+  transition:
+    color 150ms var(--ease-out),
+    opacity 150ms var(--ease-out);
+}
+.case-thumb {
+  transition: transform 200ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .case-cta:hover {
+    transform: translateY(-1px);
+  }
+  .case-card:hover {
+    transform: translateY(-2px);
+  }
+  /* The thumbnail scales inside its frame, so the card's edges never move. */
+  .case-card:hover .case-thumb {
+    transform: scale(1.04);
+  }
+  .case-link:hover {
+    opacity: 0.7;
+  }
+}
+/* After the hover block on purpose: a press has to beat the hover it happens
+   during, and equal-specificity rules are decided by source order. */
+.case-cta:active {
+  transform: translateY(0) scale(0.98);
+}
+.case-card:active {
+  transform: translateY(-1px) scale(0.99);
+}
+@media (prefers-reduced-motion: reduce) {
+  .case-cta,
+  .case-card,
+  .case-thumb,
+  .case-link {
+    transition: none;
+  }
+  .case-cta:active,
+  .case-card:active,
+  .case-card:hover,
+  .case-card:hover .case-thumb {
+    transform: none;
+  }
+}
+
 /* ---- Site preloader (horizontal slot machine) ---- */
 /* CSS lives here (not in a component <style>) so it is server-rendered and
    the loader renders styled on the very first paint, before hydration. */
@@ -217,7 +288,13 @@ button:focus-visible {
   justify-content: center;
   gap: 28px;
   background: #ffffff;
-  animation: loader-fade 550ms cubic-bezier(0.23, 1, 0.32, 1) 2.8s forwards;
+  /* Backstop only: the component fades this out as soon as the critical
+     media resolves. If JS never runs, the overlay still clears itself so the
+     page can never be trapped behind it. */
+  animation: loader-fade 550ms cubic-bezier(0.23, 1, 0.32, 1) 6s forwards;
+}
+.loader-overlay[data-exiting="true"] {
+  animation-delay: 0s;
 }
 @keyframes loader-fade {
   to {
@@ -293,17 +370,71 @@ button:focus-visible {
 }
 
 
-/* Client logo marquee (ClientLogoLoop) */
+/* Hero skyline — image first, copy second. Kept in CSS (not framer) so it
+   runs off the main thread and cannot be left invisible if hydration fails. */
+.hero-skyline {
+  animation: hero-skyline-in 1.2s cubic-bezier(0.23, 1, 0.32, 1) 0.15s backwards;
+}
+@keyframes hero-skyline-in {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-skyline {
+    animation: none;
+  }
+}
+
+/* Client logo marquee (ClientLogoLoop)
+   ---------------------------------------------------------------------------
+   Track holds two identical sets; the animation shifts by -50%, i.e. exactly
+   one set. `.client-loop-set` carries both its gap and a trailing pad of the
+   same size, which is what makes the two halves equal width — without the
+   pad, 2N logos share 2N-1 gaps and every wrap jumps by half a gap. */
+.client-loop {
+  --loop-gap: 56px;
+  --loop-duration: 34s;
+}
 .client-loop-track {
-  animation: client-loop 32s linear infinite;
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: client-loop var(--loop-duration) linear infinite;
+}
+.client-loop-set {
+  display: flex;
+  align-items: center;
+  gap: var(--loop-gap);
+  /* Must equal --loop-gap, or the halves differ by half a gap. */
+  padding-inline-end: var(--loop-gap);
+  margin: 0;
+  list-style: none;
+}
+/* Pause so a logo can actually be looked at. */
+.client-loop:hover .client-loop-track,
+.client-loop:focus-within .client-loop-track {
+  animation-play-state: paused;
 }
 @keyframes client-loop {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  from { transform: translateX(0); }
+  /* Exactly one set, so the wrap is invisible. Shifting a fixed -50% only
+     works while the track is exactly two sets long, which leaves it too short
+     to cover the viewport — hence --loop-sets. */
+  to { transform: translateX(calc(-100% / var(--loop-sets, 2))); }
 }
 @media (prefers-reduced-motion: reduce) {
   .client-loop-track {
     animation: none;
+  }
+  /* Show the real client list once, not a half-clipped duplicate. */
+  .client-loop-set[aria-hidden="true"] {
+    display: none;
   }
 }
 

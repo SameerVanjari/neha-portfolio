@@ -1,0 +1,62 @@
+{
+  "id": "visagenie",
+  "title": "VisaGenie: AI-Powered Transparency for Global Migration",
+  "subtitle": "AI · Transparency",
+  "dimension": "AI",
+  "perception": "ai",
+  "year": "2025",
+  "client": null,
+  "color": "#8b5cff",
+  "accent": "sigil",
+  "tags": [
+    "Conversational AI",
+    "Transparency",
+    "Global Systems"
+  ],
+  "url": "https://www.behance.net/gallery/237623581/VisaGenie-AI-Powered-Transparency-for-Global-Migration",
+  "heroImage": "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "VisaGenie immigration platform interface",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "AI-powered transparency platform that simplifies complex global immigration workflows through intelligent UX and conversational interfaces.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "Global immigration is opaque — fragmented rules, forms, and timelines create anxiety and errors.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Designed an intelligent UX layer with conversational guidance that translates complex visa logic into clear, stepwise transparency. Anchored to verified sources.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "Simplified comprehension of global migration steps; users complete workflows with confidence and fewer drop-offs.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "Conversational AI",
+        "Transparency",
+        "Global Systems"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "AI-powered transparency platform that simplifies complex global immigration workflows through intelligent UX and conversational interfaces.",
+      "images": []
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "id": "vr-stem-inspirit",
+  "title": "Education in Virtual Reality",
+  "subtitle": "UX · Education",
+  "dimension": "UX",
+  "perception": "ux",
+  "year": "2020",
+  "client": "Inspirit VR",
+  "color": "#ffc94d",
+  "accent": "volt",
+  "tags": [
+    "VR",
+    "STEM",
+    "Education"
+  ],
+  "url": "https://www.behance.net/gallery/97240007/Education-in-Virtual-Reality",
+  "heroImage": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop",
+  "heroImageAlt": "VR STEM curriculum for K-12",
+  "sections": {
+    "overview": {
+      "label": "Story",
+      "heading": "Overview",
+      "body": "Research-backed VR biology and physics modules for K-12. Immersive storytelling improved student comprehension by 35%, across the full design lifecycle.",
+      "images": []
+    },
+    "problem": {
+      "label": "Problem",
+      "heading": "Why this needed to exist",
+      "body": "K-12 STEM is abstract on flat screens; students struggle to connect concepts to experience.",
+      "images": []
+    },
+    "approach": {
+      "label": "Approach",
+      "heading": "How the work got done",
+      "body": "Designed biology/physics modules end-to-end — research, narrative, interaction and deployment — using immersive storytelling at true scale.",
+      "images": []
+    },
+    "outcomes": {
+      "label": "Outcomes",
+      "heading": "What changed once it shipped",
+      "body": "35% lift in student comprehension — research-backed VR that turns lessons into explorable worlds.",
+      "images": []
+    },
+    "toolkit": {
+      "label": "Toolkit",
+      "heading": "What it was made with",
+      "body": "",
+      "images": [],
+      "items": [
+        "VR",
+        "STEM",
+        "Education"
+      ]
+    },
+    "credits": {
+      "label": "Credits",
+      "heading": "One last thing",
+      "body": "Designed for Inspirit VR — Research-backed VR biology and physics modules for K-12. Immersive storytelling improved student comprehension by 35%, across the full design lifecycle.",
+      "images": []
+    }
+  }
+}

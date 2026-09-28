@@ -2,9 +2,15 @@
  * Clarity — An AI copilot for the mortgage lifecycle.
  * Transcribed from Website Wireframes "Project 3: Clarity" (node 142:217).
  * All copy and visual specs are taken from the Figma design only.
- * The design's image slots are intentional drop-zones and are reproduced
- * exactly (fills, radii, and "Drop image" notes) as specified in Figma.
+ *
+ * Media was recovered from the project Drive folder, which holds HTML exports of
+ * the design rather than image files. Three screens had actually been built and
+ * were rasterised at 2x; the remaining frames shipped empty, so those slots point
+ * at live `screen` components — concept reconstructions in ClarityCase.tsx,
+ * built in the same design language. `note` keeps the original Figma filename.
  */
+
+const C = "/case/clarity";
 
 export const HERO = {
   eyebrow: "Clarity · Self-initiated concept",
@@ -14,6 +20,16 @@ export const HERO = {
   role: "Product & AI Experience Designer · Self-initiated concept",
   roleNote: "Task analysis to hi-fi, designed end to end",
   cta: { label: "See the screens", href: "#hifi" },
+  copilot: {
+    src: `${C}/adam-risk-review.webp`,
+    alt: "The loan officer copilot on Laura Bennett’s file: Clarity has flagged an income calculation anomaly with the citation behind it, and the decision — recalculate, request history or clear — is Adam’s to record",
+    note: "01-hero-adam-risk-review.png",
+  },
+  borrower: {
+    src: `${C}/laura-underwriting.webp`,
+    alt: "Laura’s borrower app mid-underwriting: a five-stage tracker, a plain-language note naming Adam Webb as the owner, and nothing needed from her",
+    note: "02-hero-laura-home.png",
+  },
 };
 
 export const FACTS = [
@@ -304,6 +320,8 @@ export const UX_FLOW = {
     heading: "Every branch routes through Adam first",
     note: "Every file gets a flag-or-clear moment reviewed by a named person, however confident the AI is. Laura hears only what Adam has approved.",
     placeholder: "Drop image 03-flow-underwriting-flag.png",
+    screen: "flow-underwriting-flag",
+    alt: "The underwriting flag end to end: the borrower uploads, Clarity cross-checks and cites the rule, Adam decides, and only then is Laura told — with a note that no file skips the human, however confident the AI is",
   },
 };
 
@@ -316,18 +334,38 @@ export const WIREFRAMES = {
       title: "Adam · Risk review",
       size: "desktop" as const,
       stages: [
-        { tag: "LO-FI", placeholder: "Drop image 06-lofi-adam-risk-review.png" },
-        { tag: "MID-FI", placeholder: "Drop image 09-midfi-adam-risk-review.png" },
-        { tag: "HI-FI", placeholder: "Drop image 16-adam-risk-review.png" },
+        {
+          tag: "LO-FI",
+          screen: "wf-adam-lofi",
+          alt: "Lo-fi desktop layout for Adam’s risk review: a navigation rail beside a column of three stacked file panels",
+          placeholder: "Drop image 06-lofi-adam-risk-review.png",
+        },
+        {
+          tag: "MID-FI",
+          screen: "wf-adam-midfi",
+          alt: "Mid-fi desktop layout for Adam’s risk review: a two-column working area, three risk items on the left and a decision panel of three options on the right",
+          placeholder: "Drop image 09-midfi-adam-risk-review.png",
+        },
+        {
+          tag: "HI-FI",
+          src: `${C}/adam-risk-review.webp`,
+          alt: "The built screen: the income anomaly Clarity flagged, the DTI impact, the citation, and the three decisions Adam can record",
+          placeholder: "Drop image 16-adam-risk-review.png",
+        },
       ],
     },
     {
       title: "Laura · Home",
       size: "mobile",
       stages: [
-        { tag: "LO-FI", placeholder: "Drop image 04-lofi-laura-home.png" },
-        { tag: "MID-FI", placeholder: "Drop image 07-midfi-laura-home.png" },
-        { tag: "HI-FI", placeholder: "Drop image 10-laura-home.png" },
+        {
+          tag: "LO-FI",
+          src: `${C}/laura-lofi-home.webp`,
+          alt: "Lo-fi wireframe of the borrower home screen: a five-stage progress tracker, a plain-language status summary card, a nothing-pending state, three quick-glance stats and a four-item tab bar",
+          placeholder: "Drop image 04-lofi-laura-home.png",
+        },
+        { tag: "MID-FI", screen: "wf-laura-midfi", alt: "Mid-fi mobile layout for Laura’s home: a greeting, the five-stage tracker, a plain-language status card and three quick-glance stats", placeholder: "Drop image 07-midfi-laura-home.png" },
+        { tag: "HI-FI", screen: "hi-laura-home", alt: "The built home screen: nothing to do today, the next outstanding item, and documents, timing and closing date at a glance", placeholder: "Drop image 10-laura-home.png" },
       ],
     },
   ] as const,
@@ -367,22 +405,64 @@ export const HIFI = {
   laura: {
     title: "Laura · Borrower app",
     screens: [
-      { placeholder: "Drop image 10-laura-home.png", caption: "Home dashboard" },
-      { placeholder: "Drop image 11-laura-document-rejection.png", caption: "Document rejection" },
-      { placeholder: "Drop image 12-laura-underwriting-status.png", caption: "Underwriting status" },
-      { placeholder: "Drop image 13-laura-closing-disclosure.png", caption: "Closing Disclosure" },
+      {
+        screen: "hi-laura-home",
+        alt: "Home dashboard: nothing to do today, the one outstanding item, and documents, timing and closing date at a glance",
+        placeholder: "Drop image 10-laura-home.png",
+        caption: "Home dashboard",
+      },
+      {
+        screen: "hi-laura-rejection",
+        alt: "Document rejection with a specific reason — page 2 of the W-2 was cut off — and exactly what to do instead of a generic rejection",
+        placeholder: "Drop image 11-laura-document-rejection.png",
+        caption: "Document rejection",
+      },
+      {
+        src: `${C}/laura-underwriting.webp`,
+        alt: "The borrower app during underwriting: a five-stage tracker with the current stage marked, a note naming Adam Webb as the owner, and three figures for documents, timing and closing date",
+        placeholder: "Drop image 12-laura-underwriting-status.png",
+        caption: "Underwriting status",
+      },
+      {
+        screen: "hi-laura-closing",
+        alt: "Closing Disclosure with the $1,200 title fee change flagged 11 days before signing, itemised against the previous version",
+        placeholder: "Drop image 13-laura-closing-disclosure.png",
+        caption: "Closing Disclosure",
+      },
     ],
   },
   adam: {
     title: "Adam · Loan officer copilot",
     screens: [
-      { placeholder: "Drop image 14-adam-pipeline.png", caption: "Pipeline dashboard" },
-      { placeholder: "Drop image 15-adam-document-request.png", caption: "Document request draft" },
-      { placeholder: "Drop image 16-adam-risk-review.png", caption: "Risk review" },
-      { placeholder: "Drop image 17-adam-closing-verification.png", caption: "Closing verification" },
+      {
+        screen: "hi-adam-pipeline",
+        alt: "Pipeline ordered by risk: four customer tabs, what Clarity suggests clearing, and which one needs a human call",
+        placeholder: "Drop image 14-adam-pipeline.png",
+        caption: "Pipeline dashboard",
+      },
+      {
+        screen: "hi-adam-docreq",
+        alt: "Document request draft: the borrower’s file on the left, and the message Clarity drafted on the right, unsent until Adam edits and sends it",
+        placeholder: "Drop image 15-adam-document-request.png",
+        caption: "Document request draft",
+      },
+      {
+        src: `${C}/adam-risk-review.webp`,
+        alt: "Risk review on Laura Bennett’s file: the income anomaly Clarity flagged, the DTI impact, the regulation cited, and the three decisions Adam can record",
+        placeholder: "Drop image 16-adam-risk-review.png",
+        caption: "Risk review",
+      },
+      {
+        screen: "hi-adam-closing",
+        alt: "Closing verification: version 3 of the disclosure line by line against version 2, with the $200 title fee movement flagged and ready for Adam to approve the explanation",
+        placeholder: "Drop image 17-adam-closing-verification.png",
+        caption: "Closing verification",
+      },
     ],
   },
   component: {
+    screen: "component-tabbar",
+    alt: "The customer tab bar in four states — default, hover, flagged, and active plus flagged — so an open flag is visible without clicking in",
     placeholder: "Drop image 18-component-tab-bar.png",
     label: "Component",
     title: "Customer tab bar",

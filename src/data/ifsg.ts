@@ -188,6 +188,9 @@ export const NEIGHBORS = [
     title: "Turtle Bay Resort",
     highlight: "A door onto the beach at Turtle Bay",
     href: "/projects/turtle-bay-resort",
+    thumb: "/case/turtle/tb-15-finished-three-screens.webp",
+    thumbAlt:
+      "Three Turtle Bay screens side by side: the welcome screen, a turtle on the beach, and the invitation to visit",
     thumbBg: "#10272B",
     thumbFg: "#FFB997",
   },

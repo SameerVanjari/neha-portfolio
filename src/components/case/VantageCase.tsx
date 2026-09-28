@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { motion, type Variants } from "framer-motion";
 import {
   BETTER,
   FACTS,
@@ -17,6 +19,10 @@ import {
   WIREFRAMES,
 } from "@/data/vantage";
 import { FOOTER_LINKS } from "@/data/landing";
+import { vantageFigure } from "@/data/vantage-media";
+import { EASE_OUT, Reveal, useStagger, useMotionPref } from "@/components/motion/reveal";
+import { useLoadStage } from "@/components/LoadStage";
+import { caseStudyThumb } from "@/data/case-studies";
 
 const DARK = "#16171C";
 const FAINT_DARK = "#0E0F13";
@@ -34,6 +40,63 @@ const RUST = "#8A5313";
 const DISPLAY = { fontFamily: "var(--font-display)" } as const;
 const BODY = { fontFamily: "var(--font-body)" } as const;
 
+/* ---------------------------------- motion --------------------------------- */
+
+/**
+ * Above the fold, the hero plays on load rather than on scroll, so it can't
+ * use the shared `useStagger` (viewport-triggered, never fires above the
+ * fold). Same easing and 500ms-class timing as the other case studies.
+ * Opacity lives on the items, never the container, so no branch can trap the
+ * hero at zero; reduced motion keeps the fade and drops all movement.
+ */
+function heroMotion(mode: "pending" | boolean): { group: Variants; item: Variants } {
+  if (mode === "pending") {
+    return {
+      group: { hidden: {}, visible: {} },
+      item: { hidden: { opacity: 0 }, visible: { opacity: 1 } },
+    };
+  }
+  if (mode) {
+    return {
+      group: { hidden: {}, visible: { transition: { duration: 0.3 } } },
+      item: {
+        hidden: { opacity: 0, transform: "translateY(0px)" },
+        visible: { opacity: 1, transform: "translateY(0px)", transition: { duration: 0.3 } },
+      },
+    };
+  }
+  return {
+    group: {
+      hidden: {},
+      visible: { transition: { delayChildren: 0.05, staggerChildren: 0.09 } },
+    },
+    item: {
+      hidden: { opacity: 0, transform: "translateY(20px)" },
+      visible: {
+        opacity: 1,
+        transform: "translateY(0px)",
+        transition: { duration: 0.55, ease: EASE_OUT },
+      },
+    },
+  };
+}
+
+/**
+ * The media query is unavailable during SSR, so the preference is read only
+ * after mount. Server markup and the first client frame therefore match, and
+ * the reduced-motion variant applies as a normal update.
+ */
+function useMotionReady(): boolean {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      setReady(true);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
+  return ready;
+}
+
 function SectionHead({
   eyebrow,
   heading,
@@ -45,9 +108,20 @@ function SectionHead({
   note?: string;
   dark?: boolean;
 }) {
+  // Every section announces itself identically: heading block lands, note
+  // follows a beat behind. Uniform arrival lets a long scroll read as one
+  // document rather than a dozen separate screens.
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.07 });
+
   return (
-    <div className="flex flex-wrap items-end justify-between gap-6 pb-9">
-      <div className="max-w-[900px]">
+    <motion.div
+      variants={group}
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewport}
+      className="flex flex-wrap items-end justify-between gap-6 pb-9"
+    >
+      <motion.div variants={item} className="max-w-[900px]">
         <p
           className="text-[11px] font-bold uppercase tracking-[1.32px]"
           style={{ ...BODY, color: dark ? PALE : BLUE }}
@@ -60,16 +134,17 @@ function SectionHead({
         >
           {heading}
         </h2>
-      </div>
+      </motion.div>
       {note && (
-        <p
+        <motion.p
+          variants={item}
           className="max-w-[340px] text-right text-[14px] leading-[1.5]"
           style={{ ...BODY, color: dark ? "#B6BAC4" : MUTED }}
         >
           {note}
-        </p>
+        </motion.p>
       )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -88,13 +163,40 @@ function Icon({ name, size = 20, className = "" }: { name: string; size?: number
   );
 }
 
+/**
+ * A figure slot. Renders the real export when one exists for this name, and
+ * otherwise keeps the Figma drop-frame treatment — so a slot still awaiting
+ * artwork reads as pending rather than as a broken image.
+ */
 function DropZone({
   note,
   className = "",
+  alt,
+  loading = "lazy",
 }: {
   note: string;
   className?: string;
+  alt?: string;
+  /** Above-the-fold media opts out of lazy loading so it can be the LCP. */
+  loading?: "eager" | "lazy";
 }) {
+  const src = vantageFigure(note);
+
+  if (src) {
+    return (
+      <div className={`overflow-hidden ${className}`} style={{ background: PANEL }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={src}
+          alt={alt ?? note.replace(/\.png$/, "")}
+          loading={loading}
+          draggable={false}
+          className="h-full w-full object-cover"
+        />
+      </div>
+    );
+  }
+
   return (
     <div
       aria-label={`Image placeholder: ${note}`}
@@ -111,8 +213,18 @@ function DropZone({
 }
 
 function Nav() {
+  const reduce = useMotionPref();
+  // Same load choreography as the site header: the bar drops in last, once the
+  // hero copy has landed, so the two never arrive on top of each other.
+  const { stage } = useLoadStage();
+
   return (
-    <header style={{ background: PAPER }}>
+    <motion.header
+      initial={{ transform: "translateY(-100%)" }}
+      animate={{ transform: stage === "nav" ? "translateY(0%)" : "translateY(-100%)" }}
+      transition={{ duration: reduce ? 0.2 : 0.65, ease: EASE_OUT }}
+      style={{ background: PAPER }}
+    >
       <div className="mx-auto flex h-[68px] w-full max-w-[1036px] items-center justify-between px-6 lg:px-0">
         <Link href="/" className="text-[16px] font-semibold" style={{ ...DISPLAY, color: INK }}>
           Neha Mayacharya
@@ -121,15 +233,15 @@ function Nav() {
           <Link href="/projects" className="border-b border-[#17181C] pb-[3px] text-[14px]" style={{ color: INK }}>
             Work
           </Link>
-          <Link href="/about" className="text-[14px] transition-opacity hover:opacity-70" style={{ color: INK }}>
+          <Link href="/about" className="text-[14px] transition-opacity duration-200 hover:opacity-70" style={{ color: INK }}>
             About
           </Link>
-          <a href="/resume.pdf" className="text-[14px] transition-opacity hover:opacity-70" style={{ color: INK }}>
+          <a href="/resume.pdf" className="text-[14px] transition-opacity duration-200 hover:opacity-70" style={{ color: INK }}>
             Résumé (PDF)
           </a>
           <Link
             href="/#contact"
-            className="inline-flex h-[40px] items-center rounded-[999px] px-[20px] text-[14px] font-semibold text-white"
+            className="inline-flex h-[40px] items-center rounded-[999px] px-[20px] text-[14px] font-semibold text-white transition-[transform,opacity] duration-150 motion-safe:hover:-translate-y-[1px] motion-safe:active:scale-[0.98]"
             style={{ background: INK }}
           >
             Contact
@@ -137,17 +249,25 @@ function Nav() {
         </nav>
         <Link
           href="/#contact"
-          className="inline-flex h-[40px] items-center rounded-[999px] px-[20px] text-[14px] font-semibold text-white md:hidden"
+          className="inline-flex h-[40px] items-center rounded-[999px] px-[20px] text-[14px] font-semibold text-white transition-[transform,opacity] duration-150 motion-safe:hover:-translate-y-[1px] motion-safe:active:scale-[0.98] md:hidden"
           style={{ ...BODY, background: INK }}
         >
           Contact
         </Link>
       </div>
-    </header>
+    </motion.header>
   );
 }
 
 function Hero() {
+  const reduce = useMotionPref();
+  const ready = useMotionReady();
+  // The hero is above the fold, so it animates on load rather than on scroll.
+  // It stays hidden until the preloader releases, otherwise it would play out
+  // unseen behind the gate.
+  const { stage } = useLoadStage();
+  const { group, item } = heroMotion(!ready ? "pending" : !!reduce);
+
   return (
     <section className="relative overflow-hidden" style={{ background: DARK }}>
       <div
@@ -158,8 +278,14 @@ function Hero() {
             "radial-gradient(circle, rgba(124,156,255,0.4) 0%, rgba(124,156,255,0.12) 38%, rgba(22,23,28,0) 70%)",
         }}
       />
-      <div className="relative mx-auto grid w-full max-w-[1036px] items-center gap-10 px-6 py-[70px] lg:grid-cols-[500px_1fr] lg:px-0 lg:py-[104px]">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        animate={stage === "loading" ? "hidden" : "visible"}
+        className="relative mx-auto grid w-full max-w-[1036px] items-center gap-10 px-6 py-[70px] lg:grid-cols-[500px_1fr] lg:px-0 lg:py-[104px]"
+      >
         <div className="max-w-[500px]">
+          <motion.div variants={item}>
           <p className="text-[13px] font-semibold" style={{ ...BODY, color: PALE }}>
             <span className="text-white">{HERO.eyebrowLead}</span>
             {HERO.eyebrowRest}
@@ -174,43 +300,64 @@ function Hero() {
           <p className="mt-[18px] max-w-[490px] text-[18px] leading-[1.5] text-[#C9CCD4]" style={BODY}>
             {HERO.subtitle}
           </p>
-          <div className="mt-[34px] border-l-[3px] pl-4" style={{ borderColor: PALE }}>
+          </motion.div>
+          <motion.div variants={item} className="mt-[34px] border-l-[3px] pl-4" style={{ borderColor: PALE }}>
             <p className="text-[16px] font-semibold text-[#F2F0EB]" style={BODY}>
               {HERO.role}
             </p>
             <p className="mt-[2px] text-[14px] text-[#9398A3]" style={BODY}>
               {HERO.roleNote}
             </p>
-          </div>
-          <a
+          </motion.div>
+          <motion.a
+            variants={item}
             href="#hifi"
-            className="mt-[34px] inline-flex h-[46px] items-center rounded-[999px] px-[22px] text-[15px] font-semibold"
+            className="mt-[34px] inline-flex h-[46px] items-center rounded-[999px] px-[22px] text-[15px] font-semibold transition-[transform,opacity] duration-150 motion-safe:hover:-translate-y-[1px] motion-safe:active:scale-[0.98] motion-safe:hover:opacity-90"
             style={{ ...BODY, background: PALE, color: INK }}
           >
             {HERO.cta}
-          </a>
+          </motion.a>
         </div>
-        <div className="overflow-hidden rounded-[14px] border border-[#2C3342] bg-[#0F1216] shadow-[0px_24px_50px_0px_rgba(0,0,0,0.5)]">
+        <motion.div
+          variants={item}
+          className="overflow-hidden rounded-[14px] border border-[#2C3342] bg-[#0F1216] shadow-[0px_24px_50px_0px_rgba(0,0,0,0.5)]"
+        >
           <div className="flex items-center gap-[7px] bg-[#1B1F26] py-[11px] pl-[14px]" aria-hidden>
             <span className="size-[11px] rounded-full bg-[#FF5F57]" />
             <span className="size-[11px] rounded-full bg-[#FEBC2E]" />
             <span className="size-[11px] rounded-full bg-[#28C840]" />
           </div>
-          <DropZone note={HERO.browserNote} className="aspect-[680/425] w-full" />
-        </div>
-      </div>
+          <DropZone
+                    note={HERO.browserNote}
+                    className="aspect-[680/425] w-full"
+                    alt="Vantage AI Preview: role-fit score, skills gap and the bullet improver"
+                    loading="eager"
+                  />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
 
 function Facts() {
+  // A tight band of metadata: the four facts assemble in one beat rather than
+  // each getting its own moment.
+  const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
+
   return (
     <section aria-label="At a glance" style={{ background: FAINT_DARK }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 lg:px-0">
-        <ul className="grid grid-cols-2 lg:grid-cols-4">
+        <motion.ul
+          variants={group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          className="grid grid-cols-2 lg:grid-cols-4"
+        >
           {FACTS.map((fact, i) => (
-            <li
+            <motion.li
               key={fact.label}
+              variants={item}
               className="flex items-start gap-3 py-[22px] lg:px-5 lg:first:pl-0"
               style={{ borderLeft: i > 0 ? `1px solid ${HAIR}` : undefined }}
             >
@@ -223,22 +370,32 @@ function Facts() {
                   {fact.value}
                 </p>
               </div>
-            </li>
+            </motion.li>
           ))}
-        </ul>
+        </motion.ul>
       </div>
     </section>
   );
 }
 
 function Problem() {
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.07 });
+  const audiences = useStagger({ distance: 12, step: 0.05 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={PROBLEM.eyebrow} heading={PROBLEM.heading} />
-      <div className="grid gap-4 md:grid-cols-3">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid gap-4 md:grid-cols-3"
+      >
         {PROBLEM.pains.map((pain) => (
-          <article
+          <motion.article
             key={pain.num}
+            variants={item}
             className="rounded-[18px] border bg-white px-[26px] pb-[26px] pt-6"
             style={{ borderColor: CARD_BORDER }}
           >
@@ -251,10 +408,11 @@ function Problem() {
             <p className="mt-2 text-[14px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
               {pain.body}
             </p>
-          </article>
+          </motion.article>
         ))}
-      </div>
-      <div className="mt-4 rounded-[20px] px-9 pb-8 pt-[30px]" style={{ background: DARK }}>
+      </motion.div>
+      <Reveal distance={20}>
+        <div className="mt-4 rounded-[20px] px-9 pb-8 pt-[30px]" style={{ background: DARK }}>
         <p className="text-[11px] font-bold uppercase tracking-[1.32px]" style={{ ...BODY, color: PALE }}>
           {PROBLEM.statementLabel}
         </p>
@@ -264,55 +422,76 @@ function Problem() {
           {PROBLEM.statementMid}
           <strong style={{ color: GOLD }}>{PROBLEM.statementB}</strong>.
         </p>
-      </div>
-      <div className="mt-4 flex flex-wrap items-center gap-[10px]">
+        </div>
+      </Reveal>
+      <motion.div
+        variants={audiences.group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={audiences.viewport}
+        className="mt-4 flex flex-wrap items-center gap-[10px]"
+      >
         <p className="text-[11px] font-semibold tracking-[1.32px]" style={{ ...BODY, color: MUTED }}>
           {PROBLEM.audiencesLabel}
         </p>
         {PROBLEM.audiences.map((a) => (
-          <span
+          <motion.span
             key={a}
+            variants={audiences.item}
             className="rounded-full border bg-white px-4 py-2 text-[14px]"
             style={{ ...BODY, borderColor: CARD_BORDER, color: INK }}
           >
             {a}
-          </span>
+          </motion.span>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
 
 function Hmws() {
+  // One row per question, arriving in order — the list is the argument.
+  const { group, item, viewport } = useStagger({ distance: 14, step: 0.06 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={HMWS.eyebrow} heading={HMWS.heading} />
-      <div>
-        {HMWS.items.map((item) => (
-          <div
-            key={item.num}
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        {HMWS.items.map((hmw) => (
+          <motion.div
+            key={hmw.num}
+            variants={item}
             className="grid gap-2 border-t py-5 md:grid-cols-[340px_1fr]"
             style={{ borderColor: CARD_BORDER }}
           >
             <p className="flex items-start gap-0 text-[12px]">
               <span className="w-[110px] shrink-0" style={{ ...BODY, color: BLUE }}>
-                {item.num}
+                {hmw.num}
               </span>
               <span className="font-bold tracking-[0.96px]" style={{ ...BODY, color: RUST }}>
-                {item.tag}
+                {hmw.tag}
               </span>
             </p>
             <p className="text-[19px] font-medium leading-[1.35] md:text-[22px]" style={{ ...BODY, color: INK }}>
-              {item.body}
+              {hmw.body}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
 
 function Research() {
+  // The comparison table stays static — it is data to read. The takeaway
+  // cards below it arrive in order.
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.06 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={RESEARCH.eyebrow} heading={RESEARCH.heading} />
@@ -356,29 +535,53 @@ function Research() {
           </tbody>
         </table>
       </div>
-      <div className="mt-4 grid gap-4 md:grid-cols-3">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="mt-4 grid gap-4 md:grid-cols-3"
+      >
         {RESEARCH.insights.map((insight) => (
-          <article key={insight.num} className="rounded-[18px] border bg-white px-6 pb-6 pt-[22px]" style={{ borderColor: CARD_BORDER }}>
+          <motion.article
+            key={insight.num}
+            variants={item}
+            className="rounded-[18px] border bg-white px-6 pb-6 pt-[22px]"
+            style={{ borderColor: CARD_BORDER }}
+          >
             <p className="text-[11px] font-semibold tracking-[1.32px]" style={{ ...BODY, color: MUTED }}>
               {insight.num}
             </p>
             <p className="mt-[10px] text-[16px] leading-[1.45]" style={{ ...BODY, color: INK }}>
               {insight.body}
             </p>
-          </article>
+          </motion.article>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
 
 function Ideation() {
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.06 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={IDEATION.eyebrow} heading={IDEATION.heading} note={IDEATION.note} />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+      >
         {IDEATION.pillars.map((pillar) => (
-          <article key={pillar.num} className="rounded-[18px] border bg-white px-[23px] pb-6 pt-[23px]" style={{ borderColor: CARD_BORDER }}>
+          <motion.article
+            key={pillar.num}
+            variants={item}
+            className="rounded-[18px] border bg-white px-[23px] pb-6 pt-[23px]"
+            style={{ borderColor: CARD_BORDER }}
+          >
             <p className="text-[11px] font-semibold tracking-[1.32px]" style={{ ...BODY, color: MUTED }}>
               {pillar.num}
             </p>
@@ -388,9 +591,9 @@ function Ideation() {
             <p className="mt-2 text-[14px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
               {pillar.body}
             </p>
-          </article>
+          </motion.article>
         ))}
-      </div>
+      </motion.div>
       <div className="mt-4 grid gap-4 lg:grid-cols-[560px_1fr]">
         <div className="rounded-[18px] border bg-white p-[27px]" style={{ borderColor: CARD_BORDER }}>
           <p className="text-[11px] font-bold tracking-[1.32px]" style={{ ...BODY, color: MUTED }}>
@@ -521,6 +724,9 @@ function Journey() {
 }
 
 function Wireframes() {
+  // Each fidelity pass arrives in order — the progression is the point.
+  const passes = useStagger({ distance: 18, step: 0.09 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={WIREFRAMES.eyebrow} heading={WIREFRAMES.heading} note={WIREFRAMES.note} />
@@ -530,23 +736,33 @@ function Wireframes() {
             <p className="text-[16px] font-semibold" style={{ ...BODY, color: INK }}>
               {group.title}
             </p>
-            <div className="mt-[14px] flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+            <motion.div
+              variants={passes.group}
+              initial="hidden"
+              whileInView="visible"
+              viewport={passes.viewport}
+              className="mt-[14px] flex flex-col items-stretch gap-3 sm:flex-row sm:items-center"
+            >
               {group.passes.map((note, i) => (
-                <div key={note} className="flex min-w-0 flex-1 items-center gap-3">
+                <motion.div key={note} variants={passes.item} className="flex min-w-0 flex-1 items-center gap-3">
                   {i > 0 && (
                     <span className="hidden shrink-0 sm:block" aria-hidden>
                       <Icon name="icon-arrow" size={28} />
                     </span>
                   )}
                   <div className="min-w-0 flex-1">
-                    <DropZone note={note} className="aspect-[316/197] w-full rounded-[14px]" />
+                    <DropZone
+                      note={note}
+                      className="aspect-[316/197] w-full rounded-[14px]"
+                      alt={`${group.title} — ${WIREFRAMES.passLabels[i].toLowerCase()} pass`}
+                    />
                     <p className="mt-2 text-[11px] font-bold tracking-[1.32px]" style={{ ...BODY, color: MUTED }}>
                       {WIREFRAMES.passLabels[i]}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         ))}
       </div>
@@ -555,36 +771,55 @@ function Wireframes() {
 }
 
 function Hifi() {
+  // Each screen-plus-caption arrives as one unit, so frame and label never
+  // separate mid-entrance.
+  const rows = useStagger({ distance: 20, step: 0.08 });
+
   return (
     <section id="hifi" className="mt-[96px] scroll-mt-6" style={{ background: DARK }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 py-[96px] lg:px-0">
         <SectionHead eyebrow={HIFI.eyebrow} heading={HIFI.heading} note={HIFI.note} dark />
         <div className="flex flex-col gap-4">
           {HIFI.rows.map((row, r) => (
-            <div key={r} className="grid gap-4 md:grid-cols-2">
+            <motion.div
+              key={r}
+              variants={rows.group}
+              initial="hidden"
+              whileInView="visible"
+              viewport={rows.viewport}
+              className="grid gap-4 md:grid-cols-2"
+            >
               {row.map((shot) => (
-                <figure key={shot.note}>
-                  <DropZone note={shot.note} className="aspect-[510/319] w-full rounded-[16px]" />
+                <motion.figure key={shot.note} variants={rows.item}>
+                  <DropZone note={shot.note} className="aspect-[510/319] w-full rounded-[16px]" alt={shot.caption} />
                   <figcaption className="mt-[10px] text-[13px] leading-[1.5] text-[#B6BAC4]" style={BODY}>
                     {shot.caption}
                   </figcaption>
-                </figure>
+                </motion.figure>
               ))}
-            </div>
+            </motion.div>
           ))}
         </div>
-        <figure className="mt-4">
-          <DropZone note={HIFI.tracker.note} className="aspect-[1036/648] w-full rounded-[16px]" />
-          <figcaption className="mt-[10px] text-[13px] leading-[1.5] text-[#B6BAC4]" style={BODY}>
-            {HIFI.tracker.caption}
-          </figcaption>
-        </figure>
+        <Reveal className="mt-4" distance={20}>
+          <figure>
+            <DropZone
+              note={HIFI.tracker.note}
+              className="aspect-[1036/648] w-full rounded-[16px]"
+              alt={HIFI.tracker.caption}
+            />
+            <figcaption className="mt-[10px] text-[13px] leading-[1.5] text-[#B6BAC4]" style={BODY}>
+              {HIFI.tracker.caption}
+            </figcaption>
+          </figure>
+        </Reveal>
       </div>
     </section>
   );
 }
 
 function Prototyping() {
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.06 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead
@@ -592,9 +827,20 @@ function Prototyping() {
         heading={PROTOTYPING.heading}
         note={PROTOTYPING.note}
       />
-      <ol className="grid gap-[14px] sm:grid-cols-2 lg:grid-cols-4">
+      <motion.ol
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid gap-[14px] sm:grid-cols-2 lg:grid-cols-4"
+      >
         {PROTOTYPING.steps.map((step) => (
-          <li key={step.num} className="rounded-[18px] border bg-white px-[23px] pb-6 pt-[23px]" style={{ borderColor: CARD_BORDER }}>
+          <motion.li
+            key={step.num}
+            variants={item}
+            className="rounded-[18px] border bg-white px-[23px] pb-6 pt-[23px]"
+            style={{ borderColor: CARD_BORDER }}
+          >
             <p className="text-[28px] font-bold leading-none" style={{ ...DISPLAY, color: INK }}>
               {step.num}
             </p>
@@ -604,9 +850,9 @@ function Prototyping() {
             <p className="mt-2 text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
               {step.body}
             </p>
-          </li>
+          </motion.li>
         ))}
-      </ol>
+      </motion.ol>
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         <div className="rounded-[18px] border bg-white p-[27px]" style={{ borderColor: CARD_BORDER }}>
           <p className="text-[11px] font-bold tracking-[1.32px]" style={{ ...BODY, color: BLUE }}>
@@ -630,6 +876,10 @@ function Prototyping() {
 }
 
 function Solves() {
+  // Before → after, row by row: the comparison is the argument, so the rows
+  // arrive in reading order.
+  const { group, item, viewport } = useStagger({ distance: 14, step: 0.06 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={SOLVES.eyebrow} heading={SOLVES.heading} />
@@ -638,9 +888,19 @@ function Solves() {
         <span />
         <span>WITH VANTAGE AI</span>
       </p>
-      <div className="flex flex-col">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="flex flex-col"
+      >
         {SOLVES.rows.map((row) => (
-          <div key={row.before} className="grid grid-cols-[1fr_40px_1fr] items-stretch gap-0">
+          <motion.div
+            key={row.before}
+            variants={item}
+            className="grid grid-cols-[1fr_40px_1fr] items-stretch gap-0"
+          >
             <p className="border-t py-5 pr-6 text-[17px] font-medium leading-[1.4]" style={{ ...BODY, borderColor: CARD_BORDER, color: MUTED }}>
               {row.before}
             </p>
@@ -650,20 +910,33 @@ function Solves() {
             <p className="border-t py-5 pl-2 text-[17px] font-semibold leading-[1.4]" style={{ ...BODY, borderColor: CARD_BORDER, color: INK }}>
               {row.after}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
 
 function Better() {
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.05 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={BETTER.eyebrow} heading={BETTER.heading} />
-      <ol className="grid gap-[14px] sm:grid-cols-2 lg:grid-cols-5">
+      <motion.ol
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid gap-[14px] sm:grid-cols-2 lg:grid-cols-5"
+      >
         {BETTER.cards.map((card, i) => (
-          <li key={card.num} className="rounded-[18px] border bg-white px-5 pb-6 pt-5" style={{ borderColor: CARD_BORDER }}>
+          <motion.li
+            key={card.num}
+            variants={item}
+            className="rounded-[18px] border bg-white px-5 pb-6 pt-5"
+            style={{ borderColor: CARD_BORDER }}
+          >
             <p className="text-[12px] font-bold" style={{ ...BODY, color: BLUE }}>
               {String(i + 1).padStart(2, "0")}
             </p>
@@ -673,9 +946,9 @@ function Better() {
             <p className="mt-2 text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
               {card.body}
             </p>
-          </li>
+          </motion.li>
         ))}
-      </ol>
+      </motion.ol>
       <p className="mt-6 text-[12px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
         {BETTER.credit}
       </p>
@@ -687,31 +960,46 @@ function Better() {
 }
 
 function MoreProjects() {
+  const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
+
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[110px] lg:px-0">
       <div className="flex items-center justify-between">
         <p className="text-[12px] tracking-[1.2px]" style={{ ...BODY, color: MUTED }}>
           MORE PROJECTS
         </p>
-        <Link href="/projects" className="border-b pb-[2px] text-[14px] font-semibold" style={{ ...BODY, color: INK, borderColor: INK }}>
+        <Link href="/projects" className="border-b pb-[2px] text-[14px] font-semibold transition-opacity duration-200 hover:opacity-70" style={{ ...BODY, color: INK, borderColor: INK }}>
           All work
         </Link>
       </div>
-      <div className="mt-7 grid gap-4 md:grid-cols-2">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="mt-7 grid gap-4 md:grid-cols-2"
+      >
         {NEIGHBORS.map((n) => (
-          <Link
-            key={n.title}
-            href={n.href}
-            className="group flex items-center gap-5 rounded-[18px] bg-white p-[14px] transition-transform motion-safe:hover:-translate-y-[2px]"
-          >
-            <span
-              className="flex h-[110px] w-[150px] shrink-0 items-end rounded-[12px] p-2"
-              style={{ background: n.thumbBg }}
+          /* The motion wrapper only carries the entrance, so the CSS hover
+             lift on the card never fights it for `transform`. */
+          <motion.div key={n.title} variants={item}>
+            <Link
+              href={n.href}
+              className="group flex items-center gap-5 rounded-[18px] bg-white p-[14px] transition-transform duration-200 motion-safe:hover:-translate-y-[2px] motion-safe:active:scale-[0.99] motion-reduce:transition-none motion-reduce:transform-none"
             >
-              <span className="text-[11px]" style={{ ...BODY, color: n.thumbFg }}>
-                [Thumbnail]
-              </span>
-            </span>
+                              <span
+                  className="relative h-[110px] w-[150px] shrink-0 overflow-hidden rounded-[12px]"
+                  style={{ background: n.thumbBg }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={caseStudyThumb(n.href)}
+                    alt={n.title}
+                    loading="lazy"
+                    draggable={false}
+                    className="absolute inset-0 h-full w-full object-cover motion-safe:group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:transform-none"
+                  />
+                </span>
             <span className="min-w-0">
               <span className="block text-[12px]" style={{ ...BODY, color: MUTED }}>
                 {n.direction}
@@ -724,8 +1012,9 @@ function MoreProjects() {
               </span>
             </span>
           </Link>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -733,33 +1022,38 @@ function MoreProjects() {
 function Footer() {
   return (
     <footer style={{ background: DARK }}>
-      <div className="mx-auto flex w-full max-w-[1036px] flex-wrap items-center justify-between gap-6 px-6 py-14 lg:px-0">
-        <div>
-          <p className="text-[32px] font-semibold text-[#F2F0EB]" style={DISPLAY}>
-            Let&apos;s talk.
-          </p>
-          <a
-            href="mailto:nmayacharya@gmail.com"
-            className="mt-[10px] inline-block border-b border-[#3A5552] pb-[2px] text-[16px] text-[#C9CCD4] transition-opacity hover:opacity-80"
-            style={BODY}
-          >
-            nmayacharya@gmail.com
-          </a>
-        </div>
-        <nav aria-label="Footer links" className="flex items-center gap-8" style={BODY}>
-          {FOOTER_LINKS.map((link) => (
+      {/* One quiet rise for the whole row — a footer is a sign-off, not a
+          section, and per-link entrances would overplay it. */}
+      <Reveal distance={16}>
+        <div className="mx-auto flex w-full max-w-[1036px] flex-wrap items-center justify-between gap-6 px-6 py-14 lg:px-0">
+          <div>
+            <p className="text-[32px] font-semibold text-[#F2F0EB]" style={DISPLAY}>
+              Let&apos;s talk.
+            </p>
             <a
-              key={link.label}
-              href={link.href}
-              target={link.href.startsWith("http") ? "_blank" : undefined}
-              rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-              className="text-[14px] text-[#F2F0EB] transition-opacity hover:opacity-80"
+              href="mailto:nmayacharya@gmail.com"
+              className="mt-[10px] inline-block border-b border-[#3A5552] pb-[2px] text-[16px] text-[#C9CCD4] transition-opacity duration-200 hover:opacity-80"
+              style={BODY}
             >
-              {link.label}
+              nmayacharya@gmail.com
             </a>
-          ))}
-        </nav>
-      </div>
+          </div>
+          <nav aria-label="Footer links" className="flex items-center gap-8" style={BODY}>
+            {FOOTER_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                className="text-[14px] text-[#F2F0EB] transition-opacity duration-200 hover:opacity-80"
+                style={BODY}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </Reveal>
     </footer>
   );
 }
