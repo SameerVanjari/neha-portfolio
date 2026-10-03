@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { motion, type Variants } from "framer-motion";
 import {
   BRIEF,
   BUILDS,
@@ -16,6 +17,7 @@ import {
 } from "@/data/turtle";
 import { FOOTER_LINKS } from "@/data/landing";
 import { caseStudyThumb } from "@/data/case-studies";
+import { EASE_OUT, Reveal, useMotionPref, useStagger } from "@/components/motion/reveal";
 
 const DARK = "#10272B";
 const FAINT_DARK = "#0B1D20";
@@ -43,9 +45,20 @@ function SectionHead({
   note?: string;
   dark?: boolean;
 }) {
+  // Every section announces itself identically: the heading block lands, the
+  // note follows a beat behind. Uniform arrival is what lets a long scroll
+  // read as one document rather than a dozen separate screens.
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.08 });
+
   return (
-    <div className="flex flex-wrap items-end justify-between gap-6 pb-9">
-      <div className="max-w-[760px]">
+    <motion.div
+      variants={group}
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewport}
+      className="flex flex-wrap items-end justify-between gap-6 pb-9"
+    >
+      <motion.div variants={item} className="max-w-[760px]">
         <p
           className="text-[11px] font-bold uppercase tracking-[1.32px]"
           style={{ ...BODY, color: dark ? PALE : ACCENT }}
@@ -58,16 +71,17 @@ function SectionHead({
         >
           {heading}
         </h2>
-      </div>
+      </motion.div>
       {note && (
-        <p
+        <motion.p
+          variants={item}
           className="max-w-[340px] text-right text-[14px] leading-[1.5]"
           style={{ ...BODY, color: dark ? "#AFC3C2" : MUTED }}
         >
           {note}
-        </p>
+        </motion.p>
       )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -208,6 +222,22 @@ function Nav() {
 }
 
 function Hero() {
+  const reduce = useMotionPref();
+  // The hero sits above the fold, so it plays on load rather than on scroll —
+  // the same dialect as the other case studies (opacity + a short rise, one
+  // strong ease-out). Reduced motion keeps the fade and drops the movement.
+  const group: Variants = {
+    hidden: {},
+    visible: { transition: { delayChildren: 0.05, staggerChildren: reduce ? 0 : 0.09 } },
+  };
+  const item: Variants = {
+    hidden: { opacity: 0, transform: reduce ? "translateY(0px)" : "translateY(20px)" },
+    visible: {
+      opacity: 1,
+      transform: "translateY(0px)",
+      transition: { duration: reduce ? 0.3 : 0.55, ease: EASE_OUT },
+    },
+  };
   return (
     <section className="relative overflow-hidden" style={{ background: DARK }}>
       <div
@@ -218,8 +248,13 @@ function Hero() {
             "radial-gradient(circle, rgba(217,119,74,0.5) 0%, rgba(217,119,74,0.16) 38%, rgba(16,39,43,0) 70%)",
         }}
       />
-      <div className="relative mx-auto grid w-full max-w-[1036px] items-center gap-10 px-6 py-[70px] lg:grid-cols-[1fr_450px] lg:px-0 lg:py-[88px]">
-        <div className="max-w-[560px]">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        animate="visible"
+        className="relative mx-auto grid w-full max-w-[1036px] items-center gap-10 px-6 py-[70px] lg:grid-cols-[1fr_450px] lg:px-0 lg:py-[88px]"
+      >
+        <motion.div variants={item} className="max-w-[560px]">
           <p className="text-[13px] font-semibold" style={{ ...BODY, color: PALE }}>
             <span className="text-white">{HERO.eyebrowLead}</span>
             {HERO.eyebrowRest}
@@ -249,8 +284,11 @@ function Hero() {
           >
             {HERO.cta}
           </a>
-        </div>
-        <div className="relative mx-auto hidden h-[600px] w-full max-w-[450px] sm:block lg:mx-0">
+        </motion.div>
+        <motion.div
+          variants={item}
+          className="relative mx-auto hidden h-[600px] w-full max-w-[450px] sm:block lg:mx-0"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={HERO.shells.src}
@@ -263,23 +301,31 @@ function Hero() {
             {...HERO.video}
             className="absolute left-0 top-0 z-10 h-[556px] w-[260px] max-w-none rounded-[24px]"
           />
-        </div>
-        <div className="mx-auto w-[250px] sm:hidden">
+        </motion.div>
+        <motion.div variants={item} className="mx-auto w-[250px] sm:hidden">
           <Media {...HERO.video} className="h-auto w-full max-w-none rounded-[20px]" />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
 
 function Facts() {
+  const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
   return (
     <section aria-label="At a glance" style={{ background: FAINT_DARK }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 lg:px-0">
-        <ul className="grid grid-cols-2 lg:grid-cols-4">
+        <motion.ul
+          variants={group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          className="grid grid-cols-2 lg:grid-cols-4"
+        >
           {FACTS.map((fact, i) => (
-            <li
+            <motion.li
               key={fact.label}
+              variants={item}
               className="flex items-start gap-3 py-[22px] lg:px-5 lg:first:pl-0"
               style={{ borderLeft: i > 0 ? `1px solid ${HAIR}` : undefined }}
             >
@@ -292,21 +338,32 @@ function Facts() {
                   {fact.value}
                 </p>
               </div>
-            </li>
+            </motion.li>
           ))}
-        </ul>
+        </motion.ul>
       </div>
     </section>
   );
 }
 
 function Brief() {
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.07 });
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={BRIEF.eyebrow} heading={BRIEF.heading} note={BRIEF.note} />
-      <div className="grid gap-4 md:grid-cols-3">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid gap-4 md:grid-cols-3"
+      >
         {BRIEF.cards.map((card) => (
-          <article key={card.title} className="rounded-[18px] bg-white px-6 pb-[26px] pt-6">
+          <motion.article
+            key={card.title}
+            variants={item}
+            className="rounded-[18px] bg-white px-6 pb-[26px] pt-6"
+          >
             <span className="flex h-[46px] w-[46px] items-center justify-center rounded-[12px]" style={{ background: TILE }}>
               <Icon name={card.icon} size={20} />
             </span>
@@ -316,20 +373,27 @@ function Brief() {
             <p className="mt-2 text-[14px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
               {card.body}
             </p>
-          </article>
+          </motion.article>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
 
 function Journey() {
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.06 });
   return (
     <section id="journey" className="mx-auto w-full max-w-[1036px] scroll-mt-6 px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={JOURNEY.eyebrow} heading={JOURNEY.heading} />
-      <ol className="grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
+      <motion.ol
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 lg:grid-cols-6"
+      >
         {JOURNEY.steps.map((step, i) => (
-          <li key={step.note}>
+          <motion.li key={step.note} variants={item}>
             <Media {...step} className="aspect-[163/361] rounded-[18px]" />
             <p className="mt-2 flex items-center gap-2">
               <span
@@ -345,22 +409,31 @@ function Journey() {
             <p className="mt-1 text-[12px] leading-[1.4]" style={{ ...BODY, color: MUTED }}>
               {step.body}
             </p>
-          </li>
+          </motion.li>
         ))}
-      </ol>
+      </motion.ol>
     </section>
   );
 }
 
 function Testing() {
+  const scale = useStagger({ distance: 16, step: 0.06 });
+  const integrity = useStagger({ distance: 16, step: 0.05 });
+  const sound = useStagger({ distance: 16, step: 0.07 });
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={TESTING.eyebrow} heading={TESTING.heading} note={TESTING.note} />
       <div className="flex flex-col gap-3 pt-2">
         <GroupHead title={TESTING.scale.title} sub={TESTING.scale.sub} />
-        <div className="grid grid-cols-2 gap-[14px] lg:grid-cols-4">
+        <motion.div
+          variants={scale.group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={scale.viewport}
+          className="grid grid-cols-2 gap-[14px] lg:grid-cols-4"
+        >
           {TESTING.scale.captures.map((cap) => (
-            <figure key={cap.note}>
+            <motion.figure key={cap.note} variants={scale.item}>
               <Media {...cap} className="aspect-[248.5/552] rounded-[16px]" />
               <figcaption className="mt-[6px] text-[14px] font-semibold" style={{ ...BODY, color: INK }}>
                 {cap.title}
@@ -368,28 +441,40 @@ function Testing() {
               <p className="text-[12px] leading-[1.4]" style={{ ...BODY, color: MUTED }}>
                 {cap.body}
               </p>
-            </figure>
+            </motion.figure>
           ))}
-        </div>
+        </motion.div>
       </div>
       <div className="flex flex-col gap-3 pt-9">
         <GroupHead title={TESTING.integrity.title} sub={TESTING.integrity.sub} />
-        <div className="grid grid-cols-2 gap-[14px] sm:grid-cols-3 lg:grid-cols-5">
+        <motion.div
+          variants={integrity.group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={integrity.viewport}
+          className="grid grid-cols-2 gap-[14px] sm:grid-cols-3 lg:grid-cols-5"
+        >
           {TESTING.integrity.captures.map((cap) => (
-            <figure key={cap.note}>
+            <motion.figure key={cap.note} variants={integrity.item}>
               <Media {...cap} className="aspect-[196/435] rounded-[16px]" />
               <figcaption className="mt-[6px] text-[14px] font-semibold" style={{ ...BODY, color: INK }}>
                 {cap.title}
               </figcaption>
-            </figure>
+            </motion.figure>
           ))}
-        </div>
+        </motion.div>
       </div>
       <div className="flex flex-col gap-3 pt-9">
         <GroupHead title={TESTING.sound.title} sub={TESTING.sound.sub} />
-        <div className="grid gap-[14px] md:grid-cols-3">
+        <motion.div
+          variants={sound.group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={sound.viewport}
+          className="grid gap-[14px] md:grid-cols-3"
+        >
           {TESTING.sound.captures.map((cap) => (
-            <figure key={cap.note}>
+            <motion.figure key={cap.note} variants={sound.item}>
               <Media {...cap} className="aspect-[9/16] rounded-[16px]" />
               <figcaption className="mt-[6px] text-[14px] font-semibold" style={{ ...BODY, color: INK }}>
                 {cap.title}
@@ -399,21 +484,32 @@ function Testing() {
                   {cap.body}
                 </p>
               )}
-            </figure>
+            </motion.figure>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
 function Builds() {
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.08 });
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={BUILDS.eyebrow} heading={BUILDS.heading} note={BUILDS.note} />
-      <div className="grid gap-6 md:grid-cols-3">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid gap-6 md:grid-cols-3"
+      >
         {BUILDS.cards.map((card) => (
-          <article key={card.note} className="flex items-start gap-4 rounded-[18px] bg-white p-4">
+          <motion.article
+            key={card.note}
+            variants={item}
+            className="flex items-start gap-4 rounded-[18px] bg-white p-4"
+          >
             <Media {...card} className="h-[267px] w-[120px] shrink-0 rounded-[14px]" />
             <div className="min-w-0 py-[2px]">
               <p className="text-[10px] font-bold tracking-[1px]" style={{ ...BODY, color: ACCENT }}>
@@ -426,21 +522,33 @@ function Builds() {
                 {card.body}
               </p>
             </div>
-          </article>
+          </motion.article>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
 
 function Craft() {
+  const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
   return (
     <section className="mt-[96px]" style={{ background: DARK }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 py-[96px] lg:px-0">
         <SectionHead eyebrow={CRAFT.eyebrow} heading={CRAFT.heading} dark />
-        <div className="grid gap-4 md:grid-cols-2">
+        <motion.div
+          variants={group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          className="grid gap-4 md:grid-cols-2"
+        >
           {CRAFT.cards.map((card) => (
-            <article key={card.title} className="rounded-[20px] px-7 pb-[30px] pt-7" style={{ background: CRAFT_CARD }}>
+            <motion.article
+              key={card.title}
+              variants={item}
+              className="rounded-[20px] px-7 pb-[30px] pt-7"
+              style={{ background: CRAFT_CARD }}
+            >
               <span className="flex h-[72px] w-[72px] items-center justify-center rounded-[16px]" style={{ background: PANEL }}>
                 <Icon name={card.icon} size={32} />
               </span>
@@ -450,74 +558,92 @@ function Craft() {
               <p className="mt-2 text-[15px] leading-[1.55] text-[#AFC3C2]" style={BODY}>
                 {card.body}
               </p>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
 function Finished() {
+  const { group, item, viewport } = useStagger({ distance: 18, step: 0.09 });
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={FINISHED.eyebrow} heading={FINISHED.heading} note={FINISHED.note} />
-      <div className="grid items-start gap-4 lg:grid-cols-[1fr_320px]">
-        <figure>
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid items-start gap-4 lg:grid-cols-[1fr_320px]"
+      >
+        <motion.figure variants={item}>
           <Media {...FINISHED.wide} className="aspect-[700/566] rounded-[18px]" />
           <figcaption className="mt-[10px] text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
             {FINISHED.wide.caption}
           </figcaption>
-        </figure>
-        <figure>
+        </motion.figure>
+        <motion.figure variants={item}>
           <Media {...FINISHED.walkthrough} className="aspect-[320/457] rounded-[24px]" />
           <figcaption className="mt-[10px] text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
             {FINISHED.walkthrough.caption}
           </figcaption>
-        </figure>
-      </div>
+        </motion.figure>
+      </motion.div>
     </section>
   );
 }
 
 function Contributions() {
+  const { group, item, viewport } = useStagger({ distance: 14, step: 0.05 });
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={CONTRIBUTIONS.eyebrow} heading={CONTRIBUTIONS.heading} />
-      <div className="flex flex-col gap-[14px]">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="flex flex-col gap-[14px]"
+      >
         {CONTRIBUTIONS.rows.map((row, r) => (
           <div key={r} className="grid gap-[14px] md:grid-cols-3">
-            {row.map((item) => (
-              <div
-                key={item.title}
+            {row.map((entry) => (
+              <motion.div
+                key={entry.title}
+                variants={item}
                 className="flex items-center gap-[14px] rounded-[16px] px-5 py-[18px]"
-                style={{ background: item.lead ? ACCENT : "#FFFFFF" }}
+                style={{ background: entry.lead ? ACCENT : "#FFFFFF" }}
               >
                 <span
                   className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[12px]"
-                  style={{ background: item.lead ? "rgba(255,255,255,0.2)" : TILE }}
+                  style={{ background: entry.lead ? "rgba(255,255,255,0.2)" : TILE }}
                 >
-                  <Icon name={item.icon} size={20} />
+                  <Icon name={entry.icon} size={20} />
                 </span>
                 <p
                   className="text-[15px] font-semibold leading-[1.5]"
-                  style={{ ...BODY, color: item.lead ? "#FFFFFF" : INK }}
+                  style={{ ...BODY, color: entry.lead ? "#FFFFFF" : INK }}
                 >
-                  {item.title}
+                  {entry.title}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         ))}
-      </div>
-      <p className="mt-[22px] text-[12px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
-        {CONTRIBUTIONS.credit}
-      </p>
+      </motion.div>
+      <Reveal delay={0.1} distance={14}>
+        <p className="mt-[22px] text-[12px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
+          {CONTRIBUTIONS.credit}
+        </p>
+      </Reveal>
     </section>
   );
 }
 
 function MoreProjects() {
+  const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[110px] lg:px-0">
       <div className="flex items-center justify-between">
@@ -528,35 +654,42 @@ function MoreProjects() {
           All work
         </Link>
       </div>
-      <div className="mt-7 grid gap-4 md:grid-cols-2">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="mt-7 grid gap-4 md:grid-cols-2"
+      >
         {NEIGHBORS.map((n) => (
-          <Link
-            key={n.title}
-            href={n.href}
-            className="group flex items-center gap-5 rounded-[18px] bg-white p-[14px] transition-transform motion-safe:hover:-translate-y-[2px]"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-<img
-  src={caseStudyThumb(n.href)}
-  alt={n.title}
-  loading="lazy"
-  draggable={false}
-  className="h-[110px] w-[150px] shrink-0 rounded-[12px] object-cover motion-safe:group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:transform-none"
-/>
-            <span className="min-w-0">
-              <span className="block text-[12px]" style={{ ...BODY, color: MUTED }}>
-                {n.direction}
+          <motion.div key={n.title} variants={item}>
+            <Link
+              href={n.href}
+              className="group flex items-center gap-5 rounded-[18px] bg-white p-[14px] transition-transform motion-safe:hover:-translate-y-[2px]"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={caseStudyThumb(n.href)}
+                alt={n.title}
+                loading="lazy"
+                draggable={false}
+                className="h-[110px] w-[150px] shrink-0 rounded-[12px] object-cover motion-safe:group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:transform-none"
+              />
+              <span className="min-w-0">
+                <span className="block text-[12px]" style={{ ...BODY, color: MUTED }}>
+                  {n.direction}
+                </span>
+                <span className="mt-[6px] block text-[22px] font-semibold leading-[1.2]" style={{ ...DISPLAY, color: INK }}>
+                  {n.title}
+                </span>
+                <span className="mt-[6px] block truncate text-[14px]" style={{ ...BODY, color: MUTED }}>
+                  {n.highlight}
+                </span>
               </span>
-              <span className="mt-[6px] block text-[22px] font-semibold leading-[1.2]" style={{ ...DISPLAY, color: INK }}>
-                {n.title}
-              </span>
-              <span className="mt-[6px] block truncate text-[14px]" style={{ ...BODY, color: MUTED }}>
-                {n.highlight}
-              </span>
-            </span>
-          </Link>
+            </Link>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

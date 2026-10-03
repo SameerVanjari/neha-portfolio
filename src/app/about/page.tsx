@@ -229,7 +229,13 @@ export default function AboutPage() {
         <section className="mx-auto max-w-[1200px] px-6 pb-10 md:px-8 lg:px-0">
           <Eyebrow>Experience</Eyebrow>
           <div className="mt-6 divide-y divide-[#DAD3C8]">
-            {data.about.experience.map((job) => (
+            {(data.about.experience as unknown as {
+              when: string;
+              what: string;
+              where: string;
+              desc: string;
+              url?: string;
+            }[]).map((job) => (
               <div key={`${job.where}-${job.when}`} className="grid gap-2 py-4 md:grid-cols-[180px_1fr] md:gap-8">
                 <div className="text-[11px] tracking-[0.08em] text-[#5C5750]" style={BODY}>
                   {job.when}
@@ -238,9 +244,24 @@ export default function AboutPage() {
                   <div className="text-[15px] font-semibold tracking-[-0.02em] text-[#17161B]" style={DISPLAY}>
                     {job.what}
                   </div>
-                  <div className="text-[11px] tracking-[0.08em] text-[#5C5750]" style={BODY}>
-                    {job.where}
-                  </div>
+                  {job.url ? (
+                    <a
+                      href={job.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-block text-[11px] tracking-[0.08em] text-[#5C5750] underline decoration-[#CFC7BA] underline-offset-[3px] transition-colors hover:text-[#17161B] hover:decoration-[#17161B]"
+                      style={BODY}
+                    >
+                      {job.where}
+                      <span aria-hidden className="ml-1 opacity-60">
+                        ↗
+                      </span>
+                    </a>
+                  ) : (
+                    <div className="text-[11px] tracking-[0.08em] text-[#5C5750]" style={BODY}>
+                      {job.where}
+                    </div>
+                  )}
                   <p className="mt-2 max-w-[62ch] text-[13px] leading-[1.6] text-[#2B2926]" style={BODY}>
                     {job.desc}
                   </p>

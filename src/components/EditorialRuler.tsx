@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { lenisScrollToId } from "@/lib/lenis";
 
 export type RulerItem = { id: string; label: string };
 
@@ -77,7 +78,9 @@ export default function EditorialRuler({ items }: { items: RulerItem[] }) {
             onMouseEnter={() => setHover(item.id)}
             onFocus={() => setHover(item.id)}
             onClick={() => {
-              document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+              // Route through Lenis so the ruler, the hero CTAs and plain hash
+              // links all land on the same smooth scroller.
+              lenisScrollToId(item.id, 0);
               setActive(item.id);
             }}
             className="relative flex h-4 cursor-pointer items-center justify-end outline-none"

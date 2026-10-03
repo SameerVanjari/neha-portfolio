@@ -154,8 +154,8 @@ function Figure({
       ) : (
         <span
           aria-hidden
-          className={`px-2 text-center text-[10px] leading-[1.4] ${onDark ? LAVENDER_LIGHT : MUTED}`}
-          style={BODY}
+          className="px-2 text-center text-[10px] leading-[1.4]"
+          style={{ ...BODY, color: onDark ? LAVENDER_LIGHT : MUTED }}
         >
           Drop image
           <br />
@@ -167,8 +167,8 @@ function Figure({
 
   const label = caption ? (
     <figcaption
-      className={`text-[13px] leading-[1.5] ${onDark ? ON_DARK_4 : MUTED}`}
-      style={BODY}
+      className="text-[13px] leading-[1.5]"
+      style={{ ...BODY, color: onDark ? ON_DARK_4 : MUTED }}
     >
       {caption}
     </figcaption>
@@ -222,14 +222,14 @@ function SectionHead({
     >
       <motion.div variants={item} className="max-w-[820px]">
         <p
-          className={`text-[11px] font-bold uppercase tracking-[1.32px] ${onDark ? LAVENDER_LIGHT : LAVENDER}`}
-          style={BODY}
+          className="text-[11px] font-bold uppercase tracking-[1.32px]"
+          style={{ ...BODY, color: onDark ? LAVENDER_LIGHT : LAVENDER }}
         >
           {eyebrow}
         </p>
         <h2
-          className={`mt-[14px] text-[26px] font-semibold leading-[1.15] tracking-[-0.38px] md:text-[38px] ${onDark ? ON_DARK : INK}`}
-          style={DISPLAY}
+          className="mt-[14px] text-[26px] font-semibold leading-[1.15] tracking-[-0.38px] md:text-[38px]"
+          style={{ ...DISPLAY, color: onDark ? ON_DARK : INK }}
         >
           {heading}
         </h2>
@@ -237,8 +237,8 @@ function SectionHead({
       {note && (
         <motion.p
           variants={item}
-          className={`max-w-[340px] text-right text-[14px] leading-[1.5] ${onDark ? ON_DARK_4 : MUTED}`}
-          style={BODY}
+          className="max-w-[340px] text-right text-[14px] leading-[1.5]"
+          style={{ ...BODY, color: onDark ? ON_DARK_4 : MUTED }}
         >
           {note}
         </motion.p>
@@ -839,39 +839,41 @@ function IaFlow() {
 function Hifi() {
   const { group, item, viewport } = useStagger({ distance: 20, step: 0.09 });
   return (
-    <section className="w-full bg-[#1d2a38] pt-24">
-      <div className={`${CONTENT} ${GUTTER} py-24`}>
-        <SectionHead eyebrow={HIFI.eyebrow} heading={HIFI.heading} note={HIFI.note} onDark />
+    <section className="w-full pt-24">
+      <div className="w-full bg-[#1d2a38] py-24">
+        <div className={`${CONTENT} ${GUTTER}`}>
+          <SectionHead eyebrow={HIFI.eyebrow} heading={HIFI.heading} note={HIFI.note} onDark />
 
-        {HIFI.figures.map((f) => (
-          <div key={f.file} className="mb-5 last:mb-0">
-            <Figure
-              file={f.file}
-              caption={f.caption}
-              height={f.wide ? "h-[380px] lg:h-[749px]" : "h-[320px] lg:h-[600px]"}
-              onDark
-            />
-          </div>
-        ))}
+          {HIFI.figures.map((f) => (
+            <div key={f.file} className="mb-5 last:mb-0">
+              <Figure
+                file={f.file}
+                caption={f.caption}
+                height={f.wide ? "h-[380px] lg:h-[749px]" : "h-[320px] lg:h-[600px]"}
+                onDark
+              />
+            </div>
+          ))}
 
-            <motion.div
-              variants={group}
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewport}
-              className="grid gap-4 md:grid-cols-2"
-            >
-              {HIFI.entry.map((f) => (
-                <Figure
-                  key={f.file}
-                  file={f.file}
-                  caption={f.caption}
-                  height="h-[240px] lg:h-[400px]"
-                  onDark
-                  variants={item}
-                />
-              ))}
-            </motion.div>
+          <motion.div
+            variants={group}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewport}
+            className="grid gap-4 md:grid-cols-2"
+          >
+            {HIFI.entry.map((f) => (
+              <Figure
+                key={f.file}
+                file={f.file}
+                caption={f.caption}
+                height="h-[240px] lg:h-[400px]"
+                onDark
+                variants={item}
+              />
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   );

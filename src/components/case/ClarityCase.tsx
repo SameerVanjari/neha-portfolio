@@ -807,14 +807,14 @@ function Hero() {
         className="pointer-events-none absolute hidden rounded-full border lg:block"
         style={{ width: 900, height: 900, right: -220, top: -260, borderColor: "rgba(255,255,255,0.06)" }}
       />
-      <div className="relative mx-auto w-full max-w-[1036px] px-6 pb-[70px] pt-[60px] lg:px-0 lg:pb-16 lg:pt-[70px]">
+      <div className="relative mx-auto w-full max-w-[1036px] px-6 pb-[70px] pt-[60px] lg:h-[731px] lg:px-0 lg:pb-16 lg:pt-[96px]">
         <motion.div
           variants={group}
           initial="hidden"
           animate={stage === "loading" ? "hidden" : "visible"}
-          className="flex flex-col gap-10 lg:flex-row lg:justify-between"
+          className="flex flex-col gap-10 lg:block"
         >
-          <div className="flex max-w-[540px] flex-col items-start gap-9">
+          <div className="flex max-w-[540px] flex-col items-start gap-9 lg:w-[540px] lg:max-w-none lg:shrink-0">
             <motion.div variants={item} className="flex flex-col items-start gap-[18px]">
               <p className="text-[13px] font-semibold" style={{ ...BODY, color: AMBER }}>
                 {HERO.eyebrow}
@@ -850,14 +850,15 @@ function Hero() {
             </motion.a>
           </div>
 
-          {/* Drop-zones, exactly as designed */}
+          {/* Drop-zones, exactly as designed: pinned to the content column
+              (design x minus the 202px gutter), so the copilot window bleeds
+              past the column's right edge while the copy keeps its 540 width. */}
           <motion.div
             variants={item}
             aria-hidden
-            className="relative hidden shrink-0 lg:block"
-            style={{ width: 700, minHeight: 493 }}
+            className="absolute inset-0 hidden lg:block"
           >
-            <div className="absolute left-[90px] top-[54px] h-[360px] w-[576px] rounded-[12px] p-[10px]" style={{ background: "#2A424B" }}>
+            <div className="absolute left-[588px] top-[54px] h-[360px] w-[576px] rounded-[12px] p-[10px]" style={{ background: "#2A424B" }}>
               <Shot
                 src={HERO.copilot.src}
                 alt={HERO.copilot.alt}
@@ -869,7 +870,7 @@ function Hero() {
               />
             </div>
             <div
-              className="absolute left-0 top-[154px] h-[433px] w-[200px] rounded-[28px] p-[10px]"
+              className="absolute left-[498px] top-[250px] h-[433px] w-[200px] rounded-[28px] p-[10px]"
               style={{ background: DARK2, border: "6px solid #0E1A1F" }}
             >
               <Shot
@@ -1700,12 +1701,20 @@ function Wireframes() {
           <p className="text-[15px] font-semibold" style={{ ...BODY, color: TEAL }}>
             {group.title}
           </p>
+          {/* The desktop row is 1086px — 50px wider than the 1036 content
+              column, exactly as the design draws it. On desktop it must show
+              all three stages on one line (the row bleeds ~25px past the
+              column on each side; the page clips overflow-x, so it never
+              scrolls). Only on narrower screens does it scroll inline. */}
+          <div className={group.size === "desktop" ? "overflow-x-auto lg:overflow-visible" : undefined}>
           <motion.div
             variants={stages.group}
             initial="hidden"
             whileInView="visible"
             viewport={stages.viewport}
-            className="mt-[10px] flex flex-wrap items-start gap-[18px]"
+            className={`mt-[10px] flex flex-nowrap items-start gap-[18px] ${
+              group.size === "desktop" ? "w-[1086px] max-w-none" : "flex-wrap"
+            }`}
           >
             {group.stages.map((stage, i) => (
               <div key={stage.tag} className="contents">
@@ -1742,6 +1751,7 @@ function Wireframes() {
               </div>
             ))}
           </motion.div>
+          </div>
         </div>
       ))}
     </section>

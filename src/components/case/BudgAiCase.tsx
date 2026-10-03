@@ -255,14 +255,14 @@ function SectionHead({
     >
       <motion.div variants={item} className="max-w-[820px]">
         <p
-          className={`text-[11px] font-bold uppercase tracking-[1.32px] ${onDark ? ON_DARK_3 : TEAL}`}
-          style={BODY}
+          className="text-[11px] font-bold uppercase tracking-[1.32px]"
+          style={{ ...BODY, color: onDark ? ON_DARK_3 : TEAL }}
         >
           {eyebrow}
         </p>
         <h2
-          className={`mt-[14px] text-[26px] font-semibold leading-[1.15] tracking-[-0.38px] md:text-[38px] ${onDark ? ON_DARK : INK}`}
-          style={DISPLAY}
+          className="mt-[14px] text-[26px] font-semibold leading-[1.15] tracking-[-0.38px] md:text-[38px]"
+          style={{ ...DISPLAY, color: onDark ? ON_DARK : INK }}
         >
           {heading}
         </h2>
@@ -270,8 +270,8 @@ function SectionHead({
       {note && (
         <motion.p
           variants={item}
-          className={`max-w-[340px] text-right text-[14px] leading-[1.5] ${onDark ? ON_DARK_5 : MUTED}`}
-          style={BODY}
+          className="max-w-[340px] text-right text-[14px] leading-[1.5]"
+          style={{ ...BODY, color: onDark ? ON_DARK_5 : MUTED }}
         >
           {note}
         </motion.p>
@@ -616,6 +616,7 @@ function Personas() {
                   loading="lazy"
                   draggable={false}
                   className="h-full w-full object-cover"
+                  style={{ objectPosition: "objectPosition" in p ? p.objectPosition : "center" }}
                 />
               </div>
               <p className={`text-[20px] font-semibold leading-[1.5] ${dark ? "text-[#f1f6f4]" : "text-[#0e2a30]"}`} style={DISPLAY}>
@@ -699,7 +700,7 @@ function FlowsIa() {
 function Fidelity() {
   const { group, item, viewport } = useStagger({ distance: 16, step: 0.08 });
   return (
-    <section className={`${CONTENT} ${GUTTER} pt-24`}>
+    <section className={`${CONTENT} ${GUTTER} pt-24 pb-24`}>
       <SectionHead eyebrow={FIDELITY.eyebrow} heading={FIDELITY.heading} note={FIDELITY.note} />
 
       <motion.div
@@ -751,7 +752,7 @@ function Fidelity() {
 function FinalScreens() {
   const { item } = useStagger({ distance: 16, step: 0.08 });
   return (
-    <section className="w-full bg-[#0e2a30] pt-24">
+    <section className="w-full bg-[#0e2a30]">
       <div className={`${CONTENT} ${GUTTER} py-24`}>
         <SectionHead eyebrow={FINAL.eyebrow} heading={FINAL.heading} note={FINAL.note} onDark />
 
