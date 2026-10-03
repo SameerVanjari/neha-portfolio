@@ -31,9 +31,9 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "NEHA — Perception, Intelligence, Design",
+  title: "NEHA · Perception, Intelligence, Design",
   description:
-    "Neha Mayacharya — AI experience, XR, UX, and product designer. Available 2026 · STEM OPT. Work for TD Bank, Harvard MedTech, IFSG, and more.",
+    "Neha Mayacharya, AI experience, XR, UX, and product designer. Available 2026 · STEM OPT. Work for TD Bank, Harvard MedTech, IFSG, and more.",
 };
 
 import BarbaProvider from "@/components/BarbaProvider";

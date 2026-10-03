@@ -297,7 +297,7 @@ function Nav() {
           <Link href="/about" className="text-[14px] transition-opacity duration-200 hover:opacity-70" style={{ color: INK }}>
             About
           </Link>
-          <a href="/resume.pdf" className="text-[14px] transition-opacity duration-200 hover:opacity-70" style={{ color: INK }}>
+          <a target="_blank" rel="noreferrer" href="/resume.pdf" className="text-[14px] transition-opacity duration-200 hover:opacity-70" style={{ color: INK }}>
             Résumé (PDF)
           </a>
           <Link

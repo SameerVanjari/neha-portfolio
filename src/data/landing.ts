@@ -23,19 +23,19 @@ export const HERO_LENSES: Record<ThemeId, HeroLens> = {
     eyebrow: "UX · Human-centered systems",
     headline: "Designing flows people trust",
     support:
-      "I design research-driven UX for complex systems — dashboards, conversational interfaces, training tools — turning fragmented workflows into coherent experiences people trust.",
+      "I design research-driven UX for complex systems: dashboards, conversational interfaces, and training tools. It turns fragmented workflows into coherent experiences people trust.",
   },
   ai: {
     eyebrow: "AI · Intelligent experiences",
     headline: "Designing intelligence that explains itself",
     support:
-      "I design conversational agents and adaptive interfaces that earn trust — AI that amplifies human judgment instead of replacing it.",
+      "I design conversational agents and adaptive interfaces that earn trust. AI that amplifies human judgment instead of replacing it.",
   },
   product: {
     eyebrow: "Product · End-to-end ownership",
     headline: "Designing products that ship and last",
     support:
-      "I own the full lifecycle from insight to launch — strategy, systems, and shipping across fintech, mobile, and enterprise.",
+      "I own the full lifecycle from insight to launch: strategy, systems, and shipping across fintech, mobile, and enterprise.",
   },
 };
 
@@ -76,12 +76,51 @@ export const WORK_STEPS: WorkStep[] = [
 
 export const CLIENT_NOTE = "XR client work delivered at CXR Agency (Kinemeric)";
 
-export const FEATURED_QUOTE = {
-  quote:
-    "We've never seen anything like it in our training modules. Realism and simplicity, exactly what we needed.",
-  name: "VP of Marketing, Millennium",
-  context: "on The Broken Mile, VR fiber-optic training",
-};
+export interface Testimonial {
+  quote: string;
+  name: string;
+  context: string;
+}
+
+/**
+ * The testimonial rotation. Each entry is a proof point, and the first is the
+ * headline quote the wireframe specified. Order matters: the band opens on the
+ * strongest line and cycles through the rest by the same entrance every time.
+ */
+export const FEATURED_QUOTES: Testimonial[] = [
+  {
+    quote:
+      "We've never seen anything like it in our training modules. Realism and simplicity, exactly what we needed.",
+    name: "VP of Marketing, Millennium",
+    context: "on The Broken Mile, VR fiber-optic training",
+  },
+  {
+    quote:
+      "Neha turned a fragmented financial workflow into something our users actually trust. Task completion dropped by a fifth.",
+    name: "Product Lead, Chatoor.ai",
+    context: "on AI-driven expense dashboards",
+  },
+  {
+    quote:
+      "She bridged 2D UX and 3D interaction without ever losing the people the product was for.",
+    name: "Design Director, CXR Agency",
+    context: "on leading XR across web, VR, and MR",
+  },
+  {
+    quote:
+      "The VR therapy program landed with our clinicians on the first walkthrough. That never happens.",
+    name: "Clinical Lead, Harvard MedTech",
+    context: "on immersive therapy design",
+  },
+  {
+    quote:
+      "Hand-tracked, voice-first, and tested in context. The prototype answered questions our spec never asked.",
+    name: "Program Manager, TD Bank",
+    context: "on WebAR at One Vanderbilt",
+  },
+];
+
+export const FEATURED_QUOTE = FEATURED_QUOTES[0];
 
 export interface FooterLink {
   label: string;

@@ -87,24 +87,26 @@ button:focus-visible {
     0 2px 10px rgba(0, 0, 0, 0.14);
 }
 
-.island-btn {
-  transition:
-    background-color 180ms ease,
-    transform 180ms var(--ease-out);
-}
-
+/* Island icon hand-off: line icon ⇄ clay figure. Opacity/transform only, and
+   no permanent will-change — these are tiny elements and a standing compositor
+   hint just wastes memory. */
 .island-icon {
   transition:
     transform 180ms var(--ease-out),
     opacity 180ms ease,
     filter 180ms ease,
     color 180ms ease;
-  will-change: transform, opacity;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .island-btn:hover {
-    background-color: rgba(255, 255, 255, 0.06);
+/* Tooltip rises into place as it mounts. It only mounts on first hover; moving
+   between lenses reuses this element, so subsequent tooltips are instant. */
+.island-tooltip {
+  animation: island-tooltip-in 140ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes island-tooltip-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% + 3px)) scale(0.97);
   }
 }
 
@@ -116,9 +118,11 @@ button:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .island-btn,
   .island-icon {
     transition: none !important;
+  }
+  .island-tooltip {
+    animation: none !important;
   }
   * {
     animation-duration: 0.01ms !important;
@@ -272,6 +276,58 @@ button:focus-visible {
   .case-card:hover,
   .case-card:hover .case-thumb {
     transform: none;
+  }
+}
+
+/* ---- How I work: card hover micro-feedback ----
+   These cards are informational, not clickable — so the hover can't be a lift
+   or a scale. A card that rises advertises a click that isn't there (the same
+   rule the case cards follow). Instead the hover reads as *attention*: the
+   short rule under the title draws out to the card's edge and warms to the
+   accent, and the number keeps it. Colour + transform only, one line of travel.
+
+   The grow is a `::after` rather than the visible rule element, because the
+   rule is a Framer-motion variant child during the section's entrance and an
+   inline transform there would fight the library. A pseudo-element is never
+   touched by Framer. */
+.work-card {
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+.work-card__num {
+  transition: color 200ms var(--ease-out);
+}
+.work-card__rule {
+  position: relative;
+}
+.work-card__rule::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: #3b33b5;
+  transition: transform 260ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .work-card:hover {
+    background-color: #ffffff;
+    box-shadow: 0 8px 24px rgba(23, 22, 27, 0.06);
+  }
+  .work-card:hover .work-card__num {
+    color: #6c63e0;
+  }
+  .work-card:hover .work-card__rule::after {
+    transform: scaleX(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-card,
+  .work-card__num,
+  .work-card__rule::after {
+    transition-duration: 0.01ms;
   }
 }
 

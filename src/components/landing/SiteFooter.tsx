@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import data from "@/data/portfolio.json";
 import { FOOTER_LINKS } from "@/data/landing";
 import { useStagger } from "@/components/motion/reveal";
+import { WordStagger } from "@/components/ui/word-stagger";
 
 const DISPLAY = { fontFamily: "var(--font-display)" } as const;
 const BODY = { fontFamily: "var(--font-body)" } as const;
@@ -42,10 +43,10 @@ export default function SiteFooter() {
             <motion.div variants={item}>
               <a
                 href={`mailto:${email}`}
-                className="border-b border-[rgba(242,238,231,0.4)] pb-[6px] text-[26px] font-medium text-[#F2EEE7] transition-opacity hover:opacity-80 md:text-[34px]"
+                className="group inline-block border-b border-[rgba(242,238,231,0.4)] pb-[6px] text-[26px] font-medium text-[#F2EEE7] transition-opacity hover:opacity-80 md:text-[34px]"
                 style={BODY}
               >
-                {email}
+                <WordStagger text={email} stagger={22} />
               </a>
             </motion.div>
           </div>

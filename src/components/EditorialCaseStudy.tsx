@@ -193,7 +193,7 @@ export default function EditorialCaseStudy({
           <EditorialRuler items={rulerItems} />
 
           {/* Back link */}
-          <div className="pt-[92px]">
+          <div className="pt-[177px]">
             <Link
               href="/projects"
               className="text-[11px] tracking-[0.14em] hover:opacity-70"

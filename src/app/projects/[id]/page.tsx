@@ -20,6 +20,7 @@ const CUSTOM_CASE_IDS = new Set([
   "research-recommender",
   "vantage-ai",
   "visagenie",
+  "budgai",
 ]);
 
 export function generateStaticParams() {

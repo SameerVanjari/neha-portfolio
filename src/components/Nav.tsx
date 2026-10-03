@@ -9,11 +9,14 @@ import type { Theme } from "@/data/themes";
 import { lenisScrollToId } from "@/lib/lenis";
 import { useLoadStage } from "@/components/LoadStage";
 import data from "@/data/portfolio.json";
+import { WordStagger } from "@/components/ui/word-stagger";
 
 const NAV_ITEMS = [
   { id: "work", label: "Work", href: "/projects" },
   { id: "about", label: "About", href: "/about" },
-  { id: "resume", label: "Résumé (PDF)", href: "/resume.pdf" },
+  /* The résumé is a document, not a page: it opens in a new tab so the site
+     keeps its place, and so Barba's click handler lets it through untouched. */
+  { id: "resume", label: "Résumé (PDF)", href: "/resume.pdf", target: "_blank", rel: "noreferrer" },
 ] as const;
 
 function scrollToId(id: string) {
@@ -52,15 +55,27 @@ export default function Nav({ theme }: { theme?: Theme; activeSection?: string; 
         initial={{ transform: "translateY(-100%)" }}
         animate={{ transform: shown ? "translateY(0%)" : "translateY(-100%)" }}
         transition={{ duration: reduce ? 0.2 : 0.65, ease: [0.23, 1, 0.32, 1] }}
-        className="border-b border-[#DAD3C8] bg-[#F2EEE7]"
+        className="fixed inset-x-0 top-0 z-40 border-b border-[#DAD3C8] bg-[#F2EEE7]"
       >
         <div className="mx-auto flex h-[85px] w-full max-w-[1200px] items-center justify-between px-6 lg:px-0">
           <Link
             href="/"
-            className="shrink-0 text-[17px] font-semibold tracking-[0.34px] text-[#17161B]"
-            style={{ fontFamily: "var(--font-display)" }}
+            className="group flex shrink-0 items-center gap-[10px]"
           >
-            Neha Mayacharya
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/profile/logo.png"
+              alt=""
+              aria-hidden
+              draggable={false}
+              className="h-[34px] w-[34px] rounded-[10px] object-cover transition-transform duration-200 ease-out group-hover:scale-[1.06]"
+            />
+            <span
+              className="text-[17px] font-semibold tracking-[0.34px] text-[#17161B]"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              Neha Mayacharya
+            </span>
           </Link>
 
           <nav aria-label="Primary" className="hidden items-center gap-10 md:flex">
@@ -68,6 +83,8 @@ export default function Nav({ theme }: { theme?: Theme; activeSection?: string; 
               <Link
                 key={item.id}
                 href={item.href}
+                target={"target" in item ? item.target : undefined}
+                rel={"rel" in item ? item.rel : undefined}
                 className="text-[15px] font-normal text-[#17161B] transition-opacity hover:opacity-60"
                 style={{ fontFamily: "var(--font-body)" }}
               >
@@ -81,18 +98,18 @@ export default function Nav({ theme }: { theme?: Theme; activeSection?: string; 
                   e.preventDefault();
                   scrollToId("contact");
                 }}
-                className="inline-flex h-[44px] items-center justify-center rounded-[999px] bg-[#17161B] px-[22px] text-[14px] font-medium text-[#F2EEE7] transition-opacity hover:opacity-85"
+                className="inline-flex h-[44px] items-center justify-center rounded-[999px] bg-[#17161B] px-[22px] text-[14px] font-medium text-[#F2EEE7] transition-[background-color,transform] duration-150 ease-out hover:bg-[#262330] motion-safe:active:scale-[0.97]"
                 style={{ fontFamily: "var(--font-body)" }}
               >
-                Contact
+                <WordStagger text="Contact" />
               </a>
             ) : (
               <Link
                 href="/#contact"
-                className="inline-flex h-[44px] items-center justify-center rounded-[999px] bg-[#17161B] px-[22px] text-[14px] font-medium text-[#F2EEE7] transition-opacity hover:opacity-85"
+                className="inline-flex h-[44px] items-center justify-center rounded-[999px] bg-[#17161B] px-[22px] text-[14px] font-medium text-[#F2EEE7] transition-[background-color,transform] duration-150 ease-out hover:bg-[#262330] motion-safe:active:scale-[0.97]"
                 style={{ fontFamily: "var(--font-body)" }}
               >
-                Contact
+                <WordStagger text="Contact" />
               </Link>
             )}
           </nav>
@@ -134,11 +151,21 @@ export default function Nav({ theme }: { theme?: Theme; activeSection?: string; 
             aria-label="Navigation menu"
           >
             <div className="flex h-[85px] items-center justify-between border-b border-[#DAD3C8] px-6">
-              <span
-                className="text-[17px] font-semibold tracking-[0.34px] text-[#17161B]"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                Neha Mayacharya
+              <span className="flex items-center gap-[10px]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/profile/logo.png"
+                  alt=""
+                  aria-hidden
+                  draggable={false}
+                  className="h-[34px] w-[34px] rounded-[10px] object-cover"
+                />
+                <span
+                  className="text-[17px] font-semibold tracking-[0.34px] text-[#17161B]"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  Neha Mayacharya
+                </span>
               </span>
               <button
                 aria-label="Close menu"
@@ -160,6 +187,8 @@ export default function Nav({ theme }: { theme?: Theme; activeSection?: string; 
                     <Link
                       href={item.href}
                       onClick={() => setOpen(false)}
+                      target={"target" in item ? item.target : undefined}
+                      rel={"rel" in item ? item.rel : undefined}
                       className="flex items-baseline justify-between border-b border-[#DAD3C8] py-5"
                     >
                       <span

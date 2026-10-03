@@ -52,11 +52,9 @@ export default function ProjectsList({ lens }: { lens: string | null }) {
   return (
     <>
       <Nav theme={theme} activeSection="projects" />
-      <main className="pt-[64px] bg-[#F2EEE6]">
+      <main className="pt-[149px] bg-[#F2EEE6]">
         <section className="mx-auto max-w-[1280px] px-6 md:px-8">
-          <div className="h-px w-full bg-black/5" />
-
-          <div className="py-10 md:py-14">
+          <div className="pb-10 pt-6 md:pb-14 md:pt-8">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div>
                 <div className="mb-4 flex items-center gap-3">
@@ -70,7 +68,7 @@ export default function ProjectsList({ lens }: { lens: string | null }) {
                   <span className="font-light text-zinc-400">.</span>
                 </h1>
                 <p className="mt-3 max-w-[520px] text-[14px] leading-[1.6] text-zinc-500">
-                  Sort by perception — matching work slides to the front. Everything stays in the grid.
+                  Sort by perception: matching work slides to the front. Everything stays in the grid.
                 </p>
               </div>
 

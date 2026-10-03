@@ -20,8 +20,10 @@ export interface Theme {
   islandIconIdle: string;
 }
 
-const ISLAND_BG = "rgba(18,18,22,0.92)";
-const ISLAND_IDLE = "rgba(255,255,255,0.52)";
+// The island is a glass chip in the site's paper language: light, hairline
+// border, ink at rest — accents arrive with the active perception only.
+const ISLAND_BG = "rgba(251, 249, 245, 0.88)";
+const ISLAND_IDLE = "rgba(23, 22, 27, 0.55)";
 
 // Site-wide cream (editorial paper) — one background across all perceptions.
 // Subtle tonal gradient keeps transitions visible while staying cream-family.
@@ -44,7 +46,7 @@ export const THEMES: Record<ThemeId, Theme> = {
     border: "#DAD3C8",
     surface: "#FFFFFF",
     islandBg: ISLAND_BG,
-    islandBorder: "rgba(255,255,255,0.10)",
+    islandBorder: "rgba(22,22,30,0.09)",
     islandIconIdle: ISLAND_IDLE,
   },
   ux: {
@@ -61,7 +63,7 @@ export const THEMES: Record<ThemeId, Theme> = {
     border: "#DAD3C8",
     surface: "#FFFFFF",
     islandBg: ISLAND_BG,
-    islandBorder: "rgba(255,255,255,0.10)",
+    islandBorder: "rgba(22,22,30,0.09)",
     islandIconIdle: ISLAND_IDLE,
   },
   ai: {
@@ -78,7 +80,7 @@ export const THEMES: Record<ThemeId, Theme> = {
     border: "#DAD3C8",
     surface: "#FFFFFF",
     islandBg: ISLAND_BG,
-    islandBorder: "rgba(255,255,255,0.10)",
+    islandBorder: "rgba(22,22,30,0.09)",
     islandIconIdle: ISLAND_IDLE,
   },
   product: {
@@ -95,7 +97,7 @@ export const THEMES: Record<ThemeId, Theme> = {
     border: "#DAD3C8",
     surface: "#FFFFFF",
     islandBg: ISLAND_BG,
-    islandBorder: "rgba(255,255,255,0.10)",
+    islandBorder: "rgba(22,22,30,0.09)",
     islandIconIdle: ISLAND_IDLE,
   },
 };

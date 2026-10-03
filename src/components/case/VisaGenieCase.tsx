@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import {
   COMPETITIVE,
@@ -129,18 +130,25 @@ function Figure({
   /** Set when the figure sits inside a staggered group, so it inherits timing. */
   variants?: Variants;
 }) {
+  // Exports resolve by convention at /case/visagenie/<file> unless an
+  // explicit src is given; a missing asset falls back to the labelled frame
+  // rather than a broken image.
+  const [failed, setFailed] = useState(false);
+  const resolved = !failed ? (src ?? `/case/visagenie/${file}`) : undefined;
+
   const frame = (
     <div
       className={`flex w-full flex-col items-center justify-center overflow-hidden rounded-[14px] px-2 ${height}`}
       style={{ background: onDark ? FRAME_ON_DARK : FRAME }}
     >
-      {src ? (
+      {resolved ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={src}
+          src={resolved}
           alt={caption ?? file}
           loading="lazy"
           draggable={false}
+          onError={() => setFailed(true)}
           className="h-full w-full object-cover"
         />
       ) : (
@@ -275,7 +283,7 @@ function Nav() {
         >
           About
         </Link>
-        <a
+        <a target="_blank" rel="noreferrer"
           href="/resume.pdf"
           className="case-link text-[14px] leading-[1.5] text-[#1c2230]"
           style={BODY}
@@ -597,16 +605,7 @@ function Personas() {
                 key={p.name}
                 className="flex flex-col gap-3 rounded-[18px] bg-white px-[22px] pb-6 pt-[22px]"
               >
-                <div
-                  className="flex h-[120px] w-full items-center justify-center overflow-hidden rounded-[12px] px-2 lg:h-[170px]"
-                  style={{ background: FRAME }}
-                >
-                  <span aria-hidden className="px-2 text-center text-[10px] leading-[1.4] text-[#5b6272]" style={BODY}>
-                    Drop image
-                    <br />
-                    {p.figure}
-                  </span>
-                </div>
+                <Figure file={p.figure} height="h-[260px] lg:h-[340px]" variants={item} />
                 <p className="text-[19px] font-semibold leading-[1.5] text-[#1c2230]" style={DISPLAY}>
                   {p.name}
                 </p>
@@ -1103,7 +1102,7 @@ function Footer() {
           <a href="https://www.behance.net" target="_blank" rel="noreferrer" className="case-link">
             Behance
           </a>
-          <a href="/resume.pdf" className="case-link">
+          <a target="_blank" rel="noreferrer" href="/resume.pdf" className="case-link">
             Résumé (PDF)
           </a>
         </nav>

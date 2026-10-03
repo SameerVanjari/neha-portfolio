@@ -63,7 +63,7 @@ function WorkCard({
       <Link
         href={`/projects/${card.id}`}
         className="group flex w-full flex-col items-start gap-[18px]"
-        aria-label={`${card.title} — ${card.meta}, ${card.year ?? ""}`}
+        aria-label={`${card.title}, ${card.meta}, ${card.year ?? ""}`}
       >
       <div className="relative aspect-[3/2] w-full overflow-hidden rounded-[14px]">
         {card.image ? (

@@ -176,7 +176,7 @@ function Nav() {
           <Link href="/about" className="text-[14px] text-[#1B1F24] transition-opacity hover:opacity-70">
             About
           </Link>
-          <a href="/resume.pdf" className="text-[14px] text-[#1B1F24] transition-opacity hover:opacity-70">
+          <a target="_blank" rel="noreferrer" href="/resume.pdf" className="text-[14px] text-[#1B1F24] transition-opacity hover:opacity-70">
             Résumé (PDF)
           </a>
           <Link

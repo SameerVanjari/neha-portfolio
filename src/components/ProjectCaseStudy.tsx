@@ -16,7 +16,7 @@ export default function ProjectCaseStudy({ project, related }: { project: Projec
   return (
     <>
       <Nav theme={theme} activeSection="projects" />
-      <main className="pt-[64px]" style={{ background: `linear-gradient(180deg, ${theme.wash}22 0%, transparent 28%)` }}>
+      <main className="pt-[149px]" style={{ background: `linear-gradient(180deg, ${theme.wash}22 0%, transparent 28%)` }}>
         <div className="mx-auto max-w-[1280px] px-6 md:px-8">
           <div className="h-px w-full" style={{ background: theme.border }} />
           <div className="py-6 md:py-8">

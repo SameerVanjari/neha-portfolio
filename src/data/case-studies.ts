@@ -39,7 +39,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     meta: "AI · Conversational agent",
     year: "2026",
     description:
-      "An AI check-in companion that knows its limits — a mental-wellness companion designed end to end, from a research paper on companion AI to hi-fi on mobile and web.",
+      "An AI check-in companion that knows its limits. A mental-wellness companion designed end to end, from a research paper on companion AI to hi-fi on mobile and web.",
     role: "Product & Conversation Designer · Independent project",
     lens: "ai",
     image: "/case/pausa/visual-webshot.png",
@@ -59,6 +59,106 @@ export const CASE_STUDIES: CaseStudy[] = [
     // the component built from this case's own palette and flow copy.
     image: "/case/visagenie/card.png",
     imageAlt: "The VisaGenie chat: guest mode, a guided F-1 answer with source citations, and the employer-fee fraud alert",
+  },
+  {
+    id: "budgai",
+    title: "BudgAI",
+    meta: "Personal finance · AI + UX",
+    year: "2024 · 2026",
+    description:
+      "Scan to pay, send abroad at live rates, split with anyone, and ask plain questions about your spending. AI suggests; you decide.",
+    role: "Product Design Consultant · Chatoor.ai",
+    lens: "ai",
+    // Cover render from the Chatoor-AI-UX presentation deck (slide 1).
+    image: "/case/budgai/card.png",
+    imageAlt: "BudgAI on a phone: one global money app",
+  },
+  {
+    id: "focus",
+    title: "Focus",
+    meta: "Attention & wellbeing · Concept",
+    year: "2026",
+    description:
+      "A distraction-to-intention app that protects what you picked up your phone to do, instead of guessing what you meant.",
+    role: "Designer · Independent concept project",
+    lens: "product",
+    // Cover export from the Focus case-study Figma file (fc-01-cover.png).
+    image: "/case/focus/fc-01-cover.png",
+    imageAlt: "Focus: hold the boundaries you set, don’t guess at intentions",
+  },
+  {
+    id: "atrium",
+    title: "Atrium",
+    meta: "XR · Social VR workspace (NDA)",
+    year: "2024",
+    description:
+      "End-to-end interaction design for a multi-user VR collaboration platform on PICO 4 with a companion mobile app, for a large public-sector organization.",
+    role: "Lead Immersive Experience Designer · CXR Agency (Kinemeric)",
+    lens: "xr",
+    // NDA case: the approved cover render is shown; the rest is withheld.
+    image: "/case/atrium/atrium-hero.jpg",
+    imageAlt: "The Atrium virtual room: a neon-teal grid hall opening into a glowing portal",
+  },
+  {
+    id: "inspirit-physics",
+    title: "Inspirit VR Physics",
+    meta: "VR · Education",
+    description:
+      "A sci-fi carnival where physics is something you do: launch a cannon, throw objects and walk under their parabolas. Built on the NGSS curriculum, tested in real classrooms.",
+    role: "VR Design Intern · Inspirit VR",
+    lens: "xr",
+    // Cover: the Sci-Fi Carnival theme art from the case's own asset set.
+    image: "/case/inspirit/iv-03-scifi-carnival-theme.jpg",
+    imageAlt: "Sci-Fi Carnival theme: dome experiment stations across the VR world",
+  },
+  {
+    id: "inspirit-biology",
+    title: "Inspirit VR Biology",
+    meta: "VR · NGSS biology",
+    description:
+      "Fly a spaceship inside the cell to learn how life copies itself. Four biology modules storyboarded and designed for HTC Vive and Oculus Quest.",
+    role: "VR Design Intern · Inspirit VR",
+    lens: "xr",
+    // Cover from the project's Figma export set (bv-01-cover.jpg).
+    image: "/case/inspirit-biology/bv-01-cover.jpg",
+    imageAlt: "Education in Virtual Reality: Project 2, Inspirit VR Biology",
+  },
+  {
+    id: "inspirit-dna",
+    title: "Inspirit VR DNA",
+    meta: "VR · NGSS biology",
+    description:
+      "A spaceship carries students into a eukaryotic cell and into the chromatin, where they explore DNA’s structure and then construct it themselves. Graduation internship project on Google Cardboard.",
+    role: "VR Design Intern · Inspirit VR",
+    lens: "xr",
+    // Cover: dn-01-cover.jpg from the case's own asset set.
+    image: "/case/inspirit-dna/dn-01-cover.jpg",
+    imageAlt: "Education in Virtual Reality: a modelled DNA helix over the Inspirit spaceship",
+  },
+  {
+    id: "maternal-care",
+    title: "Emergency Delivery Aid",
+    meta: "Product Design · Healthcare",
+    year: "2017",
+    description:
+      "Field research across Nashik district led to an emergency delivery aid for Sub Centres that supports the squatting posture rural women already live in. Best Graduation Project award.",
+    role: "Product Designer · Independent graduation project",
+    lens: "product",
+    // Cover: hc-01-cover.jpg (non-sensitive deck cover art).
+    image: "/case/maternal-care/hc-01-cover.jpg",
+    imageAlt: "Field research portraits from Nashik district under the project title",
+  },
+  {
+    id: "interactive-learning-aid",
+    title: "Interactive Learning Aid",
+    meta: "Physical computing · Arduino",
+    description:
+      "An interactive learning aid that teaches young children the parts of the face: each name tag hides an IR sensor, and touching it lights the matching eye, nose, lip or ear.",
+    role: "Concept, interaction design and prototyping",
+    lens: "product",
+    // Cover export from the project's Drive folder (ila-01-cover.jpg).
+    image: "/case/interactive-learning-aid/ila-01-cover.jpg",
+    imageAlt: "Interactive Learning Aid: a green circuit-board head and the project cover",
   },
   {
     id: "broken-mile",
