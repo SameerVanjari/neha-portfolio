@@ -180,7 +180,7 @@ function Nav() {
           <Link href="/about" className="text-[14px] text-[#1A1826] transition-opacity duration-200 hover:opacity-70">
             About
           </Link>
-          <a href="/resume.pdf" className="text-[14px] text-[#1A1826] transition-opacity duration-200 hover:opacity-70">
+          <a target="_blank" rel="noreferrer" href="/resume.pdf" className="text-[14px] text-[#1A1826] transition-opacity duration-200 hover:opacity-70">
             Résumé (PDF)
           </a>
           <Link

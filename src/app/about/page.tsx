@@ -1,14 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import Nav from "@/components/Nav";
 import { THEMES } from "@/data/themes";
 import data from "@/data/portfolio.json";
-import ContactCard from "@/components/ContactCard";
 import SiteFooter from "@/components/landing/SiteFooter";
-import { lenisScrollToId } from "@/lib/lenis";
-import { AceternityCTA, HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+import { AceternityCTA } from "@/components/ui/hover-border-gradient";
 import { AnnotatedBio } from "@/components/BioLens";
 import { Reveal, TextRow, LineReveal, EASE_OUT, useMotionPref } from "@/components/motion/reveal";
 import { BIO_ANNOTATIONS, annotationLinkTarget } from "@/data/bio-annotations";
@@ -90,58 +87,7 @@ function Photo({ photo }: { photo: (typeof PHOTOS)[number] }) {
 export default function AboutPage() {
   const theme = THEMES.product; // neutral anchor — theme carries softly
   const reduce = useMotionPref();
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0);
-  const [atStart, setAtStart] = useState(true);
-  const [atEnd, setAtEnd] = useState(false);
 
-  const measure = useCallback(() => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const max = el.scrollWidth - el.clientWidth;
-    const p = max > 0 ? el.scrollLeft / max : 0;
-    setProgress(max > 0 ? Math.min(Math.max(p, 0.06), 1) : 1);
-    setAtStart(el.scrollLeft <= 4);
-    setAtEnd(max > 0 && el.scrollLeft >= max - 4);
-  }, []);
-
-  useEffect(() => {
-    measure();
-    const el = scrollerRef.current;
-    if (!el) return;
-    const onResize = () => measure();
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [measure]);
-
-  const nudge = (dir: 1 | -1) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    el.scrollBy({ left: dir * 360, behavior: reduce ? "auto" : "smooth" });
-  };
-
-  const stripParent: Variants = reduce
-    ? {
-        hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { duration: 0.3 } },
-      }
-    : {
-        hidden: { opacity: 0, transform: "translateY(24px)" },
-        visible: {
-          opacity: 1,
-          transform: "translateY(0px)",
-          transition: { duration: 0.5, ease: EASE_OUT, delayChildren: 0.08, staggerChildren: 0.06 },
-        },
-      };
-  const stripCard: Variants = reduce
-    ? {
-        hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { duration: 0.3 } },
-      }
-    : {
-        hidden: { opacity: 0, transform: "translateX(24px)" },
-        visible: { opacity: 1, transform: "translateX(0px)", transition: { duration: 0.45, ease: EASE_OUT } },
-      };
   const journeyParent: Variants = reduce
     ? {
         hidden: { opacity: 0 },
@@ -168,13 +114,13 @@ export default function AboutPage() {
   return (
     <>
       <Nav theme={theme} activeSection="about" />
-      <main className="bg-[#F2EEE7] pt-[85px]">
+      <main className="bg-[#F2EEE7] pt-[128px] md:pt-[152px]">
         {/* hero with photo gallery */}
         <section className="mx-auto max-w-[1200px] px-6 md:px-8 lg:px-0">
           <div className="grid gap-10 pb-10 md:pb-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-[44px] lg:pb-[80px]">
             <div className="space-y-6">
               <Reveal delay={0}>
-                <Eyebrow>About — Neha</Eyebrow>
+                <Eyebrow>About Neha</Eyebrow>
               </Reveal>
 
               <h1
@@ -279,104 +225,29 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* experience — horizontal snap strip */}
+        {/* experience */}
         <section className="mx-auto max-w-[1200px] px-6 pb-10 md:px-8 lg:px-0">
-          <div className="flex items-end justify-between gap-6">
-            <Reveal>
-              <Eyebrow>Experience</Eyebrow>
-            </Reveal>
-            <div className="flex items-center gap-2 pb-[2px]">
-              <button
-                type="button"
-                aria-label="Previous roles"
-                disabled={atStart}
-                onClick={() => nudge(-1)}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#CFC7BA] bg-[#FBF9F5] text-[#17161B] transition-[background-color,color,opacity,transform] duration-200 ease-out hover:bg-[#17161B] hover:text-[#F2EEE7] active:scale-[0.97] disabled:pointer-events-none disabled:opacity-30"
-              >
-                <svg aria-hidden width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M9 2.5 4.5 7 9 11.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                aria-label="Next roles"
-                disabled={atEnd}
-                onClick={() => nudge(1)}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#CFC7BA] bg-[#FBF9F5] text-[#17161B] transition-[background-color,color,opacity,transform] duration-200 ease-out hover:bg-[#17161B] hover:text-[#F2EEE7] active:scale-[0.97] disabled:pointer-events-none disabled:opacity-30"
-              >
-                <svg aria-hidden width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M5 2.5 9.5 7 5 11.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <motion.div
-            className="mt-6"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            variants={stripParent}
-          >
-            <div
-              ref={scrollerRef}
-              onScroll={measure}
-              className="marquee-mask scrollbar-none -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 md:mx-0 md:px-[2px]"
-            >
-              {data.about.experience.map((job) => (
-                <motion.article
-                  key={`${job.where}-${job.when}`}
-                  variants={stripCard}
-                  className="w-[300px] shrink-0 snap-start sm:w-[340px]"
-                >
-                  <div className="group flex h-full flex-col rounded-[14px] border border-[#DAD3C8] bg-[#FBF9F5] p-5 transition-[transform,border-color,box-shadow] duration-200 ease-out hover:border-[#3B33B5]/40 hover:shadow-[0_10px_28px_rgba(22,22,30,0.10)] motion-safe:hover:-translate-y-[2px]">
-                    <span
-                      className="inline-flex w-fit items-center rounded-full bg-[#F2EEE7] px-3 py-[6px] text-[12px] font-semibold tracking-[0.04em] text-[#3B33B5]"
-                      style={BODY}
-                    >
-                      {job.when}
-                    </span>
-                    <h3 className="mt-[14px] text-[19px] font-semibold leading-[1.2] tracking-[-0.02em] text-[#17161B]" style={DISPLAY}>
-                      {job.what}
-                    </h3>
-                    <div className="mt-[6px] text-[12px] tracking-[0.08em] text-[#5C5750]" style={BODY}>
-                      {job.url ? (
-                        <a
-                          href={job.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-[6px] text-[#3B33B5] underline decoration-[#CFC7BA] decoration-1 underline-offset-[3px] transition-colors duration-200 ease-out hover:decoration-[#3B33B5]"
-                        >
-                          {job.where}
-                          <svg
-                            aria-hidden
-                            width="9"
-                            height="9"
-                            viewBox="0 0 10 10"
-                            fill="none"
-                            className="translate-y-[0.5px] transition-transform duration-200 ease-out group-hover:translate-x-[1px] group-hover:-translate-y-[1px]"
-                          >
-                            <path d="M1 9L9 1M9 1H2.5M9 1V7.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </a>
-                      ) : (
-                        job.where
-                      )}
-                    </div>
-                    <p className="mt-[12px] text-[13px] leading-[1.6] text-[#2B2926]" style={BODY}>
-                      {job.desc}
-                    </p>
+          <Eyebrow>Experience</Eyebrow>
+          <div className="mt-6 divide-y divide-[#DAD3C8]">
+            {data.about.experience.map((job) => (
+              <div key={`${job.where}-${job.when}`} className="grid gap-2 py-4 md:grid-cols-[180px_1fr] md:gap-8">
+                <div className="text-[11px] tracking-[0.08em] text-[#5C5750]" style={BODY}>
+                  {job.when}
+                </div>
+                <div>
+                  <div className="text-[15px] font-semibold tracking-[-0.02em] text-[#17161B]" style={DISPLAY}>
+                    {job.what}
                   </div>
-                </motion.article>
-              ))}
-              <div aria-hidden className="w-[2px] shrink-0" />
-            </div>
-            <div className="mt-[14px] h-[2px] w-full bg-[#DAD3C8]">
-              <div
-                className="h-full w-full origin-left bg-[#17161B]"
-                style={{ transform: `scaleX(${progress})` }}
-              />
-            </div>
-          </motion.div>
+                  <div className="text-[11px] tracking-[0.08em] text-[#5C5750]" style={BODY}>
+                    {job.where}
+                  </div>
+                  <p className="mt-2 max-w-[62ch] text-[13px] leading-[1.6] text-[#2B2926]" style={BODY}>
+                    {job.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* education */}
@@ -425,31 +296,9 @@ export default function AboutPage() {
             </div>
           </Reveal>
           <Reveal delay={0.16} className="mt-8">
-            <div className="flex flex-wrap gap-3">
-              <AceternityCTA href="/projects" variant="dark">
-                View projects
-              </AceternityCTA>
-              <HoverBorderGradient
-                as="a"
-                href="#contact"
-                onClick={(e) => {
-                  e.preventDefault();
-                  lenisScrollToId("contact");
-                }}
-              >
-                Contact
-              </HoverBorderGradient>
-            </div>
-          </Reveal>
-        </section>
-
-        {/* contact */}
-        <section id="contact" className="mx-auto max-w-[1200px] scroll-mt-[80px] px-6 pb-10 md:px-8 lg:px-0">
-          <Reveal>
-            <Eyebrow>Contact</Eyebrow>
-          </Reveal>
-          <Reveal className="mt-6" delay={0.08}>
-            <ContactCard />
+            <AceternityCTA href="/projects" variant="dark">
+              View projects
+            </AceternityCTA>
           </Reveal>
         </section>
 

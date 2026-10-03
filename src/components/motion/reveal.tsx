@@ -138,6 +138,8 @@ export function LineByLine({
   step = 0.11,
   duration = 0.5,
   distance = 14,
+  blur = 0,
+  paused = false,
   className,
   style,
 }: {
@@ -146,6 +148,11 @@ export function LineByLine({
   step?: number;
   duration?: number;
   distance?: number;
+  /** Entering lines also defocus from this blur radius to sharp. */
+  blur?: number;
+  /** Holds every line at its hidden state until explicitly released — used by
+      copy that must wait for the preloader rather than its own viewport entry. */
+  paused?: boolean;
   className?: string;
   style?: CSSProperties;
 }) {
@@ -153,6 +160,8 @@ export function LineByLine({
   // the measured version replaces it before anything becomes visible.
   const [lines, setLines] = useState<string[]>([text]);
   const measureRef = useRef<HTMLSpanElement | null>(null);
+  const reduce = useMotionPref();
+  const blurPx = reduce || !blur ? 0 : blur;
 
   const measure = useCallback(() => {
     const host = measureRef.current;
@@ -214,8 +223,20 @@ export function LineByLine({
         <motion.span
           key={`${i}:${line}`}
           className="block"
-          initial={{ opacity: 0, transform: `translateY(${distance}px)` }}
-          whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+          initial={{
+            opacity: 0,
+            transform: `translateY(${distance}px)`,
+            filter: blurPx ? `blur(${blurPx}px)` : undefined,
+          }}
+          whileInView={
+            paused
+              ? undefined
+              : {
+                  opacity: 1,
+                  transform: "translateY(0px)",
+                  filter: blurPx ? "blur(0px)" : undefined,
+                }
+          }
           viewport={REVEAL_VIEWPORT}
           transition={{ duration, delay: delay + i * step, ease: EASE_OUT }}
         >
