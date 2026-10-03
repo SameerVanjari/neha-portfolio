@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMotionPref } from "@/components/motion/reveal";
 import type { Theme } from "@/data/themes";
-import { lenisScrollToId } from "@/lib/lenis";
 import { useLoadStage } from "@/components/LoadStage";
 import data from "@/data/portfolio.json";
 import { WordStagger } from "@/components/ui/word-stagger";
@@ -18,10 +17,6 @@ const NAV_ITEMS = [
      keeps its place, and so Barba's click handler lets it through untouched. */
   { id: "resume", label: "Résumé (PDF)", href: "/resume.pdf", target: "_blank", rel: "noreferrer" },
 ] as const;
-
-function scrollToId(id: string) {
-  lenisScrollToId(id);
-}
 
 export default function Nav({ theme }: { theme?: Theme; activeSection?: string; revealDelay?: number }) {
   const [open, setOpen] = useState(false);
@@ -92,12 +87,12 @@ export default function Nav({ theme }: { theme?: Theme; activeSection?: string; 
               </Link>
             ))}
             {pathname === "/" ? (
+              /* A plain hash link, deliberately: Lenis owns same-page anchors
+                 (see SmoothScroll `anchors`), so letting the anchor through
+                 keeps this CTA on the same smooth scroller as every other
+                 hash link instead of a second, competing handler. */
               <a
                 href="#contact"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToId("contact");
-                }}
                 className="inline-flex h-[44px] items-center justify-center rounded-[999px] bg-[#17161B] px-[22px] text-[14px] font-medium text-[#F2EEE7] transition-[background-color,transform] duration-150 ease-out hover:bg-[#262330] motion-safe:active:scale-[0.97]"
                 style={{ fontFamily: "var(--font-body)" }}
               >

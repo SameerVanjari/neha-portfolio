@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { motion, type Variants } from "framer-motion";
 import {
   ACTIVATION,
   BRANDED,
@@ -14,6 +15,7 @@ import {
 } from "@/data/td";
 import { FOOTER_LINKS } from "@/data/landing";
 import { caseStudyThumb } from "@/data/case-studies";
+import { EASE_OUT, Reveal, useMotionPref, useStagger } from "@/components/motion/reveal";
 
 const DARK = "#101A14";
 const FAINT_DARK = "#0B130E";
@@ -42,9 +44,20 @@ function SectionHead({
   note?: string;
   dark?: boolean;
 }) {
+  // Every section announces itself identically: the heading block lands, the
+  // note follows a beat behind. Uniform arrival is what lets a long scroll
+  // read as one document rather than a dozen separate screens.
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.08 });
+
   return (
-    <div className="flex flex-wrap items-end justify-between gap-6 pb-9">
-      <div className="max-w-[620px]">
+    <motion.div
+      variants={group}
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewport}
+      className="flex flex-wrap items-end justify-between gap-6 pb-9"
+    >
+      <motion.div variants={item} className="max-w-[620px]">
         <p
           className="text-[11px] font-bold uppercase tracking-[1.32px]"
           style={{ ...BODY, color: dark ? LIGHT : GREEN }}
@@ -57,16 +70,17 @@ function SectionHead({
         >
           {heading}
         </h2>
-      </div>
+      </motion.div>
       {note && (
-        <p
+        <motion.p
+          variants={item}
           className="max-w-[340px] text-right text-[14px] leading-[1.5]"
           style={{ ...BODY, color: dark ? "#B2C3B6" : MUTED }}
         >
           {note}
-        </p>
+        </motion.p>
       )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -143,6 +157,21 @@ function Nav() {
 }
 
 function Hero() {
+  const reduce = useMotionPref();
+  // Above the fold, so it plays on load rather than on scroll — same dialect
+  // as the other case studies. Reduced motion keeps the fade, drops the rise.
+  const group: Variants = {
+    hidden: {},
+    visible: { transition: { delayChildren: 0.05, staggerChildren: reduce ? 0 : 0.09 } },
+  };
+  const item: Variants = {
+    hidden: { opacity: 0, transform: reduce ? "translateY(0px)" : "translateY(20px)" },
+    visible: {
+      opacity: 1,
+      transform: "translateY(0px)",
+      transition: { duration: reduce ? 0.3 : 0.55, ease: EASE_OUT },
+    },
+  };
   return (
     <section className="relative overflow-hidden" style={{ background: DARK }}>
       <div
@@ -153,8 +182,13 @@ function Hero() {
             "radial-gradient(circle, rgba(31,138,59,0.55) 0%, rgba(31,138,59,0.18) 38%, rgba(16,26,20,0) 70%)",
         }}
       />
-      <div className="relative mx-auto grid w-full max-w-[1036px] items-center gap-10 px-6 py-[70px] lg:grid-cols-[1fr_262px] lg:justify-between lg:px-0 lg:py-[90px]">
-        <div className="max-w-[560px]">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        animate="visible"
+        className="relative mx-auto grid w-full max-w-[1036px] items-center gap-10 px-6 py-[70px] lg:grid-cols-[1fr_262px] lg:justify-between lg:px-0 lg:py-[90px]"
+      >
+        <motion.div variants={item} className="max-w-[560px]">
           <p className="text-[13px] font-semibold" style={{ ...BODY, color: LIGHT }}>
             <span className="text-white">{HERO.eyebrowLead}</span>
             {HERO.eyebrowRest}
@@ -184,21 +218,31 @@ function Hero() {
           >
             {HERO.cta}
           </a>
-        </div>
-        <Phone src={HERO.phone.src} alt={HERO.phone.alt} className="mx-auto h-[470px] w-[262px] rounded-[32px] shadow-[0px_24px_50px_0px_rgba(0,0,0,0.45)]" />
-      </div>
+        </motion.div>
+        <motion.div variants={item}>
+          <Phone src={HERO.phone.src} alt={HERO.phone.alt} className="mx-auto h-[470px] w-[262px] rounded-[32px] shadow-[0px_24px_50px_0px_rgba(0,0,0,0.45)]" />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
 
 function Facts() {
+  const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
   return (
     <section aria-label="At a glance" style={{ background: FAINT_DARK }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 lg:px-0">
-        <ul className="grid grid-cols-2 lg:grid-cols-4">
+        <motion.ul
+          variants={group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          className="grid grid-cols-2 lg:grid-cols-4"
+        >
           {FACTS.map((fact, i) => (
-            <li
+            <motion.li
               key={fact.label}
+              variants={item}
               className="flex items-start gap-3 py-[22px] lg:px-5 lg:first:pl-0"
               style={{ borderLeft: i > 0 ? `1px solid ${HAIR}` : undefined }}
             >
@@ -211,25 +255,33 @@ function Facts() {
                   {fact.value}
                 </p>
               </div>
-            </li>
+            </motion.li>
           ))}
-        </ul>
+        </motion.ul>
       </div>
     </section>
   );
 }
 
 function Idea() {
+  const beats = useStagger({ distance: 16, step: 0.07 });
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={IDEA.eyebrow} heading={IDEA.heading} note={IDEA.note} />
       <div className="grid items-start gap-6 lg:grid-cols-[380px_1fr]">
-        <div className="flex flex-col gap-3">
+        <motion.div
+          variants={beats.group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={beats.viewport}
+          className="flex flex-col gap-3"
+        >
           {IDEA.beats.map((beat) => {
             const green = beat.tone === "green";
             return (
-              <article
+              <motion.article
                 key={beat.title}
+                variants={beats.item}
                 className="flex items-center gap-4 rounded-[16px] px-5 py-[18px]"
                 style={{ background: green ? GREEN : "#FFFFFF" }}
               >
@@ -247,33 +299,47 @@ function Idea() {
                     {beat.body}
                   </p>
                 </div>
-              </article>
+              </motion.article>
             );
           })}
-        </div>
-        <div>
-          <div className="h-[354px] overflow-hidden rounded-[16px]" style={{ background: PANEL }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={IDEA.prototype.src} alt={IDEA.prototype.alt} className="h-full w-full object-cover" loading="lazy" draggable={false} />
+        </motion.div>
+        <Reveal distance={20}>
+          <div>
+            <div className="h-[354px] overflow-hidden rounded-[16px]" style={{ background: PANEL }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={IDEA.prototype.src} alt={IDEA.prototype.alt} className="h-full w-full object-cover" loading="lazy" draggable={false} />
+            </div>
+            <p className="mt-[10px] text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
+              {IDEA.prototype.caption}
+            </p>
           </div>
-          <p className="mt-[10px] text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
-            {IDEA.prototype.caption}
-          </p>
-        </div>
+        </Reveal>
       </div>
     </section>
   );
 }
 
 function WhatIDid() {
+  const steps = useStagger({ distance: 16, step: 0.08 });
+  const tiles = useStagger({ distance: 16, step: 0.07 });
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={ROLE.eyebrow} heading={ROLE.heading} note={ROLE.note} />
       <div className="relative">
         <div aria-hidden className="absolute left-[12.5%] right-[12.5%] top-[28px] hidden h-px lg:block" style={{ background: LIGHT }} />
-        <ol className="relative grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4">
+        <motion.ol
+          variants={steps.group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={steps.viewport}
+          className="relative grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4"
+        >
           {ROLE.steps.map((step) => (
-            <li key={step.title} className="flex flex-col items-center gap-1 text-center">
+            <motion.li
+              key={step.title}
+              variants={steps.item}
+              className="flex flex-col items-center gap-1 text-center"
+            >
               <span className="flex h-[56px] w-[56px] items-center justify-center rounded-[999px]" style={{ background: GREEN }}>
                 <Icon name={step.icon} size={20} />
               </span>
@@ -283,14 +349,21 @@ function WhatIDid() {
               <p className="max-w-[247px] text-[13px] leading-[1.4]" style={{ ...BODY, color: MUTED }}>
                 {step.body}
               </p>
-            </li>
+            </motion.li>
           ))}
-        </ol>
+        </motion.ol>
       </div>
-      <div className="mt-7 grid gap-[14px] md:grid-cols-3">
+      <motion.div
+        variants={tiles.group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={tiles.viewport}
+        className="mt-7 grid gap-[14px] md:grid-cols-3"
+      >
         {ROLE.tiles.map((tile) => (
-          <div
+          <motion.div
             key={tile.num}
+            variants={tiles.item}
             className="rounded-[18px] px-[22px] pb-6 pt-[22px]"
             style={{ background: tile.tone === "green" ? GREEN : DARK }}
           >
@@ -300,54 +373,68 @@ function WhatIDid() {
             <p className="mt-3 text-[14px] leading-[1.5] text-[#D6E7DA]" style={BODY}>
               {tile.body}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
 
 function Activation() {
+  const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={ACTIVATION.eyebrow} heading={ACTIVATION.heading} note={ACTIVATION.note} />
-      <div className="grid items-center gap-6 lg:grid-cols-[230px_230px_1fr]">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid items-center gap-6 lg:grid-cols-[230px_230px_1fr]"
+      >
         {ACTIVATION.phones.map((phone) => (
-          <figure key={phone.note}>
+          <motion.figure key={phone.note} variants={item}>
             <Phone src={phone.src} alt={phone.alt} className="h-[406px] w-full rounded-[28px]" />
             <figcaption className="mt-[10px] text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
               {phone.caption}
             </figcaption>
-          </figure>
+          </motion.figure>
         ))}
-        <div className="flex flex-col gap-[14px]">
-          {ACTIVATION.notes.map((item) => (
-            <article key={item.title} className="flex items-start gap-[14px] rounded-[14px] bg-white px-[18px] py-4">
+        <motion.div variants={item} className="flex flex-col gap-[14px]">
+          {ACTIVATION.notes.map((note) => (
+            <article key={note.title} className="flex items-start gap-[14px] rounded-[14px] bg-white px-[18px] py-4">
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-white" style={{ ...BODY, background: GREEN }}>
-                {item.num}
+                {note.num}
               </span>
               <div>
                 <p className="text-[16px] font-semibold" style={{ ...BODY, color: INK }}>
-                  {item.title}
+                  {note.title}
                 </p>
                 <p className="mt-[2px] text-[14px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
-                  {item.body}
+                  {note.body}
                 </p>
               </div>
             </article>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
 
 function Branded() {
+  const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={BRANDED.eyebrow} heading={BRANDED.heading} />
-      <div className="grid items-center gap-6 lg:grid-cols-[1fr_230px_230px]">
-        <div className="flex flex-col gap-[14px]">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid items-center gap-6 lg:grid-cols-[1fr_230px_230px]"
+      >
+        <motion.div variants={item} className="flex flex-col gap-[14px]">
           {BRANDED.cards.map((card) => (
             <article key={card.title} className="rounded-[18px] bg-white px-6 pb-6 pt-[22px]">
               <span className="flex h-[46px] w-[46px] items-center justify-center rounded-[12px]" style={{ background: TILE }}>
@@ -361,91 +448,118 @@ function Branded() {
               </p>
             </article>
           ))}
-        </div>
+        </motion.div>
         {BRANDED.phones.map((phone) => (
-          <figure key={phone.note}>
+          <motion.figure key={phone.note} variants={item}>
             <Phone src={phone.src} alt={phone.alt} className="h-[406px] w-full rounded-[28px]" />
             <figcaption className="mt-[10px] text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
               {phone.caption}
             </figcaption>
-          </figure>
+          </motion.figure>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
 
 function Celebration() {
+  const pipeline = useStagger({ distance: 16, step: 0.06 });
+  const shots = useStagger({ distance: 18, step: 0.08 });
   return (
     <section id="celebration" className="mt-[96px]" style={{ background: DARK }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 py-[96px] lg:px-0">
         <SectionHead eyebrow={CELEBRATION.eyebrow} heading={CELEBRATION.heading} note={CELEBRATION.note} dark />
-        <div className="flex flex-col items-stretch gap-2 lg:flex-row lg:items-center">
-          {CELEBRATION.pipeline.map((item, i) =>
-            "arrow" in item ? (
-              <span key={`arrow-${i}`} className="hidden h-6 w-6 shrink-0 items-center justify-center lg:flex">
-                <Icon name={item.icon} size={18} />
-              </span>
-            ) : (
-              <article
-                key={item.title}
-                className="min-w-0 rounded-[16px] px-5 pb-[22px] pt-5 lg:flex-1"
-                style={{ background: "last" in item ? GREEN : PIPE_CARD }}
+        <motion.div
+          variants={pipeline.group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={pipeline.viewport}
+          className="flex flex-col items-stretch gap-2 lg:flex-row lg:items-center"
+        >
+          {CELEBRATION.pipeline.map((entry, i) =>
+            "arrow" in entry ? (
+              <motion.span
+                key={`arrow-${i}`}
+                variants={pipeline.item}
+                className="hidden h-6 w-6 shrink-0 items-center justify-center lg:flex"
               >
-                <Icon name={item.icon} size={24} />
+                <Icon name={entry.icon} size={18} />
+              </motion.span>
+            ) : (
+              <motion.article
+                key={entry.title}
+                variants={pipeline.item}
+                className="min-w-0 rounded-[16px] px-5 pb-[22px] pt-5 lg:flex-1"
+                style={{ background: "last" in entry ? GREEN : PIPE_CARD }}
+              >
+                <Icon name={entry.icon} size={24} />
                 <p className="mt-3 text-[17px] font-semibold text-[#EEF5EF]" style={BODY}>
-                  {item.title}
+                  {entry.title}
                 </p>
                 <p
                   className="mt-2 text-[13px] leading-[1.5]"
-                  style={{ ...BODY, color: "last" in item ? "#DDF3E1" : "#B2C3B6" }}
+                  style={{ ...BODY, color: "last" in entry ? "#DDF3E1" : "#B2C3B6" }}
                 >
-                  {item.body}
+                  {entry.body}
                 </p>
-              </article>
+              </motion.article>
             ),
           )}
-        </div>
-        <div className="mt-8 grid items-center gap-6 lg:grid-cols-[230px_230px_1fr]">
+        </motion.div>
+        <motion.div
+          variants={shots.group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={shots.viewport}
+          className="mt-8 grid items-center gap-6 lg:grid-cols-[230px_230px_1fr]"
+        >
           {CELEBRATION.shots.map((shot) => (
-            <figure key={shot.note}>
+            <motion.figure key={shot.note} variants={shots.item}>
               <Phone src={shot.src} alt={shot.alt} className="h-[406px] w-full rounded-[28px]" />
               <figcaption className="mt-[10px] text-[13px] leading-[1.5] text-[#B2C3B6]" style={BODY}>
                 {shot.caption}
               </figcaption>
-            </figure>
+            </motion.figure>
           ))}
-          <div className="flex flex-col gap-[14px]">
-            {CELEBRATION.notes.map((item) => (
-              <article key={item.title} className="flex items-start gap-[14px] rounded-[14px] px-[18px] py-4" style={{ background: PIPE_CARD }}>
+          <motion.div variants={shots.item} className="flex flex-col gap-[14px]">
+            {CELEBRATION.notes.map((note) => (
+              <article key={note.title} className="flex items-start gap-[14px] rounded-[14px] px-[18px] py-4" style={{ background: PIPE_CARD }}>
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-white" style={{ ...BODY, background: GREEN }}>
-                  {item.num}
+                  {note.num}
                 </span>
                 <div>
                   <p className="text-[16px] font-semibold text-[#EEF5EF]" style={BODY}>
-                    {item.title}
+                    {note.title}
                   </p>
                   <p className="mt-[2px] text-[14px] leading-[1.5] text-[#B2C3B6]" style={BODY}>
-                    {item.body}
+                    {note.body}
                   </p>
                 </div>
               </article>
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
 function Takeaways() {
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.08 });
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pt-[96px] lg:px-0">
       <SectionHead eyebrow={TAKEAWAYS.eyebrow} heading={TAKEAWAYS.heading} />
-      <div className="grid gap-[14px] md:grid-cols-3">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="grid gap-[14px] md:grid-cols-3"
+      >
         {TAKEAWAYS.cards.map((card) => (
-          <article
+          <motion.article
             key={card.title}
+            variants={item}
             className="rounded-[18px] px-6 pb-[26px] pt-6"
             style={{ background: card.tone === "green" ? GREEN : DARK }}
           >
@@ -456,17 +570,20 @@ function Takeaways() {
             <p className="mt-3 text-[14px] leading-[1.5] text-[#D6E7DA]" style={BODY}>
               {card.body}
             </p>
-          </article>
+          </motion.article>
         ))}
-      </div>
-      <p className="mt-[22px] text-[12px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
-        {TAKEAWAYS.credit}
-      </p>
+      </motion.div>
+      <Reveal delay={0.1} distance={14}>
+        <p className="mt-[22px] text-[12px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
+          {TAKEAWAYS.credit}
+        </p>
+      </Reveal>
     </section>
   );
 }
 
 function MoreProjects() {
+  const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
   return (
     <section className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[110px] lg:px-0">
       <div className="flex items-center justify-between">
@@ -477,14 +594,20 @@ function MoreProjects() {
           All work
         </Link>
       </div>
-      <div className="mt-7 grid gap-4 md:grid-cols-2">
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="mt-7 grid gap-4 md:grid-cols-2"
+      >
         {NEIGHBORS.map((n) => (
-          <Link
-            key={n.title}
-            href={n.href}
-            className="group flex items-center gap-5 rounded-[18px] bg-white p-[14px] transition-transform motion-safe:hover:-translate-y-[2px]"
-          >
-                          <span
+          <motion.div key={n.title} variants={item}>
+            <Link
+              href={n.href}
+              className="group flex items-center gap-5 rounded-[18px] bg-white p-[14px] transition-transform motion-safe:hover:-translate-y-[2px]"
+            >
+              <span
                 className="relative h-[110px] w-[150px] shrink-0 overflow-hidden rounded-[12px]"
                 style={{ background: n.thumbBg }}
               >
@@ -497,20 +620,21 @@ function MoreProjects() {
                   className="absolute inset-0 h-full w-full object-cover motion-safe:group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:transform-none"
                 />
               </span>
-            <span className="min-w-0">
-              <span className="block text-[12px]" style={{ ...BODY, color: MUTED }}>
-                {n.direction}
+              <span className="min-w-0">
+                <span className="block text-[12px]" style={{ ...BODY, color: MUTED }}>
+                  {n.direction}
+                </span>
+                <span className="mt-[6px] block text-[22px] font-semibold leading-[1.2]" style={{ ...DISPLAY, color: INK }}>
+                  {n.title}
+                </span>
+                <span className="mt-[6px] block truncate text-[14px]" style={{ ...BODY, color: MUTED }}>
+                  {n.highlight}
+                </span>
               </span>
-              <span className="mt-[6px] block text-[22px] font-semibold leading-[1.2]" style={{ ...DISPLAY, color: INK }}>
-                {n.title}
-              </span>
-              <span className="mt-[6px] block truncate text-[14px]" style={{ ...BODY, color: MUTED }}>
-                {n.highlight}
-              </span>
-            </span>
-          </Link>
+            </Link>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

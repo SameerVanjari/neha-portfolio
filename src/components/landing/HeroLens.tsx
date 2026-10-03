@@ -145,10 +145,6 @@ export default function HeroLens() {
             >
               <a
                 href="#work"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
-                }}
                 className="inline-flex h-[52px] items-center justify-center rounded-[999px] bg-[#F2EEE7] px-[28px] text-[15px] font-semibold text-[#17161B] transition-opacity hover:opacity-90"
                 style={BODY}
               >

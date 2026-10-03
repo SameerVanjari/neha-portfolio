@@ -59,6 +59,13 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
         smoothWheel: true,
         syncTouch: false,
         respectReducedMotion: true,
+        /* Without this, plain `href="#id"` links fall through to the browser's
+           native jump — and `html { scroll-behavior: smooth }` is disabled
+           while Lenis owns the scroll, so they hit instantly instead of
+           gliding. Letting Lenis own them keeps every same-page CTA (the case
+           study hero CTAs, the nav) on one smooth scroller. The offset leaves
+           a little breathing room above the landed section. */
+        anchors: { offset: -24 },
       }}
     >
       <LenisGsapBridge />

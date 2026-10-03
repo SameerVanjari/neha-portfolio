@@ -122,6 +122,9 @@ export const PERSONAS = {
       src: "/case/budgai/cb-04-persona-sunita.png",
       alt: "Sunita Rane: a homemaker in the kitchen",
       tone: "light" as const,
+      /** Square source in a short, wide frame: anchor the crop to the top so
+          the face is not cut off. */
+      objectPosition: "top" as const,
     },
     {
       name: "Tomás Herrera",
