@@ -8,16 +8,36 @@ import data from "@/data/portfolio.json";
 import SiteFooter from "@/components/landing/SiteFooter";
 import { AceternityCTA } from "@/components/ui/hover-border-gradient";
 import { AnnotatedBio } from "@/components/BioLens";
-import { Reveal, TextRow, LineReveal, EASE_OUT, useMotionPref } from "@/components/motion/reveal";
+import { Reveal, EASE_OUT, useMotionPref } from "@/components/motion/reveal";
 import { BIO_ANNOTATIONS, annotationLinkTarget } from "@/data/bio-annotations";
 import { LEGACY_PROJECTS } from "@/data/legacy-projects";
 import { CASE_STUDIES } from "@/data/case-studies";
 import ExperienceTimeline from "@/components/about/ExperienceTimeline";
+import SkillsGravity from "@/components/about/SkillsGravity";
+import { useLoadStage } from "@/components/LoadStage";
 import type { ReactNode } from "react";
 
 /* Home design tokens — paper / ink / muted / hairline / accent */
 const DISPLAY = { fontFamily: "var(--font-display)" } as const;
 const BODY = { fontFamily: "var(--font-body)" } as const;
+
+/**
+ * Hero entry: each block rises into place, stepped by `index`, once the
+ * preloader has cleared (`started`). The whole hero reads as one gesture —
+ * eyebrow → title lines → bio → tagline → roles → stats → photos — and the
+ * fixed nav drops in last via LoadStage. Reduced motion keeps the fade and
+ * drops the movement.
+ */
+function enter(started: boolean, reduce: boolean, index: number) {
+  const from = reduce ? "translateY(0px)" : "translateY(22px)";
+  return {
+    initial: { opacity: 0, transform: from },
+    animate: started
+      ? { opacity: 1, transform: "translateY(0px)" }
+      : { opacity: 0, transform: from },
+    transition: { duration: reduce ? 0.3 : 0.6, ease: EASE_OUT, delay: reduce ? 0 : 0.04 + index * 0.042 },
+  };
+}
 
 /**
  * Profile gallery. Each entry carries a tiny (16px) blurred JPEG — a real
@@ -109,6 +129,10 @@ function Photo({ photo }: { photo: (typeof PHOTOS)[number] }) {
 export default function AboutPage() {
   const theme = THEMES.product; // neutral anchor — theme carries softly
   const reduce = useMotionPref();
+  const { stage } = useLoadStage();
+  // Nothing lands until the preloader is out of the way; then the hero runs
+  // its stagger in order while the nav drops in last.
+  const started = stage !== "loading";
 
   const journeyParent: Variants = reduce
     ? {
@@ -141,81 +165,91 @@ export default function AboutPage() {
         <section className="mx-auto max-w-[1200px] px-6 md:px-8 lg:px-0">
           <div className="grid gap-10 pb-10 md:pb-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-[44px] lg:pb-[80px]">
             <div className="space-y-6">
-              <Reveal delay={0}>
+              <motion.div {...enter(started, reduce, 0)}>
                 <Eyebrow>About Neha</Eyebrow>
-              </Reveal>
+              </motion.div>
 
               <h1
                 className="text-[32px] font-semibold leading-[0.95] tracking-[-0.04em] text-[#17161B] md:text-[44px] lg:text-[48px]"
                 style={DISPLAY}
               >
-                <TextRow delay={0.06}>Perception,</TextRow>
-                <TextRow delay={0.12}>built for people.</TextRow>
+                <motion.span className="block" {...enter(started, reduce, 1)}>
+                  Perception,
+                </motion.span>
+                <motion.span className="block" {...enter(started, reduce, 2)}>
+                  built for people.
+                </motion.span>
               </h1>
 
-              <p className="max-w-[560px] text-[16px] leading-[1.7] text-[#2B2926] md:text-[17px]" style={BODY}>
-                <LineReveal delay={0.18}>
-                  <AnnotatedBio
-                    bio={data.profile.bio}
-                    annotations={BIO_ANNOTATIONS}
-                    popupFor={(a) => ({
-                      ...a,
-                      link: annotationLinkTarget(a.linkTo, [...CASE_STUDIES, ...LEGACY_PROJECTS]) ?? undefined,
-                    })}
-                  />
-                </LineReveal>
-              </p>
+              <motion.p
+                className="max-w-[560px] text-[16px] leading-[1.7] text-[#2B2926] md:text-[17px]"
+                style={BODY}
+                {...enter(started, reduce, 3)}
+              >
+                <AnnotatedBio
+                  bio={data.profile.bio}
+                  annotations={BIO_ANNOTATIONS}
+                  popupFor={(a) => ({
+                    ...a,
+                    link: annotationLinkTarget(a.linkTo, [...CASE_STUDIES, ...LEGACY_PROJECTS]) ?? undefined,
+                  })}
+                />
+              </motion.p>
 
-              <p className="max-w-[540px] text-[14px] leading-[1.6] text-[#5C5750]" style={BODY}>
-                <TextRow delay={0.34}>{data.profile.tagline}</TextRow>
-              </p>
+              <motion.p
+                className="max-w-[540px] text-[14px] leading-[1.6] text-[#5C5750]"
+                style={BODY}
+                {...enter(started, reduce, 4)}
+              >
+                {data.profile.tagline}
+              </motion.p>
 
-              <Reveal delay={0.4}>
-                <div className="flex flex-wrap gap-1.5 pt-2">
-                  {data.profile.roles.map((r) => (
-                    <span
-                      key={r}
-                      className="rounded-full border border-[#CFC7BA] bg-[#FBF9F5] px-3 py-1 text-[10px] tracking-[0.12em] text-[#3A3833]"
-                      style={BODY}
-                    >
-                      {r}
-                    </span>
-                  ))}
-                </div>
-              </Reveal>
+              <motion.div className="flex flex-wrap gap-1.5 pt-2" {...enter(started, reduce, 5)}>
+                {data.profile.roles.map((r) => (
+                  <span
+                    key={r}
+                    className="rounded-full border border-[#CFC7BA] bg-[#FBF9F5] px-3 py-1 text-[10px] tracking-[0.12em] text-[#3A3833]"
+                    style={BODY}
+                  >
+                    {r}
+                  </span>
+                ))}
+              </motion.div>
 
               <div className="grid grid-cols-2 gap-3 pt-4">
                 {(data as unknown as { stats: { value: string; label: string }[] }).stats.map((s, i) => (
-                  <Reveal key={s.label} delay={0.46 + i * 0.05}>
-                    <div className="rounded-[14px] border border-[#DAD3C8] bg-[#FBF9F5] px-4 py-3">
-                      <div className="text-[20px] font-semibold tracking-[-0.03em] text-[#17161B]" style={DISPLAY}>
-                        {s.value}
-                      </div>
-                      <div className="mt-1 text-[10px] tracking-[0.12em] text-[#5C5750]" style={BODY}>
-                        {s.label}
-                      </div>
+                  <motion.div
+                    key={s.label}
+                    className="rounded-[14px] border border-[#DAD3C8] bg-[#FBF9F5] px-4 py-3"
+                    {...enter(started, reduce, 6 + i)}
+                  >
+                    <div className="text-[20px] font-semibold tracking-[-0.03em] text-[#17161B]" style={DISPLAY}>
+                      {s.value}
                     </div>
-                  </Reveal>
+                    <div className="mt-1 text-[10px] tracking-[0.12em] text-[#5C5750]" style={BODY}>
+                      {s.label}
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
 
-            {/* photo gallery — each photo rises from below its own frame */}
+            {/* photo gallery — each photo rises into place, after the copy */}
             <div className="grid content-start gap-[18px] sm:grid-cols-2 lg:pl-6">
-              <Reveal className="sm:row-span-2" delay={0.1} distance={34}>
+              <motion.div className="sm:row-span-2" {...enter(started, reduce, 10)}>
                 <Photo photo={PHOTOS[0]} />
-              </Reveal>
-              <Reveal delay={0.18} distance={34}>
+              </motion.div>
+              <motion.div {...enter(started, reduce, 11)}>
                 <Photo photo={PHOTOS[1]} />
-              </Reveal>
-              <Reveal delay={0.26} distance={34}>
+              </motion.div>
+              <motion.div {...enter(started, reduce, 12)}>
                 <Photo photo={PHOTOS[2]} />
-              </Reveal>
-              <Reveal delay={0.34} distance={34}>
+              </motion.div>
+              <motion.div {...enter(started, reduce, 13)}>
                 <div className="-translate-y-4">
                   <Photo photo={PHOTOS[3]} />
                 </div>
-              </Reveal>
+              </motion.div>
             </div>
           </div>
 
@@ -285,19 +319,9 @@ export default function AboutPage() {
           <Reveal>
             <Eyebrow>Skills & Toolkit</Eyebrow>
           </Reveal>
-          <Reveal delay={0.08} className="mt-6">
-            <div className="flex flex-wrap gap-2">
-              {(data as unknown as { skills: string[] }).skills.map((s) => (
-                <span
-                  key={s}
-                  className="rounded-full border border-[#CFC7BA] bg-[#FBF9F5] px-3 py-1.5 text-[11px] tracking-[0.08em] text-[#3A3833] transition-opacity hover:opacity-70"
-                  style={BODY}
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          </Reveal>
+          <div className="mt-6">
+            <SkillsGravity />
+          </div>
           <Reveal delay={0.16} className="mt-8">
             <AceternityCTA href="/projects" variant="dark">
               View projects
