@@ -114,6 +114,29 @@ function Icon({ name, size = 20 }: { name: string; size?: number }) {
   );
 }
 
+/** Intrinsic export sizes, so a lazy image reserves its box before it decodes. */
+const FIG_DIMS: Record<string, [number, number]> = {
+  "vg-02-hifi-prototypes.png": [1600, 1158],
+  "vg-03-research-insights.png": [1600, 2020],
+  "vg-04-persona-sarah.png": [1600, 1592],
+  "vg-05-persona-marcus.png": [1600, 1403],
+  "vg-06-persona-rita.png": [1600, 1403],
+  "vg-07-impact-effort-matrix.png": [1600, 2708],
+  "vg-08-competitive-landscape.png": [1600, 1114],
+  "vg-09-feature-comparison.png": [1600, 1114],
+  "vg-11-user-flow.png": [1600, 1890],
+  "vg-12-information-architecture.png": [1600, 2199],
+  "vg-13-user-journeys.png": [1600, 3151],
+  "vg-14-ui-landing-login.png": [1600, 2963],
+  "vg-15-ui-welcome-country.png": [1600, 2963],
+  "vg-16-ui-chatbot.png": [1600, 3045],
+  "vg-17-ui-all-journeys.png": [1600, 5088],
+  "vg-18-logo.png": [1600, 2020],
+  "vg-19-logo-devices.png": [1600, 2020],
+  "vg-20-typography.png": [1600, 1102],
+  "vg-22-iconography.png": [1600, 681],
+};
+
 /** The design's drop-frames, reproduced exactly: tone, caption, real export slot. */
 function Figure({
   file,
@@ -136,10 +159,13 @@ function Figure({
   // rather than a broken image.
   const [failed, setFailed] = useState(false);
   const resolved = !failed ? (src ?? `/case/visagenie/${file}`) : undefined;
+  const dims = FIG_DIMS[file];
 
   const frame = (
     <div
-      className={`flex w-full flex-col items-center justify-center overflow-hidden rounded-[14px] px-2 ${height}`}
+      className={`flex w-full flex-col items-center justify-center overflow-hidden rounded-[14px] ${
+        resolved ? "" : `px-2 ${height}`
+      }`}
       style={{ background: onDark ? FRAME_ON_DARK : FRAME }}
     >
       {resolved ? (
@@ -147,10 +173,12 @@ function Figure({
         <img
           src={resolved}
           alt={caption ?? file}
+          width={dims?.[0]}
+          height={dims?.[1]}
           loading="lazy"
           draggable={false}
           onError={() => setFailed(true)}
-          className="h-full w-full object-cover"
+          className="block h-auto w-full"
         />
       ) : (
         <span

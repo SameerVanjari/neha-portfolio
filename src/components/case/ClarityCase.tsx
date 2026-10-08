@@ -644,6 +644,132 @@ function HiAdamClosing() {
   );
 }
 
+/* --- wireframe stages (grayscale) --- */
+
+function WfLauraLoFi() {
+  return (
+    <Phone tone="lo">
+      <div className="flex items-center justify-between px-[11px] pt-[2px]">
+        <Bar w="42%" h={9} wire />
+        <span className="size-[14px] rounded-full" style={{ background: WIRE_BAR }} />
+      </div>
+      <div className="mt-[10px] space-y-[6px] px-[11px]">
+        <Bar w="58%" h={6} wire />
+        <Bar w="88%" h={10} wire />
+      </div>
+      <p className="mt-[13px] px-[11px] text-[6px] font-bold tracking-[0.4px]" style={{ color: WIRE_TEXT }}>
+        PROGRESS · 5 STAGES
+      </p>
+      <Tracker stage={2} wire />
+      <div className="mx-[11px] mt-[11px] space-y-[5px] rounded-[5px] p-[8px]" style={{ background: WIRE_CARD, border: `1px solid ${WIRE_BAR}` }}>
+        <p className="text-[6px] font-bold tracking-[0.4px]" style={{ color: WIRE_TEXT }}>PLAIN-LANGUAGE STATUS SUMMARY</p>
+        <Bar w="94%" h={4} wire /><Bar w="86%" h={4} wire /><Bar w="68%" h={4} wire />
+      </div>
+      <div className="mx-[11px] mt-[9px] flex items-center gap-[7px] rounded-[5px] p-[8px]" style={{ background: WIRE_CARD }}>
+        <span className="size-[13px] shrink-0 rounded-full" style={{ background: WIRE_BAR }} />
+        <Bar w="62%" h={4} wire />
+      </div>
+      <p className="mt-[13px] px-[11px] text-[6px] font-bold tracking-[0.4px]" style={{ color: WIRE_TEXT }}>
+        QUICK-GLANCE STATS
+      </p>
+      <div className="mt-[6px] grid grid-cols-3 gap-[5px] px-[11px]">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="space-y-[5px] rounded-[4px] p-[6px]" style={{ background: WIRE_CARD, border: `1px solid ${WIRE_BAR}` }}>
+            <Bar w="72%" h={5} wire /><Bar w="92%" h={3} wire />
+          </div>
+        ))}
+      </div>
+      <div className="mx-[11px] mt-[13px] flex items-center gap-[7px]">
+        <span className="size-[13px] shrink-0 rounded-full" style={{ background: WIRE_BAR }} />
+        <Bar w="46%" h={5} wire />
+        <span className="ml-auto h-[16px] w-[50px] rounded-[4px]" style={{ border: `1px solid ${WIRE_BAR}` }} />
+      </div>
+      <PhoneTabs wire />
+    </Phone>
+  );
+}
+
+/* --- hi-fi, additional screens --- */
+
+function HiLauraUnderwriting() {
+  return (
+    <Phone>
+      <div className="px-[11px] text-[7px]" style={{ color: MUTED }}>Good morning, Laura</div>
+      <div className="px-[11px] text-[15px] font-semibold leading-tight" style={{ ...DISPLAY, color: INK }}>You&apos;re in underwriting.</div>
+      <Tracker stage={2} />
+      <div className="mx-[11px] mt-[11px] rounded-[6px] p-[8px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+        <p className="text-[8px] leading-[1.45]" style={{ color: INK }}>
+          An underwriter is confirming your income, savings and the home&apos;s value. <span className="font-semibold">Adam Webb</span> is handling it.
+        </p>
+      </div>
+      <div className="mx-[11px] mt-[8px] flex items-center gap-[7px] rounded-[6px] p-[8px]" style={{ background: MINT, border: "1px solid #CFE3E3" }}>
+        <span className="flex size-[15px] shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white" style={{ background: "#3E8E6D" }}>✓</span>
+        <p className="text-[8px] font-semibold leading-[1.35]" style={{ color: INK }}>Nothing needed from you right now</p>
+      </div>
+      <div className="mt-[9px] grid grid-cols-3 gap-[5px] px-[11px]">
+        {[["9 of 9", "Documents"], ["5–9 d", "Typical"], ["Oct 30", "Closing"]].map(([n, l]) => (
+          <div key={l} className="rounded-[5px] p-[6px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+            <p className="text-[10px] font-semibold leading-none" style={{ ...DISPLAY, color: INK }}>{n}</p>
+            <p className="mt-[3px] text-[6px]" style={{ color: MUTED }}>{l}</p>
+          </div>
+        ))}
+      </div>
+      <PhoneTabs active={2} />
+    </Phone>
+  );
+}
+
+function HiAdamRiskReview() {
+  return (
+    <Desk>
+      <DeskTabs />
+      <div className="flex flex-1 gap-[10px] p-[10px]">
+        <div className="flex-[3] space-y-[7px]">
+          <div className="rounded-[5px] p-[9px]" style={{ background: "#FDF4E8", border: "1px solid #E8C89A" }}>
+            <p className="text-[6.5px] font-bold tracking-[0.4px]" style={{ color: AMBER_D }}>FLAGGED BY CLARITY · INCOME</p>
+            <p className="mt-[3px] text-[13px] font-semibold leading-tight" style={{ ...DISPLAY, color: INK }}>Income calculation anomaly</p>
+            <p className="mt-[4px] text-[8px] leading-[1.4]" style={{ color: INK }}>
+              Application income is 9.9% above what pay stubs support. The gap matches a one-time bonus with only one year of history.
+            </p>
+          </div>
+          <div className="flex gap-[7px]">
+            <div className="flex-1 rounded-[5px] p-[8px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+              <p className="text-[6.5px] font-bold tracking-[0.4px]" style={{ color: MUTED }}>IF BASE INCOME ONLY</p>
+              <p className="mt-[3px] text-[11px] font-semibold" style={{ ...DISPLAY, color: INK }}>DTI 36.1% → 39.7%</p>
+            </div>
+            <div className="flex-1 rounded-[5px] p-[8px]" style={{ background: TINT }}>
+              <p className="text-[6.5px] font-bold tracking-[0.4px]" style={{ color: TEAL }}>REFERENCES</p>
+              <p className="mt-[3px] text-[7px] leading-[1.4]" style={{ color: INK }}>
+                12 CFR 1026.43(c)(2)(i)<br />Fannie Mae B3-3.1-01
+              </p>
+            </div>
+          </div>
+          <div className="space-y-[5px] rounded-[5px] p-[8px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+            <Bar w="70%" h={5} />
+            <Bar w="82%" h={5} />
+            <Bar w="52%" h={5} />
+          </div>
+        </div>
+        <div className="flex-[2] rounded-[5px] p-[9px]" style={{ background: CARD, border: `1px solid ${LINE}` }}>
+          <p className="text-[9px] font-semibold" style={{ ...DISPLAY, color: INK }}>Your decision</p>
+          <div className="mt-[7px] space-y-[5px]">
+            <div className="rounded-[4px] py-[6px] text-center text-[7px] font-semibold" style={{ border: `1px solid ${TEAL}`, color: INK }}>
+              Recalculate on base income
+            </div>
+            {["Request bonus history", "Clear the flag"].map((t) => (
+              <div key={t} className="rounded-[4px] py-[6px] text-center text-[7px]" style={{ border: `1px solid ${LINE}`, color: MUTED }}>{t}</div>
+            ))}
+          </div>
+          <div className="mt-[9px] rounded-[4px] py-[6px] text-center text-[7.5px] font-semibold text-white" style={{ background: TEAL }}>
+            Record my decision
+          </div>
+          <p className="mt-[9px] text-[6.5px]" style={{ color: MUTED }}>This is guidance, not a decision.</p>
+        </div>
+      </div>
+    </Desk>
+  );
+}
+
 /* --- wide single-slot pieces --- */
 
 function FlowUnderwritingFlag() {
@@ -733,13 +859,16 @@ type ScreenTone = "lo" | "mid" | "hi";
 const SCREENS: Record<string, React.ReactNode> = {
   "wf-adam-lofi": <WfAdamLoFi />,
   "wf-adam-midfi": <WfAdamMidFi />,
+  "wf-laura-lofi": <WfLauraLoFi />,
   "wf-laura-midfi": <WfLauraMidFi />,
   "flow-underwriting-flag": <FlowUnderwritingFlag />,
   "hi-laura-home": <HiLauraHome />,
   "hi-laura-rejection": <HiLauraRejection />,
+  "hi-laura-underwriting": <HiLauraUnderwriting />,
   "hi-laura-closing": <HiLauraClosing />,
   "hi-adam-pipeline": <HiAdamPipeline />,
   "hi-adam-docreq": <HiAdamDocRequest />,
+  "hi-adam-risk-review": <HiAdamRiskReview />,
   "hi-adam-closing": <HiAdamClosing />,
   "component-tabbar": <TabBarComponent />,
 };
@@ -859,26 +988,24 @@ function Hero() {
             aria-hidden
             className="absolute inset-0 hidden lg:block"
           >
-            <div className="absolute left-[588px] top-[54px] h-[360px] w-[576px] rounded-[12px] p-[10px]" style={{ background: "#2A424B" }}>
+            <div className="absolute left-[588px] top-[54px] h-[360px] w-[576px] overflow-hidden rounded-[12px]" style={{ background: "#2A424B" }}>
               <Shot
-                src={HERO.copilot.src}
+                screen={HERO.copilot.screen}
                 alt={HERO.copilot.alt}
                 note={"Drop image\n01-hero-adam-risk-review.png"}
-                className="pl-1 pt-[150px]"
                 fillClassName="h-full w-full"
                 noteClass="text-[#F2B872]"
                 loading="eager"
               />
             </div>
             <div
-              className="absolute left-[498px] top-[250px] h-[433px] w-[200px] rounded-[28px] p-[10px]"
+              className="absolute left-[498px] top-[250px] h-[433px] w-[200px] overflow-hidden rounded-[28px]"
               style={{ background: DARK2, border: "6px solid #0E1A1F" }}
             >
               <Shot
-                src={HERO.borrower.src}
+                screen={HERO.borrower.screen}
                 alt={HERO.borrower.alt}
                 note={"Drop image\n02-hero-laura-home.png"}
-                className="pl-1 pt-[185px]"
                 fillClassName="h-full w-full"
                 noteClass="text-[#F2B872]"
                 loading="eager"
@@ -1730,7 +1857,6 @@ function Wireframes() {
                 )}
                 <motion.div variants={stages.item} className="flex flex-col gap-[10px]">
                   <Shot
-                    src={"src" in stage ? stage.src : undefined}
                     screen={"screen" in stage ? stage.screen : undefined}
                     alt={"alt" in stage ? stage.alt : undefined}
                     note={stage.placeholder.replace("Drop image ", "Drop image\n")}
@@ -1831,7 +1957,6 @@ function HifiSection() {
         {HIFI.laura.screens.map((s) => (
           <motion.figure key={s.caption} variants={laura.item}>
             <Shot
-              src={"src" in s ? s.src : undefined}
               screen={"screen" in s ? s.screen : undefined}
               alt={"alt" in s ? s.alt : undefined}
               note={"Drop image\n" + s.placeholder.split(" ")[2]}
@@ -1857,7 +1982,6 @@ function HifiSection() {
         {HIFI.adam.screens.map((s) => (
           <motion.figure key={s.caption} variants={adam.item}>
             <Shot
-              src={"src" in s ? s.src : undefined}
               screen={"screen" in s ? s.screen : undefined}
               alt={"alt" in s ? s.alt : undefined}
               note={"Drop image\n" + s.placeholder.split(" ")[2]}
