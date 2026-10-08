@@ -10,8 +10,6 @@
  * built in the same design language. `note` keeps the original Figma filename.
  */
 
-const C = "/case/clarity";
-
 export const HERO = {
   eyebrow: "Clarity · Self-initiated concept",
   title: "An AI copilot for the mortgage lifecycle",
@@ -21,12 +19,12 @@ export const HERO = {
   roleNote: "Task analysis to hi-fi, designed end to end",
   cta: { label: "See the screens", href: "#hifi" },
   copilot: {
-    src: `${C}/adam-risk-review.webp`,
+    screen: "hi-adam-risk-review",
     alt: "The loan officer copilot on Laura Bennett’s file: Clarity has flagged an income calculation anomaly with the citation behind it, and the decision — recalculate, request history or clear — is Adam’s to record",
     note: "01-hero-adam-risk-review.png",
   },
   borrower: {
-    src: `${C}/laura-underwriting.webp`,
+    screen: "hi-laura-underwriting",
     alt: "Laura’s borrower app mid-underwriting: a five-stage tracker, a plain-language note naming Adam Webb as the owner, and nothing needed from her",
     note: "02-hero-laura-home.png",
   },
@@ -348,7 +346,7 @@ export const WIREFRAMES = {
         },
         {
           tag: "HI-FI",
-          src: `${C}/adam-risk-review.webp`,
+          screen: "hi-adam-risk-review",
           alt: "The built screen: the income anomaly Clarity flagged, the DTI impact, the citation, and the three decisions Adam can record",
           placeholder: "Drop image 16-adam-risk-review.png",
         },
@@ -360,7 +358,7 @@ export const WIREFRAMES = {
       stages: [
         {
           tag: "LO-FI",
-          src: `${C}/laura-lofi-home.webp`,
+          screen: "wf-laura-lofi",
           alt: "Lo-fi wireframe of the borrower home screen: a five-stage progress tracker, a plain-language status summary card, a nothing-pending state, three quick-glance stats and a four-item tab bar",
           placeholder: "Drop image 04-lofi-laura-home.png",
         },
@@ -418,7 +416,7 @@ export const HIFI = {
         caption: "Document rejection",
       },
       {
-        src: `${C}/laura-underwriting.webp`,
+        screen: "hi-laura-underwriting",
         alt: "The borrower app during underwriting: a five-stage tracker with the current stage marked, a note naming Adam Webb as the owner, and three figures for documents, timing and closing date",
         placeholder: "Drop image 12-laura-underwriting-status.png",
         caption: "Underwriting status",
@@ -447,7 +445,7 @@ export const HIFI = {
         caption: "Document request draft",
       },
       {
-        src: `${C}/adam-risk-review.webp`,
+        screen: "hi-adam-risk-review",
         alt: "Risk review on Laura Bennett’s file: the income anomaly Clarity flagged, the DTI impact, the regulation cited, and the three decisions Adam can record",
         placeholder: "Drop image 16-adam-risk-review.png",
         caption: "Risk review",

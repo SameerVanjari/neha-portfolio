@@ -25,6 +25,7 @@ import { EASE_OUT, LineByLine, Reveal, useStagger, useMotionPref } from "@/compo
 import { useLoadStage } from "@/components/LoadStage";
 import { caseStudyThumb } from "@/data/case-studies";
 import VisaGenieChatPreview from "@/components/case/VisaGenieChatPreview";
+import { ProjectRuler } from "@/components/ProjectRuler";
 
 /* ---------------------------------- tokens ---------------------------------
    Sampled directly from the Figma frame (node 291:217). This case study has
@@ -101,7 +102,7 @@ function heroMotion(reduce: boolean): { group: Variants; item: Variants } {
 function Icon({ name, size = 20 }: { name: string; size?: number }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`/case/visagenie/${name}.svg`}
       width={size}
       height={size}
@@ -112,6 +113,29 @@ function Icon({ name, size = 20 }: { name: string; size?: number }) {
     />
   );
 }
+
+/** Intrinsic export sizes, so a lazy image reserves its box before it decodes. */
+const FIG_DIMS: Record<string, [number, number]> = {
+  "vg-02-hifi-prototypes.png": [1600, 1158],
+  "vg-03-research-insights.png": [1600, 2020],
+  "vg-04-persona-sarah.png": [1600, 1592],
+  "vg-05-persona-marcus.png": [1600, 1403],
+  "vg-06-persona-rita.png": [1600, 1403],
+  "vg-07-impact-effort-matrix.png": [1600, 2708],
+  "vg-08-competitive-landscape.png": [1600, 1114],
+  "vg-09-feature-comparison.png": [1600, 1114],
+  "vg-11-user-flow.png": [1600, 1890],
+  "vg-12-information-architecture.png": [1600, 2199],
+  "vg-13-user-journeys.png": [1600, 3151],
+  "vg-14-ui-landing-login.png": [1600, 2963],
+  "vg-15-ui-welcome-country.png": [1600, 2963],
+  "vg-16-ui-chatbot.png": [1600, 3045],
+  "vg-17-ui-all-journeys.png": [1600, 5088],
+  "vg-18-logo.png": [1600, 2020],
+  "vg-19-logo-devices.png": [1600, 2020],
+  "vg-20-typography.png": [1600, 1102],
+  "vg-22-iconography.png": [1600, 681],
+};
 
 /** The design's drop-frames, reproduced exactly: tone, caption, real export slot. */
 function Figure({
@@ -135,10 +159,13 @@ function Figure({
   // rather than a broken image.
   const [failed, setFailed] = useState(false);
   const resolved = !failed ? (src ?? `/case/visagenie/${file}`) : undefined;
+  const dims = FIG_DIMS[file];
 
   const frame = (
     <div
-      className={`flex w-full flex-col items-center justify-center overflow-hidden rounded-[14px] px-2 ${height}`}
+      className={`flex w-full flex-col items-center justify-center overflow-hidden rounded-[14px] ${
+        resolved ? "" : `px-2 ${height}`
+      }`}
       style={{ background: onDark ? FRAME_ON_DARK : FRAME }}
     >
       {resolved ? (
@@ -146,10 +173,12 @@ function Figure({
         <img
           src={resolved}
           alt={caption ?? file}
+          width={dims?.[0]}
+          height={dims?.[1]}
           loading="lazy"
           draggable={false}
           onError={() => setFailed(true)}
-          className="h-full w-full object-cover"
+          className="block h-auto w-full"
         />
       ) : (
         <span
@@ -320,7 +349,7 @@ function Hero() {
     <section className="relative overflow-hidden bg-[#1d2a38]">
       {/* Lavender glow — a Figma asset, right-bleed behind the copy. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <img loading="lazy" decoding="async"
         src="/case/visagenie/glow.svg"
         alt=""
         aria-hidden
@@ -1020,7 +1049,7 @@ function Testing() {
 function MoreProjects() {
   const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
   return (
-    <section className={`${CONTENT} ${GUTTER} flex flex-col gap-[18px] pb-[90px] pt-[110px]`}>
+    <section data-index="More projects" data-tone="light" className={`${CONTENT} ${GUTTER} flex flex-col gap-[18px] pb-[90px] pt-[110px]`}>
       <div className="flex w-full items-center justify-between">
         <p className="text-[12px] tracking-[1.2px] text-[#5b6272]" style={BODY}>
           {MORE_PROJECTS.label}
@@ -1083,7 +1112,7 @@ function MoreProjects() {
 
 function Footer() {
   return (
-    <footer id="contact" className="w-full bg-[#1d2a38]">
+    <footer data-index="Contact" data-tone="dark" id="contact" className="w-full bg-[#1d2a38]">
       <div className={`${CONTENT} ${GUTTER} flex flex-col gap-8 pb-16 pt-14 md:flex-row md:items-center md:justify-between`}>
         <div className="flex flex-col gap-2">
           <p className="text-[32px] font-semibold leading-[1.15] text-[#f2f4f8]" style={DISPLAY}>
@@ -1118,6 +1147,7 @@ function Footer() {
 export default function VisaGenieCase() {
   return (
     <main style={{ background: PAPER }}>
+      <ProjectRuler />
       <Nav />
       <Hero />
       <Facts />

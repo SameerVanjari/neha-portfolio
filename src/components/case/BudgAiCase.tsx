@@ -20,6 +20,7 @@ import {
 import { EASE_OUT, Reveal, useStagger, useMotionPref } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
 import { caseStudyThumb } from "@/data/case-studies";
+import { ProjectRuler } from "@/components/ProjectRuler";
 
 /* ---------------------------------- tokens ---------------------------------
    Sampled directly from the Figma frame (node 406:217). This case study has
@@ -99,7 +100,7 @@ function heroMotion(reduce: boolean): { group: Variants; item: Variants } {
 function Icon({ name, size = 20 }: { name: string; size?: number }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`/case/budgai/${name}.svg`}
       width={size}
       height={size}
@@ -114,14 +115,12 @@ function Icon({ name, size = 20 }: { name: string; size?: number }) {
 /** A phone bezel exactly as the design draws it: dark glass, deep-teal tile. */
 function PhoneFrame({
   width,
-  height,
   screen,
   className = "",
   children,
   dark = true,
 }: {
   width: number;
-  height: number;
   screen?: string;
   className?: string;
   children?: React.ReactNode;
@@ -129,29 +128,46 @@ function PhoneFrame({
 }) {
   return (
     <div
-      className={`flex flex-col items-center justify-center overflow-hidden rounded-[34px] border-[7px] px-[6px] ${className}`}
+      className={`overflow-hidden rounded-[34px] border-[7px] px-[6px] ${className}`}
       style={{
-        background: children ? undefined : dark ? SCREEN : FRAME,
+        background: dark ? SCREEN : FRAME,
         borderColor: dark ? BEZEL : "#e6ebe8",
-        height,
         width,
         boxShadow: dark ? "0 24px 50px rgba(0,0,0,0.45)" : undefined,
       }}
     >
-      {children ?? (
-        <span
-          aria-hidden
-          className={`px-2 text-center text-[10px] leading-[1.4] ${dark ? ON_DARK_3 : MUTED}`}
-          style={BODY}
-        >
-          Drop image
-          <br />
-          {screen}
-        </span>
-      )}
+      <div
+        className="relative aspect-[293/633] w-full overflow-hidden rounded-[26px]"
+        style={{ background: dark ? SCREEN : FRAME }}
+      >
+        {children ?? (
+          <span
+            aria-hidden
+            className={`absolute inset-0 flex flex-col items-center justify-center px-2 text-center text-[10px] leading-[1.4] ${dark ? ON_DARK_3 : MUTED}`}
+            style={BODY}
+          >
+            Drop image
+            <br />
+            {screen}
+          </span>
+        )}
+      </div>
     </div>
   );
 }
+
+/**
+ * Intrinsic export sizes, so a lazy figure reserves its box before it decodes.
+ */
+const FIG_DIMS: Record<string, [number, number]> = {
+  "cb-2024-ux-flow.png": [1600, 900],
+  "cb-2024-wire-home.png": [720, 1280],
+  "cb-2024-wire-scan-receipt.png": [720, 1280],
+  "cb-2024-wire-expense-planner.png": [720, 1280],
+  "cb-06-journey-map.png": [1024, 438],
+  "cb-07-user-flows.png": [1024, 462],
+  "cb-08-information-architecture.png": [1036, 583],
+};
 
 /**
  * Drop-frame figure — the design's export slots, reproduced exactly: tone,
@@ -175,9 +191,12 @@ function Figure({
   /** Set when the figure sits inside a staggered group, so it inherits timing. */
   variants?: Variants;
 }) {
+  const dims = FIG_DIMS[file];
   const frame = (
     <div
-      className={`flex w-full flex-col items-center justify-center overflow-hidden px-2 ${radius} ${height}`}
+      className={`flex w-full flex-col items-center justify-center overflow-hidden ${radius} ${
+        src ? "" : `px-2 ${height}`
+      }`}
       style={{ background: onDark ? SCREEN : FRAME }}
       data-file={file}
     >
@@ -186,9 +205,11 @@ function Figure({
         <img
           src={src}
           alt={caption ?? file}
+          width={dims?.[0]}
+          height={dims?.[1]}
           loading="lazy"
           draggable={false}
-          className="h-full w-full object-cover"
+          className="block h-auto w-full"
         />
       ) : (
         <span
@@ -344,7 +365,7 @@ function Hero() {
     <section className="relative overflow-hidden bg-[#0e2a30]">
       {/* Teal glow — a Figma asset, right-bleed behind the copy. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <img loading="lazy" decoding="async"
         src="/case/budgai/teal-glow.svg"
         alt=""
         aria-hidden
@@ -411,44 +432,44 @@ function Hero() {
           className="relative hidden h-[640px] shrink-0 lg:block"
           style={{ width: 470, marginLeft: "auto", marginRight: -112 }}
         >
-          <PhoneFrame width={260} height={563} screen="cb-hi-home.png" className="absolute left-0 top-0 z-0">
+          <PhoneFrame width={260} screen="cb-hi-home.png" className="absolute left-0 top-0 z-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <img loading="eager" fetchPriority="high"
               src="/case/budgai/cb-hi-home.png"
               alt={HERO.phones[0].alt}
               draggable={false}
-              className="h-full w-full rounded-[27px] object-cover object-top"
+              className="h-full w-full rounded-[27px] object-cover"
             />
           </PhoneFrame>
-          <PhoneFrame width={230} height={498} screen="cb-hi-global.png" className="absolute right-0 top-[50px] z-10">
+          <PhoneFrame width={230} screen="cb-hi-global.png" className="absolute right-0 top-[50px] z-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <img loading="eager" fetchPriority="high"
               src="/case/budgai/cb-hi-global.png"
               alt={HERO.phones[1].alt}
               draggable={false}
-              className="h-full w-full rounded-[27px] object-cover object-top"
+              className="h-full w-full rounded-[27px] object-cover"
             />
           </PhoneFrame>
         </motion.div>
 
         {/* Mobile: the same two phones, stacked side by side under the copy. */}
         <motion.div variants={item} className="flex w-full items-start justify-center gap-4 lg:hidden">
-          <PhoneFrame width={230} height={498} screen="cb-hi-home.png" className="max-w-[46%]">
+          <PhoneFrame width={230} screen="cb-hi-home.png" className="max-w-[46%]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <img loading="eager" fetchPriority="high"
               src="/case/budgai/cb-hi-home.png"
               alt={HERO.phones[0].alt}
               draggable={false}
-              className="h-full w-full rounded-[24px] object-cover object-top"
+              className="h-full w-full rounded-[24px] object-cover"
             />
           </PhoneFrame>
-          <PhoneFrame width={204} height={442} screen="cb-hi-global.png" className="mt-6 max-w-[42%]">
+          <PhoneFrame width={204} screen="cb-hi-global.png" className="mt-6 max-w-[42%]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <img loading="eager" fetchPriority="high"
               src="/case/budgai/cb-hi-global.png"
               alt={HERO.phones[1].alt}
               draggable={false}
-              className="h-full w-full rounded-[24px] object-cover object-top"
+              className="h-full w-full rounded-[24px] object-cover"
             />
           </PhoneFrame>
         </motion.div>
@@ -714,7 +735,7 @@ function Fidelity() {
           <div key={s.file} className="contents">
             <motion.div variants={item} className="flex flex-col gap-2">
               <div
-                className="flex w-full flex-col items-center justify-center overflow-hidden rounded-[26px] px-2 h-[420px] lg:h-[541px] lg:w-[250px]"
+                className="mx-auto flex w-full max-w-[250px] flex-col items-center justify-center overflow-hidden rounded-[26px] aspect-[293/633]"
                 style={{ background: s.tone === "dark" ? SCREEN : FRAME }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -723,7 +744,7 @@ function Fidelity() {
                   alt={s.alt}
                   loading="lazy"
                   draggable={false}
-                  className="h-full w-full object-cover object-top"
+                  className="h-full w-full object-cover"
                 />
               </div>
               <p className="text-[11px] font-bold tracking-[1.1px] text-[#0f5c5a]" style={BODY}>
@@ -760,7 +781,7 @@ function FinalScreens() {
           {FINAL.screens.map((s) => (
             <motion.figure key={`${s.file}:${s.caption}`} variants={item} className="flex w-full flex-col gap-2">
               <div
-                className="flex w-full flex-col items-center justify-center overflow-hidden rounded-[24px] px-2 h-[280px] lg:h-[534px]"
+                className="flex w-full flex-col items-center justify-center overflow-hidden rounded-[24px] aspect-[293/633]"
                 style={{ background: SCREEN }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -769,7 +790,7 @@ function FinalScreens() {
                   alt={s.caption}
                   loading="lazy"
                   draggable={false}
-                  className="h-full w-full object-cover object-top"
+                  className="h-full w-full object-cover"
                 />
               </div>
               <figcaption className="text-[13px] leading-[1.5] text-[#afc3bf]" style={BODY}>
@@ -801,7 +822,7 @@ function Trust() {
         {TRUST.figures.map((f) => (
           <motion.figure key={f.file} variants={item} className="flex w-full flex-col gap-2">
             <div
-              className="flex w-full flex-col items-center justify-center overflow-hidden rounded-[22px] px-2 h-[300px] lg:h-[476px]"
+              className="flex w-full flex-col items-center justify-center overflow-hidden rounded-[22px] aspect-[293/633]"
               style={{ background: FRAME }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -810,7 +831,7 @@ function Trust() {
                 alt={f.caption}
                 loading="lazy"
                 draggable={false}
-                className="h-full w-full object-cover object-top"
+                className="h-full w-full object-cover"
               />
             </div>
             <figcaption className="text-[13px] leading-[1.5] text-[#4e6166]" style={BODY}>
@@ -906,7 +927,7 @@ function MoreProjects() {
   // bitmap falls back to the labelled tile rather than a broken image.
   const [brokenThumbs, setBrokenThumbs] = useState<Set<string>>(new Set());
   return (
-    <section className={`${CONTENT} ${GUTTER} flex flex-col gap-[18px] pb-[90px] pt-[110px]`}>
+    <section data-index="More projects" data-tone="light" className={`${CONTENT} ${GUTTER} flex flex-col gap-[18px] pb-[90px] pt-[110px]`}>
       <div className="flex w-full items-center justify-between">
         <p className="text-[12px] tracking-[1.2px] text-[#4e6166]" style={BODY}>
           {MORE_PROJECTS.label}
@@ -972,7 +993,7 @@ function MoreProjects() {
 
 function Footer() {
   return (
-    <footer id="contact" className="w-full bg-[#0e2a30]">
+    <footer data-index="Contact" data-tone="dark" id="contact" className="w-full bg-[#0e2a30]">
       <div className={`${CONTENT} ${GUTTER} flex flex-col gap-8 pb-16 pt-14 md:flex-row md:items-center md:justify-between`}>
         <div className="flex flex-col gap-2">
           <p className="text-[32px] font-semibold leading-[1.15] text-[#f1f6f4]" style={DISPLAY}>
@@ -1007,6 +1028,7 @@ function Footer() {
 export default function BudgAiCase() {
   return (
     <main style={{ background: PAPER }}>
+      <ProjectRuler />
       <Nav />
       <Hero />
       <Facts />

@@ -20,6 +20,7 @@ import { FOOTER_LINKS } from "@/data/landing";
 import { EASE_OUT, LineByLine, Reveal, useMotionPref, useStagger } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
 import { caseStudyThumb } from "@/data/case-studies";
+import { ProjectRuler } from "@/components/ProjectRuler";
 
 /* ---------------------------------- tokens --------------------------------- */
 
@@ -38,7 +39,7 @@ const ASSET_BASE = "/case/broken-mile";
 function Icon({ name, size = 32, className = "" }: { name: string; size?: number; className?: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`${ASSET_BASE}/icon-${name}.svg`}
       width={size}
       height={size}
@@ -192,7 +193,7 @@ function Vignette({ kind }: { kind: string }) {
   if (!file) return null;
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`/case/broken-mile/${file}.svg`}
       alt=""
       aria-hidden
@@ -335,7 +336,7 @@ function AtAGlance() {
   const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
 
   return (
-    <section aria-label="At a glance" className="bg-[#17161B]">
+    <section data-index="At a glance" data-tone="dark" aria-label="At a glance" className="bg-[#17161B]">
       <div className="mx-auto w-full max-w-[1200px] px-6 lg:px-0">
         <motion.ul
           variants={group}
@@ -737,7 +738,7 @@ function Impact() {
       <Reveal className="mt-8" distance={18}>
         <figure className="flex flex-col gap-8 rounded-[20px] bg-[#E9E3D9] p-[36px] md:flex-row md:p-[44px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <img loading="lazy" decoding="async"
             src="/case/broken-mile/quote-user.svg"
             width={48}
             height={48}
@@ -771,7 +772,7 @@ function MoreProjects() {
   const { group, item, viewport } = useStagger({ distance: 16, step: 0.07 });
 
   return (
-    <section className="mx-auto w-full max-w-[1200px] px-6 pb-[110px] pt-[100px] lg:px-0">
+    <section data-index="More projects" data-tone="light" className="mx-auto w-full max-w-[1200px] px-6 pb-[110px] pt-[100px] lg:px-0">
       <div className="flex items-center justify-between border-t border-[#DAD3C8] pt-[43px]">
         <p className="text-[13px] font-medium uppercase tracking-[1.82px] text-[#5C5750]" style={BODY}>
           More projects
@@ -832,7 +833,7 @@ function MoreProjects() {
 
 function CaseFooter() {
   return (
-    <footer className="bg-[#17161B]">
+    <footer data-index="Contact" data-tone="dark" className="bg-[#17161B]">
       {/* One quiet rise for the whole row — a footer is a sign-off, not a
           section, and per-link entrances would overplay it. */}
       <Reveal distance={16}>
@@ -876,6 +877,7 @@ export default function BrokenMileCase() {
   // keeps the hero clear of it.
   return (
     <main className="bg-[#F2EEE7] pt-[85px]">
+      <ProjectRuler />
       <Hero />
       <AtAGlance />
       <Problem />

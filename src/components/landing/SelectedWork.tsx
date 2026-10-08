@@ -20,7 +20,7 @@ const FILTERS: { id: CaseLens | "all"; label: string }[] = [
   { id: "xr", label: "XR" },
   { id: "ux", label: "UX" },
   { id: "ai", label: "AI" },
-  { id: "product", label: "Product" },
+  { id: "product", label: "Product Design" },
 ];
 
 function Placeholder({ card }: { card: CaseStudy }) {
@@ -125,6 +125,7 @@ export default function SelectedWork() {
   const [hasFiltered, setHasFiltered] = useState(false);
   const limit = filter === "all" ? HOME_ALL_LIMIT : HOME_LENS_LIMIT;
   const cards = caseStudiesForLens(filter).slice(0, limit);
+  const filterLabel = FILTERS.find((f) => f.id === filter)?.label ?? filter;
 
   const { group, item, viewport } = useStagger({ step: 0.055, distance: 16 });
 
@@ -212,7 +213,7 @@ export default function SelectedWork() {
         ) : (
           <div className="flex w-full flex-col items-start gap-3 rounded-[14px] border border-dashed border-[#B8AFA2] bg-[#F2EEE7] p-8" style={BODY}>
             <p className="text-[17px] font-medium text-[#17161B]">
-              More {filter.toUpperCase()} case studies live in the full archive.
+              More {filterLabel} case studies live in the full archive.
             </p>
             <Link
               href="/projects"

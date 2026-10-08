@@ -20,6 +20,7 @@ import {
 import { EASE_OUT, Reveal, useStagger, useMotionPref } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
 import { caseStudyThumb } from "@/data/case-studies";
+import { ProjectRuler } from "@/components/ProjectRuler";
 
 /* ---------------------------------- tokens ---------------------------------
    Sampled directly from the Figma frame (node 430:217). This case study has
@@ -93,7 +94,7 @@ function heroMotion(reduce: boolean): { group: Variants; item: Variants } {
 function Icon({ name, size = 20 }: { name: string; size?: number }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`/case/inspirit-dna/${name}.svg`}
       width={size}
       height={size}
@@ -875,7 +876,7 @@ function MoreProjects() {
   // back to the labelled tile rather than a broken image.
   const [brokenThumbs, setBrokenThumbs] = useState<Set<string>>(new Set());
   return (
-    <section className={`${CONTENT} ${GUTTER} flex flex-col gap-[18px] pb-[90px] pt-[110px]`}>
+    <section data-index="More projects" data-tone="light" className={`${CONTENT} ${GUTTER} flex flex-col gap-[18px] pb-[90px] pt-[110px]`}>
       <div className="flex w-full items-center justify-between">
         <p className="text-[12px] tracking-[1.2px] text-[#5c5b70]" style={BODY}>
           {MORE_PROJECTS.label}
@@ -940,7 +941,7 @@ function MoreProjects() {
 
 function Footer() {
   return (
-    <footer id="contact" className="w-full" style={{ background: DUSK }}>
+    <footer data-index="Contact" data-tone="dark" id="contact" className="w-full" style={{ background: DUSK }}>
       <div className={`${CONTENT} ${GUTTER} flex flex-col gap-8 pb-16 pt-14 md:flex-row md:items-center md:justify-between`}>
         <div className="flex flex-col gap-2">
           <p className="text-[32px] font-semibold leading-[1.15] text-[#f1f0fa]" style={DISPLAY}>
@@ -975,6 +976,7 @@ function Footer() {
 export default function InspiritDnaCase() {
   return (
     <main style={{ background: PAPER }}>
+      <ProjectRuler />
       <Nav />
       <Hero />
       <Facts />

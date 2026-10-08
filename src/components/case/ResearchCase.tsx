@@ -21,6 +21,7 @@ import { FOOTER_LINKS } from "@/data/landing";
 import { EASE_OUT, LineByLine, Reveal, useStagger, useMotionPref } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
 import { caseStudyThumb } from "@/data/case-studies";
+import { ProjectRuler } from "@/components/ProjectRuler";
 
 const DARK = "#0B1733";
 const FAINT_DARK = "#071128";
@@ -148,7 +149,7 @@ function SectionHead({
 function Icon({ name, size = 20, className = "" }: { name: string; size?: number; className?: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`/case/research/${name}.svg`}
       width={size}
       height={size}
@@ -159,6 +160,28 @@ function Icon({ name, size = 20, className = "" }: { name: string; size?: number
     />
   );
 }
+
+/** Intrinsic export sizes, so a shot reserves its box before it decodes. */
+const IMG_DIMS: Record<string, [number, number]> = {
+  "ia.webp": [1024, 1105],
+  "frame-home.webp": [1020, 478],
+  "frame-results.webp": [1020, 498],
+  "frame-citations.webp": [1020, 505],
+  "model-tfidf.webp": [1024, 609],
+  "model-algo.webp": [1024, 601],
+  "data-loading.webp": [700, 178],
+  "data-merge.webp": [1024, 609],
+  "data-nan.webp": [700, 205],
+  "note-highlight.webp": [700, 342],
+  "note-pdf.webp": [700, 353],
+  "note-citations.webp": [700, 328],
+  "iter-1.webp": [400, 192],
+  "iter-2.webp": [400, 192],
+  "iter-3.webp": [400, 192],
+  "iter-4.webp": [400, 192],
+  "iter-5.webp": [400, 192],
+  "final.webp": [1024, 1043],
+};
 
 function Shot({
   src,
@@ -172,10 +195,19 @@ function Shot({
   /** Above-the-fold media opts out of lazy loading so it can be the LCP. */
   loading?: "eager" | "lazy";
 }) {
+  const dims = IMG_DIMS[src.split("/").pop() ?? ""];
   return (
     <div className={`overflow-hidden ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} className="h-full w-full object-cover" loading={loading} draggable={false} />
+      <img
+        src={src}
+        alt={alt}
+        width={dims?.[0]}
+        height={dims?.[1]}
+        className="block h-auto w-full"
+        loading={loading}
+        draggable={false}
+      />
     </div>
   );
 }
@@ -296,7 +328,7 @@ function Hero() {
             <span className="size-[11px] rounded-full bg-[#28C840]" />
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={HERO.browser.src} alt={HERO.browser.alt} className="aspect-[640/306] w-full object-cover object-top" loading="eager" draggable={false} />
+          <img src={HERO.browser.src} alt={HERO.browser.alt} width={IMG_DIMS["final.webp"][0]} height={IMG_DIMS["final.webp"][1]} className="block h-auto w-full" loading="eager" draggable={false} />
         </motion.div>
       </motion.div>
     </section>
@@ -309,7 +341,7 @@ function Facts() {
   const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
 
   return (
-    <section aria-label="At a glance" style={{ background: FAINT_DARK }}>
+    <section data-index="At a glance" data-tone="dark" aria-label="At a glance" style={{ background: FAINT_DARK }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 lg:px-0">
         <motion.ul
           variants={group}
@@ -503,7 +535,7 @@ function IAFrames() {
       >
         {IA.frames.map((frame) => (
           <motion.figure key={frame.note} variants={item}>
-            <Shot src={frame.src} alt={frame.alt} className="aspect-[510/550] rounded-[14px]" />
+            <Shot src={frame.src} alt={frame.alt} className="rounded-[14px]" />
             <figcaption className="mt-[10px] text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
               {frame.caption}
             </figcaption>
@@ -628,7 +660,7 @@ function UnderHood() {
         >
           {HOOD.models.map((model) => (
             <motion.figure key={model.note} variants={models.item}>
-              <Shot src={model.src} alt={model.alt} className="aspect-[510/290] rounded-[14px]" />
+              <Shot src={model.src} alt={model.alt} className="rounded-[14px]" />
             <figcaption className="mt-[10px] text-[13px] leading-[1.5] text-[#AFBDD6]" style={BODY}>
               {model.caption}
             </figcaption>
@@ -644,7 +676,7 @@ function UnderHood() {
         >
           {HOOD.data.map((shot) => (
             <motion.figure key={shot.note} variants={data.item}>
-              <Shot src={shot.src} alt={shot.alt} className="aspect-[335/220] rounded-[14px]" />
+              <Shot src={shot.src} alt={shot.alt} className="rounded-[14px]" />
             <figcaption className="mt-[10px] text-[13px] leading-[1.5] text-[#AFBDD6]" style={BODY}>
               {shot.caption}
             </figcaption>
@@ -671,7 +703,7 @@ function Notes() {
       >
         {NOTES.frames.map((frame) => (
           <motion.figure key={frame.note} variants={item}>
-            <Shot src={frame.src} alt={frame.alt} className="aspect-[335/200] rounded-[14px]" />
+            <Shot src={frame.src} alt={frame.alt} className="rounded-[14px]" />
             <figcaption className="mt-[10px] text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
               {frame.caption}
             </figcaption>
@@ -699,7 +731,7 @@ function Iterations() {
       >
         {ITERATIONS.steps.map((step, i) => (
           <motion.li key={step.note} variants={steps.item}>
-            <Shot src={step.src} alt={step.alt} className="aspect-[198/95] rounded-[10px] border border-[#DDE5F2]" />
+            <Shot src={step.src} alt={step.alt} className="rounded-[10px] border border-[#DDE5F2]" />
             <p className="mt-2 flex items-start gap-[6px]">
               <span className="text-[12px] font-bold" style={{ ...BODY, color: BLUE }}>
                 {i + 1}
@@ -716,7 +748,7 @@ function Iterations() {
           <Shot
             src={ITERATIONS.final.src}
             alt={ITERATIONS.final.alt}
-            className="aspect-[1036/491] w-full rounded-[16px] border border-[#DDE5F2]"
+            className="w-full rounded-[16px] border border-[#DDE5F2]"
           />
           <figcaption className="mt-[10px] text-[13px] leading-[1.5]" style={{ ...BODY, color: MUTED }}>
             {ITERATIONS.final.caption}
@@ -761,7 +793,7 @@ function MoreProjects() {
   const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
 
   return (
-    <section className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[110px] lg:px-0">
+    <section data-index="More projects" data-tone="light" className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[110px] lg:px-0">
       <div className="flex items-center justify-between">
         <p className="text-[12px] tracking-[1.2px]" style={{ ...BODY, color: MUTED }}>
           MORE PROJECTS
@@ -819,7 +851,7 @@ function MoreProjects() {
 
 function Footer() {
   return (
-    <footer style={{ background: DARK }}>
+    <footer data-index="Contact" data-tone="dark" style={{ background: DARK }}>
       {/* One quiet rise for the whole row — a footer is a sign-off, not a
           section, and per-link entrances would overplay it. */}
       <Reveal distance={16}>
@@ -859,6 +891,7 @@ function Footer() {
 export default function ResearchCase() {
   return (
     <main style={{ background: PAPER }}>
+      <ProjectRuler />
       <Nav />
       <Hero />
       <Facts />

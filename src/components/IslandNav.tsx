@@ -22,7 +22,7 @@ const ITEMS: { id: ThemeId; label: string; color: string }[] = [
   { id: "xr", label: "XR", color: "#FF2BD6" },
   { id: "ux", label: "UX", color: "#FFC94D" },
   { id: "ai", label: "AI", color: "#8B5CF6" },
-  { id: "product", label: "Product", color: "#06B6D4" },
+  { id: "product", label: "Product Design", color: "#06B6D4" },
 ];
 
 /* ---------------------------------- metrics --------------------------------

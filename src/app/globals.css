@@ -208,6 +208,18 @@ button:focus-visible {
   }
 }
 
+/* ---- Project ruler (left-edge section index) ----
+   Ticks expand as the section they mark comes into view. The width change is
+   the whole animation; under reduced motion it snaps. */
+.project-ruler__line {
+  will-change: width;
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-ruler__line {
+    transition: none;
+  }
+}
+
 /* ---- Case studies: hover / press feedback ----
    Interaction states, not decoration. These sit in the "tens of times a day"
    tier, so every one is near-imperceptible: 150–200ms, one or two pixels,

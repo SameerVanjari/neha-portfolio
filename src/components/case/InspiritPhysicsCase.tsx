@@ -17,6 +17,7 @@ import {
 import { EASE_OUT, Reveal, useStagger, useMotionPref } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
 import { caseStudyThumb } from "@/data/case-studies";
+import { ProjectRuler } from "@/components/ProjectRuler";
 
 /* ---------------------------------- tokens ---------------------------------
    Sampled directly from the Figma frame (node 423:217). This case study has
@@ -79,7 +80,7 @@ function heroMotion(reduce: boolean): { group: Variants; item: Variants } {
 function Icon({ name, size = 20 }: { name: string; size?: number }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`/case/inspirit/${name}.svg`}
       width={size}
       height={size}
@@ -226,7 +227,7 @@ function Hero() {
       <div aria-hidden className="absolute inset-0">
         <div className="relative mx-auto h-full max-w-[1440px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <img loading="lazy" decoding="async"
             src="/case/inspirit/iv-sky-glow.svg"
             alt=""
             draggable={false}
@@ -237,7 +238,7 @@ function Hero() {
             style={{ background: DARK_SLOT }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <img loading="lazy" decoding="async"
               src="/case/inspirit/iv-c1-dome-cannon-hud.jpg"
               alt=""
               draggable={false}
@@ -249,7 +250,7 @@ function Hero() {
             style={{ background: DARK_SLOT }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <img loading="lazy" decoding="async"
               src="/case/inspirit/iv-c2-ferris-wheel-domes.jpg"
               alt=""
               draggable={false}
@@ -400,7 +401,7 @@ function Methodology() {
           <motion.div variants={item} key={step.num} className="flex flex-col gap-2 rounded-[18px] bg-white px-[22px] pb-6 pt-[22px]">
             <div className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/case/inspirit/iv-triangle.svg" width={18} height={16} alt="" aria-hidden className="select-none" />
+              <img loading="lazy" decoding="async" src="/case/inspirit/iv-triangle.svg" width={18} height={16} alt="" aria-hidden className="select-none" />
               <p className="text-[13px] font-bold leading-[1.5] text-[#5d5d63]" style={BODY}>
                 {step.num}
               </p>
@@ -606,7 +607,7 @@ function ModuleBlock({ module: m }: { module: (typeof MODULES.items)[number] }) 
           {m.outcomes.map((outcome) => (
             <div key={outcome.slice(0, 24)} className="flex items-start gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/case/inspirit/iv-bullet.svg" width={16} height={19} alt="" aria-hidden className="mt-[2px] shrink-0 select-none" />
+              <img loading="lazy" decoding="async" src="/case/inspirit/iv-bullet.svg" width={16} height={19} alt="" aria-hidden className="mt-[2px] shrink-0 select-none" />
               <p className="max-w-[450px] text-[15px] leading-[1.5] text-[#1e1e20]" style={BODY}>
                 {outcome}
               </p>
@@ -741,7 +742,7 @@ function Validation() {
 function MoreProjects() {
   const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
   return (
-    <section className={`${CONTENT} ${GUTTER} flex flex-col gap-[18px] pb-[90px] pt-[110px]`}>
+    <section data-index="More projects" data-tone="light" className={`${CONTENT} ${GUTTER} flex flex-col gap-[18px] pb-[90px] pt-[110px]`}>
       <div className="flex w-full items-center justify-between">
         <p className="text-[12px] tracking-[1.2px] text-[#5d5d63]" style={BODY}>
           {MORE_PROJECTS.label}
@@ -802,7 +803,7 @@ function MoreProjects() {
 
 function Footer() {
   return (
-    <footer id="contact" className="w-full bg-[#232325]">
+    <footer data-index="Contact" data-tone="dark" id="contact" className="w-full bg-[#232325]">
       <div className={`${CONTENT} ${GUTTER} flex flex-col gap-8 pb-16 pt-14 md:flex-row md:items-center md:justify-between`}>
         <div className="flex flex-col gap-2">
           <p className="text-[32px] font-semibold leading-[1.15] text-[#f2f2ef]" style={DISPLAY}>
@@ -837,6 +838,7 @@ function Footer() {
 export default function InspiritPhysicsCase() {
   return (
     <main style={{ background: PAPER }}>
+      <ProjectRuler />
       <Nav />
       <Hero />
       <Facts />
