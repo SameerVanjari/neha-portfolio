@@ -13,6 +13,13 @@ import CaseStudyCardMedia from "@/components/CaseStudyCardMedia";
 
 const SORTS: (ThemeId | "all")[] = ["all", "ai", "xr", "ux", "product"];
 
+const SORT_LABELS: Record<ThemeId, string> = {
+  xr: "XR",
+  ux: "UX",
+  ai: "AI",
+  product: "Product Design",
+};
+
 function isThemeId(v: string | null): v is ThemeId {
   return v === "ai" || v === "xr" || v === "ux" || v === "product";
 }
@@ -88,7 +95,7 @@ export default function ProjectsList({ lens }: { lens: string | null }) {
                         borderColor: isActive ? "#111827" : "rgba(0,0,0,0.08)",
                       }}
                     >
-                      {s === "all" ? "All" : s.toUpperCase()}
+                      {s === "all" ? "All" : SORT_LABELS[s]}
                     </button>
                   );
                 })}

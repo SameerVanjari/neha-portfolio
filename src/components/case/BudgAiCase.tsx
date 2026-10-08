@@ -20,6 +20,7 @@ import {
 import { EASE_OUT, Reveal, useStagger, useMotionPref } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
 import { caseStudyThumb } from "@/data/case-studies";
+import { ProjectRuler } from "@/components/ProjectRuler";
 
 /* ---------------------------------- tokens ---------------------------------
    Sampled directly from the Figma frame (node 406:217). This case study has
@@ -99,7 +100,7 @@ function heroMotion(reduce: boolean): { group: Variants; item: Variants } {
 function Icon({ name, size = 20 }: { name: string; size?: number }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`/case/budgai/${name}.svg`}
       width={size}
       height={size}
@@ -344,7 +345,7 @@ function Hero() {
     <section className="relative overflow-hidden bg-[#0e2a30]">
       {/* Teal glow — a Figma asset, right-bleed behind the copy. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <img loading="lazy" decoding="async"
         src="/case/budgai/teal-glow.svg"
         alt=""
         aria-hidden
@@ -413,7 +414,7 @@ function Hero() {
         >
           <PhoneFrame width={260} height={563} screen="cb-hi-home.png" className="absolute left-0 top-0 z-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <img loading="eager" fetchPriority="high"
               src="/case/budgai/cb-hi-home.png"
               alt={HERO.phones[0].alt}
               draggable={false}
@@ -422,7 +423,7 @@ function Hero() {
           </PhoneFrame>
           <PhoneFrame width={230} height={498} screen="cb-hi-global.png" className="absolute right-0 top-[50px] z-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <img loading="eager" fetchPriority="high"
               src="/case/budgai/cb-hi-global.png"
               alt={HERO.phones[1].alt}
               draggable={false}
@@ -435,7 +436,7 @@ function Hero() {
         <motion.div variants={item} className="flex w-full items-start justify-center gap-4 lg:hidden">
           <PhoneFrame width={230} height={498} screen="cb-hi-home.png" className="max-w-[46%]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <img loading="eager" fetchPriority="high"
               src="/case/budgai/cb-hi-home.png"
               alt={HERO.phones[0].alt}
               draggable={false}
@@ -444,7 +445,7 @@ function Hero() {
           </PhoneFrame>
           <PhoneFrame width={204} height={442} screen="cb-hi-global.png" className="mt-6 max-w-[42%]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <img loading="eager" fetchPriority="high"
               src="/case/budgai/cb-hi-global.png"
               alt={HERO.phones[1].alt}
               draggable={false}
@@ -906,7 +907,7 @@ function MoreProjects() {
   // bitmap falls back to the labelled tile rather than a broken image.
   const [brokenThumbs, setBrokenThumbs] = useState<Set<string>>(new Set());
   return (
-    <section className={`${CONTENT} ${GUTTER} flex flex-col gap-[18px] pb-[90px] pt-[110px]`}>
+    <section data-index="More projects" data-tone="light" className={`${CONTENT} ${GUTTER} flex flex-col gap-[18px] pb-[90px] pt-[110px]`}>
       <div className="flex w-full items-center justify-between">
         <p className="text-[12px] tracking-[1.2px] text-[#4e6166]" style={BODY}>
           {MORE_PROJECTS.label}
@@ -972,7 +973,7 @@ function MoreProjects() {
 
 function Footer() {
   return (
-    <footer id="contact" className="w-full bg-[#0e2a30]">
+    <footer data-index="Contact" data-tone="dark" id="contact" className="w-full bg-[#0e2a30]">
       <div className={`${CONTENT} ${GUTTER} flex flex-col gap-8 pb-16 pt-14 md:flex-row md:items-center md:justify-between`}>
         <div className="flex flex-col gap-2">
           <p className="text-[32px] font-semibold leading-[1.15] text-[#f1f6f4]" style={DISPLAY}>
@@ -1007,6 +1008,7 @@ function Footer() {
 export default function BudgAiCase() {
   return (
     <main style={{ background: PAPER }}>
+      <ProjectRuler />
       <Nav />
       <Hero />
       <Facts />

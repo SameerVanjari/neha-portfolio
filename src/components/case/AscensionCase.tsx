@@ -21,6 +21,7 @@ import { FOOTER_LINKS } from "@/data/landing";
 import { EASE_OUT, LineByLine, Reveal, useStagger, useMotionPref } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
 import { caseStudyThumb } from "@/data/case-studies";
+import { ProjectRuler } from "@/components/ProjectRuler";
 
 /* ---------------------------------- tokens --------------------------------- */
 
@@ -94,7 +95,7 @@ function useMotionReady(): boolean {
 function Icon({ name, size = 20, className = "" }: { name: string; size?: number; className?: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`/case/ascension/${name}.svg`}
       width={size}
       height={size}
@@ -273,14 +274,14 @@ function Hero() {
           >
             <div className="absolute left-0 top-[20px] h-[340px] w-[560px] overflow-hidden rounded-[16px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={HERO.media.still.src} alt={HERO.media.still.alt} className="h-full w-full object-cover" draggable={false} />
+              <img loading="eager" fetchPriority="high" src={HERO.media.still.src} alt={HERO.media.still.alt} className="h-full w-full object-cover" draggable={false} />
             </div>
             <div
               className="absolute right-0 top-[120px] h-[440px] w-[210px] overflow-hidden rounded-[30px]"
               style={{ border: "6px solid #0B0A12" }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <img loading="eager" fetchPriority="high"
                 src={HERO.media.phone.src}
                 alt={HERO.media.phone.alt}
                 className="h-full w-full object-cover"
@@ -301,7 +302,7 @@ function Facts() {
   const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
 
   return (
-    <section aria-label="At a glance" style={{ background: "#0F0D18" }}>
+    <section data-index="At a glance" data-tone="dark" aria-label="At a glance" style={{ background: "#0F0D18" }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 lg:px-0">
         <motion.ul
           variants={group}
@@ -739,7 +740,7 @@ function MoreProjects() {
   const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
 
   return (
-    <section className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[90px] lg:px-0">
+    <section data-index="More projects" data-tone="light" className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[90px] lg:px-0">
       <div className="flex items-center justify-between">
         <p className="text-[12px] tracking-[1.2px] text-[#625E72]" style={BODY}>
           MORE PROJECTS
@@ -797,7 +798,7 @@ function MoreProjects() {
 
 function Footer() {
   return (
-    <footer style={{ background: DARK }}>
+    <footer data-index="Contact" data-tone="dark" style={{ background: DARK }}>
       {/* One quiet rise for the whole row — a footer is a sign-off, not a
           section, and per-link entrances would overplay it. */}
       <Reveal distance={16}>
@@ -839,6 +840,7 @@ function Footer() {
 export default function AscensionCase() {
   return (
     <main style={{ background: PAPER }}>
+      <ProjectRuler />
       <Nav />
       <Hero />
       <Facts />

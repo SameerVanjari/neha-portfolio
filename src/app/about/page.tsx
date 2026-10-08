@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
+import Image from "next/image";
 import Nav from "@/components/Nav";
 import { THEMES } from "@/data/themes";
 import data from "@/data/portfolio.json";
@@ -11,36 +12,51 @@ import { Reveal, TextRow, LineReveal, EASE_OUT, useMotionPref } from "@/componen
 import { BIO_ANNOTATIONS, annotationLinkTarget } from "@/data/bio-annotations";
 import { LEGACY_PROJECTS } from "@/data/legacy-projects";
 import { CASE_STUDIES } from "@/data/case-studies";
+import ExperienceTimeline from "@/components/about/ExperienceTimeline";
 import type { ReactNode } from "react";
 
 /* Home design tokens — paper / ink / muted / hairline / accent */
 const DISPLAY = { fontFamily: "var(--font-display)" } as const;
 const BODY = { fontFamily: "var(--font-body)" } as const;
 
+/**
+ * Profile gallery. Each entry carries a tiny (16px) blurred JPEG — a real
+ * low-quality image placeholder, ~310 bytes, inlined as a data URI. It paints
+ * instantly with no request, so the frame is never an empty box, and the full
+ * photo then resolves from blur to sharp as it decodes.
+ */
 const PHOTOS = [
   {
     src: "/profile/headshot.png",
     alt: "Neha Mayacharya, portrait",
     caption: "Portrait",
     ratio: "aspect-[4/5]",
+    blurDataURL:
+      "data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAQABADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAwX/xAAbEAADAQEAAwAAAAAAAAAAAAABAhEAAxITIv/EABUBAQEAAAAAAAAAAAAAAAAAAAAD/8QAGREAAwADAAAAAAAAAAAAAAAAAAECISJh/9oADAMBAAIRAxEAPwCCvP7VLLlbhKpNmLqw96EmDMWA7HxagjUd7B5np//Z",
   },
   {
     src: "/profile/neha-vr-headset.jpeg",
     alt: "Neha wearing a VR headset",
     caption: "In the headset",
     ratio: "aspect-[4/3]",
+    blurDataURL:
+      "data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAQAA4DASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABAMF/8QAHhAAAgICAgMAAAAAAAAAAAAAAQIDEQAEBRITISL/xAAVAQEBAAAAAAAAAAAAAAAAAAABA//EABYRAQEBAAAAAAAAAAAAAAAAAAEAEv/aAAwDAQACEQMRAD8ANt8jMs/ZRUYyurzKyWJBVZn7jKWMan5GBik8bH1d4ZEqN//Z",
   },
   {
     src: "/profile/neha-smile.webp",
     alt: "Neha Mayacharya smiling outdoors",
     caption: "Off duty",
     ratio: "aspect-[3/5]",
+    blurDataURL:
+      "data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAQAAkDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAgMEBv/EACAQAAEDAwUBAAAAAAAAAAAAAAMAAQIEBRESFBUhUVL/xAAUAQEAAAAAAAAAAAAAAAAAAAAC/8QAFREBAQAAAAAAAAAAAAAAAAAAADH/2gAMAwEAAhEDEQA/AKy3mEKp462wyZyw/plmq23FGbEe0OyP46MKv//Z",
   },
   {
     src: "/profile/portrait-alt.png",
     alt: "Neha Mayacharya, three-quarter portrait",
     caption: "Studio",
     ratio: "aspect-[4/3]",
+    blurDataURL:
+      "data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAALABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABAMF/8QAHRAAAgICAwEAAAAAAAAAAAAAAQIAEQMxBBJRE//EABUBAQEAAAAAAAAAAAAAAAAAAAID/8QAGBEAAwEBAAAAAAAAAAAAAAAAAAMiERL/2gAMAwEAAhEDEQA/AMIhFZFbRlfmnVhqtQZJOXHfsZyjTCvJXqwspen/2Q==",
   },
 ] as const;
 
@@ -64,14 +80,20 @@ function Eyebrow({ children }: { children: ReactNode }) {
 function Photo({ photo }: { photo: (typeof PHOTOS)[number] }) {
   return (
     <figure className="group flex w-full flex-col items-start gap-[12px]">
-      <div className="relative w-full overflow-hidden rounded-[14px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+      {/* The aspect ratio lives on the frame, so `next/image` can `fill` it and
+          serve an optimised, correctly-sized file (the sources are multi-MB).
+          `placeholder="blur"` paints the inlined LQIP first and crossfades to
+          the sharp photo as it decodes — lazy, but never an empty box. */}
+      <div className={`relative w-full overflow-hidden rounded-[14px] ${photo.ratio}`}>
+        <Image
           src={photo.src}
           alt={photo.alt}
-          loading="lazy"
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 24vw"
+          placeholder="blur"
+          blurDataURL={photo.blurDataURL}
           draggable={false}
-          className={`${photo.ratio} w-full object-cover transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.03] motion-reduce:transition-none`}
+          className="object-cover transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.03] motion-reduce:transition-none"
         />
       </div>
       <figcaption
@@ -228,47 +250,7 @@ export default function AboutPage() {
         {/* experience */}
         <section className="mx-auto max-w-[1200px] px-6 pb-10 md:px-8 lg:px-0">
           <Eyebrow>Experience</Eyebrow>
-          <div className="mt-6 divide-y divide-[#DAD3C8]">
-            {(data.about.experience as unknown as {
-              when: string;
-              what: string;
-              where: string;
-              desc: string;
-              url?: string;
-            }[]).map((job) => (
-              <div key={`${job.where}-${job.when}`} className="grid gap-2 py-4 md:grid-cols-[180px_1fr] md:gap-8">
-                <div className="text-[11px] tracking-[0.08em] text-[#5C5750]" style={BODY}>
-                  {job.when}
-                </div>
-                <div>
-                  <div className="text-[15px] font-semibold tracking-[-0.02em] text-[#17161B]" style={DISPLAY}>
-                    {job.what}
-                  </div>
-                  {job.url ? (
-                    <a
-                      href={job.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-block text-[11px] tracking-[0.08em] text-[#5C5750] underline decoration-[#CFC7BA] underline-offset-[3px] transition-colors hover:text-[#17161B] hover:decoration-[#17161B]"
-                      style={BODY}
-                    >
-                      {job.where}
-                      <span aria-hidden className="ml-1 opacity-60">
-                        ↗
-                      </span>
-                    </a>
-                  ) : (
-                    <div className="text-[11px] tracking-[0.08em] text-[#5C5750]" style={BODY}>
-                      {job.where}
-                    </div>
-                  )}
-                  <p className="mt-2 max-w-[62ch] text-[13px] leading-[1.6] text-[#2B2926]" style={BODY}>
-                    {job.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ExperienceTimeline items={data.about.experience} accent={theme.accent} />
         </section>
 
         {/* education */}

@@ -99,7 +99,7 @@ export const BIO_ANNOTATIONS: BioAnnotation[] = [
     phrase: "Executive Master's in Artificial Intelligence (GPA 4.0)",
     title: "Executive Master's in AI",
     rows: [
-      { label: "When", value: "2025 to 2026, in progress" },
+      { label: "When", value: "2025 to 2026, completed" },
       { label: "Standing", value: "GPA 4.0" },
       { label: "Focus", value: "Sharpening the bridge between design craft and machine intelligence" },
     ],

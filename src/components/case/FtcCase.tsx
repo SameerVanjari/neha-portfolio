@@ -20,6 +20,7 @@ import { FOOTER_LINKS } from "@/data/landing";
 import { EASE_OUT, LineByLine, Reveal, useMotionPref, useStagger } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
 import { caseStudyThumb } from "@/data/case-studies";
+import { ProjectRuler } from "@/components/ProjectRuler";
 
 /* ---------------------------------- tokens --------------------------------- */
 
@@ -93,7 +94,7 @@ function useMotionReady(): boolean {
 function Icon({ name, size = 20, className = "" }: { name: string; size?: number; className?: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`/case/ftc/${name}.svg`}
       width={size}
       height={size}
@@ -273,11 +274,11 @@ function Hero() {
           >
             <div className="absolute left-0 top-0 h-[540px] w-[270px] overflow-hidden rounded-[32px]" style={{ border: "6px solid #0E0B09" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={HERO.media.pantry.src} alt={HERO.media.pantry.alt} className="h-full w-full object-cover" draggable={false} />
+              <img loading="eager" fetchPriority="high" src={HERO.media.pantry.src} alt={HERO.media.pantry.alt} className="h-full w-full object-cover" draggable={false} />
             </div>
             <div className="absolute right-0 top-[40px] h-[500px] w-[250px] overflow-hidden rounded-[30px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={HERO.media.handheld.src} alt={HERO.media.handheld.alt} className="h-full w-full object-cover" draggable={false} />
+              <img loading="eager" fetchPriority="high" src={HERO.media.handheld.src} alt={HERO.media.handheld.alt} className="h-full w-full object-cover" draggable={false} />
             </div>
           </motion.div>
         </motion.div>
@@ -292,7 +293,7 @@ function Facts() {
   const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
 
   return (
-    <section aria-label="At a glance" style={{ background: "#15110E" }}>
+    <section data-index="At a glance" data-tone="dark" aria-label="At a glance" style={{ background: "#15110E" }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 lg:px-0">
         <motion.ul
           variants={group}
@@ -662,7 +663,7 @@ function MoreProjects() {
   const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
 
   return (
-    <section className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[90px] lg:px-0">
+    <section data-index="More projects" data-tone="light" className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[90px] lg:px-0">
       <div className="flex items-center justify-between">
         <p className="text-[12px] tracking-[1.2px] text-[#6B5E57]" style={BODY}>
           MORE PROJECTS
@@ -720,7 +721,7 @@ function MoreProjects() {
 
 function Footer() {
   return (
-    <footer style={{ background: DARK }}>
+    <footer data-index="Contact" data-tone="dark" style={{ background: DARK }}>
       {/* One quiet rise for the whole row — a footer is a sign-off, not a
           section, and per-link entrances would overplay it. */}
       <Reveal distance={16}>
@@ -762,6 +763,7 @@ function Footer() {
 export default function FtcCase() {
   return (
     <main style={{ background: PAPER }}>
+      <ProjectRuler />
       <Nav />
       <Hero />
       <Facts />

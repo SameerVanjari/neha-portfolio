@@ -18,6 +18,7 @@ import {
 import { FOOTER_LINKS } from "@/data/landing";
 import { caseStudyThumb } from "@/data/case-studies";
 import { EASE_OUT, Reveal, useMotionPref, useStagger } from "@/components/motion/reveal";
+import { ProjectRuler } from "@/components/ProjectRuler";
 
 const DARK = "#10272B";
 const FAINT_DARK = "#0B1D20";
@@ -88,7 +89,7 @@ function SectionHead({
 function Icon({ name, size = 20, className = "" }: { name: string; size?: number; className?: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`/case/turtle/${name}.svg`}
       width={size}
       height={size}
@@ -313,7 +314,7 @@ function Hero() {
 function Facts() {
   const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
   return (
-    <section aria-label="At a glance" style={{ background: FAINT_DARK }}>
+    <section data-index="At a glance" data-tone="dark" aria-label="At a glance" style={{ background: FAINT_DARK }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 lg:px-0">
         <motion.ul
           variants={group}
@@ -645,7 +646,7 @@ function Contributions() {
 function MoreProjects() {
   const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
   return (
-    <section className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[110px] lg:px-0">
+    <section data-index="More projects" data-tone="light" className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[110px] lg:px-0">
       <div className="flex items-center justify-between">
         <p className="text-[12px] tracking-[1.2px]" style={{ ...BODY, color: MUTED }}>
           MORE PROJECTS
@@ -696,7 +697,7 @@ function MoreProjects() {
 
 function Footer() {
   return (
-    <footer style={{ background: DARK }}>
+    <footer data-index="Contact" data-tone="dark" style={{ background: DARK }}>
       <div className="mx-auto flex w-full max-w-[1036px] flex-wrap items-center justify-between gap-6 px-6 py-14 lg:px-0">
         <div>
           <p className="text-[32px] font-semibold text-[#F2F6F5]" style={DISPLAY}>
@@ -731,6 +732,7 @@ function Footer() {
 export default function TurtleCase() {
   return (
     <main style={{ background: PAPER }}>
+      <ProjectRuler />
       <Nav />
       <Hero />
       <Facts />

@@ -23,6 +23,7 @@ import { vantageFigure } from "@/data/vantage-media";
 import { EASE_OUT, Reveal, useStagger, useMotionPref } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
 import { caseStudyThumb } from "@/data/case-studies";
+import { ProjectRuler } from "@/components/ProjectRuler";
 
 const DARK = "#16171C";
 const FAINT_DARK = "#0E0F13";
@@ -151,7 +152,7 @@ function SectionHead({
 function Icon({ name, size = 20, className = "" }: { name: string; size?: number; className?: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`/case/vantage/${name}.svg`}
       width={size}
       height={size}
@@ -345,7 +346,7 @@ function Facts() {
   const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
 
   return (
-    <section aria-label="At a glance" style={{ background: FAINT_DARK }}>
+    <section data-index="At a glance" data-tone="dark" aria-label="At a glance" style={{ background: FAINT_DARK }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 lg:px-0">
         <motion.ul
           variants={group}
@@ -963,7 +964,7 @@ function MoreProjects() {
   const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
 
   return (
-    <section className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[110px] lg:px-0">
+    <section data-index="More projects" data-tone="light" className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[110px] lg:px-0">
       <div className="flex items-center justify-between">
         <p className="text-[12px] tracking-[1.2px]" style={{ ...BODY, color: MUTED }}>
           MORE PROJECTS
@@ -1021,7 +1022,7 @@ function MoreProjects() {
 
 function Footer() {
   return (
-    <footer style={{ background: DARK }}>
+    <footer data-index="Contact" data-tone="dark" style={{ background: DARK }}>
       {/* One quiet rise for the whole row — a footer is a sign-off, not a
           section, and per-link entrances would overplay it. */}
       <Reveal distance={16}>
@@ -1061,6 +1062,7 @@ function Footer() {
 export default function VantageCase() {
   return (
     <main style={{ background: PAPER }}>
+      <ProjectRuler />
       <Nav />
       <Hero />
       <Facts />

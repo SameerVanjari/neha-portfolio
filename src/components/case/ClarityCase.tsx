@@ -21,6 +21,7 @@ import {
 import { FOOTER_LINKS } from "@/data/landing";
 import { EASE_OUT, Reveal, useStagger, useMotionPref } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
+import { ProjectRuler } from "@/components/ProjectRuler";
 
 /* ---------------------------------- tokens --------------------------------- */
 
@@ -99,7 +100,7 @@ function useMotionReady(): boolean {
 function Icon({ name, size = 20, className = "" }: { name: string; size?: number; className?: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <img loading="lazy" decoding="async"
       src={`/case/clarity/${name}.svg`}
       width={size}
       height={size}
@@ -896,7 +897,7 @@ function Facts() {
   const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
 
   return (
-    <section aria-label="At a glance" style={{ background: "#0F1C21" }}>
+    <section data-index="At a glance" data-tone="dark" aria-label="At a glance" style={{ background: "#0F1C21" }}>
       <div className="mx-auto w-full max-w-[1036px] px-6 lg:px-0">
         <motion.ul
           variants={group}
@@ -1781,7 +1782,7 @@ function KeyDecisions() {
               className="flex items-start gap-[24px] rounded-[20px] bg-[#1F333B] p-[26px]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <img loading="lazy" decoding="async"
                 src={decision.art}
                 width={104}
                 height={104}
@@ -1966,7 +1967,7 @@ function MoreProjects() {
   const { group, item, viewport } = useStagger({ distance: 18, step: 0.08 });
 
   return (
-    <section className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[90px] lg:px-0">
+    <section data-index="More projects" data-tone="light" className="mx-auto w-full max-w-[1036px] px-6 pb-[90px] pt-[90px] lg:px-0">
       <div className="flex items-center justify-between">
         <p className="text-[12px] tracking-[1.2px] text-[#5E6A6E]" style={BODY}>
           MORE PROJECTS
@@ -2024,7 +2025,7 @@ function MoreProjects() {
 
 function Footer() {
   return (
-    <footer style={{ background: DARK }}>
+    <footer data-index="Contact" data-tone="dark" style={{ background: DARK }}>
       {/* One quiet rise for the whole row — a footer is a sign-off, not a
           section, and per-link entrances would overplay it. */}
       <Reveal distance={16}>
@@ -2066,6 +2067,7 @@ function Footer() {
 export default function ClarityCase() {
   return (
     <main style={{ background: PAPER }}>
+      <ProjectRuler />
       <Nav />
       <Hero />
       <Facts />
