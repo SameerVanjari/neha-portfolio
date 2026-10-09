@@ -2,6 +2,7 @@
 
 import { motion, type Variants } from "framer-motion";
 import { WORK_STEPS } from "@/data/landing";
+import WorkStepIcon from "@/components/landing/WorkStepIcon";
 import { EASE_OUT, REVEAL_VIEWPORT, useMotionPref } from "@/components/motion/reveal";
 
 const DISPLAY = { fontFamily: "var(--font-display)" } as const;
@@ -100,15 +101,22 @@ export default function HowIWork() {
             <motion.li
               key={step.num}
               variants={card}
-              className="work-card flex flex-col items-start gap-[14px] rounded-[14px] bg-[#FBF9F5] px-[24px] py-[28px] xl:h-[250px]"
+              className="work-card flex flex-col items-start gap-[14px] rounded-[14px] bg-[#FBF9F5] px-[24px] py-[28px]"
             >
-              <motion.span
-                variants={roll}
-                className="work-card__num text-[13px] font-semibold tracking-[1.04px] text-[#3B33B5]"
-                style={BODY}
-              >
-                {step.num}
-              </motion.span>
+              {/* Illustration + step number share the top row, so the drawing
+                  leads the eye and the number anchors it. */}
+              <div className="flex w-full items-start justify-between gap-4">
+                <motion.span variants={roll} aria-hidden>
+                  <WorkStepIcon num={step.num} className="h-11 w-11" />
+                </motion.span>
+                <motion.span
+                  variants={roll}
+                  className="work-card__num text-[13px] font-semibold tracking-[1.04px] text-[#3B33B5]"
+                  style={BODY}
+                >
+                  {step.num}
+                </motion.span>
+              </div>
               <motion.h3
                 variants={roll}
                 className="text-[20px] font-semibold text-[#17161B]"

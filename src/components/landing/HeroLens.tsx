@@ -161,9 +161,11 @@ export default function HeroLens() {
           </div>
 
           {/* The island's home: the hero's "Explore by lens" spot — in flow on
-              phones, and at the hero's bottom-left on desktop. It stays
-              where it is placed. */}
-          <div id="lens-anchor" className="mt-[88px] lg:absolute lg:bottom-[56px] lg:left-0 lg:mt-0">
+              phones, and centered 2rem from the hero's bottom on desktop. */}
+          <div
+            id="lens-anchor"
+            className="mt-[88px] lg:absolute lg:bottom-8 lg:left-1/2 lg:mt-0 lg:-translate-x-1/2"
+          >
             <IslandNav
               activeId={pending ?? lens}
               onSelect={choose}
