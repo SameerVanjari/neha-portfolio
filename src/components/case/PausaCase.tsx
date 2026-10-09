@@ -462,7 +462,7 @@ function Conversation() {
           <img
             src={CONVERSATION.flowImage}
             alt="Pausa conversation flow: welcome, sign up, check in, talk, breathe, try something, closure, and the escalation path to Support"
-            className="w-full select-none rounded-[14px]"
+            className="w-full select-none"
             loading="lazy"
             draggable={false}
           />
@@ -529,14 +529,14 @@ function UxHifi() {
               <div className="lg:flex lg:flex-1 lg:flex-col lg:gap-[12px]">
                 <Reveal delay={i * 0.18} distance={26}>
                   <div
-                    className="relative flex h-auto items-center justify-center rounded-[20px] p-[26px]"
+                    className="relative flex h-auto items-center justify-center rounded-[18px] p-[26px]"
                     style={{ background: light ? CARD : DARK, border: light ? `1px solid ${HAIR}` : undefined }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={panel.image}
                       alt={`${panel.tag} Pausa mood check-in`}
-                      className="w-[230px] select-none rounded-[24px]"
+                      className="w-[230px] select-none"
                       loading="lazy"
                       draggable={false}
                     />
@@ -600,7 +600,7 @@ function KeyDecisions() {
                 alt=""
                 aria-hidden
                 draggable={false}
-                className="shrink-0 select-none rounded-[16px]"
+                className="shrink-0 select-none"
               />
               <div>
                 <h3 className="text-[18px] font-semibold leading-[1.55] text-[#EEF1F4]" style={DISPLAY}>
@@ -637,7 +637,7 @@ function VisualVoice() {
           <img
             src={VISUAL_VOICE.visual.webshot}
             alt="Pausa web dashboard: check-in, conversation, 7-day mood and a breathing card"
-            className="w-full select-none rounded-[10px]"
+            className="w-full select-none"
             loading="lazy"
             draggable={false}
           />
@@ -652,43 +652,43 @@ function VisualVoice() {
       </Reveal>
       <Reveal delay={0.08} distance={22}>
         <p className="text-[11px] font-bold uppercase tracking-[1.32px]" style={{ ...BODY, color: BLUE }}>
-            {VISUAL_VOICE.voice.label}
-          </p>
-          <h2 className="mt-[12px] text-[28px] font-semibold leading-[1.15] tracking-[-0.28px] text-[#1B1F24]" style={DISPLAY}>
-            {VISUAL_VOICE.voice.heading}
-          </h2>
-          <motion.div
-            variants={voice.group}
-            initial="hidden"
-            whileInView="visible"
-            viewport={voice.viewport}
-            className="mt-[26px] flex flex-col gap-[8px]"
-          >
-            {VISUAL_VOICE.voice.rows.map((row) => {
-              const styles = {
-                deep: { bg: "#1F4E6C", fg: "#FFFFFF" },
-                blue: { bg: BLUE, fg: "#FFFFFF" },
-                mid: { bg: "#7FA6C2", fg: "#10202C" },
-                light: { bg: "#C9DCE8", fg: INK },
-                outline: { bg: CARD, fg: INK },
-              }[row.tone];
-              return (
-                <motion.div
-                  key={row.label}
-                  variants={voice.item}
-                  className="flex min-h-[48px] items-center justify-between gap-4 rounded-[10px] px-4 py-3"
-                  style={{ background: styles.bg, color: styles.fg, ...(row.tone === "outline" ? { border: `1px solid ${HAIR}` } : {}) }}
-                >
-                  <p className="text-[14px] font-semibold" style={BODY}>
-                    {row.label}
-                  </p>
-                  <p className="text-right text-[14px]" style={BODY}>
-                    {row.quote}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+          {VISUAL_VOICE.voice.label}
+        </p>
+        <h2 className="mt-[12px] text-[28px] font-semibold leading-[1.15] tracking-[-0.28px] text-[#1B1F24]" style={DISPLAY}>
+          {VISUAL_VOICE.voice.heading}
+        </h2>
+        <motion.div
+          variants={voice.group}
+          initial="hidden"
+          whileInView="visible"
+          viewport={voice.viewport}
+          className="mt-[26px] flex flex-col gap-[8px]"
+        >
+          {VISUAL_VOICE.voice.rows.map((row) => {
+            const styles = {
+              deep: { bg: "#1F4E6C", fg: "#FFFFFF" },
+              blue: { bg: BLUE, fg: "#FFFFFF" },
+              mid: { bg: "#7FA6C2", fg: "#10202C" },
+              light: { bg: "#C9DCE8", fg: INK },
+              outline: { bg: CARD, fg: INK },
+            }[row.tone];
+            return (
+              <motion.div
+                key={row.label}
+                variants={voice.item}
+                className="flex min-h-[48px] items-center justify-between gap-4 rounded-[10px] px-4 py-3"
+                style={{ background: styles.bg, color: styles.fg, ...(row.tone === "outline" ? { border: `1px solid ${HAIR}` } : {}) }}
+              >
+                <p className="text-[14px] font-semibold" style={BODY}>
+                  {row.label}
+                </p>
+                <p className="text-right text-[14px]" style={BODY}>
+                  {row.quote}
+                </p>
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </Reveal>
     </section>
   );
@@ -712,8 +712,7 @@ function Hifi() {
                 height={224}
                 loading="lazy"
                 draggable={false}
-                className="w-[104px] select-none rounded-[14px] border"
-                style={{ borderColor: HAIR }}
+                className="w-[104px] select-none"
               />
               <figcaption className="mt-[8px] text-[12px] text-[#5F6670]" style={BODY}>
                 {screen.caption}
