@@ -46,8 +46,8 @@ export const CASE_STUDIES: CaseStudy[] = [
       "An AI check-in companion that knows its limits. A mental-wellness companion designed end to end, from a research paper on companion AI to hi-fi on mobile and web.",
     role: "Product & Conversation Designer · Independent project",
     lens: "ux",
-    image: "/case/pausa/visual-webshot.png",
-    imageAlt: "Pausa web dashboard: check-in, conversation, 7-day mood and a breathing card",
+    image: "/case/pausa/thumbnail.webp",
+    imageAlt: "A smartphone and five tactile mood tokens for the Pausa mental-wellness check-in",
   },
   {
     id: "broken-mile",
@@ -72,8 +72,8 @@ export const CASE_STUDIES: CaseStudy[] = [
       "An AI career co-pilot that turns one resume into a role-specific story: tailored to each job, styled to who you are, and approved by you line by line.",
     role: "Sole product designer and builder",
     lens: "ai",
-    image: "/case/vantage/thumbnail.png",
-    imageAlt: "Vantage AI portal: start your profile",
+    image: "/case/vantage/thumbnail.webp",
+    imageAlt: "A tailored resume with identity tabs representing the Vantage AI career co-pilot",
   },
   {
     id: "interactive-learning-aid",
@@ -145,11 +145,8 @@ export const CASE_STUDIES: CaseStudy[] = [
       "An AI assistant that guides applicants through the visa process, reaching 95% task conversion. Built with LangChain, GPT-4, and Flask.",
     role: "Lead AI Product Designer",
     lens: "ux",
-    // No bitmap of the chat UI exists in the Figma file, Drive or the
-    // prototype — the thumbnail is a real render of VisaGenieChatPreview,
-    // the component built from this case's own palette and flow copy.
-    image: "/case/visagenie/card.png",
-    imageAlt: "The VisaGenie chat: guest mode, a guided F-1 answer with source citations, and the employer-fee fraud alert",
+    image: "/case/visagenie/thumbnail.webp",
+    imageAlt: "A passport, globe and curling route ribbon representing VisaGenie visa guidance",
   },
   {
     id: "made-for-joy",
@@ -172,9 +169,8 @@ export const CASE_STUDIES: CaseStudy[] = [
       "Scan to pay, send abroad at live rates, split with anyone, and ask plain questions about your spending. AI suggests; you decide.",
     role: "Product Design Consultant · Chatoor.ai",
     lens: "ux",
-    // Cover render from the Chatoor-AI-UX presentation deck (slide 1).
-    image: "/case/budgai/card.png",
-    imageAlt: "BudgAI on a phone: one global money app",
+    image: "/case/budgai/thumbnail.webp",
+    imageAlt: "A smartphone, world currencies and QR token representing BudgAI global finance",
   },
   {
     id: "ascension",
@@ -198,9 +194,8 @@ export const CASE_STUDIES: CaseStudy[] = [
       "A distraction-to-intention app that protects what you picked up your phone to do, instead of guessing what you meant.",
     role: "Designer · Independent concept project",
     lens: "ux",
-    // Cover export from the Focus case-study Figma file (fc-01-cover.png).
-    image: "/case/focus/fc-01-cover.png",
-    imageAlt: "Focus: hold the boundaries you set, don’t guess at intentions",
+    image: "/case/focus/thumbnail.webp",
+    imageAlt: "A smartphone protected by a clear boundary with a single amber focus point",
   },
   {
     id: "feed-the-children",
