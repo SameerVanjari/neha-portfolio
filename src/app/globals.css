@@ -506,6 +506,24 @@ button:focus-visible {
   }
 }
 
+/* ---- Project image lightbox ---- */
+/* Entrance lives in CSS so it fires on mount, before any JS transition state.
+   The global prefers-reduced-motion rule above neutralizes its duration. */
+.lightbox-backdrop {
+  animation: lightbox-fade 180ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.lightbox-stage {
+  animation: lightbox-pop 240ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+@keyframes lightbox-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes lightbox-pop {
+  from { opacity: 0; transform: scale(0.985); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 /* Bio hover-lens phrases — squared, snug, never touching */
 .bio-lens-phrase {
   display: inline-block;
