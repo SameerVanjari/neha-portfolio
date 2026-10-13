@@ -268,12 +268,12 @@ function Facts() {
           viewport={viewport}
           className="grid grid-cols-2 lg:grid-cols-4"
         >
-          {FACTS.map((fact, i) => (
+          {FACTS.map((fact) => (
             <motion.li
               key={fact.label}
               variants={item}
-              className="flex items-start gap-3 py-[22px] lg:px-5 lg:first:pl-0"
-              style={{ borderLeft: i > 0 ? "1px solid #27233A" : undefined }}
+              className="even:border-l [&:nth-child(n+3)]:border-t lg:border-t-0 lg:[&:not(:first-child)]:border-l flex items-start gap-3 py-[22px] lg:px-5 lg:first:pl-0"
+              style={{ borderColor: "#27233A" }}
             >
               <Icon name={fact.icon} size={20} className="mt-[2px] shrink-0" />
               <div>

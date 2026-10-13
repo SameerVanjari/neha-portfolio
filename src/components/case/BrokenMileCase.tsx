@@ -351,9 +351,9 @@ function AtAGlance() {
             <motion.li
               key={fact.label}
               variants={item}
-              className="flex items-start gap-4 px-0 py-[38px] lg:px-6"
+              className="even:border-l [&:nth-child(n+3)]:border-t lg:border-t-0 lg:[&:not(:first-child)]:border-l flex items-start gap-4 px-0 py-[38px] lg:px-6"
               style={{
-                borderLeft: i > 0 ? "1px solid rgba(242,238,231,0.14)" : undefined,
+                borderColor: "rgba(242,238,231,0.14)",
                 paddingLeft: i === 0 ? 0 : undefined,
               }}
             >

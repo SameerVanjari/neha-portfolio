@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { CLIENT_NOTE } from "@/data/landing";
 import { useStagger } from "@/components/motion/reveal";
-import ClientLogoLoop from "@/components/ClientLogoLoop";
+import ClientLogoLoop, { ClientGrid } from "@/components/ClientLogoLoop";
 
 const BODY = { fontFamily: "var(--font-body)" } as const;
 
@@ -30,9 +30,14 @@ export default function ClientsRow() {
             <p className="font-medium uppercase tracking-[1.82px]">Clients &amp; collaborators</p>
             <p className="font-normal">{CLIENT_NOTE}</p>
           </motion.div>
+          {/* Phones get the full roster as a two-column grid; the marquee is
+              reserved for widths where it can actually show a run of names. */}
+          <motion.div variants={item} className="w-full md:hidden">
+            <ClientGrid />
+          </motion.div>
           <motion.div
             variants={item}
-            className="w-full border-y border-[#DAD3C8] py-[26px]"
+            className="hidden w-full border-y border-[#DAD3C8] py-[26px] md:block"
           >
             <ClientLogoLoop />
           </motion.div>
