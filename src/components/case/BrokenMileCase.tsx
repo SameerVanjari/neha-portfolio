@@ -1,5 +1,6 @@
 "use client";
 
+import Nav from "@/components/Nav";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useInView, type Variants } from "framer-motion";
@@ -873,10 +874,9 @@ function CaseFooter() {
 /* ---------------------------------- page ----------------------------------- */
 
 export default function BrokenMileCase() {
-  // The shared site header is a fixed overlay, so the page's own top padding
-  // keeps the hero clear of it.
   return (
-    <main className="bg-[#F2EEE7] pt-[85px]">
+    <main className="bg-[#F2EEE7]">
+      <Nav sticky />
       <ProjectRuler />
       <Hero />
       <AtAGlance />

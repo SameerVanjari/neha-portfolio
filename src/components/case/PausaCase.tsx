@@ -1,5 +1,7 @@
 "use client";
 
+import Nav from "@/components/Nav";
+
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
 import {
@@ -149,55 +151,6 @@ function SectionHead({
 
 /* --------------------------------- sections -------------------------------- */
 
-function Nav() {
-  const reduce = useMotionPref();
-  // Same load choreography as the site header: the bar drops in last, once the
-  // hero copy has landed.
-  const { stage } = useLoadStage();
-
-  return (
-    <motion.header
-      initial={{ transform: "translateY(-100%)" }}
-      animate={{ transform: stage === "nav" ? "translateY(0%)" : "translateY(-100%)" }}
-      transition={{ duration: reduce ? 0.2 : 0.65, ease: EASE_OUT }}
-      className="bg-[#F4EFE7]"
-    >
-      <div className="mx-auto flex h-[68px] w-full max-w-[1100px] items-center justify-between px-6 lg:px-8">
-        <Link
-          href="/"
-          className="text-[16px] font-semibold text-[#1B1F24]"
-          style={DISPLAY}
-        >
-          Neha Mayacharya
-        </Link>
-        <nav aria-label="Primary" className="hidden items-center gap-8 md:flex" style={BODY}>
-          <Link href="/projects" className="border-b border-[#1B1F24] pb-[2px] text-[14px] text-[#1B1F24]">
-            Work
-          </Link>
-          <Link href="/about" className="text-[14px] text-[#1B1F24] transition-opacity hover:opacity-70">
-            About
-          </Link>
-          <a target="_blank" rel="noreferrer" href="/resume.pdf" className="text-[14px] text-[#1B1F24] transition-opacity hover:opacity-70">
-            Résumé (PDF)
-          </a>
-          <Link
-            href="/#contact"
-            className="inline-flex h-[40px] items-center rounded-[999px] bg-[#1B1F24] px-[20px] text-[14px] font-semibold text-white"
-          >
-            Contact
-          </Link>
-        </nav>
-        <Link
-          href="/#contact"
-          className="inline-flex h-[40px] items-center rounded-[999px] bg-[#1B1F24] px-[20px] text-[14px] font-semibold text-white md:hidden"
-          style={BODY}
-        >
-          Contact
-        </Link>
-      </div>
-    </motion.header>
-  );
-}
 
 function Hero() {
   const reduce = useMotionPref();
@@ -889,7 +842,7 @@ function Footer() {
 export default function PausaCase() {
   return (
     <main style={{ background: PAPER }}>
-      <Nav />
+      <Nav sticky />
       <ProjectRuler />
       <Hero />
       <Facts />

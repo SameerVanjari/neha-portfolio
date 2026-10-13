@@ -17,13 +17,13 @@ export const HERO_LENSES: Record<ThemeId, HeroLens> = {
     eyebrow: "XR · Immersive design",
     headline: "Designing for hands, space, and presence",
     support:
-      "I design VR, AR, and WebAR experiences around how people naturally reach, move, and look, so the technology fades and the task takes over. As a lead immersive designer, I've shipped 20+ XR solutions across healthcare, enterprise training, and retail.",
+      "I design VR, AR, and WebAR experiences built around how people naturally reach, move, and look — so the technology fades and the task takes over.",
   },
   ux: {
     eyebrow: "UX · Human-centered systems",
     headline: "Designing flows people trust",
     support:
-      "I design research-driven UX for complex systems: dashboards, conversational interfaces, and training tools. It turns fragmented workflows into coherent experiences people trust.",
+      "I design research-driven UX for complex systems — dashboards, conversational interfaces, training tools — turning fragmented workflows into experiences people trust.",
   },
   ai: {
     eyebrow: "AI · Intelligent experiences",

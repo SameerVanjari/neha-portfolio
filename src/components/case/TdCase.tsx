@@ -1,5 +1,7 @@
 "use client";
 
+import Nav from "@/components/Nav";
+
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
 import {
@@ -120,42 +122,6 @@ function Phone({
   );
 }
 
-function Nav() {
-  return (
-    <header style={{ background: PAPER }}>
-      <div className="mx-auto flex h-[68px] w-full max-w-[1036px] items-center justify-between px-6 lg:px-0">
-        <Link href="/" className="text-[16px] font-semibold" style={{ ...DISPLAY, color: INK }}>
-          Neha Mayacharya
-        </Link>
-        <nav aria-label="Primary" className="hidden items-center gap-[30px] md:flex" style={BODY}>
-          <Link href="/projects" className="border-b border-[#18201B] pb-[3px] text-[14px]" style={{ color: INK }}>
-            Work
-          </Link>
-          <Link href="/about" className="text-[14px] transition-opacity hover:opacity-70" style={{ color: INK }}>
-            About
-          </Link>
-          <a target="_blank" rel="noreferrer" href="/resume.pdf" className="text-[14px] transition-opacity hover:opacity-70" style={{ color: INK }}>
-            Résumé (PDF)
-          </a>
-          <Link
-            href="/#contact"
-            className="inline-flex h-[40px] items-center rounded-[999px] px-[20px] text-[14px] font-semibold text-white"
-            style={{ background: INK }}
-          >
-            Contact
-          </Link>
-        </nav>
-        <Link
-          href="/#contact"
-          className="inline-flex h-[40px] items-center rounded-[999px] px-[20px] text-[14px] font-semibold text-white md:hidden"
-          style={{ ...BODY, background: INK }}
-        >
-          Contact
-        </Link>
-      </div>
-    </header>
-  );
-}
 
 function Hero() {
   const reduce = useMotionPref();
@@ -678,7 +644,7 @@ export default function TdCase() {
   return (
     <main style={{ background: PAPER }}>
       <ProjectRuler />
-      <Nav />
+      <Nav sticky />
       <Hero />
       <Facts />
       <Idea />

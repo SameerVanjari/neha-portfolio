@@ -1,5 +1,7 @@
 "use client";
 
+import Nav from "@/components/Nav";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
@@ -875,51 +877,6 @@ const SCREENS: Record<string, React.ReactNode> = {
 
 /* ---------------------------------- chrome ---------------------------------- */
 
-function Nav() {
-  const reduce = useMotionPref();
-  // Same load choreography as the site header: the bar drops in last, once the
-  // hero copy has landed, so the two never arrive on top of each other.
-  const { stage } = useLoadStage();
-
-  return (
-    <motion.header
-      initial={{ transform: "translateY(-100%)" }}
-      animate={{ transform: stage === "nav" ? "translateY(0%)" : "translateY(-100%)" }}
-      transition={{ duration: reduce ? 0.2 : 0.65, ease: EASE_OUT }}
-      style={{ background: PAPER }}
-    >
-      <div className="mx-auto flex h-[68px] w-full max-w-[1036px] items-center justify-between px-6 lg:px-0">
-        <Link href="/" className="text-[16px] font-semibold text-[#1B2A30]" style={DISPLAY}>
-          Neha Mayacharya
-        </Link>
-        <nav aria-label="Primary" className="hidden items-center gap-[30px] md:flex" style={BODY}>
-          <Link href="/projects" className="border-b border-[#1B2A30] pb-[3px] text-[14px] text-[#1B2A30]">
-            Work
-          </Link>
-          <Link href="/about" className="text-[14px] text-[#1B2A30] transition-opacity duration-200 hover:opacity-70">
-            About
-          </Link>
-          <a target="_blank" rel="noreferrer" href="/resume.pdf" className="text-[14px] text-[#1B2A30] transition-opacity duration-200 hover:opacity-70">
-            Résumé (PDF)
-          </a>
-          <Link
-            href="/#contact"
-            className="inline-flex h-[40px] items-center rounded-[999px] bg-[#1B2A30] px-[20px] text-[14px] font-semibold text-white transition-[transform,opacity] duration-150 motion-safe:hover:-translate-y-[1px] motion-safe:active:scale-[0.98]"
-          >
-            Contact
-          </Link>
-        </nav>
-        <Link
-          href="/#contact"
-          className="inline-flex h-[40px] items-center rounded-[999px] bg-[#1B2A30] px-[20px] text-[14px] font-semibold text-white transition-[transform,opacity] duration-150 motion-safe:hover:-translate-y-[1px] motion-safe:active:scale-[0.98] md:hidden"
-          style={BODY}
-        >
-          Contact
-        </Link>
-      </div>
-    </motion.header>
-  );
-}
 
 function Hero() {
   const reduce = useMotionPref();
@@ -2192,7 +2149,7 @@ export default function ClarityCase() {
   return (
     <main style={{ background: PAPER }}>
       <ProjectRuler />
-      <Nav />
+      <Nav sticky />
       <Hero />
       <Facts />
       <Problem />

@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useMotionPref } from "@/components/motion/reveal";
 import type { Theme } from "@/data/themes";
 import { useLoadStage } from "@/components/LoadStage";
+import { getLenis } from "@/lib/lenis";
 import data from "@/data/portfolio.json";
 import { WordStagger } from "@/components/ui/word-stagger";
 
@@ -18,13 +19,28 @@ const NAV_ITEMS = [
   { id: "resume", label: "Résumé (PDF)", href: "/resume.pdf", target: "_blank", rel: "noreferrer" },
 ] as const;
 
-export default function Nav({ theme }: { theme?: Theme; activeSection?: string; revealDelay?: number }) {
+export default function Nav({
+  theme,
+  sticky = false,
+}: {
+  theme?: Theme;
+  activeSection?: string;
+  revealDelay?: number;
+  /**
+   * Case-study mode. The header sits in the page flow (`sticky`, not `fixed`,
+   * so it never overlaps the hero) and gets out of the way on the way down,
+   * returning the moment the reader scrolls back up.
+   */
+  sticky?: boolean;
+}) {
   const [open, setOpen] = useState(false);
+  /** True while the reader is moving down the page — the bar is off-screen. */
+  const [hidden, setHidden] = useState(false);
   const pathname = usePathname();
   const reduce = useMotionPref();
   // Last thing to arrive: the header drops in once the hero copy has landed.
   const { stage } = useLoadStage();
-  const shown = stage === "nav";
+  const shown = stage === "nav" && (!hidden || open);
   void theme;
 
   useEffect(() => {
@@ -36,6 +52,34 @@ export default function Nav({ theme }: { theme?: Theme; activeSection?: string; 
       };
     }
   }, [open ]);
+
+  /* Scroll-direction reveal (case pages only). Down hides, up returns; near the
+     top it is always out. Reads the live position each frame so it works under
+     Lenis and native scrolling alike. */
+  useEffect(() => {
+    if (!sticky) return;
+    let last = window.scrollY;
+    let frame = 0;
+    const read = () => {
+      frame = 0;
+      const y = window.scrollY;
+      if (y <= 96) setHidden(false);
+      else if (y > last + 6) setHidden(true);
+      else if (y < last - 6) setHidden(false);
+      last = y;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(read);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    const lenis = getLenis();
+    lenis?.on("scroll", onScroll);
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      getLenis()?.off("scroll", onScroll);
+    };
+  }, [sticky]);
 
   useEffect(() => {
     if (!open) return;
@@ -50,7 +94,7 @@ export default function Nav({ theme }: { theme?: Theme; activeSection?: string; 
         initial={{ transform: "translateY(-100%)" }}
         animate={{ transform: shown ? "translateY(0%)" : "translateY(-100%)" }}
         transition={{ duration: reduce ? 0.2 : 0.65, ease: [0.23, 1, 0.32, 1] }}
-        className="fixed inset-x-0 top-0 z-40 border-b border-[#DAD3C8] bg-[#F2EEE7]"
+        className={`${sticky ? "sticky" : "fixed"} inset-x-0 top-0 z-40 border-b border-[#DAD3C8] bg-[#F2EEE7]`}
       >
         <div className="mx-auto flex h-[85px] w-full max-w-[1200px] items-center justify-between px-6 lg:px-0">
           <Link

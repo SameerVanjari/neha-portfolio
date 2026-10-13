@@ -48,7 +48,7 @@ export default function FeaturedQuote() {
 
   return (
     <section aria-label="In their words" className="bg-[#E9E3D9]">
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-start gap-[24px] px-6 py-[70px] md:py-[110px] lg:flex-row lg:px-0">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-start gap-[20px] px-6 py-[56px] md:gap-[24px] md:py-[110px] lg:flex-row lg:px-0">
         <motion.div
           initial={{ opacity: 0, transform: "translateY(16px)" }}
           whileInView={{ opacity: 1, transform: "translateY(0px)" }}
@@ -75,7 +75,7 @@ export default function FeaturedQuote() {
               <motion.blockquote
                 exit={quoteExit}
                 transition={{ duration: 0.28, ease: EASE_OUT }}
-                className="text-[28px] font-medium leading-[1.22] tracking-[-1px] text-[#17161B] md:text-[40px]"
+                className="text-[23px] font-medium leading-[1.24] tracking-[-0.7px] text-[#17161B] sm:text-[28px] sm:tracking-[-1px] md:text-[40px]"
                 style={DISPLAY}
               >
                 <LineByLine
