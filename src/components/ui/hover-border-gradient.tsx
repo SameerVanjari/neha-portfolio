@@ -1,5 +1,6 @@
 "use client";
 
+import { createElement } from "react";
 import { cn } from "@/lib/utils";
 import { WordStagger } from "./word-stagger";
 
@@ -14,14 +15,18 @@ export function HoverBorderGradient({
   as?: React.ElementType;
 } & React.AnchorHTMLAttributes<HTMLAnchorElement> & React.HTMLAttributes<HTMLElement>) {
   const isString = typeof children === "string";
-  return (
-    <Component
-      className={cn(
+  // createElement keeps the polymorphic tag loosely typed (JSX children typing
+  // under the R3F JSX augmentation resolves the dynamic tag to `never`).
+  return createElement(
+    Component,
+    {
+      className: cn(
         "group relative inline-flex items-center justify-center rounded-full bg-white p-[1px]",
-        className
-      )}
-      {...props}
-    >
+        className,
+      ),
+      ...props,
+    },
+    <>
       <span
         aria-hidden
         className="absolute inset-0 rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100"
@@ -33,7 +38,7 @@ export function HoverBorderGradient({
       <span className="relative inline-flex items-center justify-center rounded-full bg-white px-6 py-3 font-mono text-[11px] tracking-[0.12em] text-zinc-900 transition-colors group-hover:bg-zinc-900 group-hover:text-white">
         {isString ? <WordStagger text={children as string} /> : children}
       </span>
-    </Component>
+    </>,
   );
 }
 

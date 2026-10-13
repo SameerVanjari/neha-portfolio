@@ -524,6 +524,81 @@ button:focus-visible {
   to { opacity: 1; transform: scale(1); }
 }
 
+/* ---- Homepage redesign — new Figma theme (dark "Product lens") ----
+   Scoped to the home route so the rest of the site keeps its light editorial
+   language. Fonts come from layout.tsx (Bricolage Grotesque + Instrument Sans). */
+.home-root {
+  --home-bg: #0a0918;
+  --home-surface: #121130;
+  --home-panel: #0e0d22;
+  --home-thumb: #1c1a45;
+  --home-border: #22204a;
+  --home-border-soft: #2e2b5c;
+  --home-ink: #f3f1ff;
+  --home-body: #aba8cc;
+  --home-muted: #8e8bb3;
+  --home-gold: #d9a066;
+  --home-silver: #c9d3e6;
+  --home-blue: #7fb2ff;
+  --home-violet: #b49cff;
+  background: var(--home-bg);
+  color: var(--home-ink);
+  font-family: var(--font-instrument), system-ui, sans-serif;
+}
+.home-display {
+  font-family: var(--font-bricolage), system-ui, sans-serif;
+}
+.home-body {
+  font-family: var(--font-instrument), system-ui, sans-serif;
+}
+
+/* ---- Home entrance ----
+   Above-the-fold elements rise/fade in once the preloader clears (data-shown).
+   CSS transitions, transform + opacity only, staggered via --rise-delay.
+   Reduced motion keeps the fade and drops the movement. */
+.rise {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 620ms var(--ease-out),
+    transform 620ms var(--ease-out);
+  transition-delay: var(--rise-delay, 0ms);
+}
+.rise[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+.rise-scale {
+  opacity: 0;
+  transform: scale(0.96);
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 700ms var(--ease-out);
+  transition-delay: var(--rise-delay, 0ms);
+}
+.rise-scale[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+.fade {
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out);
+  transition-delay: var(--rise-delay, 0ms);
+}
+.fade[data-shown="true"] {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .rise-scale {
+    transform: none;
+    transition-duration: 200ms;
+  }
+  .fade {
+    transition-duration: 200ms;
+  }
+}
+
 /* Bio hover-lens phrases — squared, snug, never touching */
 .bio-lens-phrase {
   display: inline-block;

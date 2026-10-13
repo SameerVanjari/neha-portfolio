@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
-import { Hanken_Grotesk, Newsreader } from "next/font/google";
+import { Hanken_Grotesk, Newsreader, Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
 import "./globals.css";
 
 // Design system (from Website Wireframes — Landing Desktop 1440).
-// Single type family: Hanken Grotesk everywhere (400 Regular, 500 Medium,
-// 600 SemiBold). Display + body vars point at the same family so existing
-// component references keep working; serif (Newsreader) retained for
-// case-study/editorial pages.
+// Legacy pages keep Hanken Grotesk (display + body point at the same family
+// so existing component references keep working); serif (Newsreader) retained
+// for case-study/editorial pages.
+//
+// The redesigned homepage uses its own pairing from the new Figma design:
+// Bricolage Grotesque (display) + Instrument Sans (body), exposed as
+// --font-bricolage / --font-instrument so the home theme can opt in without
+// restyling the rest of the site.
 
 const hankenDisplay = Hanken_Grotesk({
   variable: "--font-display",
@@ -20,6 +24,21 @@ const hankenBody = Hanken_Grotesk({
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600", "700"],
+});
+
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin"],
+  display: "swap",
+  axes: ["opsz", "wdth"],
+});
+
+const instrument = Instrument_Sans({
+  variable: "--font-instrument",
+  subsets: ["latin"],
+  display: "swap",
+  style: ["normal", "italic"],
+  axes: ["wdth"],
 });
 
 const newsreader = Newsreader({
@@ -45,7 +64,10 @@ import MotionPrefs from "@/components/MotionPrefs";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${hankenDisplay.variable} ${hankenBody.variable} ${newsreader.variable} antialiased`}>
+    <html
+      lang="en"
+      className={`${hankenDisplay.variable} ${hankenBody.variable} ${newsreader.variable} ${bricolage.variable} ${instrument.variable} antialiased`}
+    >
       <body className="bg-[#F2EEE7] text-[#17161B]">
         <PerceptionProvider>
           <LoadStageProvider>
@@ -61,7 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Without JS those never clear, so force everything visible for
             no-JS visitors rather than showing them a blank page. */}
         <noscript>
-          <style>{`[style*="opacity:0"]{opacity:1!important;transform:none!important}`}</style>
+          <style>{`[style*="opacity:0"],.rise,.rise-scale,.fade{opacity:1!important;transform:none!important}`}</style>
         </noscript>
       </body>
     </html>
