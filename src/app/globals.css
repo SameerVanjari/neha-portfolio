@@ -220,6 +220,19 @@ button:focus-visible {
   }
 }
 
+/* ---- Case studies: "More projects" neighbour cards ----
+   Each neighbour card is a grid item wrapping a flex row (thumbnail + copy).
+   A grid item defaults to `min-width: auto`, so a long, unbreakable line in
+   the copy lets the item grow past its track and the card spills off the right
+   edge on phones. Clamping the item, its link and the link's copy column to
+   `min-width: 0` keeps every neighbour section inside the viewport, on every
+   case page, without touching each template. */
+[data-index="More projects"] .grid > *,
+[data-index="More projects"] .grid > * > a,
+[data-index="More projects"] .grid > * > a > :last-child {
+  min-width: 0;
+}
+
 /* ---- Case studies: hover / press feedback ----
    Interaction states, not decoration. These sit in the "tens of times a day"
    tier, so every one is near-imperceptible: 150–200ms, one or two pixels,

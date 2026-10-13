@@ -59,8 +59,8 @@ export default function ProjectsList({ lens }: { lens: string | null }) {
   return (
     <>
       <Nav theme={theme} activeSection="projects" />
-      <main className="pt-[149px] bg-[#F2EEE6]">
-        <section className="mx-auto max-w-[1280px] px-6 md:px-8">
+      <main className="pt-[116px] bg-[#F2EEE6] md:pt-[149px]">
+        <section className="mx-auto max-w-[1280px] px-5 sm:px-6 md:px-8">
           <div className="pb-10 pt-6 md:pb-14 md:pt-8">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div>
@@ -103,7 +103,7 @@ export default function ProjectsList({ lens }: { lens: string | null }) {
             </div>
 
             <LayoutGroup id="projects-sort">
-              <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 md:gap-6">
+              <div className="mt-8 grid grid-cols-1 gap-5 min-[480px]:grid-cols-2 md:gap-6 lg:grid-cols-3">
                 {ranked.map(({ p, order, isMatch }) => {
                   const cardTheme = THEMES[p.lens];
                   return (

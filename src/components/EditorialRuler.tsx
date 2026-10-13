@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { lenisScrollToId } from "@/lib/lenis";
+import CaseIndexSheet from "@/components/CaseIndexSheet";
 
 export type RulerItem = { id: string; label: string };
 
@@ -62,6 +63,7 @@ export default function EditorialRuler({ items }: { items: RulerItem[] }) {
   const label = hover ?? active;
 
   return (
+    <>
     <nav
       aria-label="Sections"
       className="fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end gap-[7px] md:flex"
@@ -106,5 +108,7 @@ export default function EditorialRuler({ items }: { items: RulerItem[] }) {
         );
       })}
     </nav>
+    <CaseIndexSheet items={present} accent={ACCENT} buttonClassName="md:hidden" />
+    </>
   );
 }

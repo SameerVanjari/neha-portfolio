@@ -1,5 +1,6 @@
 "use client";
 
+import Nav from "@/components/Nav";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useInView, type Variants } from "framer-motion";
@@ -350,9 +351,9 @@ function AtAGlance() {
             <motion.li
               key={fact.label}
               variants={item}
-              className="flex items-start gap-4 px-0 py-[38px] lg:px-6"
+              className="even:border-l [&:nth-child(n+3)]:border-t lg:border-t-0 lg:[&:not(:first-child)]:border-l flex items-start gap-4 px-0 py-[38px] lg:px-6"
               style={{
-                borderLeft: i > 0 ? "1px solid rgba(242,238,231,0.14)" : undefined,
+                borderColor: "rgba(242,238,231,0.14)",
                 paddingLeft: i === 0 ? 0 : undefined,
               }}
             >
@@ -873,10 +874,9 @@ function CaseFooter() {
 /* ---------------------------------- page ----------------------------------- */
 
 export default function BrokenMileCase() {
-  // The shared site header is a fixed overlay, so the page's own top padding
-  // keeps the hero clear of it.
   return (
-    <main className="bg-[#F2EEE7] pt-[85px]">
+    <main className="bg-[#F2EEE7]">
+      <Nav sticky />
       <ProjectRuler />
       <Hero />
       <AtAGlance />

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { getLenis } from "@/lib/lenis";
+import CaseIndexSheet from "@/components/CaseIndexSheet";
 
 /**
  * Ruler-style index for the bespoke case-study pages.
@@ -173,7 +174,10 @@ export function ProjectRuler({ accent = "#35339E" }: { accent?: string }) {
     else el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const sheetItems = items.map((item) => ({ label: item.label, el: item.el }));
+
   return (
+    <>
     <nav
       aria-label="On this page"
       onMouseLeave={() => setHover(null)}
@@ -225,6 +229,8 @@ export function ProjectRuler({ accent = "#35339E" }: { accent?: string }) {
         );
       })}
     </nav>
+    <CaseIndexSheet items={sheetItems} accent={accent} buttonClassName="xl:hidden" />
+    </>
   );
 }
 

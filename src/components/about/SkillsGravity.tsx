@@ -357,15 +357,18 @@ export default function SkillsGravity() {
   }, [reduce]);
 
   const pillClass = (kind: Kind, big: boolean, isRel: boolean, isSink: boolean) => {
-    const shape = kind === "tool" ? "rounded-[16px]" : "rounded-full";
+    const shape = kind === "tool" ? "rounded-[14px] md:rounded-[16px]" : "rounded-full";
+    /* Phones get smaller bodies on purpose: the field is much narrower, so the
+       same pills would stack twice as deep and crowd the floor. Scaling them
+       down keeps a clear gap between the floated (matched) and sunk rows. */
     const size =
       kind === "tool"
         ? big
-          ? "px-5 py-3 text-[15px]"
-          : "px-4 py-2.5 text-[13px]"
+          ? "px-3.5 py-2 text-[12px] md:px-5 md:py-3 md:text-[15px]"
+          : "px-3 py-1.5 text-[11px] md:px-4 md:py-2.5 md:text-[13px]"
         : big
-          ? "px-6 py-3.5 text-[16px]"
-          : "px-5 py-3 text-[14px]";
+          ? "px-4 py-2.5 text-[13px] md:px-6 md:py-3.5 md:text-[16px]"
+          : "px-3.5 py-2 text-[12px] md:px-5 md:py-3 md:text-[14px]";
     const tone = isRel
       ? "border-[#3B33B5] bg-[#3B33B5] text-white shadow-[0_10px_24px_rgba(59,51,181,0.30)]"
       : isSink
@@ -424,7 +427,7 @@ export default function SkillsGravity() {
         ) : (
           <ul
             ref={fieldRef}
-            className="relative block h-[440px] select-none md:h-[500px]"
+            className="relative block h-[600px] select-none sm:h-[540px] md:h-[500px]"
             style={{ touchAction: "none" }}
           >
             {SKILLS.map((s) => {
