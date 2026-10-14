@@ -13,6 +13,7 @@ import { WordStagger } from "@/components/ui/word-stagger";
 
 const NAV_ITEMS = [
   { id: "work", label: "Work", href: "/projects" },
+  { id: "writing", label: "Writing", href: "/blog" },
   { id: "about", label: "About", href: "/about" },
   /* The résumé is a document, not a page: it opens in a new tab so the site
      keeps its place, and so Barba's click handler lets it through untouched. */

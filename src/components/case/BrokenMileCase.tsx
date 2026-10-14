@@ -1,7 +1,7 @@
 "use client";
 
 import Nav from "@/components/Nav";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useInView, type Variants } from "framer-motion";
 import {
@@ -534,18 +534,8 @@ function UxWireframes() {
         {UX_WIREFRAMES.panels.map((panel, i) => {
           const light = panel.kind === "wireframe";
           return (
-            <div key={panel.tag} className="contents lg:flex lg:flex-1 lg:flex-col lg:gap-[10px]">
-              {i === 1 && (
-                <Reveal
-                  delay={0.1}
-                  distance={16}
-                  className="mx-auto hidden h-[64px] w-[64px] items-center justify-center rounded-[999px] lg:flex"
-                  style={{ background: RED }}
-                >
-                  <Icon name="arrow" size={26} />
-                </Reveal>
-              )}
-              <div className="lg:flex lg:flex-1 lg:flex-col lg:gap-[10px]">
+            <Fragment key={panel.tag}>
+              <div className="flex flex-1 flex-col gap-[10px]">
                 <Reveal delay={i * 0.18} distance={26}>
                   <div
                     className="relative h-[300px] overflow-hidden rounded-[18px] border p-[20px] lg:h-[380px]"
@@ -571,7 +561,20 @@ function UxWireframes() {
                   {panel.tag}
                 </p>
               </div>
-            </div>
+              {/* The arrow is its own column, so it sits in the gap between the
+                  two frames, vertically centred on them — not stacked above the
+                  second one. */}
+              {i === 0 && UX_WIREFRAMES.panels.length > 1 ? (
+                <Reveal
+                  delay={0.1}
+                  distance={16}
+                  className="mx-auto hidden h-[64px] w-[64px] shrink-0 items-center justify-center rounded-[999px] lg:flex"
+                  style={{ background: RED }}
+                >
+                  <Icon name="arrow" size={26} />
+                </Reveal>
+              ) : null}
+            </Fragment>
           );
         })}
       </div>
