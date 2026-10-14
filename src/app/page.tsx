@@ -4,6 +4,7 @@ import AboutIntro from "@/components/landing/AboutIntro";
 import ClientsRow from "@/components/landing/ClientsRow";
 import SelectedWork from "@/components/landing/SelectedWork";
 import HowIWork from "@/components/landing/HowIWork";
+import LatestWriting from "@/components/landing/LatestWriting";
 import FeaturedQuote from "@/components/landing/FeaturedQuote";
 import SiteFooter from "@/components/landing/SiteFooter";
 
@@ -23,6 +24,7 @@ export default function Home() {
         <ClientsRow />
         <SelectedWork />
         <HowIWork />
+        <LatestWriting />
         <FeaturedQuote />
       </main>
 
