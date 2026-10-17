@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import Nav from "@/components/Nav";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useInView, type Variants } from "framer-motion";
 import {
@@ -350,9 +351,9 @@ function AtAGlance() {
             <motion.li
               key={fact.label}
               variants={item}
-              className="flex items-start gap-4 px-0 py-[38px] lg:px-6"
+              className="even:border-l [&:nth-child(n+3)]:border-t lg:border-t-0 lg:[&:not(:first-child)]:border-l flex items-start gap-4 px-0 py-[38px] lg:px-6"
               style={{
-                borderLeft: i > 0 ? "1px solid rgba(242,238,231,0.14)" : undefined,
+                borderColor: "rgba(242,238,231,0.14)",
                 paddingLeft: i === 0 ? 0 : undefined,
               }}
             >
@@ -533,18 +534,8 @@ function UxWireframes() {
         {UX_WIREFRAMES.panels.map((panel, i) => {
           const light = panel.kind === "wireframe";
           return (
-            <div key={panel.tag} className="contents lg:flex lg:flex-1 lg:flex-col lg:gap-[10px]">
-              {i === 1 && (
-                <Reveal
-                  delay={0.1}
-                  distance={16}
-                  className="mx-auto hidden h-[64px] w-[64px] items-center justify-center rounded-[999px] lg:flex"
-                  style={{ background: RED }}
-                >
-                  <Icon name="arrow" size={26} />
-                </Reveal>
-              )}
-              <div className="lg:flex lg:flex-1 lg:flex-col lg:gap-[10px]">
+            <Fragment key={panel.tag}>
+              <div className="flex flex-1 flex-col gap-[10px]">
                 <Reveal delay={i * 0.18} distance={26}>
                   <div
                     className="relative h-[300px] overflow-hidden rounded-[18px] border p-[20px] lg:h-[380px]"
@@ -570,7 +561,20 @@ function UxWireframes() {
                   {panel.tag}
                 </p>
               </div>
-            </div>
+              {/* The arrow is its own column, so it sits in the gap between the
+                  two frames, vertically centred on them — not stacked above the
+                  second one. */}
+              {i === 0 && UX_WIREFRAMES.panels.length > 1 ? (
+                <Reveal
+                  delay={0.1}
+                  distance={16}
+                  className="mx-auto hidden h-[64px] w-[64px] shrink-0 items-center justify-center rounded-[999px] lg:flex"
+                  style={{ background: RED }}
+                >
+                  <Icon name="arrow" size={26} />
+                </Reveal>
+              ) : null}
+            </Fragment>
           );
         })}
       </div>
@@ -873,10 +877,9 @@ function CaseFooter() {
 /* ---------------------------------- page ----------------------------------- */
 
 export default function BrokenMileCase() {
-  // The shared site header is a fixed overlay, so the page's own top padding
-  // keeps the hero clear of it.
   return (
-    <main className="bg-[#F2EEE7] pt-[85px]">
+    <main className="bg-[#F2EEE7]">
+      <Nav sticky />
       <ProjectRuler />
       <Hero />
       <AtAGlance />

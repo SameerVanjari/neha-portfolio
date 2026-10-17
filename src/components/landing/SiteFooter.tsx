@@ -21,13 +21,13 @@ export default function SiteFooter() {
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
-        className="mx-auto flex w-full max-w-[1200px] flex-col items-start gap-[64px] px-6 pb-[56px] pt-[80px] md:pt-[120px] lg:px-0"
+        className="mx-auto flex w-full max-w-[1200px] flex-col items-start gap-[48px] px-6 pb-[48px] pt-[64px] md:gap-[64px] md:pb-[56px] md:pt-[120px] lg:px-0"
       >
         <div className="flex w-full flex-col items-start gap-[48px] lg:flex-row lg:items-end lg:gap-[126px]">
           <div className="flex w-full max-w-[690px] flex-col items-start gap-[22px]">
             <motion.h2
               variants={item}
-              className="text-[48px] font-semibold tracking-[-1.5px] text-[#F2EEE7] md:text-[60px]"
+              className="text-[40px] font-semibold tracking-[-1.2px] text-[#F2EEE7] sm:text-[48px] sm:tracking-[-1.5px] md:text-[60px]"
               style={DISPLAY}
             >
               Let&apos;s talk.
@@ -43,7 +43,7 @@ export default function SiteFooter() {
             <motion.div variants={item}>
               <a
                 href={`mailto:${email}`}
-                className="group inline-block border-b border-[rgba(242,238,231,0.4)] pb-[6px] text-[26px] font-medium text-[#F2EEE7] transition-opacity hover:opacity-80 md:text-[34px]"
+                className="group inline-block border-b border-[rgba(242,238,231,0.4)] pb-[6px] text-[21px] font-medium text-[#F2EEE7] transition-opacity hover:opacity-80 sm:text-[26px] md:text-[34px]"
                 style={BODY}
               >
                 <WordStagger text={email} stagger={22} />

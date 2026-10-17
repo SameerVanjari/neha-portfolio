@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useReducedMotion } from "framer-motion";
 import { THEMES, type ThemeId } from "@/data/themes";
-import { syncLenisToTop } from "@/lib/lenis";
+import { syncLenisToTop, getLenis } from "@/lib/lenis";
 
 // Barba origin — single fixed point for all site transitions (prevents drift)
 const BARBA_ORIGIN = "50% 50%";
@@ -137,12 +137,33 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
       return;
     }
     await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
-    // scroll to top while overlay is fully covering (hidden from user)
-    // use instant to avoid smooth scroll being visible after transition
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    syncLenisToTop();
+
+    /* Land on the right spot while the overlay still covers the page, so the
+       jump is never seen. An in-page anchor on the link (#contact) wins; with
+       none, the new page starts at the top. The anchor is retried briefly
+       because the target can paint a frame or two after the route commits. */
+    const hash = href.includes("#") ? href.slice(href.indexOf("#") + 1) : "";
+    let target: HTMLElement | null = null;
+    if (hash) {
+      for (let i = 0; i < 20 && !target; i++) {
+        target = document.getElementById(hash);
+        if (!target) await new Promise((r) => setTimeout(r, 30));
+      }
+    }
+    if (target) {
+      // A native jump, not `lenis.scrollTo`: Lenis caches the previous page's
+      // scroll limit, so asking it to move would clamp short on a taller page.
+      // The native scroll lands correctly and Lenis re-syncs on the scroll event.
+      const y = Math.max(0, target.getBoundingClientRect().top + window.scrollY - 24);
+      window.scrollTo({ top: y, left: 0, behavior: "instant" as ScrollBehavior });
+      getLenis()?.resize();
+    } else {
+      // use instant to avoid smooth scroll being visible after transition
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      syncLenisToTop();
+    }
     await new Promise((r) => setTimeout(r, 60));
 
     // contract — same origin

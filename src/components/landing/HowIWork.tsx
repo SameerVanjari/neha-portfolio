@@ -77,11 +77,11 @@ export default function HowIWork() {
         initial="hidden"
         whileInView="visible"
         viewport={REVEAL_VIEWPORT}
-        className="mx-auto flex w-full max-w-[1200px] flex-col items-start gap-[44px] px-6 py-[80px] md:py-[120px] lg:px-0"
+        className="mx-auto flex w-full max-w-[1200px] flex-col items-start gap-[36px] px-6 py-[64px] md:gap-[44px] md:py-[120px] lg:px-0"
       >
         <motion.h2
           variants={roll}
-          className="text-[36px] font-semibold tracking-[-1.2px] text-[#17161B] md:text-[48px]"
+          className="text-[30px] font-semibold tracking-[-1px] text-[#17161B] sm:text-[36px] sm:tracking-[-1.2px] md:text-[48px]"
           style={DISPLAY}
         >
           How I work

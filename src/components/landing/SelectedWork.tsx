@@ -136,7 +136,7 @@ export default function SelectedWork() {
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
-        className="mx-auto flex w-full max-w-[1200px] flex-col items-start gap-[44px] px-6 pb-[130px] pt-[80px] md:pt-[120px] lg:px-0"
+        className="mx-auto flex w-full max-w-[1200px] flex-col items-start gap-[36px] px-6 pb-[88px] pt-[64px] md:gap-[44px] md:pb-[130px] md:pt-[120px] lg:px-0"
       >
         <motion.div
           variants={item}
@@ -144,7 +144,7 @@ export default function SelectedWork() {
         >
           <div className="flex flex-col items-start gap-[12px]">
             <h2
-              className="text-[36px] font-semibold tracking-[-1.2px] text-[#17161B] md:text-[48px]"
+              className="text-[30px] font-semibold tracking-[-1px] text-[#17161B] sm:text-[36px] sm:tracking-[-1.2px] md:text-[48px]"
               style={DISPLAY}
             >
               Selected work

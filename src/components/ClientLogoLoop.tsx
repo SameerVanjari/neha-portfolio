@@ -57,6 +57,34 @@ function wordmarkCss(style: MarkStyle): React.CSSProperties {
 /** Copies of the set. 6 keeps the strip covering viewports up to ~4400px. */
 const SETS = 6;
 
+/**
+ * Phone layout for the client strip.
+ *
+ * A marquee earns its keep only when there's width to spare; on a phone it
+ * shows barely two marks at a time and reads as decoration rather than proof.
+ * Below `md` the same names are shown whole, in a bordered two-column grid, so
+ * the entire roster is legible at a glance. An odd count gets a hairline
+ * filler cell so the last row stays a full rectangle.
+ */
+export function ClientGrid() {
+  const odd = CLIENTS.length % 2 === 1;
+  return (
+    <ul className="grid grid-cols-2 border-l border-t border-[#DAD3C8]">
+      {CLIENTS.map((client) => (
+        <li
+          key={client.name}
+          className="flex min-h-[74px] items-center justify-center border-b border-r border-[#DAD3C8] px-4 py-5 text-center"
+        >
+          <span className="text-[#3A3833]" style={wordmarkCss(client.style)}>
+            {client.name}
+          </span>
+        </li>
+      ))}
+      {odd ? <li aria-hidden className="border-b border-r border-[#DAD3C8]" /> : null}
+    </ul>
+  );
+}
+
 export default function ClientLogoLoop() {
   if (CLIENTS.length === 0) return null;
 

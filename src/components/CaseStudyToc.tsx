@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import type { Theme } from "@/data/themes";
 import { getLenis } from "@/lib/lenis";
+import CaseIndexSheet from "@/components/CaseIndexSheet";
 
 export type CaseStudyTocItem = { id: string; label: string };
 
@@ -96,9 +97,10 @@ export default function CaseStudyToc({
   };
 
   return (
+    <>
     <nav
       aria-label="On this page"
-      className="case-toc"
+      className="case-toc hidden lg:block"
       style={{ ["--toc-accent" as string]: theme.accent }}
     >
       <ul className="flex flex-col gap-2.5">
@@ -129,5 +131,7 @@ export default function CaseStudyToc({
         })}
       </ul>
     </nav>
+    <CaseIndexSheet items={resolved} accent={theme.accent} buttonClassName="lg:hidden" />
+    </>
   );
 }

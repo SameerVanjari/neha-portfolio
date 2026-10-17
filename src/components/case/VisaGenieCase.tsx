@@ -1,5 +1,7 @@
 "use client";
 
+import Nav from "@/components/Nav";
+
 import Link from "next/link";
 import { useState } from "react";
 import { motion, type Variants } from "framer-motion";
@@ -278,65 +280,6 @@ function SectionHead({
 
 /* ---------------------------------- chrome ---------------------------------- */
 
-function Nav() {
-  const reduce = useMotionPref();
-  // Same load choreography as the site header: the bar drops in last, once the
-  // hero copy has landed, so the two never arrive on top of each other.
-  const { stage } = useLoadStage();
-
-  return (
-    <motion.header
-      initial={{ transform: "translateY(-100%)" }}
-      animate={{ transform: stage === "nav" ? "translateY(0%)" : "translateY(-100%)" }}
-      transition={{ duration: reduce ? 0.2 : 0.65, ease: EASE_OUT }}
-      className={`${CONTENT} ${GUTTER} flex items-center justify-between py-[14px]`}
-    >
-      <Link href="/" className="shrink-0 text-[16px] font-semibold leading-[1.5] text-[#1c2230]" style={BODY}>
-        Neha Mayacharya
-      </Link>
-      {/* Desktop row + a mobile-only contact pill: the links row is 300px
-          wide by itself, so at phone widths it must not render at all. */}
-      <div className="hidden items-center gap-[30px] md:flex">
-        <Link
-          href="/projects"
-          aria-current="page"
-          className="border-b-[1.5px] border-[#1c2230] pb-[3px] text-[14px] font-normal leading-[1.5] text-[#1c2230]"
-          style={BODY}
-        >
-          Work
-        </Link>
-        <Link
-          href="/about"
-          className="case-link text-[14px] leading-[1.5] text-[#1c2230]"
-          style={BODY}
-        >
-          About
-        </Link>
-        <a target="_blank" rel="noreferrer"
-          href="/resume.pdf"
-          className="case-link text-[14px] leading-[1.5] text-[#1c2230]"
-          style={BODY}
-        >
-          Résumé (PDF)
-        </a>
-        <a
-          href="#contact"
-          className="case-cta flex h-10 items-center justify-center rounded-[999px] bg-[#1c2230] px-5 text-[14px] font-semibold leading-[1.5] text-white"
-          style={BODY}
-        >
-          Contact
-        </a>
-      </div>
-      <a
-        href="#contact"
-        className="case-cta flex h-10 items-center justify-center rounded-[999px] bg-[#1c2230] px-5 text-[14px] font-semibold leading-[1.5] text-white md:hidden"
-        style={BODY}
-      >
-        Contact
-      </a>
-    </motion.header>
-  );
-}
 
 /* ---------------------------------- hero ----------------------------------- */
 
@@ -1148,7 +1091,7 @@ export default function VisaGenieCase() {
   return (
     <main style={{ background: PAPER }}>
       <ProjectRuler />
-      <Nav />
+      <Nav sticky />
       <Hero />
       <Facts />
       <Results />

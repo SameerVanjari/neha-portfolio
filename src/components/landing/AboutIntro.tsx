@@ -11,7 +11,7 @@ const ABOUT_STATEMENT =
 export default function AboutIntro() {
   return (
     <section aria-label="About" className="bg-[#F2EEE7]">
-      <div className="mx-auto w-full max-w-[1200px] px-6 pb-[120px] pt-[80px] md:pt-[140px] lg:px-0">
+      <div className="mx-auto w-full max-w-[1200px] px-6 pb-[84px] pt-[64px] md:pb-[120px] md:pt-[140px] lg:px-0">
         <div className="flex max-w-[792px] flex-col items-start gap-[36px]">
           <Reveal>
             <p
@@ -28,12 +28,12 @@ export default function AboutIntro() {
           <LineByLine
             text={ABOUT_STATEMENT}
             delay={0.08}
-            className="text-[30px] font-medium leading-[1.18] tracking-[-1.025px] text-[#17161B] md:text-[41px]"
+            className="text-[26px] font-medium leading-[1.2] tracking-[-0.8px] text-[#17161B] sm:text-[30px] sm:tracking-[-1.025px] md:text-[41px]"
             style={DISPLAY}
           />
 
           {/* An escalation, so it gets a wider beat than a default stagger. */}
-          <div className="flex flex-col items-start gap-[10px] text-[20px] font-normal leading-[1.3] md:text-[26px]" style={BODY}>
+          <div className="flex flex-col items-start gap-[10px] text-[18px] font-normal leading-[1.35] sm:text-[20px] md:text-[26px]" style={BODY}>
             <Reveal delay={0.16}>
               <p className="text-[#5C5750]">First, I sculpted objects.</p>
             </Reveal>

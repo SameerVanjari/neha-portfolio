@@ -78,7 +78,7 @@ export default function HeroLens() {
       {/* The section starts at the very top of the viewport (the shared header
           is a fixed overlay now); the copy clears it with its own top padding,
           and the whole hero fits the viewport with scroll at the top. */}
-      <div className="relative mx-auto w-full max-w-[1200px] px-6 pb-[96px] pt-[96px] md:pb-[120px] md:pt-[148px] lg:h-[100svh] lg:min-h-[720px] lg:px-0 lg:pb-[64px]">
+      <div className="relative mx-auto flex min-h-[100svh] w-full max-w-[1200px] flex-col px-6 pb-[64px] pt-[104px] md:pb-[120px] md:pt-[148px] lg:h-[100svh] lg:min-h-[720px] lg:px-0 lg:pb-[64px]">
         <div className="flex max-w-[660px] flex-col items-start gap-[26px] md:gap-[36px]">
             {/* Lens copy — dipped out while a lens change is mid-swap, then
                 remounted line by line (keyed by the incoming eyebrow) */}
@@ -111,7 +111,7 @@ export default function HeroLens() {
                 {content.eyebrow}
               </motion.p>
               <h1
-                className="text-[clamp(42px,5.2vw,68px)] font-semibold leading-[1.04] tracking-[-1.7px] text-[#F2EEE7]"
+                className="text-[clamp(38px,10.8vw,68px)] font-semibold leading-[1.04] tracking-[-1.5px] text-[#F2EEE7] sm:tracking-[-1.7px]"
                 style={DISPLAY}
               >
                 <LineByLine
@@ -124,7 +124,7 @@ export default function HeroLens() {
                   paused={paused}
                 />
               </h1>
-              <p className="max-w-[580px] text-[19px] font-normal leading-[1.6] text-[#E4DED4]" style={BODY}>
+              <p className="max-w-[580px] text-[16px] font-normal leading-[1.6] text-[#E4DED4] sm:text-[19px]" style={BODY}>
                 <LineByLine
                   key={content.support}
                   text={content.support}
@@ -164,7 +164,7 @@ export default function HeroLens() {
               phones, and centered 2rem from the hero's bottom on desktop. */}
           <div
             id="lens-anchor"
-            className="mt-[88px] lg:absolute lg:bottom-8 lg:left-1/2 lg:mt-0 lg:-translate-x-1/2"
+            className="mt-auto pt-[56px] md:pt-[88px] lg:absolute lg:bottom-8 lg:left-1/2 lg:mt-0 lg:pt-0 lg:-translate-x-1/2"
           >
             <IslandNav
               activeId={pending ?? lens}
