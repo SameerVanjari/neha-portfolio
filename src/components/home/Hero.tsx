@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { motion } from "framer-motion";
 import type { HomeLens, HomeLensId } from "@/data/lenses";
 import { HERO_EYEBROW, LENS_ORDER, LENSES } from "@/data/lenses";
 import AnimatedHeadline from "@/components/home/AnimatedHeadline";
@@ -122,6 +123,22 @@ export default function Hero({
                   </span>
 
                   <span className="relative flex h-[72px] w-full items-center justify-center">
+                    {active && (
+                      // Shared layout element: glides from the old node to the
+                      // node being clicked, carrying the lens glow with it.
+                      <motion.span
+                        layoutId="lens-node-glow"
+                        aria-hidden
+                        transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                        className="absolute rounded-full"
+                        style={{
+                          width: 64,
+                          height: 64,
+                          background: `radial-gradient(circle, ${lens.accent}26 0%, transparent 68%)`,
+                          boxShadow: `0 0 22px 5px ${lens.accent}55, 0 0 64px 14px ${lens.accent}22`,
+                        }}
+                      />
+                    )}
                     {active ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img

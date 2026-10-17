@@ -7,6 +7,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 
@@ -52,7 +53,15 @@ const LoadStageContext = createContext<LoadStageValue>({
 });
 
 export function LoadStageProvider({ children }: { children: ReactNode }) {
-  const [assetsReady, setAssetsReady] = useState(false);
+  const [assetsSettled, setAssetsSettled] = useState(false);
+  // Hydration gate via useSyncExternalStore: the server snapshot is false
+  // (matching SSR HTML), the client snapshot flips true once React hydrates —
+  // so the overlay holds through fade and post-fade clicks always land.
+  const hydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const [stage, setStage] = useState<LoadStage>("loading");
 
   useEffect(() => {
@@ -60,7 +69,7 @@ export function LoadStageProvider({ children }: { children: ReactNode }) {
     const done = () => {
       if (settled) return;
       settled = true;
-      setAssetsReady(true);
+      setAssetsSettled(true);
     };
 
     if (typeof window === "undefined" || typeof window.Image === "undefined") {
@@ -89,6 +98,8 @@ export function LoadStageProvider({ children }: { children: ReactNode }) {
     const t = window.setTimeout(done, ASSET_TIMEOUT_MS);
     return () => window.clearTimeout(t);
   }, []);
+
+  const assetsReady = hydrated && assetsSettled;
 
   const revealText = useCallback(() => setStage("text"), []);
 

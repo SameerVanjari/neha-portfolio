@@ -50,8 +50,8 @@ export default function HeroScene({
     <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
       <Canvas
         camera={{ position: [0, 0, 5], fov: 35 }}
-        dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true }}
+        dpr={[1, 1.5]} // cap DPR: phones at dpr 3 pay 8× fragments for no gain
+        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         frameloop={reduce ? "demand" : "always"}
         onCreated={() => onReady?.(true)}
       >
