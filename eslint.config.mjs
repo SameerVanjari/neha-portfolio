@@ -18,6 +18,8 @@ const eslintConfig = defineConfig([
     ".codex/**",
     ".impeccable/**",
     "skills-lock.json",
+    // One-off repo maintenance scripts (CommonJS, run via node).
+    "scripts/*.cjs",
   ]),
 ]);
 

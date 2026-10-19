@@ -160,8 +160,11 @@ export default function BarbaProvider({ children }: { children: React.ReactNode 
     } else {
       // use instant to avoid smooth scroll being visible after transition
       window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+      /* eslint-disable react-hooks/immutability -- imperative scroll reset of the
+         scroll containers during barba's DOM swap; this must run outside React */
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
+      /* eslint-enable react-hooks/immutability */
       syncLenisToTop();
     }
     await new Promise((r) => setTimeout(r, 60));

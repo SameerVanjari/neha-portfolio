@@ -30,6 +30,12 @@ export default function Header() {
           Work
         </Link>
         <Link
+          href="/blog"
+          className="home-body text-[15px] text-[#f3f1ff] transition-opacity hover:opacity-60"
+        >
+          Writing
+        </Link>
+        <Link
           href="/about"
           className="home-body text-[15px] text-[#f3f1ff] transition-opacity hover:opacity-60"
         >

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { HomeLens } from "@/data/lenses";
+import { Reveal } from "@/components/motion/reveal";
 import {
   TOOLS,
   TOOL_GROUPS,
@@ -38,12 +39,15 @@ export default function Toolkit({ lens }: { lens: HomeLens }) {
       aria-label="Toolkit"
       className="flex flex-col gap-[14px] px-6 pb-[48px] pt-[64px] lg:px-[132px] lg:pt-[96px]"
     >
-      <h2 className="home-display text-[clamp(34px,3.6vw,52px)] font-bold leading-none tracking-[-1.04px] text-[#f3f1ff]">
-        Toolkit
-      </h2>
+      <Reveal>
+        <h2 className="home-display text-[clamp(34px,3.6vw,52px)] font-bold leading-none tracking-[-1.04px] text-[#f3f1ff]">
+          Toolkit
+        </h2>
+      </Reveal>
 
-      <div className="scrollbar-none w-full min-w-0 overflow-x-auto pb-[8px]">
-        <div className="min-w-[1176px]">
+      <Reveal delay={0.1}>
+        <div className="scrollbar-none w-full min-w-0 overflow-x-auto pb-[8px]">
+          <div className="min-w-[1176px]">
           {/* Group labels (node 525:214) */}
           <div className="grid grid-cols-8 gap-[10px]">
             {TOOL_GROUPS.map((g) => {
@@ -152,7 +156,8 @@ export default function Toolkit({ lens }: { lens: HomeLens }) {
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      </Reveal>
     </section>
   );
 }
