@@ -30,6 +30,8 @@ export interface HomeLens {
   headlineAccent: string;
   subline: string;
   /** Hero render + its particle field + lens badge. */
+  /** GLB used by this lens in the hero scene. */
+  model: string;
   eye: string;
   particles: string;
   badge: string;
@@ -54,6 +56,7 @@ export const LENSES: Record<HomeLensId, HomeLens> = {
     headlineLead: "Designing for ",
     headlineAccent: "touch, use, and longevity.",
     subline: "Physical objects, mobile apps, and end-to-end launches.",
+    model: "/models/bronze-sphere-dust.glb",
     eye: "/figma/hero/eye-product.png",
     particles: "/figma/hero/particles-product.png",
     badge: "/figma/hero/badge-product.png",
@@ -94,6 +97,7 @@ export const LENSES: Record<HomeLensId, HomeLens> = {
     headlineLead: "Designing for ",
     headlineAccent: "clarity, flow, and ease.",
     subline: "Dashboards, user journeys, and usability research.",
+    model: "/models/wireframe-logo-ux-option-2.glb",
     eye: "/figma/hero/eye-ux.png",
     particles: "/figma/hero/particles-ux.png",
     badge: "/figma/hero/badge-ux.png",
@@ -134,6 +138,7 @@ export const LENSES: Record<HomeLensId, HomeLens> = {
     headlineLead: "Designing for ",
     headlineAccent: "hands, space, and presence.",
     subline: "VR, AR, and MR experiences shaped by gesture, gaze, and voice.",
+    model: "/models/xr-logo.glb",
     eye: "/figma/hero/eye-xr.png",
     particles: "/figma/hero/particles-xr.png",
     badge: "/figma/hero/badge-xr.png",
@@ -174,6 +179,7 @@ export const LENSES: Record<HomeLensId, HomeLens> = {
     headlineLead: "Designing for ",
     headlineAccent: "judgment, context, and care.",
     subline: "Conversational agents, copilots, and adaptive interfaces.",
+    model: "/models/ai-cosmic-sphere.glb",
     eye: "/figma/hero/eye-ai.png",
     particles: "/figma/hero/particles-ai.png",
     badge: "/figma/hero/badge-ai.png",

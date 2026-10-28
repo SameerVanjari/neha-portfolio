@@ -10,7 +10,8 @@ import { useLoadStage } from "@/components/LoadStage";
  * Hero headline with a per-letter rise + blur transition.
  *
  * The text is drawn as the real font (crisp glyphs), never dots.
- *   enter — each letter rises from below (blur ~20px, opacity 30%) into place
+ *   enter — each letter of the complete title rises from below (blur ~20px,
+ *           opacity 30%) into place
  *           (blur 0, opacity 100%), one letter after another.
  *   exit  — each letter lifts upward, softening and fading away.
  * Both use cubic-bezier easings. Invisible DOM spans reserve the tallest
@@ -32,7 +33,7 @@ interface Glyph {
 const LEAD_COLOR = "#f3f1ff";
 
 const ENTRY_BLUR = 20; // px at the start of the rise
-const ENTRY_ALPHA = 0.3; // opacity at the start of the rise
+const ENTRY_ALPHA = 0; // the title is fully hidden before each glyph enters
 const ENTRY_RISE = 0.5; // × fontSize the letter starts below its slot
 const EXIT_BLUR = 9; // px as the letter leaves
 const EXIT_RISE = 0.5; // × fontSize the letter lifts on exit
@@ -137,7 +138,8 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
     const { w } = metricsRef.current;
     const lead = lensRef.current.headlineLead;
     const phrase = lensRef.current.headlineAccent;
-    const lines = wrap(ctx, lead + phrase, w);
+    const fullText = lead + phrase;
+    const lines = wrap(ctx, fullText, w);
     const firstBaseline = fontSize * 0.82;
     const color = lensRef.current.accent;
 
@@ -145,16 +147,23 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
     let ci = 0;
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      const pStart = Math.max(0, lead.length - line.start);
-      const phraseText = line.text.slice(pStart);
-      if (!phraseText) continue;
-      const xOff = ctx.measureText(line.text.slice(0, pStart)).width;
       const y = firstBaseline + i * lineHeight;
-      for (let p = 0; p < phraseText.length; p++) {
-        const ch = phraseText[p];
+      for (let p = 0; p < line.text.length; p++) {
+        const ch = line.text[p];
         if (ch !== " ") {
-          const x = xOff + ctx.measureText(phraseText.slice(0, p)).width;
-          glyphs.push({ ch, x, y, ci, fs: fontSize, color, mode: "idle", t0: 0, dur: 0 });
+          const absoluteIndex = line.start + p;
+          const x = ctx.measureText(line.text.slice(0, p)).width;
+          glyphs.push({
+            ch,
+            x,
+            y,
+            ci,
+            fs: fontSize,
+            color: absoluteIndex < lead.length ? LEAD_COLOR : color,
+            mode: "idle",
+            t0: 0,
+            dur: 0,
+          });
         }
         ci++;
       }
@@ -187,11 +196,8 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
     ctx.globalAlpha = 1;
     ctx.clearRect(0, 0, w, h);
 
-    const { fontSize } = fontOf(ctx, h1);
+    fontOf(ctx, h1);
     ctx.textBaseline = "alphabetic";
-    ctx.fillStyle = LEAD_COLOR;
-    ctx.fillText(lensRef.current.headlineLead, 0, fontSize * 0.82);
-
     let active = false;
     const gs = glyphsRef.current;
     for (let i = gs.length - 1; i >= 0; i--) {
@@ -300,12 +306,57 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
     const ctx = canvas.getContext("2d");
     if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     metricsRef.current = { w, h, dpr };
-    if (reduceRef.current) drawStatic();
-    else settleInstant(nowRef.current);
+
+    // Do not paint a settled title while the loader owns the screen. That
+    // frame would be visible first, then the real entrance would replay after
+    // the stage changes to text.
+    if (stageRef.current === "loading" || !startedRef.current) {
+      ctx?.clearRect(0, 0, w, h);
+      return;
+    }
+
+    if (reduceRef.current) {
+      drawStatic();
+      return;
+    }
+
+    // A font swap or responsive breakpoint can fire ResizeObserver during the
+    // entrance. Update the existing glyph positions only. Creating a fresh
+    // glyph array here can make unmatched glyphs look like a second entrance.
+    const animating = glyphsRef.current.some((g) => g.mode !== "idle");
+    if (animating) {
+      const fresh = new Map(buildGlyphs().map((g) => [g.ci, g]));
+      for (const g of glyphsRef.current) {
+        const next = fresh.get(g.ci);
+        if (next) {
+          g.x = next.x;
+          g.y = next.y;
+          g.fs = next.fs;
+          g.color = next.color;
+        }
+      }
+      nowRef.current = performance.now();
+      renderFrame(nowRef.current);
+      ensureLoop();
+    } else {
+      settleInstant(nowRef.current);
+    }
   }
 
   function begin() {
-    if (startedRef.current || !readyRef.current) return;
+    if (!readyRef.current) return;
+    if (metricsRef.current.w <= 0 || metricsRef.current.h <= 0) {
+      window.requestAnimationFrame(begin);
+      return;
+    }
+    if (startedRef.current) {
+      // A failed first paint must not permanently block the entrance.
+      if (glyphsRef.current.length === 0) startedRef.current = false;
+      else {
+        ensureLoop();
+        return;
+      }
+    }
     startedRef.current = true;
     const now = performance.now();
     nowRef.current = now;
@@ -315,6 +366,7 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
       return;
     }
     glyphsRef.current = spawnIn(now, 0);
+    renderFrame(now);
     ensureLoop();
   }
 
@@ -347,6 +399,12 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
   useEffect(() => {
     reduceRef.current = reduce;
     if (!readyRef.current) return;
+    if (stageRef.current === "loading") {
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext("2d");
+      if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+      return;
+    }
     if (reduce) drawStatic();
     else applyLens(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -364,9 +422,8 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
       readyRef.current = true;
       resize();
       if (stageRef.current === "loading") {
-        const now = performance.now();
-        nowRef.current = now;
-        settleInstant(now);
+        // Wait for the loader to release the text stage before painting.
+        return;
       } else {
         begin();
       }
@@ -389,7 +446,7 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
 
   useEffect(() => {
     stageRef.current = stage;
-    if (stage !== "loading") begin();
+    if (stage === "text") begin();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage]);
 

@@ -39,17 +39,18 @@ export default function Hero({
       aria-label="Introduction"
       className="relative flex flex-col items-center gap-[40px] px-6 pb-[64px] pt-[16px] lg:flex-row lg:gap-[48px] lg:px-[132px] lg:pb-[72px]"
     >
-      {/* Static field until the shader backdrop is live, then fades out. */}
+      {/* Exact Figma particle reference while the WebGL backdrop and model
+          compile; the animated field takes over after the scene is ready. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={lens.particles}
         alt=""
         aria-hidden
-        className="pointer-events-none absolute inset-0 size-full object-cover transition-opacity duration-700"
+        className="pointer-events-none absolute inset-0 z-0 size-full object-cover transition-opacity duration-700"
         style={{ opacity: sceneReady ? 0 : 1 }}
       />
 
-      {/* Full-hero WebGL: animated backdrop + the anchored model. */}
+      {/* Full-hero WebGL: animated field + anchored interactive model. */}
       <HeroScene lens={lens} anchorRef={eyeRef} onReady={setSceneReady} />
 
       <div className="relative z-10 flex w-full min-w-0 flex-1 flex-col items-start gap-[20px]">

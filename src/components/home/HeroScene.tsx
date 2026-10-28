@@ -9,9 +9,9 @@ import Backdrop from "@/components/home/Backdrop";
 import EyeModel from "@/components/home/EyeModel";
 
 /**
- * Full-hero WebGL layer: the animated per-lens backdrop covers the whole hero,
- * and the model is anchored (via `anchorRef`) to its slot in the layout.
- * Pointer-driven so the model + field lean with the cursor on hover.
+ * Full-hero WebGL layer: the model is anchored (via `anchorRef`) to its slot
+ * in the layout. The animated backdrop sits behind the model, while the
+ * supplied Figma particle mask is the exact loading reference beneath it.
  */
 export default function HeroScene({
   lens,
@@ -24,6 +24,10 @@ export default function HeroScene({
 }) {
   const reduce = useMotionPref();
   const pointer = useRef({ x: 0, y: 0 });
+  // The Product GLB carries authored punctual lights. Keep them, but reduce
+  // the generic hero lighting so the asset is not lit twice as aggressively.
+  const externalLightScale = lens.id === "product" ? 0.4 : lens.id === "xr" ? 0 : 1;
+  const keyPosition = lens.id === "product" ? ([5, 7, 14] as const) : ([3, 4, 5] as const);
 
   useEffect(() => {
     if (reduce || typeof window === "undefined") return;
@@ -53,19 +57,21 @@ export default function HeroScene({
         dpr={[1, 1.5]} // cap DPR: phones at dpr 3 pay 8× fragments for no gain
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         frameloop={reduce ? "demand" : "always"}
-        onCreated={() => onReady?.(true)}
       >
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[3, 4, 5]} intensity={1.1} />
+        <ambientLight intensity={0.5 * externalLightScale} />
+        <directionalLight position={keyPosition} intensity={1.1 * externalLightScale} />
+        {lens.id === "product" && (
+          <hemisphereLight args={["#fff4df", "#2b1a15", 0.44]} />
+        )}
         <Suspense fallback={null}>
           <Backdrop lens={lens} pointer={pointer} />
-          <EyeModel lens={lens} pointer={pointer} anchorRef={anchorRef} />
+          <EyeModel lens={lens} pointer={pointer} anchorRef={anchorRef} onReady={onReady} />
           <Environment resolution={256}>
-            <Lightformer intensity={1.8} position={[0, 3, 3]} scale={[6, 6, 1]} color="#ffffff" />
-            <Lightformer intensity={1.2} position={[-4, 1, 3]} scale={[4, 4, 1]} color="#ffffff" />
-            <Lightformer intensity={1.1} position={[4, -1, 3]} scale={[4, 4, 1]} color={lens.accent} />
-            <Lightformer intensity={0.9} position={[0, -3, 3]} scale={[6, 6, 1]} color="#ffffff" />
-            <Lightformer intensity={0.8} position={[0, 1, -4]} scale={[6, 6, 1]} color="#ffffff" />
+            <Lightformer intensity={1.8 * externalLightScale} position={[0, 3, 3]} scale={[6, 6, 1]} color="#ffffff" />
+            <Lightformer intensity={1.2 * externalLightScale} position={[-4, 1, 3]} scale={[4, 4, 1]} color="#ffffff" />
+            <Lightformer intensity={1.1 * externalLightScale} position={[4, -1, 3]} scale={[4, 4, 1]} color={lens.accent} />
+            <Lightformer intensity={0.9 * externalLightScale} position={[0, -3, 3]} scale={[6, 6, 1]} color="#ffffff" />
+            <Lightformer intensity={0.8 * externalLightScale} position={[0, 1, -4]} scale={[6, 6, 1]} color="#ffffff" />
           </Environment>
         </Suspense>
       </Canvas>
