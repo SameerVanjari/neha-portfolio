@@ -46,7 +46,7 @@ export const PROBLEM = {
       initials: "LB",
       avatarDark: false,
       name: "Laura Bennett, 34",
-      role: "First-time homebuyer · Charlotte, NC",
+      role: "First-time homebuyer",
       quote: "“I can handle complexity, I can’t handle silence.”",
       pains: [
         "Visibility blackouts at the highest-stakes moments: underwriting and closing",

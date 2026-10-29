@@ -56,7 +56,7 @@ export default function LatestWriting() {
               Latest writing
             </h2>
             <p className="max-w-[520px] text-[16px] text-[#5C5750] md:text-[17px]" style={BODY}>
-              Notes on AI, XR, and product design — each opens at its original publication.
+              Notes on AI, XR, and product design. Each opens at its original publication.
             </p>
           </div>
           <Link
@@ -75,7 +75,7 @@ export default function LatestWriting() {
                 href={post.url}
                 target="_blank"
                 rel="noreferrer noopener"
-                aria-label={`${post.title} — read on ${post.source} (opens in a new tab)`}
+                aria-label={`${post.title}. Read on ${post.source} (opens in a new tab)`}
                 className="group grid grid-cols-1 items-start gap-4 py-5 sm:grid-cols-[200px_minmax(0,1fr)_auto] sm:items-center sm:gap-6 md:py-6"
               >
                 <div className="aspect-[16/9] w-full overflow-hidden rounded-[12px] bg-[#EFE9DF] sm:w-[200px]">

@@ -37,8 +37,7 @@ export default function SiteFooter() {
               className="max-w-[520px] text-[18px] font-normal leading-[1.6] text-[#E4DED4]"
               style={BODY}
             >
-              Open to full-time Product and Experience Design roles in AI and XR. Based in
-              Charlotte, NC, and available now.
+              Open to full-time Product and Experience Design roles in AI and XR. Available now.
             </motion.p>
             <motion.div variants={item}>
               <a
@@ -82,7 +81,7 @@ export default function SiteFooter() {
           style={BODY}
         >
           <p>© 2026 Neha Mayacharya</p>
-          <p>Charlotte, North Carolina</p>
+          <p>Available 2026</p>
         </motion.div>
       </motion.div>
     </footer>

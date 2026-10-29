@@ -54,7 +54,7 @@ export default function WritingList() {
             </h1>
             <p className="mt-3 max-w-[540px] text-[15px] leading-[1.6] text-zinc-500" style={BODY}>
               Notes on AI, XR, and product design. Each piece lives where it was
-              published — the cards open the original in a new tab.
+               published. The cards open the original in a new tab.
             </p>
           </header>
 

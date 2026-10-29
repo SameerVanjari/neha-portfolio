@@ -741,7 +741,7 @@ function Footer() {
             Behance
           </a>
           <a href="/resume.pdf" className="case-link">
-            Résumé (PDF)
+            Resume (PDF)
           </a>
         </nav>
       </div>
