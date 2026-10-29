@@ -99,7 +99,7 @@ export const PERSONAS = {
       dark: false,
       tag: "FIXED 9 TO 5",
       name: "Rachel",
-      meta: "Working professional, Charlotte NC",
+      meta: "Working professional",
       body: "Set focus hours once and have them repeat. No daily reconfiguring.",
       reliesOn: "Scheduled windows · One calm prompt · Dashboard",
       figure: "fc-07-persona-rachel.png",

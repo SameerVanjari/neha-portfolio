@@ -15,9 +15,9 @@ const NAV_ITEMS = [
   { id: "work", label: "Work", href: "/projects" },
   { id: "writing", label: "Writing", href: "/blog" },
   { id: "about", label: "About", href: "/about" },
-  /* The résumé is a document, not a page: it opens in a new tab so the site
+  /* The Resume is a document, not a page: it opens in a new tab so the site
      keeps its place, and so Barba's click handler lets it through untouched. */
-  { id: "resume", label: "Résumé (PDF)", href: "/resume.pdf", target: "_blank", rel: "noreferrer" },
+  { id: "resume", label: "Resume (PDF)", href: "/resume.pdf", target: "_blank", rel: "noreferrer" },
 ] as const;
 
 export default function Nav({

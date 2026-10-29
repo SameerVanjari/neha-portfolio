@@ -96,8 +96,8 @@ export const BIO_ANNOTATIONS: BioAnnotation[] = [
     linkLabel: "Open the case →",
   },
   {
-    phrase: "Executive Master's in Artificial Intelligence (GPA 4.0)",
-    title: "Executive Master's in AI",
+    phrase: "Master of Science in Artificial Intelligence (GPA 4.0)",
+    title: "Master of Science in Artificial Intelligence",
     rows: [
       { label: "When", value: "2025 to 2026, completed" },
       { label: "Standing", value: "GPA 4.0" },
