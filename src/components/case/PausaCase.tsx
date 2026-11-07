@@ -5,19 +5,25 @@ import Nav from "@/components/Nav";
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
 import {
+  CALLOUTS,
   CONVERSATION,
+  EMPATHY,
   FACTS,
+  GLANCE,
   HIFI,
+  HIFI_WEB,
   HERO,
   KEY_DECISIONS,
   NEIGHBORS,
   NEXT_STEPS,
   PROBLEM,
+  RECORD,
   RESEARCH,
   UX_HIFI,
   VISUAL_VOICE,
   WHAT_I_DID,
 } from "@/data/pausa";
+import { recordDisplay, recordSans, recordSerif } from "@/components/case/pausa-fonts";
 import { FOOTER_LINKS } from "@/data/landing";
 import { EASE_OUT, LineByLine, Reveal, useStagger, useMotionPref } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
@@ -26,12 +32,12 @@ import { ProjectRuler } from "@/components/ProjectRuler";
 
 /* ---------------------------------- tokens --------------------------------- */
 
-const BLUE = "#2F6F98";
-const INK = "#1B1F24";
-const DARK = "#141A21";
-const PAPER = "#F4EFE7";
-const CARD = "#FBF9F4";
-const HAIR = "#E3DCD0";
+const BLUE = "#2453A6";
+const INK = "#1B2A4E";
+const DARK = "#141B34";
+const PAPER = "#F4F5FC";
+const CARD = "#FFFFFF";
+const HAIR = "#E3E7F6";
 
 const DISPLAY = { fontFamily: "var(--font-display)" } as const;
 const BODY = { fontFamily: "var(--font-body)" } as const;
@@ -125,12 +131,12 @@ function SectionHead({
       <motion.div variants={item} className="max-w-[700px]">
         <p
           className="text-[11px] font-bold uppercase tracking-[1.32px]"
-          style={{ ...BODY, color: onDark ? "#A3C2DA" : BLUE }}
+          style={{ ...BODY, color: onDark ? "#A9BDF4" : BLUE }}
         >
           {label}
         </p>
         <h2
-          className={`mt-[13px] ${size === "lg" ? "text-[30px] md:text-[38px] leading-[1.15] tracking-[-0.38px]" : "text-[24px] md:text-[28px] leading-[1.15] tracking-[-0.28px]"} ${onDark ? "text-[#EEF1F4]" : "text-[#1B1F24]"}`}
+          className={`mt-[13px] ${size === "lg" ? "text-[30px] md:text-[38px] leading-[1.15] tracking-[-0.38px]" : "text-[24px] md:text-[28px] leading-[1.15] tracking-[-0.28px]"} ${onDark ? "text-[#EEF0FB]" : "text-[#1B2A4E]"}`}
           style={DISPLAY}
         >
           {heading}
@@ -139,7 +145,7 @@ function SectionHead({
       {note && (
         <motion.p
           variants={item}
-          className={`max-w-[320px] pb-1 text-[14px] leading-[1.55] ${onDark ? "text-[#B9C1CA]" : "text-[#5F6670]"}`}
+          className={`max-w-[320px] pb-1 text-[14px] leading-[1.55] ${onDark ? "text-[#C3C9E6]" : "text-[#5E6781]"}`}
           style={BODY}
         >
           {note}
@@ -160,7 +166,7 @@ function Hero() {
   const { group, item } = heroMotion(!!reduce);
 
   return (
-    <header className="bg-[#141A21]">
+    <header className="bg-[#141B34]">
       <div className="mx-auto w-full max-w-[1100px] px-6 pb-[70px] pt-[60px] lg:px-8">
         <motion.div
           variants={group}
@@ -169,49 +175,59 @@ function Hero() {
           className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between"
         >
           <motion.div variants={item} className="max-w-[556px]">
-            <p className="text-[13px] font-bold text-[#A3C2DA]" style={BODY}>
+            <p className="text-[13px] font-bold text-[#A9BDF4]" style={BODY}>
               {HERO.eyebrow}
             </p>
             <h1
-              className="mt-[26px] max-w-[451px] text-[clamp(40px,4.4vw,62px)] font-semibold leading-[1.04] tracking-[-1.24px] text-[#EEF1F4]"
+              className="mt-[26px] max-w-[451px] text-[clamp(40px,4.4vw,62px)] font-semibold leading-[1.04] tracking-[-1.24px] text-[#EEF0FB]"
               style={DISPLAY}
             >
               {HERO.title}
             </h1>
-            <p className="mt-[24px] text-[19px] leading-[1.55] text-[#C6CDD5]" style={BODY}>
+            <p className="mt-[24px] text-[19px] leading-[1.55] text-[#C3C9E6]" style={BODY}>
               {HERO.subtitle}
             </p>
             <motion.div
               variants={item}
-              className="mt-[40px] border-l-2 pl-[19px]"
-              style={{ borderColor: "#A3C2DA" }}
+              className="mt-[40px] border-l-[3px] pl-4"
+              style={{ borderColor: "#A9BDF4" }}
             >
-              <p className="text-[16px] font-semibold text-[#EEF1F4]" style={BODY}>
-                {HERO.role}
+              <p className="text-[16px] text-[#EEF0FB]" style={BODY}>
+                <span className="font-semibold">{HERO.role}</span>{" "}
+                <span className="font-normal text-[#C3C9E6]">{HERO.roleTail}</span>
               </p>
-              <p className="mt-[4px] text-[14px] text-[#9AA4AF]" style={BODY}>
+              <p className="mt-[4px] text-[14px] text-[#9CA5CC]" style={BODY}>
                 {HERO.roleNote}
               </p>
             </motion.div>
             <motion.a
               variants={item}
               href={HERO.cta.href}
-              className="mt-[48px] inline-flex h-[46px] items-center rounded-[999px] px-[22px] text-[15px] font-semibold text-[#1B1F24] transition-opacity hover:opacity-90"
-              style={{ ...BODY, background: PAPER }}
+              className="mt-[48px] inline-flex h-[46px] items-center rounded-[999px] bg-[#F5F6FC] px-[22px] text-[15px] font-semibold text-[#1B2A4E] transition-opacity hover:opacity-90"
+              style={BODY}
             >
               {HERO.cta.label}
             </motion.a>
           </motion.div>
-          <motion.div variants={item} className="mx-auto w-full max-w-[455px] shrink-0 lg:mx-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img loading="eager" fetchPriority="high"
-              src={HERO.fan}
-              alt="Pausa mobile screens fanned out"
-              width={911}
-              height={940}
-              className="w-full select-none"
-              draggable={false}
-            />
+          <motion.div variants={item} className="relative mx-auto w-full max-w-[640px] shrink-0 lg:mx-0">
+            <div className="relative w-full" style={{ aspectRatio: "640 / 455.758" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={HERO.devices.glow} alt="" aria-hidden className="pointer-events-none absolute select-none" style={{ left: 0, top: "6.58%", width: "100%", height: "96.54%" }} draggable={false} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={HERO.devices.floor} alt="" aria-hidden className="pointer-events-none absolute select-none" style={{ left: "5.39%", top: "71.82%", width: "89.22%", height: "10.97%" }} draggable={false} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={HERO.devices.laptopScreen} alt="" className="absolute rounded-[3px] object-cover" style={{ left: "10.91%", top: "4.68%", width: "75.15%", height: "65.96%" }} draggable={false} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={HERO.devices.laptopFrame} alt="Pausa web dashboard on a laptop, with the breathing loop on a phone" className="absolute inset-0 h-full w-full select-none" draggable={false} />
+              <div className="absolute overflow-hidden" style={{ left: "72.12%", top: "31.06%", width: "20.91%", height: "63.62%", borderRadius: "14.5%" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={HERO.devices.phoneScreen} alt="" className="absolute inset-0 h-full w-full object-cover" draggable={false} />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={HERO.devices.phoneGif} alt="" className="absolute inset-0 h-full w-full object-cover" draggable={false} />
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={HERO.devices.phoneFrame} alt="" aria-hidden className="pointer-events-none absolute inset-0 h-full w-full select-none" draggable={false} />
+            </div>
           </motion.div>
         </motion.div>
       </div>
@@ -225,7 +241,7 @@ function Facts() {
   const { group, item, viewport } = useStagger({ distance: 12, step: 0.05 });
 
   return (
-    <section data-index="At a glance" data-tone="dark" aria-label="At a glance" className="bg-[#10151B]">
+    <section aria-label="At a glance" className="bg-[#0F1530]">
       <div className="mx-auto w-full max-w-[1100px] px-6 lg:px-8">
         <motion.ul
           variants={group}
@@ -239,14 +255,14 @@ function Facts() {
               key={fact.label}
               variants={item}
               className="even:border-l [&:nth-child(n+3)]:border-t lg:border-t-0 lg:[&:not(:first-child)]:border-l flex items-start gap-[12px] py-[22px] lg:px-4"
-              style={{ borderColor: "#26303A" }}
+              style={{ borderColor: "#2A3358" }}
             >
               <Icon name={`icon-${fact.icon}`} size={20} className="mt-[2px] shrink-0" />
               <div>
-                <p className="text-[11px] uppercase tracking-[0.44px] text-[#9AA4AF]" style={BODY}>
+                <p className="text-[11px] uppercase tracking-[0.44px] text-[#9CA5CC]" style={BODY}>
                   {fact.label}
                 </p>
-                <p className="mt-[4px] text-[15px] font-semibold leading-[1.55] text-[#EEF1F4]" style={BODY}>
+                <p className="mt-[4px] text-[15px] font-semibold leading-[1.55] text-[#EEF0FB]" style={BODY}>
                   {fact.value}
                 </p>
               </div>
@@ -272,14 +288,14 @@ function Problem() {
         className="mt-[36px] grid gap-4 md:grid-cols-3"
       >
         {PROBLEM.cards.map((card) => (
-          <motion.article key={card.title} variants={item} className="rounded-[18px] bg-[#FBF9F4] p-[26px]">
-            <span className="flex h-[46px] w-[46px] items-center justify-center rounded-[12px] bg-[#DCE9F1]">
+          <motion.article key={card.title} variants={item} className="rounded-[18px] bg-[#FFFFFF] p-[26px]">
+            <span className="flex h-[46px] w-[46px] items-center justify-center rounded-[12px] bg-[#E4E9FB]">
               <Icon name={card.icon} size={20} />
             </span>
-            <h3 className="mt-[15px] text-[18px] font-semibold leading-[1.55] text-[#1B1F24]" style={DISPLAY}>
+            <h3 className="mt-[15px] text-[18px] font-semibold leading-[1.55] text-[#1B2A4E]" style={DISPLAY}>
               {card.title}
             </h3>
-            <p className="text-[14px] leading-[1.55] text-[#5F6670]" style={BODY}>
+            <p className="text-[14px] leading-[1.55] text-[#5E6781]" style={BODY}>
               {card.body}
             </p>
           </motion.article>
@@ -305,7 +321,7 @@ function WhatIDid() {
             animation would break variant inheritance for what follows. */}
         <motion.div
           aria-hidden
-          className="absolute left-0 right-0 top-[27px] hidden h-px bg-[#A3C2DA] lg:block"
+          className="absolute left-0 right-0 top-[27px] hidden h-px bg-[#A9BDF4] lg:block"
           style={{ transformOrigin: "left" }}
           initial={{ transform: "scaleX(0)" }}
           whileInView={{ transform: "scaleX(1)" }}
@@ -317,7 +333,7 @@ function WhatIDid() {
           initial="hidden"
           whileInView="visible"
           viewport={viewport}
-          className="relative grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6"
+          className="relative grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-7"
         >
           {WHAT_I_DID.steps.map((step) => (
             <motion.li key={step.title} variants={item} className="flex flex-col items-center gap-[12px] text-center">
@@ -325,10 +341,10 @@ function WhatIDid() {
                 <Icon name={step.icon} size={20} />
               </span>
               <div>
-                <p className="text-[15px] font-semibold text-[#1B1F24]" style={DISPLAY}>
+                <p className="text-[15px] font-semibold text-[#1B2A4E]" style={DISPLAY}>
                   {step.title}
                 </p>
-                <p className="mx-auto mt-[4px] max-w-[160px] text-[13px] leading-[1.4] text-[#5F6670]" style={BODY}>
+                <p className="mx-auto mt-[4px] max-w-[160px] text-[13px] leading-[1.4] text-[#5E6781]" style={BODY}>
                   {step.body}
                 </p>
               </div>
@@ -344,11 +360,11 @@ function WhatIDid() {
         className="mt-[46px] grid grid-cols-2 gap-4 lg:grid-cols-4"
       >
         {WHAT_I_DID.stats.map((stat) => (
-          <motion.div key={stat.label} variants={stats.item} className="rounded-[16px] bg-[#141A21] p-[22px] pb-[24px]">
-            <p className="text-[30px] font-semibold leading-none text-[#EEF1F4]" style={DISPLAY}>
+          <motion.div key={stat.label} variants={stats.item} className="rounded-[16px] bg-[#141B34] p-[22px] pb-[24px]">
+            <p className="text-[30px] font-semibold leading-none text-[#EEF0FB]" style={DISPLAY}>
               {stat.num}
             </p>
-            <p className="mt-[8px] text-[14px] leading-[1.55] text-[#B9C1CA]" style={BODY}>
+            <p className="mt-[8px] text-[14px] leading-[1.55] text-[#C3C9E6]" style={BODY}>
               {stat.label}
             </p>
           </motion.div>
@@ -371,7 +387,7 @@ function Research() {
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
-        className="mt-[36px] rounded-[22px] bg-[#FBF9F4] px-7 py-2"
+        className="mt-[36px] rounded-[22px] bg-[#FFFFFF] px-7 py-2"
       >
         {RESEARCH.rows.map((row, i) => (
           <motion.div
@@ -381,10 +397,10 @@ function Research() {
             style={{ borderTop: i > 0 ? `1px solid ${HAIR}` : undefined }}
           >
             <div>
-              <p className="text-[16px] leading-[1.55] text-[#1B1F24]" style={BODY}>
+              <p className="text-[16px] leading-[1.55] text-[#1B2A4E]" style={BODY}>
                 {row.finding}
               </p>
-              <p className="mt-[6px] text-[13px] text-[#5F6670]" style={BODY}>
+              <p className="mt-[6px] text-[13px] text-[#5E6781]" style={BODY}>
                 {row.citation}
               </p>
             </div>
@@ -410,7 +426,7 @@ function Conversation() {
       {/* The flow diagram is the argument of the section, so it gets one
           unhurried arrival of its own before the three paths below it. */}
       <Reveal distance={28}>
-        <div className="mt-[36px] overflow-hidden rounded-[22px] bg-[#FBF9F4] p-4">
+        <div className="mt-[36px] overflow-hidden rounded-[22px] bg-[#FFFFFF] p-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={CONVERSATION.flowImage}
@@ -437,14 +453,14 @@ function Conversation() {
               className="flex flex-col justify-between gap-[38px] rounded-[18px] p-[22px]"
               style={{ background: warm ? "#F3E4DA" : DARK }}
             >
-              <p className="text-[14px] leading-[1.55]" style={{ ...BODY, color: warm ? "#5B4136" : "#B9C1CA" }}>
+              <p className="text-[14px] leading-[1.55]" style={{ ...BODY, color: warm ? "#5B4136" : "#C3C9E6" }}>
                 {thumb.body}
               </p>
               <div className="flex items-center gap-[10px]">
                 <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[11px] text-[12px] font-semibold text-white" style={{ ...BODY, background: BLUE }}>
                   {thumb.num}
                 </span>
-                <p className="text-[14px] font-semibold" style={{ ...BODY, color: warm ? INK : "#EEF1F4" }}>
+                <p className="text-[14px] font-semibold" style={{ ...BODY, color: warm ? INK : "#EEF0FB" }}>
                   {thumb.title}
                 </p>
               </div>
@@ -495,7 +511,7 @@ function UxHifi() {
                     />
                   </div>
                 </Reveal>
-                <p className="text-[11px] tracking-[0.66px] text-[#5F6670]" style={BODY}>
+                <p className="text-[11px] tracking-[0.66px] text-[#5E6781]" style={BODY}>
                   {panel.tag.toUpperCase()}
                 </p>
               </div>
@@ -511,11 +527,11 @@ function UxHifi() {
         className="mt-6 grid gap-4 md:grid-cols-3"
       >
         {UX_HIFI.cards.map((card) => (
-          <motion.article key={card.title} variants={cards.item} className="rounded-[18px] bg-[#FBF9F4] p-[26px]">
-            <h3 className="text-[18px] font-semibold leading-[1.55] text-[#1B1F24]" style={DISPLAY}>
+          <motion.article key={card.title} variants={cards.item} className="rounded-[18px] bg-[#FFFFFF] p-[26px]">
+            <h3 className="text-[18px] font-semibold leading-[1.55] text-[#1B2A4E]" style={DISPLAY}>
               {card.title}
             </h3>
-            <p className="text-[14px] leading-[1.55] text-[#5F6670]" style={BODY}>
+            <p className="text-[14px] leading-[1.55] text-[#5E6781]" style={BODY}>
               {card.body}
             </p>
           </motion.article>
@@ -529,7 +545,7 @@ function KeyDecisions() {
   const { group, item, viewport } = useStagger({ distance: 18, step: 0.07 });
 
   return (
-    <section className="mt-[90px] bg-[#141A21]">
+    <section className="mt-[90px] bg-[#141B34]">
       <div className="mx-auto w-full max-w-[1100px] px-6 py-[90px] lg:px-8">
         <SectionHead onDark label={KEY_DECISIONS.label} heading={KEY_DECISIONS.heading} />
         <motion.div
@@ -543,7 +559,7 @@ function KeyDecisions() {
             <motion.article
               key={decision.title}
               variants={item}
-              className="flex items-start gap-[24px] rounded-[20px] bg-[#1E2630] p-[26px]"
+              className="flex items-start gap-[24px] rounded-[20px] bg-[#1C2744] p-[26px]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img loading="lazy" decoding="async"
@@ -556,10 +572,10 @@ function KeyDecisions() {
                 className="shrink-0 select-none"
               />
               <div>
-                <h3 className="text-[18px] font-semibold leading-[1.55] text-[#EEF1F4]" style={DISPLAY}>
+                <h3 className="text-[18px] font-semibold leading-[1.55] text-[#EEF0FB]" style={DISPLAY}>
                   {decision.title}
                 </h3>
-                <p className="mt-[5px] text-[14px] leading-[1.55] text-[#B9C1CA]" style={BODY}>
+                <p className="mt-[5px] text-[14px] leading-[1.55] text-[#C3C9E6]" style={BODY}>
                   {decision.body}
                 </p>
               </div>
@@ -578,14 +594,15 @@ function VisualVoice() {
 
   return (
     <section className="mx-auto grid w-full max-w-[1100px] gap-10 px-6 pt-[90px] lg:grid-cols-2 lg:px-8">
+      <div data-index="Visual system">
       <Reveal distance={22}>
         <p className="text-[11px] font-bold uppercase tracking-[1.32px]" style={{ ...BODY, color: BLUE }}>
           {VISUAL_VOICE.visual.label}
         </p>
-        <h2 className="mt-[12px] text-[28px] font-semibold leading-[1.15] tracking-[-0.28px] text-[#1B1F24]" style={DISPLAY}>
+        <h2 className="mt-[12px] text-[28px] font-semibold leading-[1.15] tracking-[-0.28px] text-[#1B2A4E]" style={DISPLAY}>
           {VISUAL_VOICE.visual.heading}
         </h2>
-        <div className="mt-[26px] rounded-[18px] bg-[#141A21] p-[10px]">
+        <div className="mt-[26px] rounded-[18px] bg-[#141B34] p-[10px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={VISUAL_VOICE.visual.webshot}
@@ -597,17 +614,19 @@ function VisualVoice() {
         </div>
         <div className="mt-[16px] flex flex-wrap gap-[8px]">
           {VISUAL_VOICE.visual.chips.map((chip) => (
-            <span key={chip} className="rounded-[999px] bg-[#DCE9F1] px-[12px] py-[6px] text-[12px] font-semibold text-[#2F6F98]" style={BODY}>
+            <span key={chip} className="rounded-[999px] bg-[#E4E9FB] px-[12px] py-[6px] text-[12px] font-semibold text-[#2453A6]" style={BODY}>
               {chip}
             </span>
           ))}
         </div>
       </Reveal>
+      </div>
+      <div data-index="Voice">
       <Reveal delay={0.08} distance={22}>
         <p className="text-[11px] font-bold uppercase tracking-[1.32px]" style={{ ...BODY, color: BLUE }}>
           {VISUAL_VOICE.voice.label}
         </p>
-        <h2 className="mt-[12px] text-[28px] font-semibold leading-[1.15] tracking-[-0.28px] text-[#1B1F24]" style={DISPLAY}>
+        <h2 className="mt-[12px] text-[28px] font-semibold leading-[1.15] tracking-[-0.28px] text-[#1B2A4E]" style={DISPLAY}>
           {VISUAL_VOICE.voice.heading}
         </h2>
         <motion.div
@@ -643,6 +662,7 @@ function VisualVoice() {
           })}
         </motion.div>
       </Reveal>
+      </div>
     </section>
   );
 }
@@ -654,20 +674,20 @@ function Hifi() {
       {/* Nine screens on one scroller, so the strip arrives as a single object.
           Staggering nine phones here would read as a slot machine. */}
       <Reveal distance={20}>
-        <div className="mt-[36px] flex gap-[12px] overflow-x-auto pb-4">
+        <div className="mt-[36px] flex flex-wrap justify-center gap-x-6 gap-y-8">
           {HIFI.screens.map((screen) => (
-            <figure key={screen.caption} className="w-[104px] shrink-0">
+            <figure key={screen.caption} className="w-[148px] sm:w-[188px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={screen.image}
                 alt={`Pausa ${screen.caption} screen`}
-                width={104}
-                height={224}
+                width={188}
+                height={407}
                 loading="lazy"
                 draggable={false}
-                className="w-[104px] select-none"
+                className="h-auto w-full select-none rounded-[22px] border border-[#E3E7F6] shadow-[0_10px_24px_rgba(61,79,161,0.14)]"
               />
-              <figcaption className="mt-[8px] text-[12px] text-[#5F6670]" style={BODY}>
+              <figcaption className="mt-[8px] text-[12px] text-[#5E6781]" style={BODY}>
                 {screen.caption}
               </figcaption>
             </figure>
@@ -695,10 +715,10 @@ function NextSteps() {
           const blue = stat.tone === "blue";
           return (
             <motion.div key={stat.label} variants={item} className="rounded-[18px] p-[24px]" style={{ background: blue ? BLUE : DARK }}>
-              <p className="text-[40px] font-semibold leading-none text-[#EEF1F4]" style={DISPLAY}>
+              <p className="text-[40px] font-semibold leading-none text-[#EEF0FB]" style={DISPLAY}>
                 {stat.num}
               </p>
-              <p className="mt-[14px] text-[13px]" style={{ ...BODY, color: blue ? "#C6D4DF" : "#C6D4DF" }}>
+              <p className="mt-[14px] text-[13px]" style={{ ...BODY, color: blue ? "#C5CDEC" : "#C5CDEC" }}>
                 {stat.label}
               </p>
             </motion.div>
@@ -709,7 +729,7 @@ function NextSteps() {
           exists — so it gets the same line-by-line arrival as the homepage
           pull-quote rather than arriving as one block. */}
       <Reveal className="mt-8" distance={18}>
-        <figure className="flex gap-[24px] rounded-[20px] bg-[#EAE3D8] p-[40px]">
+        <figure className="flex gap-[24px] rounded-[20px] bg-[#E7EAF6] p-[40px]">
           <span aria-hidden className="text-[54px] font-bold leading-[0.8]" style={{ ...DISPLAY, color: BLUE }}>
             “
           </span>
@@ -720,18 +740,18 @@ function NextSteps() {
               <LineByLine
                 text={NEXT_STEPS.quote.text}
                 delay={0.12}
-                className="text-[20px] font-medium leading-[1.4] text-[#1B1F24] md:text-[22px]"
+                className="text-[20px] font-medium leading-[1.4] text-[#1B2A4E] md:text-[22px]"
                 style={DISPLAY}
               />
             </blockquote>
-            <figcaption className="mt-[16px] text-[13px] text-[#5F6670]" style={BODY}>
+            <figcaption className="mt-[16px] text-[13px] text-[#5E6781]" style={BODY}>
               {NEXT_STEPS.quote.source}
             </figcaption>
           </figure>
         </figure>
       </Reveal>
       <Reveal className="mt-6" distance={12}>
-        <p className="max-w-[900px] text-[12px] leading-[1.55] text-[#5F6670]" style={BODY}>
+        <p className="max-w-[900px] text-[12px] leading-[1.55] text-[#5E6781]" style={BODY}>
           {NEXT_STEPS.disclaimer}
         </p>
       </Reveal>
@@ -745,10 +765,10 @@ function MoreProjects() {
   return (
     <section data-index="More projects" data-tone="light" className="mx-auto w-full max-w-[1100px] px-6 pb-[90px] pt-[90px] lg:px-8">
       <div className="flex items-center justify-between">
-        <p className="text-[12px] tracking-[1.2px] text-[#5F6670]" style={BODY}>
+        <p className="text-[12px] tracking-[1.2px] text-[#5E6781]" style={BODY}>
           MORE PROJECTS
         </p>
-        <Link href="/projects" className="border-b border-[#1B1F24] pb-[2px] text-[14px] font-semibold text-[#1B1F24]" style={BODY}>
+        <Link href="/projects" className="border-b border-[#1B2A4E] pb-[2px] text-[14px] font-semibold text-[#1B2A4E]" style={BODY}>
           All work
         </Link>
       </div>
@@ -765,7 +785,7 @@ function MoreProjects() {
           <motion.div key={n.title} variants={item}>
             <Link
               href={n.href}
-              className="case-card group flex items-center gap-[20px] rounded-[18px] bg-[#FBF9F4] p-[14px]"
+              className="case-card group flex items-center gap-[20px] rounded-[18px] bg-[#FFFFFF] p-[14px]"
             >
               <span
                 className="relative h-[110px] w-[150px] shrink-0 overflow-hidden rounded-[12px]"
@@ -781,13 +801,13 @@ function MoreProjects() {
                 />
               </span>
               <span className="min-w-0">
-                <span className="block text-[12px] text-[#5F6670]" style={BODY}>
+                <span className="block text-[12px] text-[#5E6781]" style={BODY}>
                   {n.direction}
                 </span>
-                <span className="mt-[6px] block text-[22px] font-semibold leading-[1.55] text-[#1B1F24]" style={DISPLAY}>
+                <span className="mt-[6px] block text-[22px] font-semibold leading-[1.55] text-[#1B2A4E]" style={DISPLAY}>
                   {n.title}
                 </span>
-                <span className="block text-[14px] text-[#5F6670]" style={BODY}>
+                <span className="block text-[14px] text-[#5E6781]" style={BODY}>
                   {n.highlight}
                 </span>
               </span>
@@ -801,18 +821,18 @@ function MoreProjects() {
 
 function Footer() {
   return (
-    <footer data-index="Contact" data-tone="dark" className="bg-[#141A21]">
+    <footer data-index="Contact" data-tone="dark" className="bg-[#141B34]">
       {/* One quiet rise for the whole row — a footer is a sign-off, not a
           section, and per-link entrances would overplay it. */}
       <Reveal distance={16}>
         <div className="mx-auto flex w-full max-w-[1100px] flex-wrap items-center justify-between gap-6 px-6 py-[56px] lg:px-8">
           <div>
-            <p className="text-[32px] font-semibold tracking-[-0.32px] text-[#EEF1F4]" style={DISPLAY}>
+            <p className="text-[32px] font-semibold tracking-[-0.32px] text-[#EEF0FB]" style={DISPLAY}>
               Let&apos;s talk.
             </p>
             <a
               href="mailto:nmayacharya@gmail.com"
-              className="case-link mt-[10px] inline-block border-b border-[#56606B] pb-[2px] text-[16px] text-[#C6CDD5]"
+              className="case-link mt-[10px] inline-block border-b border-[#56606B] pb-[2px] text-[16px] text-[#C3C9E6]"
               style={BODY}
             >
               nmayacharya@gmail.com
@@ -825,7 +845,7 @@ function Footer() {
                 href={link.href}
                 target={link.href.startsWith("http") ? "_blank" : undefined}
                 rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                className="case-link text-[14px] text-[#EEF1F4]"
+                className="case-link text-[14px] text-[#EEF0FB]"
               >
                 {link.label}
               </a>
@@ -834,6 +854,284 @@ function Footer() {
         </div>
       </Reveal>
     </footer>
+  );
+}
+
+function Glance() {
+  return (
+    <section data-index="At a glance" className="mx-auto w-full max-w-[1100px] px-6 pt-[90px] lg:px-8">
+      <Reveal distance={24}>
+        <div
+          className="relative aspect-[1036/649] overflow-hidden rounded-[32px]"
+          style={{ backgroundImage: "linear-gradient(140deg, #F2F2FC 0%, #E0E5FA 39%, #D1D6F7 71%)" }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={GLANCE.glowA} alt="" aria-hidden className="pointer-events-none absolute select-none" style={{ left: "51.16%", top: "-32.36%", width: "67.57%", height: "92.45%" }} draggable={false} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={GLANCE.glowB} alt="" aria-hidden className="pointer-events-none absolute select-none" style={{ left: "-24.13%", top: "44.68%", width: "67.57%", height: "89.37%" }} draggable={false} />
+          <p
+            className="absolute whitespace-pre-line text-[clamp(18px,3.3vw,34px)] font-semibold leading-[1.18] tracking-[-0.4px] text-[#1C4593]"
+            style={{ ...DISPLAY, left: "4.63%", top: "6.78%" }}
+          >
+            {GLANCE.title}
+          </p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={GLANCE.web}
+            alt="Pausa web dashboard"
+            className="absolute rounded-[18px] object-cover shadow-[0_24px_50px_rgba(31,51,128,0.18)]"
+            style={{ left: "4.25%", top: "23.11%", width: "56.95%", height: "56.86%" }}
+            draggable={false}
+          />
+          <div className="absolute flex items-center justify-center" style={{ left: "56.47%", top: "16.02%", width: "25.5%", height: "79.02%" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={GLANCE.checkin} alt="Pausa check-in on a phone" className="h-[97%] w-[87%] -rotate-4 rounded-[30px] object-cover shadow-[0_24px_48px_rgba(31,51,128,0.24)]" draggable={false} />
+          </div>
+          <div className="absolute flex items-center justify-center" style={{ left: "71.62%", top: "12.02%", width: "24.69%", height: "78.48%" }}>
+            <div className="relative h-[97%] w-[90%] rotate-3 overflow-hidden rounded-[30px] shadow-[0_24px_48px_rgba(31,51,128,0.24)]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={GLANCE.breathe} alt="" className="absolute inset-0 h-full w-full object-cover" draggable={false} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={GLANCE.breatheGif} alt="Pausa box-breathing loop" className="absolute inset-0 h-full w-full object-cover" draggable={false} />
+            </div>
+          </div>
+          <div className="absolute flex flex-wrap gap-2" style={{ left: "4.25%", top: "83.36%", width: "50.7%" }}>
+            {GLANCE.chips.map((chip) => (
+              <span key={chip.label} className="inline-flex items-center gap-2 rounded-full bg-white/85 py-2 pl-3 pr-[13px] text-[13.5px] font-semibold text-[#1B2A4E] shadow-[0_4px_12px_rgba(31,51,128,0.08)]" style={BODY}>
+                <span className="size-[9px] rounded-full" style={{ background: chip.dot }} />
+                {chip.label}
+              </span>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+function TheRecord() {
+  const display = { fontFamily: recordDisplay.style.fontFamily } as const;
+  const sans = { fontFamily: recordSans.style.fontFamily } as const;
+  const serif = { fontFamily: recordSerif.style.fontFamily } as const;
+  const ink = "#1B2A4E";
+
+  return (
+    <section className="mx-auto w-full max-w-[1100px] px-6 pt-[90px] lg:px-8">
+      <Reveal distance={22}>
+        <article className="bg-[#F6F6FB] px-5 py-8 shadow-[0_18px_40px_rgba(41,31,10,0.12)] sm:px-10 sm:pt-[34px] sm:pb-[30px]">
+          <header className="flex items-end justify-between gap-4 border-b border-[#1B2A4E] pb-1.5">
+            <p className="max-w-[200px] text-[11px] font-medium leading-[16.5px] text-[#5E6781]" style={sans}>
+              {RECORD.kickerLeft[0]}
+              <br />
+              {RECORD.kickerLeft[1]}
+              <span className="italic">{RECORD.kickerLeft[2]}</span>
+            </p>
+            <h2 className="text-center text-[clamp(40px,6vw,64px)] font-black leading-none tracking-[-0.6px] text-[#1B2A4E]" style={display}>
+              {RECORD.title}
+            </h2>
+            <p className="max-w-[200px] text-right text-[11px] font-medium leading-[16.5px] text-[#5E6781]" style={sans}>
+              {RECORD.kickerRight[0]}
+              <br />
+              {RECORD.kickerRight[1]}
+            </p>
+          </header>
+          <p className="flex justify-between gap-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.9px] text-[#1B2A4E]" style={sans}>
+            {RECORD.dateline.map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+          </p>
+          <div className="mb-4 flex flex-col gap-0.5" aria-hidden>
+            <span className="h-px bg-[#1B2A4E]" />
+            <span className="h-px bg-[#1B2A4E]" />
+          </div>
+          <div className="grid gap-8 lg:grid-cols-[1.55fr_375px]">
+            <div className="lg:border-r lg:border-[#1B2A4E] lg:pr-6">
+              <p className="text-[11px] font-bold uppercase tracking-[1.5px] text-[#2453A6]" style={sans}>{RECORD.leadKicker}</p>
+              <h3 className="mt-2.5 text-[clamp(32px,4vw,44px)] font-black leading-[1.05] tracking-[-0.4px] text-[#1B2A4E]" style={display}>{RECORD.leadTitle}</h3>
+              <p className="mt-2.5 text-[19px] font-bold italic leading-[1.35] text-[#33405F]" style={display}>{RECORD.leadDeck}</p>
+              <div className="mt-4 grid gap-5 sm:grid-cols-2 sm:gap-[22px]">
+                {RECORD.leadColumns.map((column, i) => (
+                  <p key={column.slice(0, 12)} className="text-[14.5px] leading-[22.5px] text-[#1B2A4E] sm:border-l sm:border-[#D5DAEC] sm:pl-[22px] sm:first:border-0 sm:first:pl-0" style={serif}>
+                    {i === 0 ? <span className="font-black" style={display}>The</span> : null}
+                    {i === 0 ? column.slice(3) : column}
+                  </p>
+                ))}
+              </div>
+              <p className="mt-3 text-[10.5px] font-medium tracking-[0.4px] text-[#5E6781]" style={sans}>{RECORD.leadCite}</p>
+            </div>
+            <aside>
+              <div className="border-2 border-[#1B2A4E] bg-white/35 px-4 pb-4 pt-3.5">
+                <span className="inline-block border border-[#1B2A4E] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[1px]" style={sans}>{RECORD.lawTag}</span>
+                <h3 className="mt-2 text-[27px] font-black leading-[30px] text-[#1B2A4E]" style={display}>{RECORD.lawTitle}</h3>
+                <p className="mt-2 text-[14px] leading-[21px]" style={{ ...serif, color: ink }}>{RECORD.lawBody}</p>
+                <div className="mt-2.5 grid grid-cols-3 gap-3.5 border-t border-[#D5DAEC] pt-2.5">
+                  {RECORD.lawStats.map((stat) => (
+                    <div key={stat.label}>
+                      <p className="text-[30px] font-bold leading-8 text-[#1B2A4E]" style={display}>{stat.num}</p>
+                      <p className="text-[10.5px] font-medium uppercase tracking-[0.6px] text-[#5E6781]" style={sans}>{stat.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="my-3.5 flex flex-col gap-0.5" aria-hidden>
+                <span className="h-px bg-[#1B2A4E]" />
+                <span className="h-px bg-[#1B2A4E]" />
+              </div>
+              <p className="text-[20px] font-bold italic leading-[26px] text-[#1B2A4E]" style={display}>{RECORD.pull}</p>
+              <p className="mt-3 text-[10.5px] font-medium uppercase tracking-[0.6px] text-[#5E6781]" style={sans}>{RECORD.pullCite}</p>
+            </aside>
+          </div>
+          <div className="mt-[18px] grid border-t border-[#1B2A4E] md:grid-cols-3">
+            {RECORD.stories.map((story, i) => (
+              <div key={story.tag} className={`py-3.5 ${i < 2 ? "md:border-r md:border-[#1B2A4E] md:pr-[18px]" : ""} ${i > 0 ? "md:pl-[18px]" : ""}`}>
+                <span className="inline-block border border-[#1B2A4E] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[1px]" style={sans}>{story.tag}</span>
+                <h3 className="mt-2 text-[22px] font-bold leading-[25.3px] text-[#1B2A4E]" style={display}>{story.title}</h3>
+                <p className="mt-2 text-[13.8px] leading-[20.7px]" style={{ ...serif, color: ink }}>{story.body}</p>
+                <p className="mt-2 text-[10.5px] font-medium tracking-[0.4px] text-[#5E6781]" style={sans}>{story.cite}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-5 grid gap-5 bg-[#1B2A4E] px-[22px] py-[18px] text-[#F6F6FB] sm:grid-cols-[190px_1fr_1fr_1fr]">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[1.5px] text-[#A9BDF4]" style={sans}>So, in Pausa</p>
+              <p className="mt-1 text-[24px] font-black leading-[26.4px]" style={display}>{RECORD.soTitle}</p>
+            </div>
+            {RECORD.so.map((item) => (
+              <div key={item.label}>
+                <p className="text-[10.5px] font-bold uppercase tracking-[1px] text-[#A9BDF4]" style={sans}>{item.label}</p>
+                <p className="mt-1 text-[15px] leading-[21px]" style={serif}>{item.body}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-center text-[11px] font-medium text-[#5E6781]" style={sans}>{RECORD.footer}</p>
+        </article>
+      </Reveal>
+    </section>
+  );
+}
+
+function EmpathyMaps() {
+  return (
+    <section className="mx-auto w-full max-w-[1100px] px-6 pt-[90px] lg:px-8">
+      <SectionHead label={EMPATHY.label} heading={EMPATHY.heading} />
+      <div className="mt-8 flex flex-col gap-8">
+        {EMPATHY.people.map((person) => (
+          <Reveal key={person.name} distance={20}>
+            <div>
+              <div className="mb-3 flex flex-wrap items-baseline gap-3">
+                <h3 className="text-[20px] font-semibold text-[#1B2A4E]" style={DISPLAY}>{person.name}</h3>
+                <p className="text-[17px] font-semibold text-[#2453A6]" style={BODY}>{person.quote}</p>
+              </div>
+              <div className="overflow-x-auto">
+                <div className="relative h-[620px] w-[1036px] rounded-[22px] bg-white">
+                  <span className="absolute left-[517.2px] top-5 h-[580px] w-[1.6px] bg-[rgba(27,42,78,0.75)]" />
+                  <span className="absolute left-10 top-[309.2px] h-[1.6px] w-[956px] bg-[rgba(27,42,78,0.75)]" />
+                  {person.quadrants.map((quadrant) => (
+                    <div key={quadrant.key}>
+                      <p className="absolute text-[18px] font-bold text-[#1B2A4E]" style={{ ...DISPLAY, left: quadrant.labelLeft, top: quadrant.labelTop }}>
+                        {quadrant.label}
+                      </p>
+                      {quadrant.notes.map((note) => (
+                        <div
+                          key={note.text}
+                          className="absolute flex items-center justify-center"
+                          style={{ left: note.left, top: note.top, width: note.size, height: note.size }}
+                        >
+                          <p
+                            className="flex size-[112px] items-center justify-center px-2.5 text-center text-[13.5px] font-semibold leading-[18px] text-[#1B2A4E] shadow-[0_5px_10px_rgba(26,31,51,0.14)]"
+                            style={{ ...BODY, background: quadrant.color, borderRadius: 4, transform: `rotate(${note.rotate}deg)` }}
+                          >
+                            {note.text}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                  <img src={person.photo} alt="" width={150} height={150} className="absolute left-[443px] top-[235px] size-[150px] rounded-full object-cover shadow-[0_14px_34px_rgba(26,31,51,0.18)] ring-[8px] ring-white" draggable={false} />
+                  <p className="absolute top-[376px] inline-flex items-center gap-1.5 rounded-full bg-[#2453A6] px-3.5 py-[7px] text-white" style={{ left: person.badgeLeft }}>
+                    <span className="text-[14px] font-semibold" style={BODY}>{person.badge}</span>
+                    <span className="text-[12.5px] text-[#DDE4FB]" style={BODY}>{person.meta}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+      <Reveal distance={16} className="mt-5">
+        <div className="rounded-[22px] bg-white px-7 pb-2 pt-[22px]">
+          <p className="text-[11px] font-bold uppercase tracking-[1.32px] text-[#2453A6]" style={BODY}>{EMPATHY.changesLabel}</p>
+          {EMPATHY.changes.map((row, i) => (
+            <div key={row.from} className={`grid items-center gap-3 py-4 lg:grid-cols-[400px_23px_1fr] lg:gap-5 ${i < EMPATHY.changes.length - 1 ? "border-b border-[#E3E7F6]" : ""}`}>
+              <p className="text-[16px] leading-6 text-[#1B2A4E]" style={BODY}>{row.from}</p>
+              <span aria-hidden className="text-[20px] leading-none text-[#2453A6]">→</span>
+              <p className="text-[16px] font-semibold leading-6 text-[#2453A6]" style={BODY}>{row.to}</p>
+            </div>
+          ))}
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+function FeatureCallouts() {
+  return (
+    <section className="mx-auto w-full max-w-[1100px] px-6 pt-[90px] lg:px-8">
+      <SectionHead label={CALLOUTS.label} heading={CALLOUTS.heading} note={CALLOUTS.note} />
+      <div className="mt-9 overflow-x-auto">
+        <div className="relative h-[1270px] w-[1036px]">
+          {CALLOUTS.screens.map((screen) => {
+            const left = screen.side === "left";
+            const row = screen.caption === "Breathe" || screen.caption === "Support" ? 695 : 30;
+            const screenLeft = left ? 244 : 542;
+            return (
+              <div key={screen.caption}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={screen.image}
+                  alt={`Pausa ${screen.caption} screen`}
+                  width={250}
+                  height={541}
+                  className="absolute w-[250px] rounded-[26px] shadow-[0_14px_34px_rgba(61,79,161,0.16)]"
+                  style={{ left: screenLeft, top: row }}
+                  draggable={false}
+                />
+                <p className="absolute w-[250px] text-center text-[14px] text-[#5E6781]" style={{ ...BODY, left: screenLeft, top: row + 553 }}>
+                  {screen.caption}
+                </p>
+                {screen.notes.map((note) => (
+                  <div key={note.title} className="absolute w-[200px]" style={{ left: left ? 0 : 836, top: note.top }}>
+                    <p className="text-[15px] font-semibold leading-[21px] text-[#1B2A4E]" style={BODY}>{note.title}</p>
+                    <p className="mt-[3px] text-[13px] leading-[19px] text-[#5E6781]" style={BODY}>{note.body}</p>
+                    <span aria-hidden className="absolute top-[7px] size-1.5 rounded-full bg-[#2453A6]" style={left ? { right: -11 } : { left: -11 }} />
+                    <span aria-hidden className="absolute top-[9px] h-px bg-[#2453A6]" style={left ? { left: "100%", width: 56 } : { right: "100%", width: 56 }} />
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HifiWeb() {
+  return (
+    <section className="mx-auto w-full max-w-[1100px] px-6 pt-[90px] lg:px-8">
+      <SectionHead label={HIFI_WEB.label} heading={HIFI_WEB.heading} note={HIFI_WEB.note} />
+      <Reveal distance={20}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={HIFI_WEB.image}
+          alt="Pausa web today view: check-in, conversation, last 7 days and a breathing card"
+          width={1036}
+          height={648}
+          className="mt-[14px] w-full rounded-[24px] shadow-[0_18px_44px_rgba(61,79,161,0.16)]"
+          draggable={false}
+        />
+      </Reveal>
+    </section>
   );
 }
 
@@ -846,14 +1144,19 @@ export default function PausaCase() {
       <ProjectRuler />
       <Hero />
       <Facts />
+      <Glance />
       <Problem />
       <WhatIDid />
+      <TheRecord />
       <Research />
+      <EmpathyMaps />
       <Conversation />
       <UxHifi />
       <KeyDecisions />
       <VisualVoice />
       <Hifi />
+      <FeatureCallouts />
+      <HifiWeb />
       <NextSteps />
       <MoreProjects />
       <Footer />

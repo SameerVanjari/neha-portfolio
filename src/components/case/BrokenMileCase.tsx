@@ -1,7 +1,7 @@
 "use client";
 
 import Nav from "@/components/Nav";
-import { Fragment, useEffect, useRef, useState, type PointerEvent } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useMotionValue, useSpring, useTransform, type Variants } from "framer-motion";
 import {
@@ -207,10 +207,12 @@ function Vignette({ kind }: { kind: string }) {
 
 /* --------------------------------- sections -------------------------------- */
 
-function HeadsetHover() {
-  const frameRef = useRef<HTMLDivElement>(null);
+function HeadsetHover({ interactionRef }: { interactionRef: React.RefObject<HTMLElement | null> }) {
   const reduce = useMotionPref();
-  const [canTilt, setCanTilt] = useState(false);
+  const canTilt =
+    !reduce &&
+    typeof window !== "undefined" &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   const tiltX = useMotionValue(0);
   const tiltY = useMotionValue(0);
   const spring = { duration: 0.45, bounce: 0.12 } as const;
@@ -223,30 +225,30 @@ function HeadsetHover() {
   });
 
   useEffect(() => {
-    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    setCanTilt(fine && !reduce);
-  }, [reduce]);
-
-  function onMove(event: PointerEvent<HTMLDivElement>) {
-    const frame = frameRef.current;
-    if (!canTilt || !frame) return;
-    const box = frame.getBoundingClientRect();
-    const px = (event.clientX - box.left) / box.width - 0.5;
-    const py = (event.clientY - box.top) / box.height - 0.5;
-    tiltX.set(py * -7);
-    tiltY.set(px * 8);
-  }
-
-  function onLeave() {
-    tiltX.set(0);
-    tiltY.set(0);
-  }
+    const area = interactionRef.current;
+    if (!area) return;
+    const onMove = (event: globalThis.PointerEvent) => {
+      if (!canTilt) return;
+      const box = area.getBoundingClientRect();
+      const px = (event.clientX - box.left) / box.width - 0.5;
+      const py = (event.clientY - box.top) / box.height - 0.5;
+      tiltX.set(py * -7);
+      tiltY.set(px * 8);
+    };
+    const onLeave = () => {
+      tiltX.set(0);
+      tiltY.set(0);
+    };
+    area.addEventListener("pointermove", onMove, { passive: true });
+    area.addEventListener("pointerleave", onLeave);
+    return () => {
+      area.removeEventListener("pointermove", onMove);
+      area.removeEventListener("pointerleave", onLeave);
+    };
+  }, [canTilt, interactionRef, tiltX, tiltY]);
 
   return (
     <div
-      ref={frameRef}
-      onPointerMove={onMove}
-      onPointerLeave={onLeave}
       className="relative mx-auto flex w-full max-w-[500px] items-center justify-center self-center lg:mx-0 lg:justify-self-end"
     >
       <motion.div style={{ transform }} className="relative w-full">
@@ -268,6 +270,8 @@ function HeadsetHover() {
 
 function Hero() {
   const reduce = useMotionPref();
+  const heroRef = useRef<HTMLElement>(null);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
   const [motionPreferenceReady, setMotionPreferenceReady] = useState(false);
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
@@ -280,17 +284,39 @@ function Hero() {
   const { stage } = useLoadStage();
   const { group, item } = heroMotion(motionMode);
 
+  useEffect(() => {
+    const video = heroVideoRef.current;
+    if (!video) return;
+    if (reducedMotion) {
+      video.pause();
+      return;
+    }
+    void video.play().catch(() => {});
+  }, [reducedMotion]);
+
   return (
-    <section className="relative overflow-hidden bg-[#1C1518]">
+    <section ref={heroRef} className="relative overflow-hidden bg-[#1C1518]">
+      <video
+        ref={heroVideoRef}
+        className="pointer-events-none absolute inset-0 z-0 size-full object-cover opacity-35"
+        src={HERO.video}
+        poster={HERO.poster}
+        muted
+        loop
+        playsInline
+        autoPlay
+        preload="metadata"
+        aria-hidden
+      />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 z-[1]"
         style={{
           background:
             "linear-gradient(90deg, #1C1518 38%, rgba(28,21,24,0.55) 70%, rgba(28,21,24,0.2) 100%)",
         }}
       />
-      <div className="relative mx-auto grid min-h-[620px] w-full max-w-[1200px] items-center gap-8 px-6 pb-14 pt-[70px] lg:min-h-[720px] lg:grid-cols-[minmax(0,760px)_minmax(280px,1fr)] lg:px-0 lg:py-[110px]">
+      <div className="relative z-10 mx-auto grid min-h-[620px] w-full max-w-[1200px] items-center gap-8 px-6 pb-14 pt-[70px] lg:min-h-[720px] lg:grid-cols-[minmax(0,760px)_minmax(280px,1fr)] lg:px-0 lg:py-[110px]">
         <motion.div
           variants={group}
           initial="hidden"
@@ -341,7 +367,7 @@ function Hero() {
           </motion.div>
         </motion.div>
         <motion.div variants={group} initial="hidden" animate={stage === "loading" ? "hidden" : "visible"}>
-          <HeadsetHover />
+          <HeadsetHover interactionRef={heroRef} />
         </motion.div>
       </div>
       <span
@@ -719,6 +745,7 @@ function World3D() {
 
   return (
     <section className="mx-auto grid w-full max-w-[1200px] gap-10 px-6 pb-10 pt-[100px] lg:grid-cols-2 lg:px-0 lg:pt-[140px]">
+      <div data-index="3D world">
       <Reveal distance={22}>
         <p className="text-[13px] font-bold uppercase tracking-[1.56px]" style={{ ...BODY, color: RED }}>
           {WORLD_3D.label}
@@ -741,6 +768,8 @@ function World3D() {
           ))}
         </div>
       </Reveal>
+      </div>
+      <div data-index="Sound">
       <Reveal delay={0.08} distance={22}>
         <p className="text-[13px] font-bold uppercase tracking-[1.56px]" style={{ ...BODY, color: RED }}>
           {SOUND.label}
@@ -781,6 +810,7 @@ function World3D() {
           })}
         </motion.div>
       </Reveal>
+      </div>
     </section>
   );
 }

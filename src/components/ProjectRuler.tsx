@@ -49,12 +49,35 @@ function bgTone(bg: string): Tone | null {
   return lum < 0.45 ? "dark" : "light";
 }
 
-/** Prefer the short eyebrow sitting directly above a heading; else the heading. */
+function shortLabel(node: Element | null): string {
+  const text = node?.textContent?.replace(/\s+/g, " ").trim() ?? "";
+  return text.length > 0 && text.length <= 48 ? text : "";
+}
+
+/** Prefer the short eyebrow above a heading, even when a wrapper sits between them. */
 function labelForHeading(el: HTMLElement): string {
-  const prev = el.previousElementSibling as HTMLElement | null;
-  const prevText = prev?.textContent?.replace(/\s+/g, " ").trim() ?? "";
-  if (prevText && prevText.length <= 48) return prevText;
+  const direct = shortLabel(el.previousElementSibling);
+  if (direct) return direct;
+  let parent = el.parentElement;
+  for (let depth = 0; depth < 4 && parent; depth += 1) {
+    const fromParent = shortLabel(parent.previousElementSibling);
+    if (fromParent) return fromParent;
+    parent = parent.parentElement;
+  }
   return el.textContent?.replace(/\s+/g, " ").trim() ?? "";
+}
+
+/**
+ * A heading tick should land on its section. Skip that when the section holds
+ * more than one heading, or an explicit data-index, so paired columns stay separate.
+ */
+function anchorFor(el: HTMLElement): HTMLElement {
+  if (el.hasAttribute("data-index")) return el;
+  const section = el.closest("section");
+  if (!(section instanceof HTMLElement)) return el;
+  if (section.querySelectorAll("h2").length !== 1) return el;
+  if (section.querySelector("[data-index]")) return el;
+  return section;
 }
 
 function discover(): RulerItem[] {
@@ -65,7 +88,7 @@ function discover(): RulerItem[] {
 
   const headings = Array.from(main.querySelectorAll<HTMLElement>("h2"))
     .filter((h) => !h.closest("[data-index]") && !h.closest("nav") && !h.closest("[aria-hidden='true']"))
-    .map((h) => ({ el: h, label: labelForHeading(h) }));
+    .map((h) => ({ el: anchorFor(h), label: labelForHeading(h) }));
 
   return [...marks, ...headings]
     .filter((i) => i.label)

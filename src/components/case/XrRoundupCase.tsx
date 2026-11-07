@@ -240,7 +240,7 @@ export default function XrRoundupCase() {
         </div>
       </section>
 
-      <section style={{ background: INK }}>
+      <section data-index="At a glance" style={{ background: INK }}>
         <div className={`${CONTENT} ${GUTTER} grid gap-6 py-6 sm:grid-cols-2 lg:grid-cols-4`}>
           {FACTS.map((fact, i) => (
             <div
@@ -261,7 +261,7 @@ export default function XrRoundupCase() {
         </div>
       </section>
 
-      <section className={`${CONTENT} ${GUTTER} flex flex-col gap-10 py-24`}>
+      <section data-index="Overview" className={`${CONTENT} ${GUTTER} flex flex-col gap-10 py-24`}>
         <Reveal>
           <Eyebrow>Overview</Eyebrow>
           <h2 className="mt-3 max-w-[640px] text-[clamp(32px,4vw,38px)] font-semibold leading-[1.15]" style={DISPLAY}>
@@ -283,8 +283,7 @@ export default function XrRoundupCase() {
             </p>
           </div>
         </div>
-        <div>
-          <Eyebrow>Three constraints from the room</Eyebrow>
+        <div data-index="Three constraints from the room">
           <div className="mt-4 grid gap-4 md:grid-cols-3">
             {CONSTRAINTS.map((item) => (
               <article key={item.title} className="rounded-[18px] bg-white px-6 pb-[26px] pt-6">
@@ -300,7 +299,7 @@ export default function XrRoundupCase() {
         </div>
       </section>
 
-      <section className={`${CONTENT} ${GUTTER} pb-24`}>
+      <section data-index="01 · Ideation" className={`${CONTENT} ${GUTTER} pb-24`}>
         <div className="grid items-end gap-6 lg:grid-cols-[1fr_340px]">
           <div>
             <Eyebrow>01 · Ideation</Eyebrow>
@@ -342,7 +341,7 @@ export default function XrRoundupCase() {
           </div>
         </div>
 
-        <div className="mt-12">
+        <div data-index="Choosing the platform" className="mt-12">
           <Eyebrow>Choosing the platform</Eyebrow>
           <div className="mt-4 overflow-hidden rounded-[18px] bg-white">
             <div className="hidden grid-cols-[1.1fr_1.6fr_1.3fr] gap-4 px-6 py-4 text-[11px] font-bold tracking-[0.08em] text-[#a8929f] md:grid" style={BODY}>
@@ -372,7 +371,7 @@ export default function XrRoundupCase() {
         </div>
       </section>
 
-      <section className="py-24" style={{ background: NAVY }}>
+      <section data-index="02 · The filters" className="py-24" style={{ background: NAVY }}>
         <div className={`${CONTENT} ${GUTTER}`}>
           <div className="grid items-end gap-6 lg:grid-cols-[1fr_340px]">
             <div>
@@ -403,7 +402,7 @@ export default function XrRoundupCase() {
         </div>
       </section>
 
-      <section className={`${CONTENT} ${GUTTER} py-24`}>
+      <section data-index="03 · Interaction" className={`${CONTENT} ${GUTTER} py-24`}>
         <Eyebrow>03 · Interaction</Eyebrow>
         <div className="mt-3 grid items-end gap-6 lg:grid-cols-[1fr_340px]">
           <h2 className="max-w-[640px] text-[clamp(32px,4vw,42px)] font-semibold leading-[1.1]" style={DISPLAY}>
@@ -439,7 +438,7 @@ export default function XrRoundupCase() {
         </div>
       </section>
 
-      <section className={`${CONTENT} ${GUTTER} pb-24`}>
+      <section data-index="04 · The exception" className={`${CONTENT} ${GUTTER} pb-24`}>
         <Eyebrow>04 · The exception</Eyebrow>
         <h2 className="mt-3 max-w-[640px] text-[clamp(32px,4vw,42px)] font-semibold leading-[1.1]" style={DISPLAY}>
           When the camera says no, nobody hits a dead end.
@@ -474,7 +473,7 @@ export default function XrRoundupCase() {
         </div>
       </section>
 
-      <section className={`${CONTENT} ${GUTTER} pb-24`}>
+      <section data-index="05 · Sketch to screen" className={`${CONTENT} ${GUTTER} pb-24`}>
         <Eyebrow>05 · Sketch to screen</Eyebrow>
         <h2 className="mt-3 max-w-[640px] text-[clamp(32px,4vw,42px)] font-semibold leading-[1.1]" style={DISPLAY}>
           The NCXR logo became the interface.
@@ -512,7 +511,7 @@ export default function XrRoundupCase() {
         </div>
       </section>
 
-      <section className={`${CONTENT} ${GUTTER} pb-24`}>
+      <section data-index="Results" className={`${CONTENT} ${GUTTER} pb-24`}>
         <Eyebrow>Results</Eyebrow>
         <h2 className="mt-3 max-w-[640px] text-[clamp(32px,4vw,42px)] font-semibold leading-[1.1]" style={DISPLAY}>
           Live at XR Roundup, Oct 28. Everyone had fun.
@@ -573,7 +572,7 @@ export default function XrRoundupCase() {
         </p>
       </section>
 
-      <section className={`${CONTENT} ${GUTTER} border-t border-[#eadfd6] py-16`}>
+      <section data-index="More projects" className={`${CONTENT} ${GUTTER} border-t border-[#eadfd6] py-16`}>
         <div className="flex items-center justify-between">
           <p className="text-[13px] font-bold uppercase tracking-[0.08em] text-[#a8929f]" style={BODY}>More projects</p>
           <Link href="/projects" className="text-[15px] font-semibold" style={BODY}>All work</Link>
@@ -598,7 +597,7 @@ export default function XrRoundupCase() {
         </div>
       </section>
 
-      <footer id="contact" style={{ background: INK }}>
+      <footer id="contact" data-index="Contact" style={{ background: INK }}>
         <div className={`${CONTENT} ${GUTTER} flex flex-col gap-8 py-14 md:flex-row md:items-center md:justify-between`}>
           <div>
             <p className="text-[32px] font-semibold text-[#f4f7fc]" style={DISPLAY}>Let’s talk.</p>
