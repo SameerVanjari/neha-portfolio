@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useRef, useState } from "react";
 import { THEMES, type ThemeId } from "@/data/themes";
 import { HERO_LENSES } from "@/data/landing";
-import { EASE_OUT, LineByLine, useMotionPref } from "@/components/motion/reveal";
+import { useMotionPref } from "@/components/motion/reveal";
+import { gsap, useGSAP } from "@/hooks/use-gsap";
 import { useLoadStage } from "@/components/LoadStage";
 import IslandNav from "@/components/IslandNav";
 
@@ -18,42 +18,106 @@ const BODY = { fontFamily: "var(--font-body)" } as const;
 
 export default function HeroLens() {
   const [lens, setLens] = useState<ThemeId>("xr");
-  /** Set while a lens change is mid-swap; cleared once the new copy is in. */
-  const [pending, setPending] = useState<ThemeId | null>(null);
+  const rootRef = useRef<HTMLElement>(null);
+  const eyebrowRef = useRef<HTMLParagraphElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const supportRef = useRef<HTMLParagraphElement>(null);
+  const actionsRef = useRef<HTMLDivElement>(null);
+  const islandRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const introDoneRef = useRef(false);
   const reduce = useMotionPref();
   // The copy is held back until the preloader has cleared, so it animates in
   // front of the viewer instead of playing out unseen behind the overlay.
   const { stage } = useLoadStage();
 
   const hold = stage === "loading";
-  const content = HERO_LENSES[pending ?? lens];
-  const blur = reduce ? 0 : 10;
-  const hide = reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(16px)", filter: "blur(10px)" };
-  const shown = { opacity: 1, transform: "translateY(0px)", filter: "blur(0px)" };
-  const paused = hold || !!pending;
+  const content = HERO_LENSES[lens];
+  const ready = !hold;
+
+  const startVideo = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.playbackRate = 0.75;
+    void video.play().catch(() => {
+      // Autoplay is muted, but keep the hero usable if a browser still blocks it.
+    });
+  };
+
+  const revealVideo = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    gsap.to(video, { autoAlpha: 1, duration: 0.85, ease: "power2.out" });
+  };
+
+  useGSAP(() => {
+    const steps = [eyebrowRef.current, headlineRef.current, supportRef.current, actionsRef.current, islandRef.current].filter(
+      Boolean,
+    ) as HTMLElement[];
+    if (!steps.length) return;
+
+    gsap.set(steps, { autoAlpha: 0, y: 24, filter: "blur(10px)" });
+    if (!ready) return;
+
+    if (reduce) {
+      gsap.set(steps, { autoAlpha: 1, y: 0, filter: "blur(0px)" });
+      introDoneRef.current = true;
+      startVideo();
+      return;
+    }
+
+    const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+    timeline
+      .to(eyebrowRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.48 }, 0.08)
+      .to(headlineRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.64 }, 0.18)
+      .to(supportRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.52 }, 0.38)
+      .to(actionsRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.52 }, 0.58)
+      .to(islandRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.52 }, 0.82)
+      .call(() => {
+        introDoneRef.current = true;
+        startVideo();
+      });
+  }, { scope: rootRef, dependencies: [ready, reduce], revertOnUpdate: true });
+
+  useGSAP(() => {
+    if (!ready || !introDoneRef.current || reduce) return;
+    const copy = [eyebrowRef.current, headlineRef.current, supportRef.current, actionsRef.current].filter(
+      Boolean,
+    ) as HTMLElement[];
+    gsap.set(copy, { autoAlpha: 0, y: 16, filter: "blur(8px)" });
+    gsap.to(copy, {
+      autoAlpha: 1,
+      y: 0,
+      filter: "blur(0px)",
+      duration: 0.48,
+      stagger: 0.08,
+      ease: "power3.out",
+    });
+  }, { scope: rootRef, dependencies: [lens], revertOnUpdate: true });
 
   // The switcher itself stays instant — a control the user just pressed must
   // answer immediately. Only the copy it changes gets a 160ms dip (blury, not
   // flat) so the change reads as deliberate rather than as a flicker; the new
   // copy then arrives line by line out of the dip.
   const choose = (id: ThemeId) => {
-    if (id === (pending ?? lens)) return;
-    if (reduce) {
-      setLens(id);
-      return;
-    }
-    setPending(id);
+    if (id === lens) return;
+    setLens(id);
   };
 
   return (
-    <section id="hero" aria-label="Introduction" className="relative overflow-hidden bg-[#140066]">
-      {/* Static placeholder graphic, retained as the hero visual field. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/hero-wireframe.svg"
-        alt=""
+    <section ref={rootRef} id="hero" aria-label="Introduction" className="relative overflow-hidden bg-[#140066]">
+      {/* The video is deliberately constrained to the right panel. It starts
+          hidden and reveals its first playable frame after the copy timeline. */}
+      <video
+        ref={videoRef}
+        src="/hero-video-home.mp4"
+        onPlaying={revealVideo}
+        muted
+        loop
+        playsInline
+        preload="metadata"
         aria-hidden
-        className="pointer-events-none absolute inset-y-0 right-0 h-full w-full object-cover object-center lg:w-[47%]"
+        className="pointer-events-none absolute inset-y-0 right-0 h-full w-[48%] object-cover object-center opacity-0"
       />
       {/* Copy protection over the placeholder field. */}
       <div
@@ -66,69 +130,17 @@ export default function HeroLens() {
           and the whole hero fits the viewport with scroll at the top. */}
       <div className="relative mx-auto flex min-h-[100svh] w-full max-w-[1200px] flex-col px-6 pb-[64px] pt-[104px] md:pb-[120px] md:pt-[148px] lg:h-[100svh] lg:min-h-[720px] lg:px-0 lg:pb-[64px]">
         <div className="flex max-w-[660px] flex-col items-start gap-[26px] md:gap-[36px] lg:my-auto">
-            {/* Lens copy — dipped out while a lens change is mid-swap, then
-                remounted line by line (keyed by the incoming eyebrow) */}
-            <motion.div
-              animate={
-                pending
-                  ? { opacity: 0, transform: "translateY(-8px)", filter: "blur(8px)" }
-                  : hold
-                    ? { opacity: 0, transform: "translateY(16px)", filter: "blur(10px)" }
-                    : { opacity: 1, transform: "translateY(0px)", filter: "blur(0px)" }
-              }
-              transition={{ duration: pending ? 0.16 : reduce ? 0.3 : 0.6, ease: EASE_OUT }}
-              onAnimationComplete={() => {
-                if (pending) {
-                  setLens(pending);
-                  setPending(null);
-                }
-              }}
-              className="flex flex-col items-start gap-[24px] md:gap-[34px]"
-            >
-              {/* keyed by the eyebrow so each swap re-runs the defocus entrance */}
-              <motion.p
-                key={content.eyebrow}
-                initial={reduce ? { opacity: 0 } : hide}
-                animate={hold ? (reduce ? { opacity: 0 } : hide) : reduce ? { opacity: 1 } : shown}
-                transition={{ duration: reduce ? 0.3 : 0.6, delay: 0.04, ease: EASE_OUT }}
-                className="text-[13px] font-medium uppercase tracking-[1.82px] text-[#CFC8BD]"
-                style={BODY}
-              >
+              <p ref={eyebrowRef} className="text-[13px] font-medium uppercase tracking-[1.82px] text-[#CFC8BD]" style={BODY}>
                 {content.eyebrow}
-              </motion.p>
-              <h1
-                className="text-[clamp(38px,10.8vw,68px)] font-semibold leading-[1.04] tracking-[-1.5px] text-[#F2EEE7] sm:tracking-[-1.7px]"
-                style={DISPLAY}
-              >
-                <LineByLine
-                  key={content.headline}
-                  text={content.headline}
-                  delay={0.12}
-                  step={0.08}
-                  distance={22}
-                  blur={blur}
-                  paused={paused}
-                />
-              </h1>
-              <p className="max-w-[580px] text-[16px] font-normal leading-[1.6] text-[#E4DED4] sm:text-[19px]" style={BODY}>
-                <LineByLine
-                  key={content.support}
-                  text={content.support}
-                  delay={0.26}
-                  step={0.06}
-                  distance={16}
-                  blur={blur}
-                  paused={paused}
-                />
               </p>
-            </motion.div>
+              <h1 ref={headlineRef} className="text-[clamp(38px,10.8vw,68px)] font-semibold leading-[1.04] tracking-[-1.5px] text-[#F2EEE7] sm:tracking-[-1.7px]" style={DISPLAY}>
+                {content.headline}
+              </h1>
+              <p ref={supportRef} className="max-w-[580px] text-[16px] font-normal leading-[1.6] text-[#E4DED4] sm:text-[19px]" style={BODY}>
+                {content.support}
+              </p>
 
-            <motion.div
-              initial={reduce ? { opacity: 0 } : hide}
-              animate={hold ? hide : shown}
-              transition={{ duration: reduce ? 0.3 : 0.6, delay: 0.46, ease: EASE_OUT }}
-              className="flex flex-wrap items-center gap-[14px] pt-[8px]"
-            >
+            <div ref={actionsRef} className="flex flex-wrap items-center gap-[14px] pt-[8px]">
               <a
                 href="#work"
                 className="inline-flex h-[52px] items-center justify-center rounded-[999px] bg-[#F2EEE7] px-[28px] text-[15px] font-semibold text-[#17161B] transition-opacity hover:opacity-90"
@@ -143,20 +155,21 @@ export default function HeroLens() {
               >
                 Download Resume
               </a>
-            </motion.div>
+            </div>
           </div>
 
           {/* The island's home: the hero's "Explore by lens" spot — in flow on
               phones, and centered 2rem from the hero's bottom on desktop. */}
           <div
             id="lens-anchor"
+            ref={islandRef}
             className="mt-auto pt-[56px] md:pt-[88px] lg:absolute lg:bottom-8 lg:left-1/2 lg:mt-0 lg:pt-0 lg:-translate-x-1/2"
           >
             <IslandNav
-              activeId={pending ?? lens}
+              activeId={lens}
               onSelect={choose}
-              theme={THEMES[pending ?? lens]}
-              shown={stage !== "loading"}
+              theme={THEMES[lens]}
+              shown={ready}
             />
           </div>
       </div>

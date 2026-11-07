@@ -38,6 +38,18 @@ export interface CaseStudy {
 
 export const CASE_STUDIES: CaseStudy[] = [
   {
+    id: "xr-roundup",
+    title: "XR Roundup",
+    meta: "XR · WebAR photo booth",
+    year: "2026",
+    description:
+      "A no-install AR photo booth for the Halloween edition of XR Roundup. Scan a QR code, pick a filter, and leave with a photo that carries the event.",
+    role: "Experience & Interaction Designer · Concept to build",
+    lens: "xr",
+    image: "/case/xr-roundup/filter-bat.png",
+    imageAlt: "A guest in the Bat Blast WebAR filter, mouth open as bats burst across the frame",
+  },
+  {
     id: "pausa",
     title: "Pausa",
     meta: "UX · Conversational companion",

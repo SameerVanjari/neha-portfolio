@@ -3,7 +3,7 @@
 import Nav from "@/components/Nav";
 import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion, useInView, type Variants } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, type Variants } from "framer-motion";
 import {
   AT_A_GLANCE,
   CONTRIBUTIONS,
@@ -12,6 +12,7 @@ import {
   KEY_DECISIONS,
   NEIGHBORS,
   PROBLEM,
+  PROCESS,
   SOUND,
   STORYBOARD,
   UX_WIREFRAMES,
@@ -206,10 +207,71 @@ function Vignette({ kind }: { kind: string }) {
 
 /* --------------------------------- sections -------------------------------- */
 
-function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
+function HeadsetHover({ interactionRef }: { interactionRef: React.RefObject<HTMLElement | null> }) {
   const reduce = useMotionPref();
+  const canTilt =
+    !reduce &&
+    typeof window !== "undefined" &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const spring = { duration: 0.45, bounce: 0.12 } as const;
+  const smoothX = useSpring(tiltX, spring);
+  const smoothY = useSpring(tiltY, spring);
+  const transform = useTransform([smoothX, smoothY], ([x, y]) => {
+    const rx = Number(x);
+    const ry = Number(y);
+    return `perspective(800px) translate3d(${ry * 0.8}px, ${rx * -0.8}px, 0) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  });
+
+  useEffect(() => {
+    const area = interactionRef.current;
+    if (!area) return;
+    const onMove = (event: globalThis.PointerEvent) => {
+      if (!canTilt) return;
+      const box = area.getBoundingClientRect();
+      const px = (event.clientX - box.left) / box.width - 0.5;
+      const py = (event.clientY - box.top) / box.height - 0.5;
+      tiltX.set(py * -7);
+      tiltY.set(px * 8);
+    };
+    const onLeave = () => {
+      tiltX.set(0);
+      tiltY.set(0);
+    };
+    area.addEventListener("pointermove", onMove, { passive: true });
+    area.addEventListener("pointerleave", onLeave);
+    return () => {
+      area.removeEventListener("pointermove", onMove);
+      area.removeEventListener("pointerleave", onLeave);
+    };
+  }, [canTilt, interactionRef, tiltX, tiltY]);
+
+  return (
+    <div
+      className="relative mx-auto flex w-full max-w-[500px] items-center justify-center self-center lg:mx-0 lg:justify-self-end"
+    >
+      <motion.div style={{ transform }} className="relative w-full">
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[380px] w-[640px] -translate-x-1/2 -translate-y-1/2" aria-hidden>
+          <img src="/case/broken-mile/headset-glow.svg" alt="" width={640} height={380} className="h-[380px] w-[640px] max-w-none" />
+        </div>
+        <img
+          src="/case/broken-mile/quest-headset.png"
+          alt="Meta Quest 2 headset and controllers"
+          width={500}
+          height={353}
+          draggable={false}
+          className="relative w-full object-contain drop-shadow-[0_24px_48px_rgba(0,0,0,0.45)]"
+        />
+      </motion.div>
+    </div>
+  );
+}
+
+function Hero() {
+  const reduce = useMotionPref();
+  const heroRef = useRef<HTMLElement>(null);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
   const [motionPreferenceReady, setMotionPreferenceReady] = useState(false);
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
@@ -217,69 +279,49 @@ function Hero() {
     });
     return () => cancelAnimationFrame(frame);
   }, []);
-  // Match the server-rendered markup on the first client render. Applying the
-  // reduced-motion variant only after mount avoids a hydration mismatch when
-  // the media query differs from the SSR default.
   const reducedMotion = motionPreferenceReady && !!reduce;
-  // Hold the neutral hidden variants until the preference is known. Both SSR
-  // and hydration therefore render the same markup; the selector then chooses
-  // the full or reduced entrance while the preloader is still covering the hero.
   const motionMode = !motionPreferenceReady ? "pending" : reducedMotion;
-  // Held back until the preloader has cleared, so the entrance plays in front
-  // of the viewer instead of running out unseen behind the overlay.
   const { stage } = useLoadStage();
   const { group, item } = heroMotion(motionMode);
 
-  // A 15–20 second loop sits behind this hero for the whole session. Pause it
-  // once the hero leaves the viewport: nobody is looking at it, and a playing
-  // video keeps decoding frames and holding the GPU awake on mobile. Under
-  // reduced motion, keep the poster still instead of starting the loop.
-  const heroInView = useInView(heroRef, { margin: "100px" });
   useEffect(() => {
-    const video = videoRef.current;
+    const video = heroVideoRef.current;
     if (!video) return;
     if (reducedMotion) {
       video.pause();
       return;
     }
-    if (heroInView) {
-      // Autoplay can still be refused; the poster is already showing, so a
-      // rejected play() is not worth surfacing.
-      void video.play().catch(() => {});
-    } else {
-      video.pause();
-    }
-  }, [heroInView, reducedMotion]);
+    void video.play().catch(() => {});
+  }, [reducedMotion]);
 
   return (
     <section ref={heroRef} className="relative overflow-hidden bg-[#1C1518]">
       <video
-        ref={videoRef}
-        className="absolute inset-0 h-full w-full object-cover"
+        ref={heroVideoRef}
+        className="pointer-events-none absolute inset-0 z-0 size-full object-cover opacity-35"
         src={HERO.video}
         poster={HERO.poster}
         muted
         loop
         playsInline
-        autoPlay={false}
+        autoPlay
         preload="metadata"
+        aria-hidden
       />
       <div
         aria-hidden
-        className="absolute inset-0"
+        className="pointer-events-none absolute inset-0 z-[1]"
         style={{
           background:
-            "linear-gradient(90deg, #1C1518 0%, #1C1518 30%, rgba(28,21,24,0.55) 62%, rgba(28,21,24,0.2) 100%)",
+            "linear-gradient(90deg, #1C1518 38%, rgba(28,21,24,0.55) 70%, rgba(28,21,24,0.2) 100%)",
         }}
       />
-      <div className="relative mx-auto flex min-h-[620px] w-full max-w-[1200px] flex-col px-6 pb-14 pt-[70px] lg:min-h-[720px] lg:px-0 lg:pt-[110px]">
+      <div className="relative z-10 mx-auto grid min-h-[620px] w-full max-w-[1200px] items-center gap-8 px-6 pb-14 pt-[70px] lg:min-h-[720px] lg:grid-cols-[minmax(0,760px)_minmax(280px,1fr)] lg:px-0 lg:py-[110px]">
         <motion.div
           variants={group}
           initial="hidden"
           animate={stage === "loading" ? "hidden" : "visible"}
-          /* flex-1 keeps the column filling the hero's min-height, so the CTA
-             row's mt-auto still pins it to the bottom as before. */
-          className="flex flex-1 flex-col"
+          className="flex flex-col"
         >
           <motion.div variants={item}>
             <p className="text-[16px] font-semibold tracking-[0.16px]" style={{ ...BODY, color: RED_BRIGHT }}>
@@ -289,7 +331,11 @@ function Hero() {
               className="mt-[26px] max-w-[700px] text-[clamp(44px,6.2vw,72px)] font-bold leading-[1.04] tracking-[-2.16px] text-[#F2EEE7]"
               style={DISPLAY}
             >
-              {HERO.title}
+              Immersive VR Training
+              <br />
+              for Fiber Optic
+              <br />
+              Technicians
             </h1>
             <p className="mt-[24px] max-w-[580px] text-[18px] leading-[1.3] text-[#E4DED4] md:text-[22px]" style={BODY}>
               {HERO.subtitle}
@@ -297,17 +343,18 @@ function Hero() {
           </motion.div>
           <motion.div
             variants={item}
-            className="mt-[52px] max-w-[760px] border-l-2 pl-[23px]"
+            className="mt-[26px] max-w-[760px] border-l-[3px] pl-[23px]"
             style={{ borderColor: RED_BRIGHT }}
           >
-            <p className="text-[19px] font-semibold text-[#F2EEE7] md:text-[20px]" style={BODY}>
-              {HERO.role}
+            <p className="text-[19px] text-[#F2EEE7] md:text-[20px]" style={BODY}>
+              <span className="font-semibold">{HERO.role}</span>
+              <span className="font-normal text-[#CFC8BD]">{` · ${HERO.roleOrg}`}</span>
             </p>
             <p className="mt-[8px] text-[17px] text-[#CFC8BD]" style={BODY}>
               {HERO.meta}
             </p>
           </motion.div>
-          <motion.div variants={item} className="mt-[48px] flex items-end justify-between lg:mt-auto">
+          <motion.div variants={item} className="mt-[48px]">
             <a
               href={HERO.cta.href}
               target="_blank"
@@ -317,16 +364,19 @@ function Hero() {
             >
               {HERO.cta.label}
             </a>
-            <span
-              className="hidden items-center gap-[10px] rounded-[999px] px-[16px] py-[10px] text-[13px] text-[#F2EEE7] sm:inline-flex"
-              style={{ ...BODY, background: "rgba(23,22,27,0.7)" }}
-            >
-              <Icon name="mute" size={14} />
-              {reducedMotion ? "Still frame · looping video paused" : HERO.overlayNote}
-            </span>
           </motion.div>
         </motion.div>
+        <motion.div variants={group} initial="hidden" animate={stage === "loading" ? "hidden" : "visible"}>
+          <HeadsetHover interactionRef={heroRef} />
+        </motion.div>
       </div>
+      <span
+        className="absolute bottom-8 right-6 hidden items-center gap-[10px] rounded-[999px] px-[16px] py-[10px] text-[13px] text-[#F2EEE7] sm:inline-flex lg:right-10"
+        style={{ ...BODY, background: "rgba(23,22,27,0.7)" }}
+      >
+        <Icon name="mute" size={14} />
+        {HERO.overlayNote}
+      </span>
     </section>
   );
 }
@@ -470,6 +520,58 @@ function Contributions() {
           </motion.div>
         ))}
       </motion.div>
+    </section>
+  );
+}
+
+function Process() {
+  const { group, item, viewport } = useStagger({ distance: 16, step: 0.06 });
+
+  return (
+    <section className="mx-auto w-full max-w-[1200px] px-6 pb-10 pt-[100px] lg:px-0 lg:pt-[140px]">
+      <SectionHeader label={PROCESS.label} heading={PROCESS.heading} />
+      <motion.ol
+        variants={group}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="mt-9 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-[10px]"
+      >
+        {PROCESS.steps.map((step, index) => (
+          <Fragment key={step.title}>
+            <motion.li variants={item} className="flex min-w-0 flex-1 flex-col gap-[14px]">
+              <img
+                src={step.image}
+                alt={step.alt}
+                width={210}
+                height={160}
+                className="h-[160px] w-full rounded-[16px] object-cover"
+              />
+              <div className="flex items-center gap-[10px]">
+                <span
+                  className="flex size-7 shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-[#F2EEE7]"
+                  style={{ ...BODY, background: RED }}
+                >
+                  {step.num}
+                </span>
+                <p className="text-[17px] font-semibold text-[#17161B]" style={DISPLAY}>
+                  {step.title}
+                </p>
+              </div>
+              <p className="text-[14px] leading-[1.4] text-[#5C5750]" style={BODY}>{step.body}</p>
+            </motion.li>
+            {index < PROCESS.steps.length - 1 ? (
+              <span
+                aria-hidden
+                className="hidden h-[160px] w-[18px] shrink-0 items-center justify-center text-[20px] font-semibold lg:flex"
+                style={{ ...BODY, color: RED }}
+              >
+                →
+              </span>
+            ) : null}
+          </Fragment>
+        ))}
+      </motion.ol>
     </section>
   );
 }
@@ -643,6 +745,7 @@ function World3D() {
 
   return (
     <section className="mx-auto grid w-full max-w-[1200px] gap-10 px-6 pb-10 pt-[100px] lg:grid-cols-2 lg:px-0 lg:pt-[140px]">
+      <div data-index="3D world">
       <Reveal distance={22}>
         <p className="text-[13px] font-bold uppercase tracking-[1.56px]" style={{ ...BODY, color: RED }}>
           {WORLD_3D.label}
@@ -665,6 +768,8 @@ function World3D() {
           ))}
         </div>
       </Reveal>
+      </div>
+      <div data-index="Sound">
       <Reveal delay={0.08} distance={22}>
         <p className="text-[13px] font-bold uppercase tracking-[1.56px]" style={{ ...BODY, color: RED }}>
           {SOUND.label}
@@ -705,6 +810,7 @@ function World3D() {
           })}
         </motion.div>
       </Reveal>
+      </div>
     </section>
   );
 }
@@ -885,6 +991,7 @@ export default function BrokenMileCase() {
       <AtAGlance />
       <Problem />
       <Contributions />
+      <Process />
       <Storyboard />
       <UxWireframes />
       <KeyDecisions />
