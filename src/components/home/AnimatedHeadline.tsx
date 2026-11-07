@@ -7,15 +7,11 @@ import { useMotionPref } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
 
 /**
- * Hero headline with a per-letter rise + blur transition.
+ * Hero headline with a simple opacity crossfade between lens variants.
  *
  * The text is drawn as the real font (crisp glyphs), never dots.
- *   enter — each letter of the complete title rises from below (blur ~20px,
- *           opacity 30%) into place
- *           (blur 0, opacity 100%), one letter after another.
- *   exit  — each letter lifts upward, softening and fading away.
- * Both use cubic-bezier easings. Invisible DOM spans reserve the tallest
- * variant's height, so the canvas overlay never shifts the layout.
+ * Invisible DOM spans reserve the tallest variant's height, so the canvas
+ * overlay never shifts the layout while copy fades between lenses.
  */
 
 interface Glyph {
@@ -32,17 +28,16 @@ interface Glyph {
 
 const LEAD_COLOR = "#f3f1ff";
 
-const ENTRY_BLUR = 20; // px at the start of the rise
-const ENTRY_ALPHA = 0; // the title is fully hidden before each glyph enters
-const ENTRY_RISE = 0.5; // × fontSize the letter starts below its slot
-const EXIT_BLUR = 9; // px as the letter leaves
-const EXIT_RISE = 0.5; // × fontSize the letter lifts on exit
-const IN_DUR = 700;
-const OUT_DUR = 520;
-const PER_CHAR_OUT = 24;
-// Extra pause after the outgoing phrase has fully cleared, before the incoming
-// phrase starts rising — so the line empties, holds, then refills.
-const EXIT_HOLD = 260;
+const ENTRY_BLUR = 2;
+const ENTRY_ALPHA = 0;
+const ENTRY_RISE = 0;
+const EXIT_BLUR = 2;
+const EXIT_RISE = 0;
+// A single quiet crossfade keeps the copy readable while the lens changes.
+const IN_DUR = 260;
+const OUT_DUR = 180;
+const PER_CHAR_OUT = 0;
+const EXIT_HOLD = 80;
 
 function clamp(v: number, a: number, b: number) {
   return v < a ? a : v > b ? b : v;
@@ -74,10 +69,18 @@ function cubicBezier(x1: number, y1: number, x2: number, y2: number) {
   };
 }
 
-const ENTRY_EASE = cubicBezier(0.22, 1, 0.36, 1); // ease-out: quick, then settle
-const EXIT_EASE = cubicBezier(0.55, 0, 0.85, 0.25); // ease-in: accelerate away
+const ENTRY_EASE = cubicBezier(0.23, 1, 0.32, 1);
+const EXIT_EASE = cubicBezier(0.23, 1, 0.32, 1);
 
-export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
+export default function AnimatedHeadline({
+  lens,
+  onEntryComplete,
+  onTransitionComplete,
+}: {
+  lens: HomeLens;
+  onEntryComplete?: () => void;
+  onTransitionComplete?: () => void;
+}) {
   const reduce = useMotionPref();
   const { stage } = useLoadStage();
   const h1Ref = useRef<HTMLHeadingElement>(null);
@@ -90,7 +93,16 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
   const reduceRef = useRef(reduce);
   const stageRef = useRef(stage);
   const startedRef = useRef(false);
+  const entryCompleteRef = useRef(false);
+  const onEntryCompleteRef = useRef(onEntryComplete);
+  const transitioningRef = useRef(false);
+  const onTransitionCompleteRef = useRef(onTransitionComplete);
   const metricsRef = useRef({ w: 0, h: 0, dpr: 1 });
+
+  useEffect(() => {
+    onEntryCompleteRef.current = onEntryComplete;
+    onTransitionCompleteRef.current = onTransitionComplete;
+  }, [onEntryComplete, onTransitionComplete]);
 
   /* ---- layout helpers ------------------------------------------------ */
 
@@ -173,8 +185,7 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
 
   function spawnIn(now: number, delayBase: number): Glyph[] {
     const gs = buildGlyphs();
-    const count = gs.length ? gs[gs.length - 1].ci + 1 : 1;
-    const perChar = Math.min(60, Math.max(28, 900 / Math.max(1, count)));
+    const perChar = 0;
     for (const g of gs) {
       g.mode = "in";
       g.t0 = now + delayBase + g.ci * perChar;
@@ -250,7 +261,16 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
 
   function loop(now: number) {
     nowRef.current = now;
-    rafRef.current = renderFrame(now) ? requestAnimationFrame(loop) : null;
+    const active = renderFrame(now);
+    if (!active && !entryCompleteRef.current) {
+      entryCompleteRef.current = true;
+      onEntryCompleteRef.current?.();
+    }
+    if (!active && transitioningRef.current) {
+      transitioningRef.current = false;
+      onTransitionCompleteRef.current?.();
+    }
+    rafRef.current = active ? requestAnimationFrame(loop) : null;
   }
   function ensureLoop() {
     if (rafRef.current == null) rafRef.current = requestAnimationFrame(loop);
@@ -377,6 +397,7 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
       settleInstant(now);
       return;
     }
+    transitioningRef.current = true;
     // Letters lift away (staggered) and fully clear, then — after a beat —
     // the new phrase rises in, so the exit and the entry never overlap.
     const old = glyphsRef.current;
@@ -465,7 +486,7 @@ export default function AnimatedHeadline({ lens }: { lens: HomeLens }) {
     <h1
       ref={h1Ref}
       aria-label={`${lens.headlineLead}${lens.headlineAccent}`}
-      className="home-display relative grid w-full text-[clamp(40px,4.45vw,64px)] font-bold leading-[1.02] tracking-[-1.28px] text-[#f3f1ff]"
+      className="home-display relative grid w-full text-[clamp(34px,3.6vw,52px)] font-bold leading-[1.04] tracking-[-1.28px] text-[#f3f1ff]"
     >
       {/* Height reservation — every variant, invisible, in one grid cell. */}
       {LENS_ORDER.map((id) => (

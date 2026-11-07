@@ -24,6 +24,10 @@ export interface HomeLens {
   node: string;
   /** Node year shown under the eye mark. */
   year: string;
+  /** Node era caption — First / Then / Then / Now. */
+  era: string;
+  /** Role shown beside the lens tag on work cards. */
+  role: string;
   /** Accent used for the active node, headline tail and CTA glow. */
   accent: string;
   headlineLead: string;
@@ -32,6 +36,9 @@ export interface HomeLens {
   /** Hero render + its particle field + lens badge. */
   /** GLB used by this lens in the hero scene. */
   model: string;
+  /** About portrait for this lens: an illustrated working scene. */
+  portrait: string;
+  portraitAlt: string;
   eye: string;
   particles: string;
   badge: string;
@@ -51,12 +58,16 @@ export const LENSES: Record<HomeLensId, HomeLens> = {
   product: {
     id: "product",
     node: "Product Design",
+    era: "First",
+    role: "Product designer",
     year: "2014",
     accent: "#d9a066",
     headlineLead: "Designing for ",
     headlineAccent: "touch, use, and longevity.",
     subline: "Physical objects, mobile apps, and end-to-end launches.",
     model: "/models/bronze-sphere-dust.glb",
+    portrait: "/figma/brand/work/neha-work-product.jpg",
+    portraitAlt: "Neha Mayacharya woodworking at a bench",
     eye: "/figma/hero/eye-product.png",
     particles: "/figma/hero/particles-product.png",
     badge: "/figma/hero/badge-product.png",
@@ -92,12 +103,16 @@ export const LENSES: Record<HomeLensId, HomeLens> = {
   ux: {
     id: "ux",
     node: "User Experience",
+    era: "Then",
+    role: "UX designer",
     year: "2014",
     accent: "#c9d3e6",
     headlineLead: "Designing for ",
     headlineAccent: "clarity, flow, and ease.",
     subline: "Dashboards, user journeys, and usability research.",
-    model: "/models/wireframe-logo-ux-option-2.glb",
+    model: "/models/logo-wireframe-texture.glb",
+    portrait: "/figma/brand/work/neha-work-ux-blank.jpg",
+    portraitAlt: "Neha Mayacharya designing on a tablet",
     eye: "/figma/hero/eye-ux.png",
     particles: "/figma/hero/particles-ux.png",
     badge: "/figma/hero/badge-ux.png",
@@ -133,12 +148,16 @@ export const LENSES: Record<HomeLensId, HomeLens> = {
   xr: {
     id: "xr",
     node: "Spatial / XR",
+    era: "Then",
+    role: "Immersive designer",
     year: "2018",
     accent: "#7fb2ff",
     headlineLead: "Designing for ",
     headlineAccent: "hands, space, and presence.",
     subline: "VR, AR, and MR experiences shaped by gesture, gaze, and voice.",
-    model: "/models/xr-logo.glb",
+    model: "/models/xr-logo-texture.glb",
+    portrait: "/figma/brand/work/neha-work-xr.jpg",
+    portraitAlt: "Neha Mayacharya working in a VR headset",
     eye: "/figma/hero/eye-xr.png",
     particles: "/figma/hero/particles-xr.png",
     badge: "/figma/hero/badge-xr.png",
@@ -174,12 +193,16 @@ export const LENSES: Record<HomeLensId, HomeLens> = {
   ai: {
     id: "ai",
     node: "Artificial Intelligence",
+    era: "Now",
+    role: "AI experience designer",
     year: "2024",
     accent: "#b49cff",
     headlineLead: "Designing for ",
     headlineAccent: "judgment, context, and care.",
     subline: "Conversational agents, copilots, and adaptive interfaces.",
-    model: "/models/ai-cosmic-sphere.glb",
+    model: "/models/logo-ai-texture.glb",
+    portrait: "/figma/brand/work/neha-work-ai.jpg",
+    portraitAlt: "Neha Mayacharya creating AI agents on a laptop",
     eye: "/figma/hero/eye-ai.png",
     particles: "/figma/hero/particles-ai.png",
     badge: "/figma/hero/badge-ai.png",
@@ -298,8 +321,13 @@ export const RECOGNITION = [
 ];
 
 export const ABOUT_ROWS = [
-  { label: "Writing", value: "WHO & HOW: AI Edition" },
-  { label: "Off the clock", value: "Camera, canvas, clay, and dance" },
+  { label: "Writing", value: "One article a month — WHO & HOW: AI Edition", accent: true },
+  {
+    label: "Toolkit",
+    value: "Rhino · Figma · Unity · ShapesXR · Blender · Claude API · +15",
+    accent: false,
+  },
+  { label: "Off the clock", value: "Camera, canvas, clay, and dance", accent: false },
 ];
 
 export const QUOTE = {

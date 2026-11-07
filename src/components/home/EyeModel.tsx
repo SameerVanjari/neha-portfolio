@@ -20,15 +20,19 @@ const MODEL_PATHS = [
   "/models/wireframe-logo-ux.glb",
   "/models/ai-cosmic-sphere.glb",
   "/models/bronze-sphere.glb",
+  "/models/xr-logo-1.glb",
+  "/models/logo-ai-texture.glb",
+  "/models/logo-wireframe-texture.glb",
+  "/models/xr-logo-texture.glb",
 ] as const;
 for (const model of MODEL_PATHS) useGLTF.preload(model);
 
 // Product currently uses the material authored inside bronze-sphere-dust.glb.
 // Flip this only if we decide the procedural wood fallback looks better.
 const USE_PROCEDURAL_PRODUCT_MATERIAL = false;
-// XR uses the existing iridescent treatment on the newly imported mesh. This
-// flag keeps the alternate imported-material path available for comparison.
-const USE_PROCEDURAL_XR_MATERIAL = true;
+// XR preview of xr-logo-1.glb. The iridescent shader is commented out below so
+// the imported mesh shows with the material authored in the file.
+const USE_PROCEDURAL_XR_MATERIAL = false;
 
 type PointerRef = { current: { x: number; y: number } };
 
@@ -543,25 +547,24 @@ function buildLensObject(scene: THREE.Object3D, lens: HomeLens): THREE.Object3D 
   if (lens.id === "ux") {
     material = makeShellWebMaterial(26, 18, { accent: lens.accent });
     innerMaterial = makeShellWebMaterial(16, 12, { lit: true, inner: true, accent: lens.accent });
-  } else if (lens.id === "xr" && USE_PROCEDURAL_XR_MATERIAL) {
-    material = makeIridescentMaterial(lens.accent);
-    innerMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color("#182140"),
-      roughness: 0.1,
-      metalness: 0.08,
-      transmission: 0.62,
-      thickness: 0.16,
-      ior: 1.45,
-      transparent: true,
-      // Legacy XR fallback opacity. The imported XR asset is opaque.
-      opacity: 0.32,
-      clearcoat: 1,
-      clearcoatRoughness: 0.1,
-      envMapIntensity: 1.3,
-      emissive: new THREE.Color("#202858"),
-      emissiveIntensity: 0.16,
-    });
-    attachDissolve(innerMaterial, lens.accent);
+  // } else if (lens.id === "xr" && USE_PROCEDURAL_XR_MATERIAL) {
+  //   material = makeIridescentMaterial(lens.accent);
+  //   innerMaterial = new THREE.MeshPhysicalMaterial({
+  //     color: new THREE.Color("#182140"),
+  //     roughness: 0.1,
+  //     metalness: 0.08,
+  //     transmission: 0.62,
+  //     thickness: 0.16,
+  //     ior: 1.45,
+  //     transparent: true,
+  //     opacity: 0.32,
+  //     clearcoat: 1,
+  //     clearcoatRoughness: 0.1,
+  //     envMapIntensity: 1.3,
+  //     emissive: new THREE.Color("#202858"),
+  //     emissiveIntensity: 0.16,
+  //   });
+  //   attachDissolve(innerMaterial, lens.accent);
   } else if (lens.id === "product" && USE_PROCEDURAL_PRODUCT_MATERIAL) {
     material = makeMaterial(lens);
     innerMaterial = material;
@@ -576,14 +579,20 @@ function buildLensObject(scene: THREE.Object3D, lens: HomeLens): THREE.Object3D 
       const useImportedXr = lens.id === "xr" && !USE_PROCEDURAL_XR_MATERIAL;
       const useImportedAi = lens.id === "ai";
       if (useImportedProduct || useImportedXr || useImportedAi) {
+        if (useImportedXr) {
+          const geometry = mesh.geometry.clone();
+          geometry.computeVertexNormals();
+          geometry.userData.mine = true;
+          mesh.geometry = geometry;
+        }
         const imported = Array.isArray(mesh.material)
           ? mesh.material.map((m) => cloneImportedMaterial(m, {
               solid: useImportedProduct,
-              unlit: useImportedXr,
+              // unlit: useImportedXr,
             }))
           : cloneImportedMaterial(mesh.material, {
               solid: useImportedProduct,
-              unlit: useImportedXr,
+              // unlit: useImportedXr,
             });
         if (useImportedProduct) {
           for (const importedMaterial of Array.isArray(imported) ? imported : [imported]) {
@@ -708,9 +717,49 @@ export default function EyeModel({
     };
   }, []);
 
+  useEffect(() => {
+    const anchor = anchorRef.current;
+    const canvas = gl.domElement;
+    if (!anchor || typeof ResizeObserver === "undefined") return;
+
+    let frame = 0;
+    const updateAnchor = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const anchorRect = anchor.getBoundingClientRect();
+        const canvasRect = canvas.getBoundingClientRect();
+        if (canvasRect.width <= 0 || canvasRect.height <= 0) return;
+
+        const cx = anchorRect.left - canvasRect.left + anchorRect.width / 2;
+        const cy = anchorRect.top - canvasRect.top + anchorRect.height / 2;
+        const ndcX = (cx / canvasRect.width) * 2 - 1;
+        const ndcY = -((cy / canvasRect.height) * 2 - 1);
+        const perspectiveCamera = camera as THREE.PerspectiveCamera;
+        const viewHeight =
+          2 * perspectiveCamera.position.z *
+          Math.tan((perspectiveCamera.fov * Math.PI) / 360);
+        const viewWidth = viewHeight * (canvasRect.width / canvasRect.height);
+        targetPos.current.set((ndcX * viewWidth) / 2, (ndcY * viewHeight) / 2, 0);
+        targetScale.current =
+          (anchorRect.height * 0.62) / (2 * (canvasRect.height / viewHeight));
+      });
+    };
+
+    const observer = new ResizeObserver(updateAnchor);
+    observer.observe(anchor);
+    observer.observe(canvas);
+    window.addEventListener("resize", updateAnchor);
+    updateAnchor();
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("resize", updateAnchor);
+    };
+  }, [anchorRef, camera, gl]);
+
   useFrame((_, rawDt) => {
     const dt = Math.min(rawDt, 1 / 30);
-    const cam = camera as THREE.PerspectiveCamera;
 
     // Lens transition progress: entering object reforms from scattered
     // particles while the outgoing one disintegrates along the diagonal.
@@ -741,24 +790,6 @@ export default function EyeModel({
       }
     }
 
-    // Anchor the model to its DOM slot (screen-space → world at z = 0).
-    const el = anchorRef.current;
-    const canvasEl = gl.domElement;
-    if (el && canvasEl) {
-      const a = el.getBoundingClientRect();
-      const c = canvasEl.getBoundingClientRect();
-      if (c.width > 0 && c.height > 0) {
-        const cx = a.left - c.left + a.width / 2;
-        const cy = a.top - c.top + a.height / 2;
-        const ndcX = (cx / c.width) * 2 - 1;
-        const ndcY = -((cy / c.height) * 2 - 1);
-        const d = cam.position.z;
-        const vh = 2 * d * Math.tan((cam.fov * Math.PI) / 360);
-        const vw = vh * (c.width / c.height);
-        targetPos.current.set((ndcX * vw) / 2, (ndcY * vh) / 2, 0);
-        targetScale.current = (a.height * 0.62) / (2 * (c.height / vh));
-      }
-    }
     if (root.current) {
       root.current.position.lerp(targetPos.current, 0.15);
       const s = THREE.MathUtils.damp(root.current.scale.x, targetScale.current, 8, dt);

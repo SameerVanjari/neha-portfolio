@@ -27,13 +27,17 @@ interface FieldCfg {
   linkOpacity: number;
   spread: number;
   link: number;
+  /** Share of points held near the model's horizontal centerline. */
+  centerDensity: number;
+  /** Vertical share of the normal field occupied by the center band. */
+  centerBand: number;
 }
 
 const FIELD: Record<HomeLens["id"], FieldCfg> = {
-  product: { color: "#e0ab72", count: 1800, sizeMin: 0.7, sizeMax: 2.8, soft: 0.5, square: false, lines: false, opacity: 1, linkOpacity: 0, spread: 6.6, link: 0 },
-  ux: { color: "#c4d2e6", count: 1000, sizeMin: 0.6, sizeMax: 1.6, soft: 0.65, square: true, lines: false, opacity: 0.9, linkOpacity: 0, spread: 6.6, link: 0 },
-  xr: { color: "#8fbcff", count: 700, sizeMin: 1.4, sizeMax: 4.0, soft: 1.0, square: false, lines: false, opacity: 0.8, linkOpacity: 0, spread: 6.2, link: 0 },
-  ai: { color: "#c0a6ff", count: 160, sizeMin: 0.9, sizeMax: 2.4, soft: 0.4, square: false, lines: true, opacity: 1, linkOpacity: 0.32, spread: 5.8, link: 1.8 },
+  product: { color: "#e0ab72", count: 1200, sizeMin: 0.7, sizeMax: 2.8, soft: 0.5, square: false, lines: false, opacity: 1, linkOpacity: 0, spread: 6.6, link: 0, centerDensity: 0.68, centerBand: 0.22 },
+  ux: { color: "#c4d2e6", count: 700, sizeMin: 0.6, sizeMax: 1.6, soft: 0.65, square: true, lines: false, opacity: 0.9, linkOpacity: 0, spread: 6.6, link: 0, centerDensity: 0.68, centerBand: 0.22 },
+  xr: { color: "#8fbcff", count: 500, sizeMin: 1.4, sizeMax: 4.0, soft: 1.0, square: false, lines: false, opacity: 0.8, linkOpacity: 0, spread: 6.2, link: 0, centerDensity: 0.68, centerBand: 0.22 },
+  ai: { color: "#c0a6ff", count: 120, sizeMin: 0.9, sizeMax: 2.4, soft: 0.4, square: false, lines: true, opacity: 1, linkOpacity: 0.32, spread: 5.8, link: 1.8, centerDensity: 0.68, centerBand: 0.22 },
 };
 
 const DRIFT = /* glsl */ `
@@ -111,7 +115,9 @@ function buildField(cfg: FieldCfg) {
   const sy = cfg.spread * 0.6;
   for (let i = 0; i < n; i++) {
     pos[i * 3] = (Math.random() * 2 - 1) * sx;
-    pos[i * 3 + 1] = (Math.random() * 2 - 1) * sy;
+    const inCenterBand = Math.random() < cfg.centerDensity;
+    const verticalRange = inCenterBand ? sy * cfg.centerBand : sy;
+    pos[i * 3 + 1] = (Math.random() * 2 - 1) * verticalRange;
     pos[i * 3 + 2] = -6.0 + Math.random() * 6.2;
     sizes[i] = cfg.sizeMin + Math.random() * (cfg.sizeMax - cfg.sizeMin);
     phases[i] = Math.random();
