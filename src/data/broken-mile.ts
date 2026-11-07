@@ -8,9 +8,10 @@ export const HERO = {
   eyebrow: "The Broken Mile · 7th International VR Awards Finalist",
   title: "Immersive VR Training for Fiber Optic Technicians",
   subtitle: "Meta Quest 2 · Deployed via ArborXR & Meta Quest Store",
-  role: "Lead Immersive Experience Designer · CXR Agency (Kinemeric)",
+  role: "Lead Immersive Experience Designer",
+  roleOrg: "CXR Agency",
   meta: "September 2023 · 3 months",
-  cta: { label: "Try it on Meta Quest", href: "https://www.behance.net/gallery/204895093/Immersive-VR-Training-for-Fiber-Optic-Technicians" },
+  cta: { label: "Try it on Meta Quest", href: "https://www.meta.com/experiences/the-broken-mile/5844978578933344" },
   video: "/videos/vr-training-fiber.mp4",
   poster: "/images/vr-training-fiber-hero.jpg",
   overlayNote: "Muted loop · 15–20s of in-headset footage",
@@ -50,6 +51,48 @@ export const CONTRIBUTIONS = {
     { num: "4", label: "teams coordinated daily" },
     { num: "5", label: "audio layers designed" },
     { num: "13", label: "tools across 3D, UX, audio, and video" },
+  ],
+};
+
+export const PROCESS = {
+  label: "The process",
+  heading: "From field interview to headset, in five steps",
+  steps: [
+    {
+      num: "1",
+      title: "Field research",
+      body: "Technician interviews set every pole height, cable route, and tool order",
+      image: "/case/broken-mile/process-research.png",
+      alt: "A fiber technician in a hard hat working on overhead lines",
+    },
+    {
+      num: "2",
+      title: "Storyboard",
+      body: "Site plan and scenes previewed in ShapesXR, approved before any 3D",
+      image: "/case/broken-mile/process-storyboard.png",
+      alt: "A ShapesXR room with the neighborhood storyboard pinned on the wall",
+    },
+    {
+      num: "3",
+      title: "3D world",
+      body: "Asset list, references, and model reviews with the 3D team",
+      image: "/case/broken-mile/process-3d.png",
+      alt: "In-headset view of the fiber cable and a blue gaze ring",
+    },
+    {
+      num: "4",
+      title: "Wireframes",
+      body: "Panel structure the dev and UI teams built against",
+      image: "/case/broken-mile/process-wireframes.png",
+      alt: "The select-the-correct-materials panel in the headset",
+    },
+    {
+      num: "5",
+      title: "In the headset",
+      body: "Shipped on Meta Quest 2, deployed through ArborXR",
+      image: "/case/broken-mile/process-headset.png",
+      alt: "The finished street scene running on Meta Quest 2",
+    },
   ],
 };
 
