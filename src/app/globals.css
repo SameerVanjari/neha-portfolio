@@ -65,10 +65,21 @@ body {
   color: #1a1630;
 }
 
+/* ---- Scrollbar — slim and always visible (Figma note 583:498, P1) ---- */
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 6px;
   height: 0px; /* horizontal scrollbar — kills the strip */
-  background: transparent;
+}
+::-webkit-scrollbar-track {
+  background: rgba(243, 241, 255, 0.06);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(180, 156, 255, 0.7);
+  border-radius: 3px;
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(180, 156, 255, 0.7) rgba(243, 241, 255, 0.06);
 }
 
 a:focus-visible,
@@ -545,8 +556,8 @@ button:focus-visible {
   --home-surface: #121130;
   --home-panel: #0e0d22;
   --home-thumb: #1c1a45;
-  --home-border: #22204a;
-  --home-border-soft: #2e2b5c;
+  --home-border: #1c1a45;
+  --home-border-soft: #1c1a45;
   --home-ink: #f3f1ff;
   --home-body: #aba8cc;
   --home-muted: #8e8bb3;
@@ -563,6 +574,63 @@ button:focus-visible {
 }
 .home-body {
   font-family: var(--font-instrument), system-ui, sans-serif;
+}
+
+/* Keep the connector visible between orbs, but clear it beneath each orb so
+   the active lens never looks like a line is running through it. */
+.journey-track {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 5%,
+    #000 9%,
+    #000 28%,
+    transparent 33%,
+    transparent 34%,
+    #000 39%,
+    #000 61%,
+    transparent 66%,
+    transparent 67%,
+    #000 72%,
+    #000 91%,
+    transparent 95%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 5%,
+    #000 9%,
+    #000 28%,
+    transparent 33%,
+    transparent 34%,
+    #000 39%,
+    #000 61%,
+    transparent 66%,
+    transparent 67%,
+    #000 72%,
+    #000 91%,
+    transparent 95%,
+    transparent 100%
+  );
+}
+
+/* Lens-filter mini orb — spins once when its chip is selected (design note 583:519). */
+@keyframes work-orb-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-work-orb {
+  animation: work-orb-spin 0.7s ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-work-orb {
+    animation: none;
+  }
 }
 
 /* ---- Home entrance ----

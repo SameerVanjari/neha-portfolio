@@ -915,9 +915,6 @@ function Footer() {
           <a href="https://www.behance.net" target="_blank" rel="noreferrer" className="case-link">
             Behance
           </a>
-          <a target="_blank" rel="noreferrer" href="/resume.pdf" className="case-link">
-            Résumé (PDF)
-          </a>
         </nav>
       </div>
     </footer>

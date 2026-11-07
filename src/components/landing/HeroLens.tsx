@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { THEMES, type ThemeId } from "@/data/themes";
@@ -7,15 +6,12 @@ import { HERO_LENSES } from "@/data/landing";
 import { EASE_OUT, LineByLine, useMotionPref } from "@/components/motion/reveal";
 import { useLoadStage } from "@/components/LoadStage";
 import IslandNav from "@/components/IslandNav";
-
 const DISPLAY = { fontFamily: "var(--font-display)" } as const;
 const BODY = { fontFamily: "var(--font-body)" } as const;
-
 /* Hero copy entrance — a soft defocus, not a hard fade: each line arrives
    rising 16–22px while its blur dissolves from 10px to sharp. The staged
    delays (eyebrow → headline lines → support lines → CTA) keep the reading
    order intact so the entrance feels like one gesture, not four. */
-
 export default function HeroLens() {
   const [lens, setLens] = useState<ThemeId>("xr");
   /** Set while a lens change is mid-swap; cleared once the new copy is in. */
@@ -24,14 +20,12 @@ export default function HeroLens() {
   // The copy is held back until the preloader has cleared, so it animates in
   // front of the viewer instead of playing out unseen behind the overlay.
   const { stage } = useLoadStage();
-
   const hold = stage === "loading";
   const content = HERO_LENSES[pending ?? lens];
   const blur = reduce ? 0 : 10;
   const hide = reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(16px)", filter: "blur(10px)" };
   const shown = { opacity: 1, transform: "translateY(0px)", filter: "blur(0px)" };
   const paused = hold || !!pending;
-
   // The switcher itself stays instant — a control the user just pressed must
   // answer immediately. Only the copy it changes gets a 160ms dip (blury, not
   // flat) so the change reads as deliberate rather than as a flicker; the new
@@ -44,7 +38,6 @@ export default function HeroLens() {
     }
     setPending(id);
   };
-
   return (
     <section id="hero" aria-label="Introduction" className="relative overflow-hidden bg-[#140066]">
       {/* Ambient background video — atmosphere, not content. On desktop it is
@@ -74,7 +67,6 @@ export default function HeroLens() {
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#070218]/70 via-[#0B0330]/40 to-[#140066]/15 lg:from-[#140066] lg:from-46% lg:via-[#140066] lg:via-53% lg:to-[#0B0330]/20 lg:to-82%"
       />
-
       {/* The section starts at the very top of the viewport (the shared header
           is a fixed overlay now); the copy clears it with its own top padding,
           and the whole hero fits the viewport with scroll at the top. */}
@@ -136,7 +128,6 @@ export default function HeroLens() {
                 />
               </p>
             </motion.div>
-
             <motion.div
               initial={reduce ? { opacity: 0 } : hide}
               animate={hold ? hide : shown}
@@ -150,16 +141,8 @@ export default function HeroLens() {
               >
                 View selected work
               </a>
-              <a target="_blank" rel="noreferrer"
-                href="/resume.pdf"
-                className="inline-flex h-[52px] items-center justify-center rounded-[999px] border border-[rgba(242,238,231,0.45)] px-[27px] text-[15px] font-medium text-[#F2EEE7] transition-colors hover:bg-[rgba(242,238,231,0.08)]"
-                style={BODY}
-              >
-                Download résumé
-              </a>
             </motion.div>
           </div>
-
           {/* The island's home: the hero's "Explore by lens" spot — in flow on
               phones, and centered 2rem from the hero's bottom on desktop. */}
           <div

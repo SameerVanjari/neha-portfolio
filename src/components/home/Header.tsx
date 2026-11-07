@@ -22,7 +22,7 @@ export default function Header() {
         <span className="home-display text-[18px] font-bold text-[#f3f1ff]">Neha Mayacharya</span>
       </Link>
 
-      <nav aria-label="Primary" className="flex items-center gap-[28px]">
+      <nav aria-label="Primary" className="flex items-center gap-[32px]">
         <Link
           href="/projects"
           className="home-body text-[15px] text-[#f3f1ff] transition-opacity hover:opacity-60"

@@ -20,6 +20,14 @@ const GROUP_STYLE: Record<
   intel: { color: "#b49cff", bg: "rgba(180,156,255,0.16)", border: "rgba(180,156,255,0.33)" },
 };
 
+/* Board "Toolkit element" (node 637:589) — solid #121130 card, 1px stroke + symbol tinted with the lens colour. */
+const TILE_STYLE: Record<string, { color: string; border: string }> = {
+  make: { color: "#d9a066", border: "rgba(217,160,102,0.6)" },
+  design: { color: "#c9d3e6", border: "rgba(201,211,230,0.6)" },
+  worlds: { color: "#7fb2ff", border: "rgba(127,178,255,0.6)" },
+  intel: { color: "#b49cff", border: "rgba(180,156,255,0.6)" },
+};
+
 const GROUP_SPAN: Record<string, { start: number; span: number }> = {
   make: { start: 1, span: 1 },
   design: { start: 2, span: 2 },
@@ -71,7 +79,7 @@ export default function Toolkit({ lens }: { lens: HomeLens }) {
           {/* Periodic grid (node 525:231) */}
           <div className="mt-[16px] grid auto-rows-[127px] grid-cols-8 gap-[10px]">
             {TOOLS.map((t) => {
-              const s = GROUP_STYLE[t.group];
+              const s = TILE_STYLE[t.group];
               const isFeatured = t.id === featuredId;
               return (
                 <button
@@ -81,21 +89,20 @@ export default function Toolkit({ lens }: { lens: HomeLens }) {
                   onMouseLeave={() => setHovered(null)}
                   onFocus={() => setHovered(t.id)}
                   onBlur={() => setHovered(null)}
-                  className="flex flex-col items-start justify-between rounded-[14px] px-[12px] py-[10px] text-left outline-none transition-[border-width] duration-150"
+                  className="flex flex-col items-start justify-between rounded-[10px] bg-[#121130] px-[10px] py-[10px] text-left outline-none transition-[border-width] duration-150"
                   style={{
                     gridColumn: t.col + 1,
                     gridRow: t.row + 1,
-                    background: s.bg,
                     border: `${isFeatured ? 2 : 1}px solid ${s.border}`,
                     boxShadow: isFeatured
                       ? `0 0 14px 0 ${s.color}73`
                       : "0 8px 8px rgba(0,0,0,0.35)",
                   }}
                 >
-                  <span className="home-display text-[15px] font-bold" style={{ color: s.color }}>
+                  <span className="home-display text-[24px] font-bold leading-[1.05]" style={{ color: s.color }}>
                     {t.symbol}
                   </span>
-                  <span className="home-display text-[16px] font-semibold leading-[1.15] text-[#f3f1ff]">
+                  <span className="home-body min-w-full text-[11px] font-medium leading-[1.35] text-[#aba8cc]">
                     {t.name}
                   </span>
                 </button>

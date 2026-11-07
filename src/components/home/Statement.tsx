@@ -1,28 +1,35 @@
+"use client";
+
 import { motion } from "framer-motion";
 import StatementIconsScene from "@/components/home/StatementIconsScene";
+import { useMotionPref } from "@/components/motion/reveal";
 
-const STATEMENT_WORDS = [
-  { text: "I", accent: false },
-  { text: "design", accent: false },
-  { text: "AI", accent: false },
-  { text: "people", accent: false },
-  { text: "can", accent: false },
-  { text: "understand,", accent: true },
-  { text: "question,", accent: true },
-  { text: "and", accent: true },
-  { text: "overrule.", accent: true },
-] as const;
+const LINE_ONE = ["I", "design", "AI", "people", "can"] as const;
+const LINE_TWO = ["understand,", "question,", "and", "overrule."] as const;
 
-/** Full-bleed statement band (node 525:207). */
+const WORD_SPRING = {
+  hidden: { opacity: 0, transform: "translateY(0.35em)", filter: "blur(10px)" },
+  visible: { opacity: 1, transform: "translateY(0em)", filter: "blur(0px)" },
+};
+
+/** Belief band (node 583:462) — light, centred statement with glass icons. */
 export default function Statement() {
+  const reduce = useMotionPref();
+
   return (
     <section
-      aria-label="Design statement"
-      className="relative h-[420px] w-full overflow-hidden bg-[#f3f1ff] md:h-[480px]"
+      id="belief"
+      aria-label="What I believe"
+      className="relative flex w-full flex-col items-center gap-[20px] overflow-hidden bg-[#eeebff] px-6 pb-[84px] pt-[64px] lg:pb-[130px] lg:pt-[110px]"
     >
-      <StatementIconsScene />
+      {/* Glass icons — compass leans to the cursor, cube turns, bubble lifts. */}
+      <StatementIconsScene reduce={reduce} />
 
-      <motion.p
+      <p className="relative z-10 home-body text-[12px] font-semibold uppercase tracking-[2.16px] text-[#5b3fd9]">
+        What I believe
+      </p>
+
+      <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
@@ -30,22 +37,48 @@ export default function Statement() {
           hidden: {},
           visible: { transition: { delayChildren: 0.1, staggerChildren: 0.045 } },
         }}
-        className="absolute left-1/2 top-[110px] z-10 flex w-[min(880px,88vw)] -translate-x-1/2 flex-wrap justify-center gap-x-[0.24em] px-6 text-center home-display text-[clamp(34px,5.28vw,76px)] font-bold leading-[1.02] tracking-[-1.9px] text-[#0a0918] md:top-[123px]"
+        className="relative z-10 flex flex-col px-6 text-center home-display text-[clamp(34px,4.45vw,60px)] font-bold leading-[1.06] text-[#0a0918]"
       >
-        {STATEMENT_WORDS.map((word) => (
-          <motion.span
-            key={word.text}
-            variants={{
-              hidden: { opacity: 0, transform: "translateY(0.35em)", filter: "blur(10px)" },
-              visible: { opacity: 1, transform: "translateY(0em)", filter: "blur(0px)" },
-            }}
-            transition={{ duration: 0.58, ease: [0.23, 1, 0.32, 1] }}
-            className={word.accent ? "text-[#5b3fd9]" : undefined}
-          >
-            {word.text}
-          </motion.span>
-        ))}
-      </motion.p>
+        <p className="flex flex-wrap justify-center gap-x-[0.24em]">
+          {LINE_ONE.map((word) => (
+            <motion.span
+              key={word}
+              variants={WORD_SPRING}
+              transition={{ duration: 0.58, ease: [0.23, 1, 0.32, 1] }}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </p>
+        <p className="mt-[0.14em] flex flex-wrap justify-center gap-x-[0.24em] text-[#5b3fd9]">
+          {LINE_TWO.map((word) => (
+            <motion.span
+              key={word}
+              variants={WORD_SPRING}
+              transition={{ duration: 0.58, ease: [0.23, 1, 0.32, 1] }}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </p>
+      </motion.div>
+
+      <motion.a
+        href="#about"
+        onClick={(event) => {
+          event.preventDefault();
+          const target = document.getElementById("about");
+          target?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+        }}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={WORD_SPRING}
+        transition={{ duration: 0.58, ease: [0.23, 1, 0.32, 1] }}
+        className="relative z-10 home-body text-[16px] font-medium text-[#5b3fd9] transition-opacity hover:opacity-70"
+      >
+        Here&rsquo;s how I got here ↓
+      </motion.a>
     </section>
   );
 }

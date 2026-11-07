@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Lightformer } from "@react-three/drei";
 import type { HomeLens } from "@/data/lenses";
@@ -24,10 +24,25 @@ export default function HeroScene({
 }) {
   const reduce = useMotionPref();
   const pointer = useRef({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(true);
   // The Product GLB carries authored punctual lights. Keep them, but reduce
   // the generic hero lighting so the asset is not lit twice as aggressively.
-  const externalLightScale = lens.id === "product" ? 0.4 : lens.id === "xr" ? 0 : 1;
+  // XR used to zero these lights because the iridescent shader lit itself:
+  // const externalLightScale = lens.id === "product" ? 0.4 : lens.id === "xr" ? 0 : 1;
+  const externalLightScale = lens.id === "product" ? 0.4 : 1;
   const keyPosition = lens.id === "product" ? ([5, 7, 14] as const) : ([3, 4, 5] as const);
+
+  useEffect(() => {
+    const element = containerRef.current;
+    if (!element || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { rootMargin: "240px" },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (reduce || typeof window === "undefined") return;
@@ -51,12 +66,12 @@ export default function HeroScene({
   }, [reduce]);
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+    <div ref={containerRef} className="pointer-events-none absolute inset-0 z-0" aria-hidden>
       <Canvas
         camera={{ position: [0, 0, 5], fov: 35 }}
-        dpr={[1, 1.5]} // cap DPR: phones at dpr 3 pay 8× fragments for no gain
-        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-        frameloop={reduce ? "demand" : "always"}
+        dpr={[0.75, 1.25]}
+        gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
+        frameloop={reduce || !visible ? "demand" : "always"}
       >
         <ambientLight intensity={0.5 * externalLightScale} />
         <directionalLight position={keyPosition} intensity={1.1 * externalLightScale} />
@@ -66,7 +81,7 @@ export default function HeroScene({
         <Suspense fallback={null}>
           <Backdrop lens={lens} pointer={pointer} />
           <EyeModel lens={lens} pointer={pointer} anchorRef={anchorRef} onReady={onReady} />
-          <Environment resolution={256}>
+          <Environment resolution={128}>
             <Lightformer intensity={1.8 * externalLightScale} position={[0, 3, 3]} scale={[6, 6, 1]} color="#ffffff" />
             <Lightformer intensity={1.2 * externalLightScale} position={[-4, 1, 3]} scale={[4, 4, 1]} color="#ffffff" />
             <Lightformer intensity={1.1 * externalLightScale} position={[4, -1, 3]} scale={[4, 4, 1]} color={lens.accent} />

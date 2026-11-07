@@ -15,9 +15,6 @@ const NAV_ITEMS = [
   { id: "work", label: "Work", href: "/projects" },
   { id: "writing", label: "Writing", href: "/blog" },
   { id: "about", label: "About", href: "/about" },
-  /* The résumé is a document, not a page: it opens in a new tab so the site
-     keeps its place, and so Barba's click handler lets it through untouched. */
-  { id: "resume", label: "Résumé (PDF)", href: "/resume.pdf", target: "_blank", rel: "noreferrer" },
 ] as const;
 
 export default function Nav({
@@ -123,8 +120,6 @@ export default function Nav({
               <Link
                 key={item.id}
                 href={item.href}
-                target={"target" in item ? item.target : undefined}
-                rel={"rel" in item ? item.rel : undefined}
                 className="text-[15px] font-normal text-[#17161B] transition-opacity hover:opacity-60"
                 style={{ fontFamily: "var(--font-body)" }}
               >
@@ -227,8 +222,6 @@ export default function Nav({
                     <Link
                       href={item.href}
                       onClick={() => setOpen(false)}
-                      target={"target" in item ? item.target : undefined}
-                      rel={"rel" in item ? item.rel : undefined}
                       className="flex items-baseline justify-between border-b border-[#DAD3C8] py-5"
                     >
                       <span

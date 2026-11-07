@@ -1,39 +1,40 @@
 "use client";
 
-import { Suspense, useMemo } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 const MODEL = "/models/glass-icon-set.gltf";
 const ICON_NAMES = ["Cube Icon", "Bubble Icon", "Compass Icon"] as const;
-// The source scene is authored at a 0.01 root scale, so these positions are in
-// its local hundred-unit coordinates. They keep each glass mark in its own
-// quiet pocket around the statement rather than clustering at the source poses.
-const ICON_LAYOUT: Record<(typeof ICON_NAMES)[number], [number, number, number]> = {
-  "Cube Icon": [-430, 190, 0],
-  "Bubble Icon": [430, 145, 20],
-  "Compass Icon": [-360, -215, 12],
+type IconName = (typeof ICON_NAMES)[number];
+
+/* Belief band geometry (node 583:462): compass upper-left, cube upper-right,
+   bubble low-left. Coordinates are scene-local hundred-units with the GLTF's
+   authored 0.01 root scale, so ±4.3 lands near a 13-unit viewport span. */
+const ICON_LAYOUT: Record<IconName, [number, number, number]> = {
+  "Cube Icon": [430, 190, 0],
+  "Bubble Icon": [-230, -230, 20],
+  "Compass Icon": [-420, 190, 12],
 };
 useGLTF.preload(MODEL);
 
-type AnimatedIcon = {
+type Pose = {
   node: THREE.Object3D;
-  position: THREE.Vector3;
-  rotation: THREE.Euler;
+  base: THREE.Vector3;
+  startRot: THREE.Euler;
   phase: number;
-  speed: number;
 };
 
-function GlassIcons() {
-  const { scene } = useGLTF(MODEL);
-  const { viewport } = useThree();
+/* Pointer behaviour per design note 583:525 — "overrule": the compass leans
+   toward the cursor; "understand": the cube keeps turning, faster when close;
+   "question": the bubble lifts and bobs when approached. */
+function GlassIcons({ reduce }: { reduce: boolean }) {
+  const { scene, pointer, camera, viewport } = useThree();
   const { model, icons } = useMemo(() => {
     const model = new THREE.Group();
-    // Match the authored scene's 0.01 root scale while removing its original
-    // all-icons-at-once hierarchy and camera nodes.
     model.scale.setScalar(0.01);
-    const animated: AnimatedIcon[] = ICON_NAMES.flatMap((name, index) => {
+    const icons: Pose[] = ICON_NAMES.flatMap((name, index) => {
       const source = scene.getObjectByName(name);
       if (!source) return [];
       const node = source.clone(true);
@@ -45,17 +46,16 @@ function GlassIcons() {
         if ((child as THREE.Mesh).isMesh) child.frustumCulled = false;
       });
       model.add(node);
-      return [{
-        node,
-        position: node.position.clone(),
-        rotation: node.rotation.clone(),
-        phase: index * 1.9,
-        speed: 0.72 + index * 0.08,
-      }];
+      return [
+        {
+          node,
+          base: node.position.clone(),
+          startRot: node.rotation.clone(),
+          phase: index * 1.9,
+        },
+      ];
     });
-
-    // Preserve the light authored in the GLTF, without carrying over its
-    // camera or the original unseparated icon hierarchy.
+    // Preserve the light authored in the GLTF.
     for (const lightName of ["Directional Light", "Default Ambient Light"]) {
       const source = scene.getObjectByName(lightName);
       if (source) model.add(source.clone(true));
@@ -65,17 +65,32 @@ function GlassIcons() {
       if ((child as THREE.Mesh).isMesh) child.frustumCulled = false;
     });
     model.updateMatrixWorld(true);
-    return { model, icons: animated };
+    return { model, icons };
   }, [scene]);
 
   /* eslint-disable react-hooks/immutability -- Three.js scene nodes are intentionally animated imperatively per frame. */
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime();
+    const world = new THREE.Vector3();
     for (const icon of icons) {
-      const wave = time * icon.speed + icon.phase;
-      icon.node.position.y = icon.position.y + Math.sin(wave) * 10;
-      icon.node.rotation.x = icon.rotation.x + Math.sin(wave * 0.8) * 0.055;
-      icon.node.rotation.z = icon.rotation.z + Math.cos(wave * 0.7) * 0.045;
+      icon.node.getWorldPosition(world);
+      const ndc = world.clone().project(camera);
+      const dist = Math.hypot(ndc.x - pointer.x, ndc.y - pointer.y);
+      const near = Math.max(0, 1 - dist / 0.9);
+
+      if (icon.node.name.includes("Compass")) {
+        const angle = Math.atan2(pointer.y - ndc.y, pointer.x - ndc.x);
+        const targetZ = reduce ? icon.startRot.z : angle;
+        icon.node.rotation.z += (targetZ - icon.node.rotation.z) * 0.06;
+        icon.node.rotation.x = icon.startRot.x + Math.sin(time + icon.phase) * 0.04;
+      } else if (icon.node.name.includes("Cube")) {
+        icon.node.rotation.y += 0.004 + near * 0.03;
+        icon.node.position.y = icon.base.y + Math.sin(time * 0.9 + icon.phase) * 8;
+      } else {
+        icon.node.position.y =
+          icon.base.y + Math.sin(time * 1.2 + icon.phase) * 8 + near * 26;
+        icon.node.rotation.z = Math.cos(time * 0.7 + icon.phase) * 0.05;
+      }
     }
   });
   /* eslint-enable react-hooks/immutability */
@@ -91,16 +106,31 @@ function GlassIcons() {
   );
 }
 
-export default function StatementIconsScene() {
+export default function StatementIconsScene({ reduce }: { reduce: boolean }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const element = containerRef.current;
+    if (!element || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { rootMargin: "240px" },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+    <div ref={containerRef} className="pointer-events-none absolute inset-0 z-0" aria-hidden>
       <Canvas
         camera={{ position: [0, 0, 14], fov: 36 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+        dpr={[0.75, 1.25]}
+        gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
+        frameloop={reduce || !visible ? "demand" : "always"}
       >
         <Suspense fallback={null}>
-          <GlassIcons />
+          <GlassIcons reduce={reduce} />
         </Suspense>
       </Canvas>
     </div>

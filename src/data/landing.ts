@@ -140,5 +140,4 @@ export const FOOTER_LINKS: FooterLink[] = [
     href: "https://behance.net/nehamayacharya",
   },
   { label: "Writing", value: "Notes & articles", href: "/blog" },
-  { label: "Résumé", value: "PDF download", href: "/resume.pdf" },
 ];
